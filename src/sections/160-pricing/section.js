@@ -44,3 +44,28 @@ input.addEventListener("input", function () { field.classList.remove("bad"); msg
 var saved = null;
 try { saved = localStorage.getItem(KEY); } catch (err) {}
 if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
+
+/* ---------- the anchor: rows land, the total counts up, the two bars say the rest ---------- */
+var anchor = root.querySelector(".pr-anchor");
+if (anchor) {
+  var rows = [].slice.call(anchor.querySelectorAll(".pr-rows li")), total = anchor.querySelector("#pr-total");
+  var team = anchor.querySelector(".pr-bar-team"), studio = anchor.querySelector(".pr-bar-studio"), played = false;
+  var money = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); };
+  var sum = rows.reduce(function (a, r) { return a + (+r.getAttribute("data-cost")); }, 0);
+  var finish = function () { rows.forEach(function (r) { r.classList.add("on"); }); total.textContent = money(sum); team.classList.add("on"); studio.classList.add("on"); anchor.classList.add("done"); };
+  if (SK.reduced) finish();
+  else SK.onView(anchor, function () {
+    if (played) return; played = true;
+    var shown = 0;
+    rows.forEach(function (r, i) {
+      setTimeout(function () {
+        r.classList.add("on");
+        var from = shown, to = shown + (+r.getAttribute("data-cost")), t0 = performance.now(); shown = to;
+        (function tick(now) { var k = Math.min(1, (now - t0) / 520), e = 1 - Math.pow(1 - k, 3); total.textContent = money(from + (to - from) * e); if (k < 1) requestAnimationFrame(tick); })(t0);
+      }, 250 + i * 620);
+    });
+    setTimeout(function () { team.classList.add("on"); }, 300);
+    setTimeout(function () { studio.classList.add("on"); }, 250 + rows.length * 620 + 500);
+    setTimeout(function () { anchor.classList.add("done"); }, 250 + rows.length * 620 + 1300);
+  }, null, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+}

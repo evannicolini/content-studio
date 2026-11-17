@@ -2209,3 +2209,60 @@ button.wk-film .wk-dur { bottom: 19px; }
   .pr-field { height: 56px; padding-left: 16px; }
   .pr-field input { font-size: 16px; }
 }
+
+/* ---------- the anchor ---------- */
+.pr-anchor { max-width: 940px; margin: 0 auto clamp(14px, 1.6vw, 22px); padding: clamp(22px, 2.6vw, 36px); border-radius: clamp(22px, 2.2vw, 30px); background: rgba(var(--tint), .62); }
+.pr-a-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.pr-a-head .mono { color: var(--sand-3); }
+.pr-rows { margin-top: clamp(14px, 1.6vw, 22px); }
+.pr-rows li { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.6fr) auto; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px solid rgba(255, 255, 255, .08); opacity: 0; transform: translateY(8px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.pr-rows li.on { opacity: 1; transform: none; }
+.pr-rows b { font: 500 clamp(16px, 1.4vw, 19px)/1.2 var(--sans); letter-spacing: -.012em; }
+.pr-rows span { color: var(--sand-2); font-size: 15px; }
+.pr-rows em { font: 400 clamp(17px, 1.5vw, 21px)/1 var(--sans); font-style: normal; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.pr-vs { margin-top: clamp(20px, 2.4vw, 30px); display: grid; gap: 14px; }
+.pr-bar { display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 16px; }
+.pr-bar-label { display: inline-flex; align-items: center; gap: 7px; font: 500 14px/1 var(--sans); color: var(--sand-2); white-space: nowrap; }
+.pr-bar-label .mark { width: 22px; height: 22px; overflow: visible; }
+.pr-bar i { display: block; height: 14px; border-radius: 7px; width: 0; transition: width 1.6s var(--ease-io); }
+.pr-bar-team i { background: linear-gradient(90deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, .22)); }
+.pr-bar-team.on i { width: 100%; }
+.pr-bar-studio i { background: var(--pearl); min-width: 0; }
+.pr-bar-studio.on i { width: 1.03%; min-width: 7px; }
+.pr-bar strong { font: 300 clamp(26px, 3vw, 44px)/1 var(--sans); letter-spacing: -.035em; font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 5.2ch; text-align: right; }
+.pr-bar strong small { display: block; margin-top: 5px; font: 400 12px/1 var(--sans); letter-spacing: 0; color: var(--sand-3); }
+.pr-bar-team strong s { text-decoration: none; background: linear-gradient(currentColor, currentColor) left 54% / 0 1.5px no-repeat; transition: background-size .6s var(--ease) .2s, color .6s; }
+.pr-anchor.done .pr-bar-team strong s { background-size: 100% 1.5px; color: var(--sand-3); }
+.pr-bar-studio { opacity: 0; transform: translateY(8px); transition: opacity .6s var(--ease), transform .7s var(--ease); }
+.pr-bar-studio.on { opacity: 1; transform: none; }
+.pr-bar-studio .pr-bar-label { color: #fff; }
+.pr-punch { margin-top: clamp(20px, 2.4vw, 30px); font: 300 clamp(26px, 3.2vw, 46px)/1.05 var(--sans); letter-spacing: -.035em; opacity: 0; transition: opacity .8s var(--ease) .2s; }
+.pr-punch span { color: var(--sand-3); }
+.pr-agency { margin-top: 12px; color: var(--sand-2); font-size: 15px; opacity: 0; transition: opacity .8s var(--ease) .5s; }
+.pr-anchor.done .pr-punch, .pr-anchor.done .pr-agency { opacity: 1; }
+
+/* ---------- what you need ---------- */
+.pr-needs { max-width: 940px; margin: clamp(40px, 5vw, 72px) auto 0; text-align: center; }
+.pr-need-grid { margin-top: clamp(20px, 2.4vw, 30px); display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: clamp(12px, 1.4vw, 18px); text-align: left; }
+.pr-need { padding: clamp(18px, 2vw, 26px); border-radius: clamp(20px, 2vw, 26px); background: rgba(var(--tint), .5); display: flex; flex-direction: column; }
+.pr-need .mono { color: var(--sand-3); margin-bottom: 14px; }
+.pr-need ul { display: grid; gap: 14px; }
+.pr-need li { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; }
+.pr-ico { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); overflow: hidden; }
+.pr-ico svg { width: 24px; height: 24px; overflow: visible; }
+.pr-ico-claude svg { width: 19px; height: 19px; fill: #d97757; }
+.pr-ico img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
+.pr-ico img[src*="elevenlabs"], .pr-ico img[src*="artlist"] { width: 38px; height: 38px; filter: grayscale(1) contrast(1.1); }
+.pr-ico-text { font: 600 16px/1 var(--sans); color: #fff; }
+.pr-need b { display: block; font: 500 16px/1.2 var(--sans); letter-spacing: -.01em; }
+.pr-need small { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.35; color: var(--sand-2); }
+.pr-need-note { margin-top: auto; padding-top: 16px; font-size: 13px; color: var(--sand-3); }
+.pr-needs .pr-note { font-size: 12.5px; color: var(--sand-3); max-width: 52em; }
+@media (max-width: 760px) {
+  .pr-rows li { grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .pr-rows span { grid-column: 1; grid-row: 2; font-size: 13.5px; }
+  .pr-rows em { grid-row: 1 / span 2; align-self: center; }
+  .pr-bar { grid-template-columns: 1fr auto; gap: 8px 12px; }
+  .pr-bar-label { grid-column: 1 / -1; }
+  .pr-need-grid { grid-template-columns: 1fr; }
+}
