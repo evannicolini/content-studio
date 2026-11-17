@@ -61,7 +61,7 @@
 .gs-b { max-width: 84%; padding: 10px 14px; border-radius: 17px; opacity: 0; transform: translateY(10px) scale(.98); transition: opacity .5s var(--ease), transform .6s var(--ease); }
 .gs-b.on { opacity: 1; transform: none; }
 .gs-b.claude { align-self: flex-start; border-bottom-left-radius: 6px; }
-.gs-b.you { align-self: flex-end; background: rgba(255, 255, 255, .22); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); border-bottom-right-radius: 6px; }
+.gs-b.you { align-self: flex-end; background: linear-gradient(rgba(255, 255, 255, .16), rgba(255, 255, 255, .16)), rgba(var(--tint), .42); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); border-bottom-right-radius: 6px; }
 .gs-who { display: flex; align-items: center; gap: 6px; font: 500 9.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-2); margin-bottom: 6px; }
 .gs-who svg { width: 13px; height: 13px; fill: #d97757; }
 .gs-kit { position: absolute; left: 14px; right: 14px; bottom: 14px; padding: 12px; border-radius: 18px; opacity: 0; transform: translateY(14px) scale(.97); transition: opacity .5s var(--ease), transform .7s var(--ease); }
