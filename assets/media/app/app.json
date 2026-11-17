@@ -1,0 +1,328 @@
+{
+ "generated": "2026-11-17",
+ "note": "Recorded from the real Studio app on a demo Studio folder (two brands, 24 edits). Clips play in this order: hero-open, hero-launch, hero-note, hero-viral, hero-post. No audio. Stills are 2880x1800 with a 1440 copy.",
+ "order": [
+  "hero-open",
+  "hero-launch",
+  "hero-note",
+  "hero-viral",
+  "hero-post"
+ ],
+ "files": [
+  {
+   "file": "assets/media/app/hero-launch-1280.mp4",
+   "kind": "video",
+   "width": 1280,
+   "height": 800,
+   "bytes": 750158,
+   "duration": 9.867,
+   "fps": 30,
+   "frames": 296,
+   "audio": false,
+   "clip": "hero-launch",
+   "shows": "Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-launch.jpg",
+   "kind": "image",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 210229,
+   "clip": "hero-launch",
+   "shows": "Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-launch.mp4",
+   "kind": "video",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 1321620,
+   "duration": 9.867,
+   "fps": 30,
+   "frames": 296,
+   "audio": false,
+   "clip": "hero-launch",
+   "shows": "Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-note-1280.mp4",
+   "kind": "video",
+   "width": 1280,
+   "height": 800,
+   "bytes": 483157,
+   "duration": 10.0,
+   "fps": 30,
+   "frames": 300,
+   "audio": false,
+   "clip": "hero-note",
+   "shows": "Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."
+  },
+  {
+   "file": "assets/media/app/hero-note.jpg",
+   "kind": "image",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 171285,
+   "clip": "hero-note",
+   "shows": "Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."
+  },
+  {
+   "file": "assets/media/app/hero-note.mp4",
+   "kind": "video",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 840877,
+   "duration": 10.0,
+   "fps": 30,
+   "frames": 300,
+   "audio": false,
+   "clip": "hero-note",
+   "shows": "Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."
+  },
+  {
+   "file": "assets/media/app/hero-open-1280.mp4",
+   "kind": "video",
+   "width": 1280,
+   "height": 800,
+   "bytes": 1261654,
+   "duration": 13.0,
+   "fps": 30,
+   "frames": 390,
+   "audio": false,
+   "clip": "hero-open",
+   "shows": "The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-open.jpg",
+   "kind": "image",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 42712,
+   "clip": "hero-open",
+   "shows": "The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-open.mp4",
+   "kind": "video",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 2291734,
+   "duration": 13.0,
+   "fps": 30,
+   "frames": 390,
+   "audio": false,
+   "clip": "hero-open",
+   "shows": "The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-post-1280.mp4",
+   "kind": "video",
+   "width": 1280,
+   "height": 800,
+   "bytes": 565799,
+   "duration": 9.633,
+   "fps": 30,
+   "frames": 289,
+   "audio": false,
+   "clip": "hero-post",
+   "shows": "Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."
+  },
+  {
+   "file": "assets/media/app/hero-post.jpg",
+   "kind": "image",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 159950,
+   "clip": "hero-post",
+   "shows": "Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."
+  },
+  {
+   "file": "assets/media/app/hero-post.mp4",
+   "kind": "video",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 1005016,
+   "duration": 9.633,
+   "fps": 30,
+   "frames": 289,
+   "audio": false,
+   "clip": "hero-post",
+   "shows": "Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."
+  },
+  {
+   "file": "assets/media/app/hero-viral-1280.mp4",
+   "kind": "video",
+   "width": 1280,
+   "height": 800,
+   "bytes": 912818,
+   "duration": 10.0,
+   "fps": 30,
+   "frames": 300,
+   "audio": false,
+   "clip": "hero-viral",
+   "shows": "Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-viral.jpg",
+   "kind": "image",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 220310,
+   "clip": "hero-viral",
+   "shows": "Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/hero-viral.mp4",
+   "kind": "video",
+   "width": 1920,
+   "height": 1200,
+   "bytes": 1579684,
+   "duration": 10.0,
+   "fps": 30,
+   "frames": 300,
+   "audio": false,
+   "clip": "hero-viral",
+   "shows": "Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."
+  },
+  {
+   "file": "assets/media/app/still-ads-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 180426
+  },
+  {
+   "file": "assets/media/app/still-ads.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 275618
+  },
+  {
+   "file": "assets/media/app/still-aesthetic-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 260299
+  },
+  {
+   "file": "assets/media/app/still-aesthetic.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 417363
+  },
+  {
+   "file": "assets/media/app/still-ailib-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 307364
+  },
+  {
+   "file": "assets/media/app/still-ailib.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 503646
+  },
+  {
+   "file": "assets/media/app/still-brandkit-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 175613
+  },
+  {
+   "file": "assets/media/app/still-brandkit.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 261794
+  },
+  {
+   "file": "assets/media/app/still-editor-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 184508
+  },
+  {
+   "file": "assets/media/app/still-editor.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 283767
+  },
+  {
+   "file": "assets/media/app/still-edits-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 257939
+  },
+  {
+   "file": "assets/media/app/still-edits.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 410319
+  },
+  {
+   "file": "assets/media/app/still-home-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 244041
+  },
+  {
+   "file": "assets/media/app/still-home.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 403491
+  },
+  {
+   "file": "assets/media/app/still-social-calendar-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 207301
+  },
+  {
+   "file": "assets/media/app/still-social-calendar.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 330609
+  },
+  {
+   "file": "assets/media/app/still-viral-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 249017
+  },
+  {
+   "file": "assets/media/app/still-viral-open-1440.jpg",
+   "kind": "image",
+   "width": 1440,
+   "height": 900,
+   "bytes": 191595
+  },
+  {
+   "file": "assets/media/app/still-viral-open.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 307508
+  },
+  {
+   "file": "assets/media/app/still-viral.jpg",
+   "kind": "image",
+   "width": 2880,
+   "height": 1800,
+   "bytes": 395088
+  }
+ ]
+}

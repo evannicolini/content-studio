@@ -1,0 +1,76 @@
+/* 030 work: the real films on a slow rail. The centre film is large, each one carries its kind, its brand and the sentence that started it. */
+.wk { --wk-w: clamp(236px, 21.6vw, 318px); --wk-gap: clamp(12px, 1.5vw, 22px); --wk-ink: 21, 23, 27; border-radius: var(--frame-r) var(--frame-r) 0 0; overflow: hidden; overflow: clip; padding-bottom: clamp(64px, 8vw, 120px); }
+.wk-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+.wk-top .sec-head { margin-bottom: clamp(26px, 3.4vw, 48px); }
+.wk-nav { display: flex; align-items: center; gap: 10px; margin-bottom: clamp(26px, 3.4vw, 48px); flex: none; }
+.wk-count { font: 500 11px/1 var(--mono); letter-spacing: .16em; color: rgba(var(--wk-ink), .5); margin-right: 10px; font-variant-numeric: tabular-nums; }
+.wk-arrow { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; background: #fff; box-shadow: inset 0 0 0 1px rgba(var(--wk-ink), .09); color: rgb(var(--wk-ink)); transition: transform .25s var(--ease), background-color .25s; }
+.wk-arrow:hover { background: #fbfaf8; transform: scale(1.05); }
+.wk-arrow:active { transform: scale(.95); }
+.wk-arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.wk :focus-visible { outline-color: rgb(var(--wk-ink)); }
+
+/* the rail: a real horizontal scroller (swipe, trackpad, drag), snapping each film to the centre */
+.wk-rail { position: relative; display: flex; align-items: flex-start; gap: var(--wk-gap); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 6px calc(50% - var(--wk-w) / 2) 4px; cursor: grab; -webkit-user-select: none; user-select: none; }
+.wk-rail::-webkit-scrollbar { display: none; }
+.wk-rail.drag { scroll-snap-type: none; cursor: grabbing; }
+.wk-rail.drag .wk-film { pointer-events: none; }
+.wk-card { --f: 0; flex: none; width: var(--wk-w); scroll-snap-align: center; transform-origin: 50% calc(var(--wk-w) * 16 / 9); will-change: transform; }
+.wk-film { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: clamp(18px, 1.7vw, 26px); overflow: hidden; background: #1a1d22; isolation: isolate; -webkit-user-drag: none; text-align: left; }
+button.wk-film { cursor: pointer; }
+.wk-film video, .wk-film > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; pointer-events: none; }
+.wk-film::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); pointer-events: none; z-index: 3; }
+/* watch with sound: only on the films that have a full cut on the site */
+.wk-play { position: absolute; z-index: 2; left: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 15px 0 6px; border-radius: 999px; font: 500 13.5px/1 var(--sans); letter-spacing: -.008em; color: #fff; background: rgba(10, 13, 18, .42); -webkit-backdrop-filter: blur(16px) saturate(150%); backdrop-filter: blur(16px) saturate(150%); box-shadow: var(--rim); transition: background-color .25s var(--ease), transform .3s var(--ease); white-space: nowrap; }
+.wk-play svg { width: 28px; height: 28px; padding: 8px 7px 8px 9px; border-radius: 50%; background: #fff; fill: #0c0f14; flex: none; }
+button.wk-film:hover .wk-play { background: rgba(10, 13, 18, .62); transform: scale(1.03); }
+.wk-dur { position: absolute; z-index: 2; right: 12px; bottom: 12px; height: 26px; padding: 0 9px; border-radius: 9px; display: inline-flex; align-items: center; font: 500 10.5px/1 var(--mono); letter-spacing: .08em; color: #fff; background: rgba(10, 13, 18, .42); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); font-variant-numeric: tabular-nums; }
+.wk-dur:empty { display: none; }
+button.wk-film .wk-dur { bottom: 19px; }
+
+/* the label under each film */
+.wk-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; opacity: calc(.5 + .5 * var(--f)); }
+.wk-kind { font: 500 10.5px/1 var(--mono); letter-spacing: .15em; text-transform: uppercase; color: rgba(var(--wk-ink), .62); white-space: nowrap; }
+.wk-brand { display: inline-flex; align-items: center; gap: 7px; font: 500 13px/1 var(--sans); letter-spacing: -.01em; color: rgb(var(--wk-ink)); white-space: nowrap; }
+.wk-brand img { width: 20px; height: 20px; border-radius: 6px; }
+.wk-ask { position: relative; margin-top: 12px; padding-left: 1.5em; min-height: 3.1em; font: 400 13.5px/1.55 var(--mono); letter-spacing: -.01em; color: rgb(var(--wk-ink)); opacity: calc(.44 + .56 * var(--f)); text-wrap: pretty; -webkit-user-select: text; user-select: text; }
+.wk-ask b { position: absolute; left: 0; top: 0; font-weight: 500; color: rgba(var(--wk-ink), .4); }
+.wk-ask.wk-plain { padding-left: 0; font: 500 17px/1.3 var(--sans); letter-spacing: -.02em; }
+.wk-card.is-on .wk-say::after { content: ""; display: inline-block; width: 7px; height: 1.05em; margin-left: 3px; vertical-align: -.18em; background: rgba(var(--wk-ink), .82); animation: wk-blink 1.06s steps(1) infinite; }
+.wk-card.is-on .wk-plain .wk-say::after { content: none; }
+@keyframes wk-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+/* the carousel card: its slides flip like a story */
+.wk-car .wk-film { background: #05070b; }
+.wk-car .wk-film > img { opacity: 0; transition: opacity .55s var(--ease); }
+.wk-car .wk-film > img.on { opacity: 1; }
+.wk-segs { position: absolute; z-index: 2; left: 12px; right: 12px; top: 12px; display: flex; gap: 4px; }
+.wk-segs i { flex: 1; height: 2.5px; border-radius: 2px; background: rgba(255, 255, 255, .28); overflow: hidden; }
+.wk-segs i::after { content: ""; display: block; height: 100%; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+.wk-segs i.done::after { transform: none; }
+.wk-segs i.now::after { animation: wk-seg var(--wk-flip, 1900ms) linear forwards; }
+@keyframes wk-seg { to { transform: none; } }
+
+/* the quiet line */
+.wk-foot { margin-top: clamp(48px, 6vw, 88px); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; }
+.wk-logos { display: flex; align-items: center; gap: 22px; opacity: .8; }
+.wk-logos img { display: block; }
+.wk-lg-m { height: 14px; width: auto; filter: brightness(0); }
+.wk-lg-c { height: 24px; width: auto; }
+.wk-logos i { width: 1px; height: 20px; background: rgba(var(--wk-ink), .22); }
+.wk-line { font: 400 clamp(14.5px, 1.1vw, 16px)/1.5 var(--sans); letter-spacing: -.008em; color: rgba(var(--wk-ink), .6); max-width: 30em; text-wrap: balance; }
+
+@media (max-width: 760px) {
+  .wk { --wk-w: min(66vw, 300px); --wk-gap: 10px; }
+  .wk-top { display: block; }
+  .wk-nav { display: none; }
+  .wk-rail { cursor: auto; padding-top: 2px; }
+  .wk-play { height: 38px; font-size: 13px; left: 10px; bottom: 10px; }
+  .wk-dur { right: 10px; }
+  button.wk-film .wk-dur { bottom: 16px; }
+  .wk-meta { opacity: var(--f); margin-top: 14px; }
+  .wk-ask { opacity: var(--f); font-size: 12.5px; min-height: 4.7em; }
+  .wk-brand { font-size: 12.5px; }
+  .wk-kind { font-size: 10px; letter-spacing: .12em; }
+}
+@media (prefers-reduced-motion: reduce) { .wk-card.is-on .wk-say::after { content: none; } }

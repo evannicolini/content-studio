@@ -1,0 +1,2751 @@
+window.SK_MEDIA = {"generated":"2026-11-17","note":"All paths are relative to the site root. Every item is Evan's own work (finished edits, his AI generations, his AI wallpapers, his brand logos). Nothing from References, Viral Lab, Creators or raw music/SFX is included.","films":[{"slug":"mirra-multivitamin","title":"MIRRA Multivitamin commercial","brand":"MIRRA","kind":"Launch commercial","made_with":"AI live action (Cinema Studio text-to-video) + MIRRA UI motion graphics + VO","version":"v07","board_edit_id":"edit_multivitamin","board_status":"Finished (FINAL v07 in 06_Final)","duration":64.92,"aspect":"9:16","loop":"assets/media/films/mirra-multivitamin/loop.mp4","full":"assets/media/films/mirra-multivitamin/full.mp4","poster":"assets/media/films/mirra-multivitamin/poster.jpg","loop_bytes":733003,"full_bytes":8921941,"poster_bytes":41324,"loop_size":[540,960],"full_size":[720,1280],"loop_start":9.5,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[720,1280],"has_audio":true},{"slug":"founders-retreat","title":"Your place for ambitious young founders","brand":"MIRRA","kind":"AI film","made_with":"Full AI cinematic montage, no VO","version":"v04","board_edit_id":"edit_founders_retreat","board_status":"Latest version v04","duration":44.59,"aspect":"9:16","loop":"assets/media/films/founders-retreat/loop.mp4","full":"assets/media/films/founders-retreat/full.mp4","poster":"assets/media/films/founders-retreat/poster.jpg","loop_bytes":688563,"full_bytes":6061847,"poster_bytes":48032,"loop_size":[540,960],"full_size":[720,1280],"loop_start":15.0,"loop_duration":9.5,"loop_fps":30,"full_fps":30,"source_size":[720,1280],"has_audio":true},{"slug":"lobby-hero-window","title":"The Lobby \u00b7 Hero window, bigger","brand":"MIRRA","kind":"AI + motion graphics","made_with":"AI people + MIRRA profile motion graphics, no VO","version":"v06","board_edit_id":"edit_lobby_hero_big","board_status":"Ready \u00b7 posted","duration":18.3,"aspect":"9:16","loop":"assets/media/films/lobby-hero-window/loop.mp4","full":null,"poster":"assets/media/films/lobby-hero-window/poster.jpg","loop_bytes":486978,"full_bytes":1685391,"poster_bytes":53087,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.0,"loop_duration":9.5,"loop_fps":30,"full_fps":30,"source_size":[1080,1920],"has_audio":true,"full_note":"not published: the full cut carries commercial music"},{"slug":"ces-replied-booked","title":"Replied \u00d7 MIRRA \u00b7 Deleted, then booked","brand":"Custom Esignature","kind":"Commercial (AI + motion graphics)","made_with":"AI live action + signature / MIRRA app motion graphics + VO","version":"v06","board_edit_id":"edit_ces_replied_booked","board_status":"FINAL v06 (approved)","duration":47.52,"aspect":"9:16","loop":"assets/media/films/ces-replied-booked/loop.mp4","full":"assets/media/films/ces-replied-booked/full.mp4","poster":"assets/media/films/ces-replied-booked/poster.jpg","loop_bytes":540014,"full_bytes":4976178,"poster_bytes":47621,"loop_size":[540,960],"full_size":[720,1280],"loop_start":12.0,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-forest","title":"Forest \u00b7 compose to inbox","brand":"Custom Esignature","kind":"AI + motion graphics","made_with":"AI forest plate + glass composer motion graphics, no VO","version":"v02","board_edit_id":"edit_ces_compose_forest","board_status":"Ready \u00b7 posted \u00b7 ran as ad","duration":18.73,"aspect":"9:16","loop":"assets/media/films/ces-forest/loop.mp4","full":"assets/media/films/ces-forest/full.mp4","poster":"assets/media/films/ces-forest/poster.jpg","loop_bytes":435459,"full_bytes":1660562,"poster_bytes":86390,"loop_size":[540,960],"full_size":[720,1280],"loop_start":2.7,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-agent-kitchen","title":"Agent \u00b7 kitchen, real estate","brand":"Custom Esignature","kind":"Industry ad (AI + motion graphics)","made_with":"AI kitchen plate + signature motion graphics + VO","version":"v02","board_edit_id":"edit_ces_re_agent_kitchen","board_status":"Latest version v02","duration":20.43,"aspect":"9:16","loop":"assets/media/films/ces-agent-kitchen/loop.mp4","full":"assets/media/films/ces-agent-kitchen/full.mp4","poster":"assets/media/films/ces-agent-kitchen/poster.jpg","loop_bytes":285432,"full_bytes":1391629,"poster_bytes":50425,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.8,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-company-becoming","title":"Look like the company you're becoming","brand":"Custom Esignature","kind":"Launch commercial","made_with":"AI live action + signature motion graphics + VO","version":"v10","board_edit_id":"edit_ces_launch_company_becoming","board_status":"Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite","duration":48.28,"aspect":"9:16","loop":"assets/media/films/ces-company-becoming/loop.mp4","full":"assets/media/films/ces-company-becoming/full.mp4","poster":"assets/media/films/ces-company-becoming/poster.jpg","loop_bytes":577971,"full_bytes":5646124,"poster_bytes":47089,"loop_size":[540,960],"full_size":[720,1280],"loop_start":9.3,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-sea-cliffs","title":"Signature anatomy \u00b7 sea cliffs","brand":"Custom Esignature","kind":"AI + motion graphics","made_with":"AI sea-cliffs plate + signature motion graphics, no VO","version":"v02","board_edit_id":"edit_ces_sig_anatomy","board_status":"Ready \u00b7 posted \u00b7 ran as ad","duration":16.18,"aspect":"9:16","loop":"assets/media/films/ces-sea-cliffs/loop.mp4","full":"assets/media/films/ces-sea-cliffs/full.mp4","poster":"assets/media/films/ces-sea-cliffs/poster.jpg","loop_bytes":358942,"full_bytes":1348064,"poster_bytes":72693,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.5,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-email-signature","title":"This is an email signature?","brand":"Custom Esignature","kind":"Viral remake","made_with":"Evan on camera + phone screen demo, viral-format remake","version":"v03","board_edit_id":"edit_ces_is_this_a_signature","board_status":"Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite","duration":23.18,"aspect":"9:16","loop":"assets/media/films/ces-email-signature/loop.mp4","full":null,"poster":"assets/media/films/ces-email-signature/poster.jpg","loop_bytes":740950,"full_bytes":4522270,"poster_bytes":45590,"loop_size":[540,960],"full_size":[720,1280],"loop_start":0.2,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true,"full_note":"not published: the full cut carries commercial music"}],"carousels":[{"slug":"founder-sundays","title":"Stop figuring it out alone on Sundays \u00b7 Founder carousel","brand":"MIRRA","kind":"Carousel","version":"v04","aspect":"4:5","width":1080,"height":1350,"count":4,"slides":["assets/media/carousels/founder-sundays/01.jpg","assets/media/carousels/founder-sundays/02.jpg","assets/media/carousels/founder-sundays/03.jpg","assets/media/carousels/founder-sundays/04.jpg"],"bytes":404800,"note":"Stills of each slide (slides after the first are short animated scenes in the original; the still is the settled frame the project already exported)."},{"slug":"founders-new-network","title":"A new network for young founders \u00b7 9:16 carousel","brand":"MIRRA","kind":"Carousel","version":"v02","aspect":"9:16","width":1080,"height":1920,"count":7,"slides":["assets/media/carousels/founders-new-network/01.jpg","assets/media/carousels/founders-new-network/02.jpg","assets/media/carousels/founders-new-network/03.jpg","assets/media/carousels/founders-new-network/04.jpg","assets/media/carousels/founders-new-network/05.jpg","assets/media/carousels/founders-new-network/06.jpg","assets/media/carousels/founders-new-network/07.jpg"],"bytes":1799848,"note":"Stills of each slide (slides after the first are short animated scenes in the original; the still is the settled frame the project already exported)."}],"selects":[{"slug":"coastal-highway","title":"Coastal highway with friends","library_title":"Coastal Highway friends 05 (AI Library)","select_id":"ve4ae44581345e8","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/coastal-highway.mp4","poster":"assets/media/selects/coastal-highway.jpg","bytes":292398,"poster_bytes":22305,"crf":28,"excerpt":{"start":1.25,"duration":6.0,"source_duration":15.04},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026","prompt_scene_teaser":null,"note":"The prompt recorded for this clip in SELECTS.md describes the private-airstrip scene, not the coastal drive: only the generic opening lines are safe to tease."},{"slug":"private-jet","title":"Private jet with friends, California","library_title":"Private jet with friends, California (AI Library)","select_id":"vd8bc574dc94c7b","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/private-jet.mp4","poster":"assets/media/selects/private-jet.jpg","bytes":283796,"poster_bytes":29948,"crf":28,"excerpt":{"start":4.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026","prompt_scene_teaser":"Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron\u2026"},{"slug":"surfing","title":"Surfing with a friend","library_title":"Friend surfing 09 (AI Library)","select_id":"vce3ac4f7d14c36","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/surfing.mp4","poster":"assets/media/selects/surfing.jpg","bytes":414888,"poster_bytes":17790,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":null},{"slug":"mountain-biking","title":"Mountain biking with friends","library_title":"Mountain biking with friends (AI Library)","select_id":"vdbd74dc237e3fd","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/mountain-biking.mp4","poster":"assets/media/selects/mountain-biking.jpg","bytes":516433,"poster_bytes":34503,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood\u2026"},{"slug":"mountain-biking-fpv","title":"Mountain biking, FPV single shot","library_title":"Mountain biking, FPV drone single shot (AI Library)","select_id":"v11e6e4e977cc87","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/mountain-biking-fpv.mp4","poster":"assets/media/selects/mountain-biking-fpv.jpg","bytes":650514,"poster_bytes":37264,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park\u2026"},{"slug":"run-club","title":"Sydney run club","library_title":"Sydney run club (best) (AI Library)","select_id":"va3340f57cafb5c","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/run-club.mp4","poster":"assets/media/selects/run-club.jpg","bytes":434337,"poster_bytes":38302,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026","prompt_scene_teaser":"Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie\u2019s Point."},{"slug":"cofounder-whiteboard","title":"Co-founder whiteboard","library_title":"Cofounder whiteboard, tennis, investor intro (MIRRA Multivitamin)","select_id":"v6b0bb3da6a570b","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":6.04,"file":"assets/media/selects/cofounder-whiteboard.mp4","poster":"assets/media/selects/cofounder-whiteboard.jpg","bytes":284539,"poster_bytes":29693,"crf":28,"excerpt":{"start":0,"duration":6.04,"source_duration":6.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":"Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro\u2026"},{"slug":"real-connections","title":"Real connections","library_title":"Real connections (Multivitamin) (MIRRA Multivitamin)","select_id":"v4126c6b03929b7","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/real-connections.mp4","poster":"assets/media/selects/real-connections.jpg","bytes":201540,"poster_bytes":23720,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":"Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden\u2026"},{"slug":"house-party","title":"House party, Beverly Hills","library_title":"House party, Beverly Hills (AI Library)","select_id":"v362823dae44782","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/house-party.mp4","poster":"assets/media/selects/house-party.jpg","bytes":383873,"poster_bytes":29373,"crf":28,"excerpt":{"start":2.5,"duration":6.0,"source_duration":15.05},"used_in":null,"prompt_teaser":"PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026","prompt_scene_teaser":"Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"},{"slug":"get-together","title":"Upscale get-together, Hollywood Hills","library_title":"Upscale get-together with friends (AI Library)","select_id":"vf80d45513e3e04","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/get-together.mp4","poster":"assets/media/selects/get-together.jpg","bytes":447453,"poster_bytes":34756,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026","prompt_scene_teaser":"Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"},{"slug":"yacht","title":"Friends on a yacht","library_title":"Friends hanging out on a yacht (AI Library)","select_id":"ve880cb3722b009","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/yacht.mp4","poster":"assets/media/selects/yacht.jpg","bytes":358274,"poster_bytes":22303,"crf":28,"excerpt":{"start":0.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated\u2026","prompt_scene_teaser":"Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the\u2026"},{"slug":"golf","title":"Golfing with friends","library_title":"Golfing with friends (AI Library)","select_id":"ve93f75bb820e22","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/golf.mp4","poster":"assets/media/selects/golf.jpg","bytes":329744,"poster_bytes":31576,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy\u2026"},{"slug":"beach-volleyball","title":"Beach volleyball with friends","library_title":"Volleyball with friends (AI Library)","select_id":"v0de158a014d7b8","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/beach-volleyball.mp4","poster":"assets/media/selects/beach-volleyball.jpg","bytes":357349,"poster_bytes":25344,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No\u2026","prompt_scene_teaser":"Create a 12-second film of six established friends playing beach volleyball beside sparkling blue water, pale sand, healthy coastal greenery, and a clear sky."},{"slug":"tropical-vacation","title":"Friends on a tropical vacation","library_title":"Friends tropical vacation (AI Library)","select_id":"vfe5aec81b52397","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/tropical-vacation.mp4","poster":"assets/media/selects/tropical-vacation.jpg","bytes":496935,"poster_bytes":52337,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.06},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through\u2026"},{"slug":"race-track","title":"Friends at a race track","library_title":"Friends at a race track (AI Library)","select_id":"vbc73bf6b810022","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/race-track.mp4","poster":"assets/media/selects/race-track.jpg","bytes":212731,"poster_bytes":23354,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026","prompt_scene_teaser":"Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.\u2026"},{"slug":"tennis-forehand","title":"Tennis forehand","library_title":"Tennis forehand, golden hour (MIRRA Multivitamin)","select_id":"va951c7d4c71b37","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/tennis-forehand.mp4","poster":"assets/media/selects/tennis-forehand.jpg","bytes":183349,"poster_bytes":27906,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026","prompt_scene_teaser":null},{"slug":"investor-intro","title":"Investor intro, caf\u00e9 terrace","library_title":"Investor intro, cafe terrace (MIRRA Multivitamin)","select_id":"vcf2ff8d516c980","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/investor-intro.mp4","poster":"assets/media/selects/investor-intro.jpg","bytes":206019,"poster_bytes":33990,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026","prompt_scene_teaser":null},{"slug":"dinner-toast","title":"Dinner toast","library_title":"Dinner (A day in people) (A Day In People)","select_id":"v04b19313944dc4","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":6.04,"file":"assets/media/selects/dinner-toast.mp4","poster":"assets/media/selects/dinner-toast.jpg","bytes":182184,"poster_bytes":27523,"crf":28,"excerpt":{"start":0,"duration":6.05,"source_duration":6.05},"used_in":"A day in people","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026","prompt_scene_teaser":null},{"slug":"coffee-friend-arrives","title":"A friend arrives for coffee","library_title":"Coffee friend arrives (A Day In People)","select_id":"vd0515e93ce5faf","model":"Cinema Studio 4.0","aspect":"9:16","width":414,"height":720,"duration":5.04,"file":"assets/media/selects/coffee-friend-arrives.mp4","poster":"assets/media/selects/coffee-friend-arrives.jpg","bytes":278948,"poster_bytes":38827,"crf":28,"excerpt":{"start":0,"duration":5.05,"source_duration":5.05},"used_in":"A day in people","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026","prompt_scene_teaser":null},{"slug":"court-dap","title":"Basketball court dap","library_title":"basketball court dap (The Network Effect)","select_id":"va5be8970de962b","model":"Cinema Studio 4.0","aspect":"9:16","width":414,"height":720,"duration":5.04,"file":"assets/media/selects/court-dap.mp4","poster":"assets/media/selects/court-dap.jpg","bytes":189805,"poster_bytes":28218,"crf":28,"excerpt":{"start":0,"duration":5.05,"source_duration":5.05},"used_in":"The Network Effect","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard\u2026","prompt_scene_teaser":null},{"slug":"above-the-clouds","title":"Above the clouds (16:9)","library_title":"Above clouds 16x9 (CES Website Sections)","select_id":"vfefbd4dad7aa3c","model":"Cinema Studio 4.0","aspect":"16:9","width":720,"height":404,"duration":8.0,"file":"assets/media/selects/above-the-clouds.mp4","poster":"assets/media/selects/above-the-clouds.jpg","bytes":70769,"poster_bytes":27107,"crf":28,"excerpt":{"start":0.0,"duration":8.0,"source_duration":10.05},"used_in":"Custom Esignature website","prompt_teaser":"Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white\u2026","prompt_scene_teaser":null}],"wallpapers":[{"slug":"cumulus-sky","name":"Cumulus sky","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 70%","tint_rgb":"15,22,31","file":"assets/media/wallpapers/cumulus-sky.jpg","thumb":"assets/media/wallpapers/cumulus-sky-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":590971,"thumb_bytes":32040,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 2752x1536), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 2381963c-265e-42d9-b7d1-e3c544e18d4c are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"volcano-above-clouds","name":"Peak above the clouds","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 80%","tint_rgb":"15,20,29","file":"assets/media/wallpapers/volcano-above-clouds.jpg","thumb":"assets/media/wallpapers/volcano-above-clouds-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":557913,"thumb_bytes":30358,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 2768bd76-28a7-4a63-a2da-295a6a43c000 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"peaks-in-cloud-sea","name":"Peaks in a sea of cloud","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 66%","tint_rgb":"17,20,27","file":"assets/media/wallpapers/peaks-in-cloud-sea.jpg","thumb":"assets/media/wallpapers/peaks-in-cloud-sea-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":569610,"thumb_bytes":34238,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id af43bfe6-3240-441b-b28a-d045415c553a are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"above-the-clouds","name":"Above the clouds","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"sky","studio_group":"sky","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/above-the-clouds.jpg","thumb":"assets/media/wallpapers/above-the-clouds-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":585218,"thumb_bytes":37775,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id acc39dd6-1faa-4923-8162-141a415548d3 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"orange-clouds-blue-sky","name":"Orange clouds, blue sky","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"sky","studio_group":"sky","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/orange-clouds-blue-sky.jpg","thumb":"assets/media/wallpapers/orange-clouds-blue-sky-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":560916,"thumb_bytes":33186,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 8e3e7c83-2798-48ce-b969-255da783d93e are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"half-dome-long-exposure","name":"Half Dome, flowing sky","name_source":"Studio featured.json","scene":"sky / mountains","studio_group":"double","focus":"50% 42%","tint_rgb":"20,19,18","file":"assets/media/wallpapers/half-dome-long-exposure.jpg","thumb":"assets/media/wallpapers/half-dome-long-exposure-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":589684,"thumb_bytes":38888,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 82a015e1-e118-4163-bdcc-bd264f4ceb2b are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"big-sur-coast","name":"Big Sur coast","name_source":"Studio featured.json","scene":"coast","studio_group":"ocean","focus":"50% 50%","tint_rgb":"20,20,14","file":"assets/media/wallpapers/big-sur-coast.jpg","thumb":"assets/media/wallpapers/big-sur-coast-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":596037,"thumb_bytes":50001,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id e96d6b4f-279a-4c26-b451-65ef2091e006 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"pebble-beach-cypress","name":"Pebble Beach, lone cypress","name_source":"Studio featured.json","scene":"coast","studio_group":"ocean","focus":"55% 55%","tint_rgb":"12,20,28","file":"assets/media/wallpapers/pebble-beach-cypress.jpg","thumb":"assets/media/wallpapers/pebble-beach-cypress-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":588635,"thumb_bytes":49710,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 809a6a6b-2e8a-4686-a2b0-9955c822ec0d are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"alpine-lake-mirror","name":"Alpine lake mirror","name_source":"Studio featured.json","scene":"mountains / lake","studio_group":"mountains","focus":"50% 42%","tint_rgb":"12,19,25","file":"assets/media/wallpapers/alpine-lake-mirror.jpg","thumb":"assets/media/wallpapers/alpine-lake-mirror-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":561958,"thumb_bytes":38401,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 70e5ddc2-151d-430d-9b10-7a4e45237a56 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"rockies-ember-peaks","name":"Rockies, ember peaks","name_source":"Studio featured.json","scene":"mountains","studio_group":"mountains","focus":"50% 20%","tint_rgb":"18,18,20","file":"assets/media/wallpapers/rockies-ember-peaks.jpg","thumb":"assets/media/wallpapers/rockies-ember-peaks-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":575118,"thumb_bytes":53915,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 0bf33963-1ea2-40a1-adfc-b0fdbd5c2a2f are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"lake-tahoe-blue-hour","name":"Lake Tahoe, blue hour","name_source":"Studio featured.json","scene":"lake","studio_group":"ocean","focus":"50% 50%","tint_rgb":"12,18,27","file":"assets/media/wallpapers/lake-tahoe-blue-hour.jpg","thumb":"assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":74,"bytes":591081,"thumb_bytes":30732,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 21b38f77-fec7-48fe-ad69-fe7209aeb41a are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"misty-fir-forest","name":"Misty fir forest","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"forest","studio_group":"land","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/misty-fir-forest.jpg","thumb":"assets/media/wallpapers/misty-fir-forest-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":574082,"thumb_bytes":50719,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 45fea6a6-7fb4-4e15-b266-8530fd7414b5 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"}],"wallpaper_video_note":"No video wallpapers exist: the Studio wallpaper set is 48 still images. The only moving cloud footage Evan generated is selects/above-the-clouds.mp4 (16:9, source 854x480).","logos":[{"file":"assets/media/logos/mirra-icon.svg","brand":"MIRRA","what":"MIRRA app icon (rounded, blue glow, white M). SVG uses blur filters.","bytes":10640},{"file":"assets/media/logos/mirra-icon.png","brand":"MIRRA","what":"MIRRA app icon, PNG 512","bytes":361648,"width":512,"height":512},{"file":"assets/media/logos/mirra-wordmark.svg","brand":"MIRRA","what":"MIRRA lockup: M mark + MIRRA wordmark, white on transparent (for dark backgrounds)","bytes":2248},{"file":"assets/media/logos/mirra-wordmark-text.svg","brand":"MIRRA","what":"MIRRA wordmark only (no M mark), white on transparent","bytes":1805},{"file":"assets/media/logos/mirra-m-black.svg","brand":"MIRRA","what":"MIRRA M mark only, black (recolour with CSS/fill for dark backgrounds)","bytes":400},{"file":"assets/media/logos/ces-logo-white.svg","brand":"Custom Esignature","what":"Custom Esignature main logo: teal E mark + white wordmark (for dark backgrounds)","bytes":4855},{"file":"assets/media/logos/ces-logo-black.svg","brand":"Custom Esignature","what":"Custom Esignature main logo, black wordmark (for light backgrounds)","bytes":5634},{"file":"assets/media/logos/ces-logo-white.png","brand":"Custom Esignature","what":"Custom Esignature main logo white, PNG 512 wide","bytes":16401,"width":512,"height":127},{"file":"assets/media/logos/ces-icon.png","brand":"Custom Esignature","what":"Custom Esignature icon (teal E mark with glow, web clip), PNG 256","bytes":18758,"width":256,"height":256},{"file":"assets/media/logos/studio-app-mark.png","brand":"Studio","what":"Studio app logo art from \"App Logo\" (smoky silver clip mark on near-black), PNG 512","bytes":184581,"width":512,"height":512}],"thumbs":[{"file":"assets/media/thumbs/t01.jpg","from_kind":"film","from_slug":"mirra-multivitamin","at":9.7,"bytes":7676},{"file":"assets/media/thumbs/t02.jpg","from_kind":"select","from_slug":"coastal-highway","at":2.5,"bytes":8774},{"file":"assets/media/thumbs/t03.jpg","from_kind":"film","from_slug":"ces-forest","at":3.2,"bytes":13608},{"file":"assets/media/thumbs/t04.jpg","from_kind":"select","from_slug":"run-club","at":5.0,"bytes":7440},{"file":"assets/media/thumbs/t05.jpg","from_kind":"film","from_slug":"lobby-hero-window","at":2.0,"bytes":9630},{"file":"assets/media/thumbs/t06.jpg","from_kind":"select","from_slug":"surfing","at":6.0,"bytes":5092},{"file":"assets/media/thumbs/t07.jpg","from_kind":"film","from_slug":"ces-email-signature","at":0.5,"bytes":8041},{"file":"assets/media/thumbs/t08.jpg","from_kind":"select","from_slug":"private-jet","at":4.2,"bytes":9360},{"file":"assets/media/thumbs/t09.jpg","from_kind":"film","from_slug":"founders-retreat","at":16.3,"bytes":6422},{"file":"assets/media/thumbs/t10.jpg","from_kind":"film","from_slug":"ces-replied-booked","at":13.3,"bytes":7786},{"file":"assets/media/thumbs/t11.jpg","from_kind":"select","from_slug":"mountain-biking","at":2.0,"bytes":8194},{"file":"assets/media/thumbs/t12.jpg","from_kind":"film","from_slug":"ces-company-becoming","at":9.45,"bytes":9321},{"file":"assets/media/thumbs/t13.jpg","from_kind":"select","from_slug":"cofounder-whiteboard","at":2.0,"bytes":7478},{"file":"assets/media/thumbs/t14.jpg","from_kind":"film","from_slug":"ces-sea-cliffs","at":2.0,"bytes":10735},{"file":"assets/media/thumbs/t15.jpg","from_kind":"select","from_slug":"house-party","at":3.7,"bytes":6293},{"file":"assets/media/thumbs/t16.jpg","from_kind":"film","from_slug":"mirra-multivitamin","at":31.5,"bytes":7205},{"file":"assets/media/thumbs/t17.jpg","from_kind":"select","from_slug":"golf","at":1.2,"bytes":9749},{"file":"assets/media/thumbs/t18.jpg","from_kind":"film","from_slug":"ces-agent-kitchen","at":2.3,"bytes":9559},{"file":"assets/media/thumbs/t19.jpg","from_kind":"select","from_slug":"yacht","at":1.0,"bytes":10042},{"file":"assets/media/thumbs/t20.jpg","from_kind":"film","from_slug":"lobby-hero-window","at":6.0,"bytes":11341},{"file":"assets/media/thumbs/t21.jpg","from_kind":"select","from_slug":"beach-volleyball","at":2.2,"bytes":7336},{"file":"assets/media/thumbs/t22.jpg","from_kind":"film","from_slug":"ces-email-signature","at":7.2,"bytes":10410},{"file":"assets/media/thumbs/t23.jpg","from_kind":"select","from_slug":"tropical-vacation","at":4.2,"bytes":7873},{"file":"assets/media/thumbs/t24.jpg","from_kind":"film","from_slug":"founders-retreat","at":31.3,"bytes":7101},{"file":"assets/media/thumbs/t25.jpg","from_kind":"select","from_slug":"tennis-forehand","at":1.5,"bytes":9618},{"file":"assets/media/thumbs/t26.jpg","from_kind":"film","from_slug":"ces-replied-booked","at":30.6,"bytes":4817},{"file":"assets/media/thumbs/t27.jpg","from_kind":"select","from_slug":"court-dap","at":1.5,"bytes":8021},{"file":"assets/media/thumbs/t28.jpg","from_kind":"film","from_slug":"ces-company-becoming","at":21.6,"bytes":8718}],"file_count":143,"total_bytes":59489044,"app":{"generated":"2026-11-17","note":"Recorded from the real Studio app on a demo Studio folder (two brands, 24 edits). Clips play in this order: hero-open, hero-launch, hero-note, hero-viral, hero-post. No audio. Stills are 2880x1800 with a 1440 copy.","order":["hero-open","hero-launch","hero-note","hero-viral","hero-post"],"files":[{"file":"assets/media/app/hero-launch-1280.mp4","kind":"video","width":1280,"height":800,"bytes":750158,"duration":9.867,"fps":30,"frames":296,"audio":false,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-launch.jpg","kind":"image","width":1920,"height":1200,"bytes":210229,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-launch.mp4","kind":"video","width":1920,"height":1200,"bytes":1321620,"duration":9.867,"fps":30,"frames":296,"audio":false,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-note-1280.mp4","kind":"video","width":1280,"height":800,"bytes":483157,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-note.jpg","kind":"image","width":1920,"height":1200,"bytes":171285,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-note.mp4","kind":"video","width":1920,"height":1200,"bytes":840877,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-open-1280.mp4","kind":"video","width":1280,"height":800,"bytes":1261654,"duration":13.0,"fps":30,"frames":390,"audio":false,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-open.jpg","kind":"image","width":1920,"height":1200,"bytes":42712,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-open.mp4","kind":"video","width":1920,"height":1200,"bytes":2291734,"duration":13.0,"fps":30,"frames":390,"audio":false,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-post-1280.mp4","kind":"video","width":1280,"height":800,"bytes":565799,"duration":9.633,"fps":30,"frames":289,"audio":false,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-post.jpg","kind":"image","width":1920,"height":1200,"bytes":159950,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-post.mp4","kind":"video","width":1920,"height":1200,"bytes":1005016,"duration":9.633,"fps":30,"frames":289,"audio":false,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-viral-1280.mp4","kind":"video","width":1280,"height":800,"bytes":912818,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/hero-viral.jpg","kind":"image","width":1920,"height":1200,"bytes":220310,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/hero-viral.mp4","kind":"video","width":1920,"height":1200,"bytes":1579684,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/still-ads-1440.jpg","kind":"image","width":1440,"height":900,"bytes":180426},{"file":"assets/media/app/still-ads.jpg","kind":"image","width":2880,"height":1800,"bytes":275618},{"file":"assets/media/app/still-aesthetic-1440.jpg","kind":"image","width":1440,"height":900,"bytes":260299},{"file":"assets/media/app/still-aesthetic.jpg","kind":"image","width":2880,"height":1800,"bytes":417363},{"file":"assets/media/app/still-ailib-1440.jpg","kind":"image","width":1440,"height":900,"bytes":307364},{"file":"assets/media/app/still-ailib.jpg","kind":"image","width":2880,"height":1800,"bytes":503646},{"file":"assets/media/app/still-brandkit-1440.jpg","kind":"image","width":1440,"height":900,"bytes":175613},{"file":"assets/media/app/still-brandkit.jpg","kind":"image","width":2880,"height":1800,"bytes":261794},{"file":"assets/media/app/still-editor-1440.jpg","kind":"image","width":1440,"height":900,"bytes":184508},{"file":"assets/media/app/still-editor.jpg","kind":"image","width":2880,"height":1800,"bytes":283767},{"file":"assets/media/app/still-edits-1440.jpg","kind":"image","width":1440,"height":900,"bytes":257939},{"file":"assets/media/app/still-edits.jpg","kind":"image","width":2880,"height":1800,"bytes":410319},{"file":"assets/media/app/still-home-1440.jpg","kind":"image","width":1440,"height":900,"bytes":244041},{"file":"assets/media/app/still-home.jpg","kind":"image","width":2880,"height":1800,"bytes":403491},{"file":"assets/media/app/still-social-calendar-1440.jpg","kind":"image","width":1440,"height":900,"bytes":207301},{"file":"assets/media/app/still-social-calendar.jpg","kind":"image","width":2880,"height":1800,"bytes":330609},{"file":"assets/media/app/still-viral-1440.jpg","kind":"image","width":1440,"height":900,"bytes":249017},{"file":"assets/media/app/still-viral-open-1440.jpg","kind":"image","width":1440,"height":900,"bytes":191595},{"file":"assets/media/app/still-viral-open.jpg","kind":"image","width":2880,"height":1800,"bytes":307508},{"file":"assets/media/app/still-viral.jpg","kind":"image","width":2880,"height":1800,"bytes":395088}]}};
+
+/* Studio site kit: window.SK. Shared behaviour every section builds on.
+   SK.beam(el, opts)            live border beam on any element (the app's beam engine)
+   SK.orb(canvas, opts)         the thinking orb; returns { set(state) }
+   SK.promptField(host, opts)   the app's AI input field, live: orb, typing, send, processing
+   SK.chat(host, script, opts)  plays a short chat between "you" and Claude
+   SK.type(el, text, opts)      human-speed typing into any element
+   SK.onView(el, enter, leave)  run when a thing enters / leaves the viewport
+   SK.film(slugOrObj)           opens a film with sound in the modal
+   SK.sleep(ms), SK.reduced, SK.mobile(), SK.media (the media manifest)
+   Markup hooks handled for you:
+     <video data-play data-src="…" [data-src-m="…"] poster="…" muted playsinline loop>   loads near the viewport, plays only in view
+     [data-reveal] (+ style="--i:2")                                                    fades up once in view
+     [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
+     [data-download]                                                                    scrolls to pricing and focuses the invite code
+     [data-film="slug"]                                                                 opens that film from the manifest on click */
+(function () {
+  "use strict";
+  var SK = (window.SK = window.SK || {});
+  var BS = window.BeamStyles, OE = window.OrbEngine;
+  SK.media = window.SK_MEDIA || {};
+  SK.reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  SK.mobile = function () { return matchMedia("(max-width: 700px)").matches; };
+  SK.sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  SK.CLAUDE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg>';
+  SK.APPLE = '<svg class="apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>';
+
+  /* ---------- in-view ---------- */
+  SK.onView = function (el, enter, leave, opts) {
+    opts = opts || {};
+    if (!("IntersectionObserver" in window)) { enter && enter(); return { disconnect: function () {} }; }
+    var inside = false;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var now = e.isIntersecting && e.intersectionRatio >= (opts.ratio || 0);
+        if (now && !inside) { inside = true; enter && enter(e); if (opts.once) io.disconnect(); }
+        else if (!now && inside) { inside = false; leave && leave(e); }
+      });
+    }, { rootMargin: opts.margin || "0px", threshold: opts.threshold || [0, opts.ratio || 0.01, 0.5] });
+    io.observe(el);
+    return io;
+  };
+
+  /* ---------- border beam ---------- */
+  var beamN = 0;
+  SK.beam = function (el, o) {
+    if (!el || !BS) return el;
+    o = Object.assign({ size: "md", variant: "mono", theme: "dark", strength: 1, boost: 1 }, o || {});
+    var id = "sb" + ++beamN, tp = BS.sizeThemePresets[o.size][o.theme], sp = BS.sizePresets[o.size], k = o.boost;
+    var cap = function (v) { return Math.max(0, Math.min(1, v)); };
+    var css = BS.generateBeamCSS({
+      id: id, borderRadius: o.radius != null ? o.radius : sp.borderRadius, borderWidth: o.width || sp.borderWidth,
+      duration: o.duration || (o.size === "line" ? 3.1 : 1.96),
+      strokeOpacity: cap(tp.strokeOpacity * k), innerOpacity: cap(tp.innerOpacity * k), bloomOpacity: cap(tp.bloomOpacity * k),
+      innerShadow: tp.innerShadow, size: o.size, colorVariant: o.variant, staticColors: o.variant === "mono",
+      brightness: o.brightness || (tp.brightness || 1.3), saturation: tp.saturation, hueRange: /^mirra/.test(o.variant) ? 6 : 30, theme: o.theme,
+      hairlineOpacity: tp.hairlineOpacity, glowSize: o.glow || 1
+    });
+    var st = document.createElement("style");
+    st.textContent = css;
+    document.head.appendChild(st);
+    el.setAttribute("data-beam", id);
+    if (!el.querySelector(":scope > [data-beam-bloom]")) { var b = document.createElement("span"); b.setAttribute("data-beam-bloom", ""); el.appendChild(b); }
+    el.style.setProperty("--beam-strength", String(o.strength));
+    SK.onView(el, function () { el.setAttribute("data-active", ""); }, function () { el.removeAttribute("data-active"); }, { margin: "80px" });
+    return el;
+  };
+
+  /* ---------- thinking orb ---------- */
+  var orbs = [], orbRAF = 0;
+  function orbTick(now) {
+    orbRAF = 0;
+    var any = false, t = now / 1000;
+    for (var i = 0; i < orbs.length; i++) {
+      var o = orbs[i];
+      if (!o.vis) continue;
+      any = true;
+      var p = OE.resolvePreset(o.state, o.size), k = (o.dpr * o.display) / o.size;
+      o.ctx.setTransform(k, 0, 0, k, 0, 0);
+      o.ctx.clearRect(0, 0, o.size, o.size);
+      OE.MODE_DRAWS[p.mode](o.ctx, o.size, (t + 7) * p.speed, o.dark, p.opts);
+    }
+    if (any && !SK.reduced) orbRAF = requestAnimationFrame(orbTick);
+  }
+  SK.orb = function (canvas, o) {
+    o = Object.assign({ size: 20, display: 24, state: "breathing", dark: true }, o || {});
+    if (!OE || !canvas.getContext) return { set: function () {} };
+    var dpr = Math.min(3, Math.max(1, window.devicePixelRatio || 1));
+    canvas.width = canvas.height = Math.round(o.display * dpr);
+    var rec = { ctx: canvas.getContext("2d"), size: o.size, display: o.display, dpr: dpr, state: o.state, dark: o.dark, vis: false };
+    orbs.push(rec);
+    SK.onView(canvas, function () { rec.vis = true; if (!orbRAF) orbRAF = requestAnimationFrame(orbTick); }, function () { rec.vis = false; }, { margin: "60px" });
+    return { set: function (s) { rec.state = s; if (SK.reduced && !orbRAF) orbRAF = requestAnimationFrame(orbTick); } };
+  };
+
+  /* ---------- typing ---------- */
+  SK.type = function (el, text, o) {
+    o = o || {};
+    var token = (el._skType = (el._skType || 0) + 1), i = o.append ? 0 : 0, base = o.append ? el.textContent : "";
+    return new Promise(function (done) {
+      if (SK.reduced || o.instant) { el.textContent = base + text; return done(true); }
+      (function step() {
+        if (el._skType !== token) return done(false);
+        if (i >= text.length) return done(true);
+        i++;
+        el.textContent = base + text.slice(0, i);
+        o.onChar && o.onChar(i);
+        var ch = text[i - 1], d = (o.ms || 46) * (0.55 + Math.random() * 0.9);
+        if (ch === " ") d *= 1.25; if (ch === "," || ch === ".") d *= 3.2;
+        setTimeout(step, d);
+      })();
+    });
+  };
+  SK.erase = function (el, o) {
+    o = o || {};
+    var token = (el._skType = (el._skType || 0) + 1);
+    return new Promise(function (done) {
+      if (SK.reduced) { el.textContent = ""; return done(true); }
+      (function step() {
+        if (el._skType !== token) return done(false);
+        var s = el.textContent;
+        if (!s) return done(true);
+        el.textContent = s.slice(0, Math.max(0, s.length - Math.ceil(s.length / 9)));
+        setTimeout(step, o.ms || 22);
+      })();
+    });
+  };
+
+  /* ---------- the prompt field ----------
+     host: an empty element. opts: { placeholder, scale (1 = the kit's 54px field; default 1.3) or height (px), prompts: [..], loop, hold (ms), beam: {..}|false, onSend(text, ctl, i), auto: true }
+     ctl: { el, state(s), set(text), type(text), clear(), send(), run(), stop() }  states: idle | focus | processing */
+  SK.promptField = function (host, o) {
+    o = Object.assign({ placeholder: "What should we make?", scale: 1.3, prompts: [], loop: true, hold: 1500, auto: true }, o || {});
+    if (o.height) o.scale = o.height / 54;
+    host.classList.add("pf");
+    host.style.setProperty("--k", String(o.scale));
+    host.setAttribute("data-state", "idle");
+    host.innerHTML =
+      '<div class="pf-field"><canvas class="pf-orb" aria-hidden="true"></canvas>' +
+      '<div class="pf-input"><div class="pf-run"><span class="pf-text ph"></span><i class="pf-caret"></i></div></div>' +
+      '<span class="pf-trail" aria-hidden="true"><svg viewBox="0 0 22 22"><path d="M14.4865 14.4865L19.25 19.25M16.5 9.625C16.5 13.422 13.422 16.5 9.625 16.5C5.82804 16.5 2.75 13.422 2.75 9.625C2.75 5.82804 5.82804 2.75 9.625 2.75C13.422 2.75 16.5 5.82804 16.5 9.625Z"/></svg><i></i><i></i><i></i></span></div>';
+    var text = host.querySelector(".pf-text"), run = host.querySelector(".pf-run"), input = host.querySelector(".pf-input"), sendB = host.querySelector(".pf-trail");
+    var orb = SK.orb(host.querySelector(".pf-orb"), { size: 20, display: Math.round(20 * o.scale), state: "breathing" });
+    if (o.beam !== false) SK.beam(host, Object.assign({ size: "md", variant: "mirra", radius: Math.round(16 * o.scale), boost: 1 }, o.beam || {}));
+    var typed = "", alive = false, runId = 0;
+    function paint() {
+      text.textContent = typed || o.placeholder;
+      text.classList.toggle("ph", !typed);
+      run.style.flexDirection = typed ? "row" : "row-reverse";
+      var over = run.scrollWidth - input.clientWidth;
+      run.style.transform = "translateY(-50%) translateX(" + (typed && over > 0 ? -over : 0) + "px)";
+    }
+    var ctl = {
+      el: host,
+      state: function (s) {
+        host.setAttribute("data-state", s);
+        orb.set(s === "focus" ? "listening" : s === "processing" ? "searching" : "breathing");
+        host.style.setProperty("--beam-strength", s === "processing" ? "1" : String((o.beam && o.beam.strength) || 1));
+        return ctl;
+      },
+      set: function (t) { typed = t; paint(); return ctl; },
+      clear: function () { typed = ""; paint(); return ctl; },
+      type: function (t, ms) {
+        var my = runId;
+        ctl.state("focus");
+        host.setAttribute("data-typing", "");
+        return new Promise(function (done) {
+          if (SK.reduced) { typed = t; paint(); host.removeAttribute("data-typing"); return done(true); }
+          var i = 0;
+          (function step() {
+            if (my !== runId) return done(false);
+            if (i >= t.length) { host.removeAttribute("data-typing"); return done(true); }
+            i++; typed = t.slice(0, i); paint();
+            var ch = t[i - 1], d = (ms || 44) * (0.55 + Math.random() * 0.9);
+            if (ch === " ") d *= 1.2; if (ch === ",") d *= 3;
+            setTimeout(step, d);
+          })();
+        });
+      },
+      send: function () {
+        sendB.classList.add("tap");
+        setTimeout(function () { sendB.classList.remove("tap"); }, 180);
+        ctl.state("processing");
+        return ctl;
+      },
+      stop: function () { runId++; alive = false; host.removeAttribute("data-typing"); return ctl; },
+      /* types each prompt, taps send, calls onSend (may return a promise), then moves on */
+      run: async function () {
+        if (alive || !o.prompts.length) return;
+        alive = true;
+        var my = ++runId, i = 0;
+        while (alive && my === runId) {
+          var p = o.prompts[i % o.prompts.length];
+          await SK.sleep(i ? 500 : 700);
+          if (my !== runId) break;
+          if (!(await ctl.type(p))) break;
+          await SK.sleep(420);
+          if (my !== runId) break;
+          ctl.send();
+          if (o.onSend) await o.onSend(p, ctl, i % o.prompts.length); else await SK.sleep(o.hold);
+          if (my !== runId) break;
+          ctl.state("idle").clear();
+          i++;
+          if (!o.loop && i >= o.prompts.length) break;
+        }
+        alive = false;
+      }
+    };
+    paint();
+    if (o.auto && o.prompts.length) SK.onView(host, function () { ctl.run(); }, function () { ctl.stop(); ctl.state("idle").clear(); }, { ratio: 0.4, threshold: [0, 0.4, 0.8] });
+    window.addEventListener("resize", paint);
+    return ctl;
+  };
+
+  /* ---------- chat ----------
+     script: [{ who: "you" | "claude", text, html, wait (ms before), think (ms of dots) }]   opts: { loop, gap, onStep(i, el) } */
+  SK.chat = function (host, script, o) {
+    o = o || {};
+    host.classList.add("chat");
+    var id = 0;
+    async function play() {
+      var my = ++id;
+      host.innerHTML = "";
+      for (var i = 0; i < script.length; i++) {
+        var s = script[i];
+        await SK.sleep(SK.reduced ? 0 : s.wait != null ? s.wait : o.gap || 700);
+        if (my !== id) return;
+        var m = document.createElement("div");
+        m.className = "msg " + (s.who === "you" ? "you" : "claude");
+        var head = s.who === "you" ? "" : '<div class="who">' + SK.CLAUDE + "Claude</div>";
+        if (s.who !== "you" && !SK.reduced) {
+          m.innerHTML = head + '<span class="typing"><i></i><i></i><i></i></span>';
+          host.appendChild(m);
+          requestAnimationFrame(function (mm) { return function () { mm.classList.add("in"); }; }(m));
+          await SK.sleep(s.think || 900);
+          if (my !== id) return;
+        } else host.appendChild(m);
+        m.innerHTML = head + (s.html || "<span></span>");
+        if (!s.html) m.querySelector("span").textContent = s.text;
+        requestAnimationFrame(function (mm) { return function () { mm.classList.add("in"); }; }(m));
+        o.onStep && o.onStep(i, m);
+      }
+      if (o.loop) { await SK.sleep(o.loopHold || 4200); if (my === id) play(); }
+    }
+    SK.onView(host, play, function () { id++; }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+    return { replay: play };
+  };
+
+  /* ---------- videos: load near the viewport, play only in view ---------- */
+  function armVideo(v) {
+    if (v._sk) return;
+    v._sk = true;
+    v.muted = true; v.playsInline = true;
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
+    if (!v.hasAttribute("preload")) v.preload = "none";
+    SK.onView(v, function () {
+      if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
+    }, null, { margin: "500px 0px", once: true });
+    SK.onView(v, function () {
+      if (SK.reduced) return;
+      if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
+      var p = v.play(); p && p.catch(function () {});
+    }, function () { v.pause(); }, { ratio: 0.2, threshold: [0, 0.2, 0.6] });
+  }
+  SK.videos = function (root) { (root || document).querySelectorAll("video[data-play]").forEach(armVideo); };
+
+  /* ---------- film modal ---------- */
+  var fm;
+  SK.film = function (x) {
+    var f = typeof x === "string" ? ((SK.media.films || []).filter(function (a) { return a.slug === x; })[0] || null) : x;
+    if (!f) return;
+    if (!fm) {
+      fm = document.createElement("div");
+      fm.className = "fm";
+      fm.innerHTML = '<button class="fm-x" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M3 3l10 10M13 3 3 13"/></svg></button><video controls playsinline></video><p class="fm-cap mono"></p>';
+      document.body.appendChild(fm);
+      var close = function () { fm.classList.remove("open"); var v = fm.querySelector("video"); v.pause(); v.removeAttribute("src"); v.load(); };
+      fm.addEventListener("click", function (e) { if (e.target === fm || e.target.closest(".fm-x")) close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && fm.classList.contains("open")) close(); });
+    }
+    var v = fm.querySelector("video");
+    v.poster = f.poster || "";
+    v.src = f.full || f.src;
+    fm.querySelector(".fm-cap").textContent = f.title ? f.title + (f.brand ? "  ·  " + f.brand : "") : "";
+    fm.classList.add("open");
+    SK.kayla && SK.kayla.pause();
+    var p = v.play(); p && p.catch(function () {});
+  };
+
+  /* ---------- Kayla: the listen pill (fixed, .kp) and inline clips (.vo[data-src]) ----------
+     Waveform bars and the length come from <audio file name>.json next to the mp3. Only one clip plays at a time. */
+  var audios = [];
+  var fmt = function (s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
+  function player(box, src, bars) {
+    var a = new Audio(), wave = box.querySelector("[data-wave]"), time = box.querySelector("[data-time]"), rateB = box.querySelector("[data-rate]"), els = [], dur = 0;
+    a.preload = "none"; a.src = src; audios.push(a);
+    function draw(peaks) {
+      wave.innerHTML = ""; els = [];
+      for (var i = 0; i < bars; i++) {
+        var el = document.createElement("i"), pk = peaks && peaks.length ? peaks[Math.floor((i / bars) * peaks.length)] : 0.3 + 0.6 * Math.abs(Math.sin(i * 1.7));
+        el.style.height = Math.round(16 + pk * 84) + "%"; wave.appendChild(el); els.push(el);
+      }
+      paint();
+    }
+    function paint() {
+      var d = a.duration || dur || 0, p = d ? a.currentTime / d : 0;
+      els.forEach(function (el, i) { el.classList.toggle("on", i / bars < p); });
+      if (time) time.textContent = fmt(a.paused && !a.currentTime ? d : d - a.currentTime);
+    }
+    draw(null);
+    fetch(src.replace(/\.mp3$/, ".json")).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) { if (j) { dur = j.duration || 0; draw(j.peaks); } }).catch(function () {});
+    a.addEventListener("timeupdate", paint);
+    a.addEventListener("loadedmetadata", paint);
+    a.addEventListener("play", function () { audios.forEach(function (o) { if (o !== a) o.pause(); }); box.classList.add("playing", "used"); });
+    a.addEventListener("pause", function () { box.classList.remove("playing"); });
+    a.addEventListener("ended", function () { a.currentTime = 0; paint(); });
+    box.querySelector("[data-play]").addEventListener("click", function () { if (a.paused) { var p = a.play(); p && p.catch(function () {}); } else a.pause(); });
+    wave.addEventListener("click", function (e) { var r = wave.getBoundingClientRect(), d = a.duration || dur; if (d) a.currentTime = ((e.clientX - r.left) / r.width) * d; if (a.paused) { var p = a.play(); p && p.catch(function () {}); } });
+    var rates = [1, 1.25, 1.5], ri = 0;
+    rateB && rateB.addEventListener("click", function () { ri = (ri + 1) % rates.length; a.playbackRate = rates[ri]; rateB.textContent = rates[ri] + "x"; });
+    return a;
+  }
+  var PLAY = '<svg class="pl" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z"/></svg>';
+  function kayla() {
+    var kp = document.querySelector(".kp");
+    if (kp) { var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46); SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } }; }
+    document.querySelectorAll(".vo[data-src]").forEach(function (box) {
+      if (box._vo) return; box._vo = true;
+      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="" width="88" height="88" loading="lazy"></span>' +
+        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-wave" data-wave></span></span><span class="vo-time" data-time></span>' +
+        '<button class="vo-play" data-play aria-label="Play">' + PLAY + "</button>";
+      box.querySelector(".vo-label").textContent = box.getAttribute("data-label") || "Listen";
+      player(box, box.getAttribute("data-src"), 40);
+    });
+  }
+
+  /* ---------- frames grow into place as they scroll in: size and corner radius ease to rest ---------- */
+  function growFrames() {
+    if (SK.reduced) return;
+    var frames = [].slice.call(document.querySelectorAll(".frame:not(.hero):not([data-nogrow])")).map(function (f) {
+      return { el: f, r: parseFloat(getComputedStyle(f).borderTopLeftRadius) || 28, done: false };
+    });
+    if (!frames.length) return;
+    var queued = false;
+    function upd() {
+      queued = false;
+      var vh = window.innerHeight;
+      frames.forEach(function (f) {
+        var r = f.el.getBoundingClientRect();
+        if (r.bottom < -100 || r.top > vh + 100) return;
+        var p = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.62))), e = 1 - Math.pow(1 - p, 3);
+        if (e >= 0.999) { if (!f.done) { f.done = true; f.el.style.transform = ""; f.el.style.borderRadius = ""; } return; }
+        f.done = false;
+        f.el.style.transformOrigin = "50% 0";
+        f.el.style.transform = "scale(" + (0.9 + 0.1 * e).toFixed(4) + ")";
+        f.el.style.borderRadius = (f.r + 44 * (1 - e)).toFixed(1) + "px";
+      });
+    }
+    function req() { if (!queued) { queued = true; requestAnimationFrame(upd); } }
+    window.addEventListener("scroll", req, { passive: true });
+    window.addEventListener("resize", req);
+    upd();
+  }
+
+  /* ---------- headings: split into words, reveal left to right from blurred to sharp ---------- */
+  function blurHeads() {
+    if (SK.reduced) return;
+    document.querySelectorAll(".h-xl, .h-lg, .h-md, [data-blur]").forEach(function (h) {
+      if (h.hasAttribute("data-noblur") || h._bl) return;
+      h._bl = true;
+      h.removeAttribute("data-reveal");
+      h.setAttribute("aria-label", h.textContent.replace(/\s+/g, " ").trim());
+      var n = 0;
+      (function walk(node) {
+        [].slice.call(node.childNodes).forEach(function (c) {
+          if (c.nodeType === 3) {
+            var frag = document.createDocumentFragment();
+            c.textContent.split(/(\s+)/).forEach(function (tok) {
+              if (!tok) return;
+              if (/^\s+$/.test(tok)) { frag.appendChild(document.createTextNode(" ")); return; }
+              var w = document.createElement("span");
+              w.className = "bw"; w.textContent = tok; w.setAttribute("aria-hidden", "true"); w.style.setProperty("--n", String(n++));
+              frag.appendChild(w);
+            });
+            node.replaceChild(frag, c);
+          } else if (c.nodeType === 1 && c.tagName !== "BR" && c.tagName !== "SVG") walk(c);
+        });
+      })(h);
+      h.style.setProperty("--step", (n > 12 ? 45 : 75) + "ms");
+      h.classList.add("bl");
+      SK.onView(h, function () { h.classList.add("bl-in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
+    });
+  }
+
+  /* ---------- start ---------- */
+  SK.start = function () {
+    document.documentElement.classList.remove("no-js");
+    blurHeads();
+    document.querySelectorAll("[data-reveal]").forEach(function (el) {
+      SK.onView(el, function () { el.classList.add("in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
+    });
+    SK.videos();
+    document.querySelectorAll("[data-beam-auto]").forEach(function (el) {
+      var r = el.getAttribute("data-beam-radius");
+      SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });
+    });
+    document.addEventListener("click", function (e) {
+      var d = e.target.closest("[data-download]");
+      if (d) {
+        e.preventDefault();
+        if (SK.dl && !SK.mobile()) { window.location.href = SK.dl; return; }
+        var pr = document.getElementById("pricing");
+        if (pr) { pr.scrollIntoView({ behavior: SK.reduced ? "auto" : "smooth", block: "start" }); setTimeout(function () { var i = pr.querySelector("input[data-code]"); if (i && !SK.mobile()) i.focus({ preventScroll: true }); }, 900); }
+        return;
+      }
+      var f = e.target.closest("[data-film]");
+      if (f) { e.preventDefault(); SK.film(f.getAttribute("data-film")); }
+    });
+    var nav = document.querySelector(".nav");
+    var kpEl = document.querySelector(".kp");
+    if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7); }; on(); window.addEventListener("scroll", on, { passive: true }); }
+    kayla();
+    growFrames();
+    focusSections();
+  };
+
+  /* ---------- scroll focus (as on the Custom Esignature site): a section is dim and soft at the edge of the screen and comes to
+     full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
+  function focusSections() {
+    if (SK.reduced) return;
+    var els = [].slice.call(document.querySelectorAll("main > section")), blur = !SK.mobile() && matchMedia("(pointer: fine)").matches, queued = false;
+    if (!els.length) return;
+    var clamp = function (x) { return Math.min(1, Math.max(0, x)); };
+    function paint() {
+      queued = false;
+      var vh = window.innerHeight || 1;
+      els.forEach(function (el, i) {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < -vh || r.top > vh * 2) return;
+        var enter = i === 0 ? 1 : clamp((vh - r.top) / (0.45 * vh)), leave = clamp((0.45 * vh - r.bottom) / (0.45 * vh)), v = Math.min(enter, 1 - leave);
+        if (v >= 0.999) { if (el._dim) { el._dim = false; el.style.opacity = ""; el.style.filter = ""; } return; }
+        el._dim = true;
+        el.style.opacity = (0.15 + 0.85 * v).toFixed(3);
+        if (blur) el.style.filter = "blur(" + ((1 - v) * 8).toFixed(2) + "px)";
+      });
+    }
+    function req() { if (!queued) { queued = true; requestAnimationFrame(paint); } }
+    window.addEventListener("scroll", req, { passive: true });
+    window.addEventListener("resize", req);
+    paint();
+  }
+})();
+
+
+/* ===== 010-hero ===== */
+;(function () {
+try {
+var hero = document.getElementById("hero");
+if (!hero) return;
+var M = SK.media || {};
+function film(re) { return (M.films || []).filter(function (f) { return re.test(f.slug) || re.test(f.title || ""); })[0]; }
+var FILMS = { launch: film(/multivitamin/i) || (M.films || [])[0], viral: film(/email.?signature|this.?is/i) || (M.films || [])[1] };
+
+/* What the field asks for, the app recording that answers it (desktop), and the drawn scene that answers it (phones). */
+var PROMPTS = [
+  { text: "Build me a launch commercial for my company", short: "Make me a launch commercial", clip: "launch", scene: 0 },
+  { text: "Make the ending hit harder", clip: "note", scene: 1 },
+  { text: "Recreate this viral video for my company", short: "Remake this viral video", clip: "viral", scene: 2 },
+  { text: "Post all my content across all my channels", short: "Schedule my next 30 days", clip: "post", scene: 3 }
+];
+var APP_DIR = "assets/media/app/hero-";
+
+/* ---------- the sky: a slow push-in or drift, a new view every few seconds (grain-free wallpapers) ---------- */
+(function () {
+  var box = hero.querySelector(".hero-bgs"), first = box.querySelector("img"), names = ["volcano-above-clouds", "cumulus-sky", "peaks-in-cloud-sea", "orange-clouds-blue-sky", "lake-tahoe-blue-hour"];
+  var urls = [first.currentSrc || first.src].concat(names.map(function (n) { return "assets/media/wallpapers/" + n + ".jpg"; }));
+  var MOVES = [
+    [{ transform: "scale(1.03)" }, { transform: "scale(1.15)" }],
+    [{ transform: "scale(1.12) translate3d(-2.2%, 0, 0)" }, { transform: "scale(1.12) translate3d(2.2%, 0, 0)" }],
+    [{ transform: "scale(1.15) translate3d(0, 1.2%, 0)" }, { transform: "scale(1.04) translate3d(0, -0.6%, 0)" }],
+    [{ transform: "scale(1.12) translate3d(2.2%, 0, 0)" }, { transform: "scale(1.12) translate3d(-2.2%, 0, 0)" }]
+  ];
+  var cur = first, i = 0, timer = 0, HOLD = 4600;
+  function move(img, k) { if (img.animate && !SK.reduced) img.animate(MOVES[k % MOVES.length], { duration: HOLD + 2600, easing: "linear", fill: "both" }); }
+  move(first, 0);
+  if (SK.reduced) return;
+  function next() {
+    i = (i + 1) % urls.length;
+    var img = new Image();
+    img.className = "hero-bg"; img.alt = ""; img.decoding = "async";
+    img.onload = function () {
+      box.appendChild(img);
+      move(img, i);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { img.classList.add("on"); }); });
+      var old = cur; cur = img;
+      setTimeout(function () { var host = old.closest("picture") || old; host.parentNode && host.parentNode.removeChild(host); }, 2000);
+    };
+    img.src = urls[i];
+  }
+  SK.onView(hero, function () { clearInterval(timer); timer = setInterval(next, HOLD); }, function () { clearInterval(timer); });
+})();
+
+var rig = hero.querySelector(".hero-rig"), stage = hero.querySelector(".hero-stage"), ask = hero.querySelector(".hero-ask");
+var scenes = [].slice.call(stage.querySelectorAll(".hs")), vids = [].slice.call(stage.querySelectorAll(".ha"));
+var clock = document.getElementById("hero-clock"), clockT = 0, countEl = document.getElementById("hs-count");
+
+/* ---------- drawn scenes (phones, and the fallback when a recording is missing) ---------- */
+hero.querySelectorAll("video[data-hero-film]").forEach(function (v) {
+  var f = FILMS[v.getAttribute("data-hero-film")];
+  if (!f) return;
+  v.poster = f.poster;
+  v.setAttribute("data-src", f.loop);
+  v.parentNode.style.backgroundImage = "url(" + f.poster + ")";
+});
+var grid = document.getElementById("hs-grid"), thumbs = (M.thumbs || []).map(function (t) { return t.file || t; });
+var skip = { 4: 1, 11: 1, 17: 1, 23: 1, 27: 1 };
+for (var d = 0; d < 30; d++) {
+  var c = document.createElement("div");
+  c.className = "hs-cell";
+  c.innerHTML = "<span>" + (d + 1) + "</span>";
+  if (!skip[d] && thumbs.length) {
+    var im = document.createElement("img");
+    im.alt = ""; im.decoding = "async";
+    im.setAttribute("data-lazy", thumbs[d % thumbs.length]);
+    c.appendChild(im);
+    c.setAttribute("data-at", String(600 + d * 105));
+    c.setAttribute("data-post", "1");
+  }
+  grid.appendChild(c);
+}
+var sceneTok = 0;
+function playScene(i) {
+  var my = ++sceneTok, s = scenes[i];
+  scenes.forEach(function (x, j) {
+    x.classList.toggle("live", j === i);
+    if (j !== i) x.querySelectorAll("video").forEach(function (v) { v.pause(); });
+  });
+  s.querySelectorAll("[data-at]").forEach(function (el) {
+    el.classList.remove("on");
+    if (el.hasAttribute("data-swap")) el.textContent = el._orig || (el._orig = el.textContent);
+  });
+  s.querySelectorAll("img[data-lazy]").forEach(function (im) { im.src = im.getAttribute("data-lazy"); im.removeAttribute("data-lazy"); });
+  s.querySelectorAll("video").forEach(function (v) {
+    if (!v.src && v.getAttribute("data-src")) v.src = v.getAttribute("data-src");
+    try { v.currentTime = 0; } catch (e) {}
+    if (!SK.reduced) { var p = v.play(); p && p.catch(function () {}); }
+  });
+  var n = 0;
+  if (countEl && s.classList.contains("hs-cal")) countEl.textContent = "0";
+  s.querySelectorAll("[data-at]").forEach(function (el) {
+    setTimeout(function () {
+      if (my !== sceneTok) return;
+      el.classList.add("on");
+      if (el.hasAttribute("data-swap")) el.textContent = el.getAttribute("data-swap");
+      if (el.hasAttribute("data-post") && countEl) countEl.textContent = String(++n);
+    }, SK.reduced ? 0 : +el.getAttribute("data-at"));
+  });
+  return SK.sleep(+s.getAttribute("data-dur") || 6000);
+}
+
+/* ---------- the real app, recorded (desktop) ---------- */
+var have = {}, appMode = false, cur = -1;
+function clipURL(name) { return APP_DIR + name + (stage.clientWidth * (window.devicePixelRatio || 1) < 1500 ? "-1280" : "") + ".mp4"; }
+function showClip(name, alive) {
+  return new Promise(function (done) {
+    var next = vids[(cur + 1) % 2], prev = vids[cur < 0 ? 1 : cur % 2], finished = false;
+    cur++;
+    function end() { if (finished) return; finished = true; next.removeEventListener("ended", end); clearTimeout(guard); done(); }
+    var guard = setTimeout(end, 16000);
+    next.src = clipURL(name);
+    next.addEventListener("ended", end);
+    next.addEventListener("error", end, { once: true });
+    next.addEventListener("canplay", function () {
+      if (!alive()) return end();
+      next.classList.add("on"); prev.classList.remove("on");
+      var p = next.play(); p && p.catch(end);
+      setTimeout(function () { prev.pause(); }, 700);
+    }, { once: true });
+    next.load();
+  });
+}
+function probe(name) {
+  return fetch(APP_DIR + name + "-1280.mp4", { method: "HEAD" }).then(function (r) { have[name] = r.ok; }).catch(function () { have[name] = false; });
+}
+
+/* ---------- the loop ---------- */
+var field = SK.promptField(document.getElementById("hero-field"), { placeholder: "What should we make?", scale: SK.mobile() ? 1.08 : 1.3, auto: false });
+function tick(start) {
+  clearInterval(clockT);
+  clockT = setInterval(function () { var s = Math.floor((Date.now() - start) / 1000); clock.textContent = "00:" + ("0" + (s % 60)).slice(-2); }, 250);
+}
+var run = 0, opened = false;
+async function loop(my) {
+  var alive = function () { return my === run; };
+  if (appMode && have.open && !opened) {
+    opened = true;
+    await showClip("open", alive);
+    if (!alive()) return;
+  }
+  var list = PROMPTS.filter(function (p) { return !appMode || have[p.clip]; });
+  if (!list.length) return;
+  for (var i = 0; alive(); i++) {
+    var p = list[i % list.length];
+    await SK.sleep(i ? 600 : 500);
+    if (!alive()) break;
+    if (!(await field.type(SK.mobile() && p.short ? p.short : p.text))) break;
+    await SK.sleep(420);
+    if (!alive()) break;
+    field.send();
+    ask.setAttribute("data-busy", "");
+    tick(Date.now());
+    setTimeout(function () { if (alive()) field.state("idle"); }, 1700);
+    await (appMode ? showClip(p.clip, alive) : playScene(p.scene));
+    clearInterval(clockT);
+    ask.removeAttribute("data-busy");
+    if (!alive()) break;
+    await SK.sleep(appMode ? 500 : 0);
+    field.state("idle").clear();
+  }
+}
+function begin() {
+  SK.onView(rig, function () { loop(++run); }, function () {
+    run++; sceneTok++; field.stop(); field.state("idle").clear(); clearInterval(clockT); ask.removeAttribute("data-busy");
+    stage.querySelectorAll("video").forEach(function (v) { v.pause(); });
+  }, { ratio: 0.2, threshold: [0, 0.2, 0.5] });
+}
+if (SK.mobile() || SK.reduced) begin();
+else (function () {
+  var names = ["open"].concat(PROMPTS.map(function (p) { return p.clip; })), listed = M.app ? JSON.stringify(M.app) : "";
+  if (listed) { names.forEach(function (n) { have[n] = listed.indexOf("hero-" + n + "-1280.mp4") >= 0; }); return Promise.resolve(); }
+  return Promise.all(names.map(probe));
+})().then(function () {
+  appMode = !!(have.open || PROMPTS.some(function (p) { return have[p.clip]; }));
+  if (appMode) {
+    stage.classList.add("app");
+    stage.querySelector(".hero-app").style.backgroundImage = "url(" + APP_DIR + "launch.jpg)";
+  }
+  begin();
+});
+
+} catch (e) { console.error("section 010-hero", e); }
+})();
+
+/* ===== 020-statement ===== */
+;(function () {
+try {
+var root = document.getElementById("why");
+if (!root) return;
+var screen = document.getElementById("st-screen"), stage = document.getElementById("st-stage");
+var greys = [].slice.call(screen.querySelectorAll(".st-grey")), films = [].slice.call(screen.querySelectorAll(".st-film")), veil = screen.querySelector(".st-veil");
+var posts = greys.concat(films);
+function vid(f) { return f.querySelector("video"); }
+
+/* the footage drifts a little against the scroll (only while on screen, desktop only: on phones the picture sits at the top) */
+(function (el) {
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    if (SK.mobile()) { el.style.transform = ""; }
+    else {
+      var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+      var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+      var t = -p * r.height * 0.045;
+      y += (t - y) * 0.12;
+      if (Math.abs(t - y) < 0.05) y = t;
+      el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    }
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* posters and sources for the films in the feed go on once the section is near (preload is "none": nothing downloads until a film
+   is about to land). Setting the source here also means a film can never be asked to play before it has one. */
+SK.onView(root, function () {
+  films.forEach(function (f) { var v = vid(f); v.poster = v.getAttribute("data-poster"); if (!v.getAttribute("src")) v.src = v.getAttribute("data-src"); });
+}, null, { margin: "1200px 0px", once: true });
+
+/* The feed is an endless column of posts. Every fifth one is a Studio film; the rest is grey.
+   y = how many posts have gone by. Two grey slots and three film slots are recycled as it moves. */
+var EVERY = 5, HOLD = 3300, TA = 380, TC = 1050, TD = 900;
+function isFilm(k) { return k % EVERY === EVERY - 1; }
+function filmAt(k) { return films[(((k + 1) / EVERY - 1) % films.length + films.length) % films.length]; }
+function layout(y) {
+  var k = Math.floor(y), frac = y - k;
+  posts.forEach(function (p) { p._on = false; });
+  [k, k + 1].forEach(function (i, j) {
+    if (j === 1 && frac < 0.0005) return;
+    var el;
+    if (isFilm(i)) el = filmAt(i);
+    else { el = greys[i % 2]; if (el._k !== i) { el._k = i; el.setAttribute("data-v", String((i * 3 + 1) % 4)); } }
+    el.style.transform = "translate3d(0," + ((j - frac) * 100).toFixed(2) + "%,0)";
+    el._on = true;
+  });
+  posts.forEach(function (p) { if (!p._on && !p._off) p.style.transform = "translate3d(0,105%,0)"; p._off = !p._on; });
+}
+
+var y = 0, from = 0, to = EVERY - 1, phase = "idle", t0 = 0, raf = 0, live = false, likeT = 0, thinkT = 0, cur = null, fast = false, rewound = false;
+function lock(f) {
+  cur = f;
+  f.classList.add("lock");
+  var bar = f.querySelector(".st-watch u");
+  bar.style.transition = "none"; bar.style.transform = "scaleX(0)";
+  void bar.offsetWidth;
+  bar.style.transition = "transform " + HOLD + "ms linear"; bar.style.transform = "scaleX(1)";
+  clearTimeout(likeT); clearTimeout(thinkT);
+  thinkT = setTimeout(function () { stage.classList.remove("was-thought"); stage.classList.add("is-thought"); }, 480);
+  likeT = setTimeout(function () { f.classList.add("liked"); }, 1200);
+}
+function unlock() {
+  clearTimeout(likeT); clearTimeout(thinkT);
+  /* the thought drifts up and away as the thumb moves on, then waits below for the next film */
+  if (stage.classList.contains("is-thought")) { stage.classList.add("was-thought"); stage.classList.remove("is-thought"); setTimeout(function () { stage.classList.remove("was-thought"); }, 600); }
+  if (!cur) return;
+  var f = cur; cur = null;
+  f.classList.remove("lock", "liked");
+  var bar = f.querySelector(".st-watch u");
+  bar.style.transition = "none"; bar.style.transform = "scaleX(0)";
+}
+function warm(f) { var v = vid(f); if (!v.getAttribute("src")) v.src = v.getAttribute("data-src"); var p = v.play(); p && p.catch(function () {}); }
+function startMove(now) {
+  unlock();
+  phase = "move"; t0 = now; from = y; rewound = false;
+  to = Math.floor(y / EVERY + 1e-6) * EVERY + EVERY - 1;
+  if (to - from < 1) to += EVERY;
+  warm(filmAt(to));
+}
+function setFast(on) { if (on !== fast) { fast = on; screen.classList.toggle("fast", on); } }
+function frame(now) {
+  raf = 0;
+  if (!live) return;
+  if (phase === "idle") startMove(now);
+  if (phase === "move") {
+    var t = now - t0, D = to - from, V = D / (TA / 2 + TC + TD / 2), v, d;
+    if (t < TA) { v = V * (t / TA); d = (V * t * t) / (2 * TA); }
+    else if (t < TA + TC) { v = V; d = (V * TA) / 2 + V * (t - TA); }
+    else if (t < TA + TC + TD) {
+      var r = t - TA - TC;
+      v = V * (1 - r / TD); d = (V * TA) / 2 + V * TC + V * r - (V * r * r) / (2 * TD);
+      if (!rewound) { rewound = true; try { vid(filmAt(to)).currentTime = 0; } catch (e) {} }
+    } else { v = 0; d = D; }
+    y = from + d;
+    layout(y);
+    veil.style.opacity = (Math.pow(Math.min(1, v / V), 1.25) * 0.96).toFixed(3);
+    setFast(v / V > 0.5);
+    if (t >= TA + TC + TD) { y = to; layout(y); veil.style.opacity = "0"; setFast(false); phase = "hold"; t0 = now; lock(filmAt(to)); }
+  } else if (phase === "hold" && now - t0 > HOLD + 250) startMove(now);
+  raf = requestAnimationFrame(frame);
+}
+
+if (SK.reduced) {
+  /* no motion: the feed has already stopped on a Studio film, and the thought is there */
+  y = EVERY - 1; layout(y);
+  var f0 = filmAt(y); f0.classList.add("lock", "liked"); stage.classList.add("is-thought");
+  f0.querySelector(".st-watch u").style.transform = "scaleX(1)";
+  return;
+}
+layout(0);
+SK.onView(screen, function () {
+  live = true;
+  /* coming back into view: start with a fresh scroll rather than mid-hold */
+  if (phase === "hold") phase = "idle";
+  else if (phase === "move") { t0 = performance.now(); from = y; rewound = false; if (to - from < 0.5) to += EVERY; }
+  if (!raf) raf = requestAnimationFrame(frame);
+}, function () { live = false; }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
+
+} catch (e) { console.error("section 020-statement", e); }
+})();
+
+/* ===== 030-work ===== */
+;(function () {
+try {
+var root = document.getElementById("work");
+if (!root) return;
+var rail = document.getElementById("wk-rail"), cards = [].slice.call(rail.querySelectorAll(".wk-card")), n = cards.length;
+var countEl = document.getElementById("wk-count"), films = (SK.media && SK.media.films) || [];
+function pad(x) { return (x < 10 ? "0" : "") + x; }
+
+/* true running times, straight from the manifest */
+root.querySelectorAll("[data-dur]").forEach(function (el) {
+  var f = films.filter(function (x) { return x.slug === el.getAttribute("data-dur"); })[0];
+  if (f && f.duration) { var s = Math.round(f.duration); el.textContent = Math.floor(s / 60) + ":" + pad(s % 60); }
+});
+
+/* posters only once the section is near, so nine images do not load with the page.
+   The source goes on at the same moment (preload is "none", so nothing downloads until a film plays): on a sideways rail a film
+   can go from hidden to fully visible in one frame, and the kit's play observer may then run before its loader has set a source. */
+SK.onView(root, function () {
+  rail.querySelectorAll("video[data-poster]").forEach(function (v) {
+    v.poster = v.getAttribute("data-poster");
+    if (!v.getAttribute("src")) v.src = v.getAttribute("data-src");
+  });
+  var first = root.querySelector("#wk-car img[data-src]");
+  if (first && !first.getAttribute("src")) first.src = first.getAttribute("data-src");
+}, null, { margin: "1400px 0px", once: true });
+
+/* ---------- geometry: the centre film is full size, the others step back ---------- */
+var centers = [], W = 0, pitch = 1, active = -1, raf = 0, inView = false, settleT = 0;
+function measure() {
+  W = cards[0].offsetWidth;
+  centers = cards.map(function (c) { return c.offsetLeft + W / 2; });
+  pitch = n > 1 ? centers[1] - centers[0] : W;
+}
+function paint() {
+  raf = 0;
+  var mid = rail.scrollLeft + rail.clientWidth / 2, K = SK.mobile() ? 0.1 : 0.17, best = 0, bd = 1e9;
+  for (var i = 0; i < n; i++) {
+    var d = (centers[i] - mid) / pitch, a = Math.abs(d);
+    if (a < bd) { bd = a; best = i; }
+    if (a > 4) continue;
+    var near = Math.min(a, 1), s = 1 - K * near, shift = W * K * (a <= 1 ? (a * a) / 2 : a - 0.5) * (d > 0 ? -1 : 1);
+    cards[i].style.transform = "translate3d(" + shift.toFixed(1) + "px,0,0) scale(" + s.toFixed(4) + ")";
+    cards[i].style.setProperty("--f", (1 - near).toFixed(3));
+  }
+  if (best !== active) setActive(best);
+}
+function ask() { if (!raf) raf = requestAnimationFrame(paint); }
+function setActive(i) {
+  active = i;
+  cards.forEach(function (c, j) { c.classList.toggle("is-on", j === i); });
+  if (countEl) countEl.textContent = pad(i + 1) + " / " + pad(n);
+  clearTimeout(settleT);
+  settleT = setTimeout(function () { if (active === i && inView) say(cards[i]); }, 380);
+}
+/* the sentence that started the film types itself the first time its film takes the centre */
+function say(card) {
+  if (card._said || SK.reduced) return;
+  var el = card.querySelector(".wk-say");
+  if (!el || card.classList.contains("wk-car")) return;
+  card._said = true;
+  var text = el.textContent;
+  el.textContent = "";
+  SK.type(el, text, { ms: 24 });
+}
+function left(i) { return centers[i] - rail.clientWidth / 2; }
+function go(i, instant) {
+  i = Math.max(0, Math.min(n - 1, i));
+  rail.scrollTo({ left: left(i), behavior: instant || SK.reduced ? "auto" : "smooth" });
+}
+rail.addEventListener("scroll", ask, { passive: true });
+
+/* ---------- it drifts on its own, and steps aside the moment you touch it ---------- */
+var dir = 1, holdUntil = 0, hover = false, timer = 0;
+function hold(ms) { holdUntil = Date.now() + ms; }
+function tick() {
+  if (!inView || hover || document.hidden || SK.reduced || Date.now() < holdUntil || rail.classList.contains("drag")) return;
+  if (active + dir > n - 1 || active + dir < 0) dir = -dir;
+  go(active + dir);
+}
+SK.onView(root, function () {
+  inView = true;
+  clearInterval(timer);
+  timer = setInterval(tick, 4400);
+  hold(2600);
+  if (active >= 0) setActive(active);
+}, function () { inView = false; clearInterval(timer); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+rail.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") hover = true; });
+rail.addEventListener("pointerleave", function () { hover = false; hold(1800); });
+rail.addEventListener("touchstart", function () { hold(9000); }, { passive: true });
+rail.addEventListener("wheel", function (e) { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) hold(7000); }, { passive: true });
+rail.addEventListener("focusin", function () { hold(12000); });
+root.querySelectorAll("[data-go]").forEach(function (b) {
+  b.addEventListener("click", function () { hold(9000); go(active + parseInt(b.getAttribute("data-go"), 10)); });
+});
+
+/* ---------- drag with a mouse ---------- */
+var down = null, moved = false, snapT = 0;
+rail.addEventListener("pointerdown", function (e) {
+  if (e.pointerType !== "mouse" || e.button !== 0) return;
+  down = { x: e.clientX, left: rail.scrollLeft };
+  moved = false;
+});
+window.addEventListener("pointermove", function (e) {
+  if (!down) return;
+  var dx = e.clientX - down.x;
+  if (!moved && Math.abs(dx) < 6) return;
+  if (!moved) { moved = true; clearTimeout(snapT); rail.classList.add("drag"); }
+  rail.scrollLeft = down.left - dx;
+});
+function release() {
+  if (!down) return;
+  var was = moved;
+  down = null;
+  if (!was) return;
+  hold(7000);
+  go(active);
+  /* snapping comes back once the glide has landed, so it never jumps */
+  snapT = setTimeout(function () { rail.classList.remove("drag"); }, 520);
+  setTimeout(function () { moved = false; }, 0);
+}
+window.addEventListener("pointerup", release);
+window.addEventListener("pointercancel", release);
+rail.addEventListener("click", function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+rail.addEventListener("dragstart", function (e) { e.preventDefault(); });
+
+/* ---------- the carousel card flips through its slides ---------- */
+(function () {
+  var box = document.getElementById("wk-car");
+  if (!box) return;
+  var imgs = [].slice.call(box.querySelectorAll("img")), segs = box.querySelector(".wk-segs"), num = document.getElementById("wk-car-n");
+  var sets = [imgs.filter(function (im) { return !im.classList.contains("wk-45"); }), imgs.filter(function (im) { return im.classList.contains("wk-45"); })];
+  var FLIP = 1900, at = -1, t = 0, on = false;
+  box.style.setProperty("--wk-flip", FLIP + "ms");
+  function load(im) { if (im && !im.getAttribute("src")) im.src = im.getAttribute("data-src"); }
+  function show(k) {
+    at = (k + imgs.length) % imgs.length;
+    var im = imgs[at], set = sets[0].indexOf(im) >= 0 ? sets[0] : sets[1], pos = set.indexOf(im);
+    load(im); load(imgs[(at + 1) % imgs.length]);
+    imgs.forEach(function (x) { x.classList.toggle("on", x === im); });
+    if (segs.children.length !== set.length) { segs.innerHTML = ""; set.forEach(function () { segs.appendChild(document.createElement("i")); }); }
+    [].forEach.call(segs.children, function (s, j) { s.className = j < pos ? "done" : j === pos && on && !SK.reduced ? "now" : j === pos ? "done" : ""; });
+    if (num) num.textContent = pad(pos + 1) + " / " + pad(set.length);
+  }
+  function next() { show(at + 1); }
+  SK.onView(box, function () {
+    on = true;
+    show(at < 0 ? 0 : at);
+    clearInterval(t);
+    if (!SK.reduced) t = setInterval(next, FLIP);
+  }, function () { on = false; clearInterval(t); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+})();
+
+/* ---------- start on the launch commercial ---------- */
+function place() { measure(); go(active < 0 ? parseInt(rail.getAttribute("data-start"), 10) || 0 : active, true); paint(); }
+place();
+window.addEventListener("load", place);
+var rz = 0;
+window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(place, 120); });
+
+} catch (e) { console.error("section 030-work", e); }
+})();
+
+/* ===== 040-carry ===== */
+;(function () {
+try {
+var root = document.getElementById("anywhere");
+if (!root) return;
+
+/* the footage drifts a little against the scroll (only while on screen) */
+(function (el) {
+  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
+  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
+    el.removeAttribute("poster"); el.style.opacity = "0";
+    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
+  }
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+    var t = -p * r.height * 0.045;
+    y += (t - y) * 0.12;
+    if (Math.abs(t - y) < 0.05) y = t;
+    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* what he asks for, in order. Each one is answered by the result card with the same index. */
+var ASKS = [
+  "Make me a launch commercial for my company",
+  "Turn it into a carousel for Instagram",
+  "Design a flyer for Saturday's open studio",
+  "Plan my posts for the next two weeks",
+  "Run the launch film as a Facebook and Instagram ad"
+];
+var work = root.querySelector(".cy-work"), stage = root.querySelector(".cy-stage"), cards = [].slice.call(stage.querySelectorAll(".cy-r"));
+var comp = document.getElementById("cy-comp"), ask = comp.querySelector(".cy-ask"), askT = comp.querySelector(".cy-ask-t"), send = comp.querySelector(".cy-send");
+var PLACEHOLDER = "What should we make?", token = 0, shown = -1, mode = "stack";
+
+SK.beam(comp, { size: "md", variant: "mirra", radius: SK.mobile() ? 22 : 26 });
+
+/* the two-week calendar: ten posts over fourteen days */
+(function () {
+  var grid = document.getElementById("cy-grid"), th = (SK.media.thumbs || []).map(function (t) { return t.file || t; });
+  var pick = [3, 12, 7, 19, 24, 1, 14, 22, 9, 26], skip = { 2: 1, 6: 1, 9: 1, 12: 1 }, n = 0;
+  for (var d = 0; d < 14; d++) {
+    var c = document.createElement("span");
+    c.className = "cy-cell";
+    if (!skip[d] && th.length) {
+      var im = document.createElement("img");
+      im.alt = ""; im.width = 180; im.height = 320; im.loading = "lazy"; im.decoding = "async";
+      im.src = th[pick[n % pick.length] % th.length];
+      im.style.setProperty("--n", String(n++));
+      c.appendChild(im);
+    }
+    grid.appendChild(c);
+  }
+})();
+
+/* the carousel flips through its slides while it is on screen */
+var track = stage.querySelector(".cy-track"), dots = [].slice.call(stage.querySelectorAll(".cy-dots i")), slide = 0, flipT = 0;
+function flip(to) {
+  slide = to % dots.length;
+  track.style.transform = "translate3d(" + -slide * 100 + "%,0,0)";
+  dots.forEach(function (d, i) { d.classList.toggle("on", i === slide); });
+}
+function flipping(on) {
+  clearInterval(flipT);
+  if (on && !SK.reduced) flipT = setInterval(function () { flip(slide + 1); }, 1500);
+}
+
+/* where every card sits: a stack while he works (newest in front), the whole set side by side at the end */
+function place() {
+  var mob = SK.mobile(), W = stage.clientWidth, w = cards.map(function (c) { return c.offsetWidth; });
+  var set = function (c, x, s, o, dim) { c.style.transform = "translate3d(" + x.toFixed(1) + "px,0,0) scale(" + s + ")"; c.style.opacity = o; c.style.setProperty("--dim", String(dim || 0)); };
+  cards.forEach(function (c, i) {
+    c.style.zIndex = String(i + 1);
+    if (shown < 0 || i > shown) { c.style.transform = ""; c.style.opacity = ""; return; }
+    if (mob) { set(c, -(W - w[i]) / 2, i === shown ? 1 : 0.94, i === shown ? 1 : 0); return; }
+    if (mode === "set") return;
+    var d = shown - i;
+    if (d === 0) return set(c, 0, 1, 1);
+    var s1 = 0.88, s2 = 0.78, l1 = -w[shown] - w[shown - 1] * s1 * 0.52;
+    if (d === 1) return set(c, l1 + w[i] * s1, s1, 1, 0.22);
+    var l2 = l1 - w[shown - 2] * s2 * 0.46;
+    if (d === 2) return set(c, l2 + w[i] * s2, s2, 1, 0.42);
+    set(c, l2 + w[i] * 0.7 - 30, 0.7, 0);
+  });
+  if (mode === "set" && !mob) {
+    /* as much of every card as fits between the man and the right edge */
+    var S = 0.74, avail = Math.max(W, root.clientWidth * 0.62 - 40), last = cards.length - 1, rest = 0;
+    for (var i = 1; i <= last; i++) rest += w[i] * S;
+    var f = Math.min(1.05, (avail - w[0] * S) / rest), x = 0;
+    for (var j = last; j >= 0; j--) { set(cards[j], x, S, 1); x -= w[j] * S * f; }
+  }
+}
+function reveal(i) {
+  shown = i; mode = "stack";
+  place();
+  cards[i].classList.add("live");
+  var v = cards[i].querySelector("video");
+  if (v) { try { v.currentTime = 0; } catch (e) {} }
+  if (i === 1) { flip(0); flipping(true); }
+}
+function setAsk(t, typing) {
+  askT.textContent = t || PLACEHOLDER;
+  ask.classList.toggle("ph", !t);
+  comp.classList.toggle("has", !!t);
+  comp.classList.toggle("typing", !!typing);
+}
+function reset() {
+  shown = -1; mode = "stack";
+  cards.forEach(function (c) { c.classList.remove("live"); });
+  place();
+  flipping(false); flip(0);
+  comp.classList.remove("working");
+  setAsk("", false);
+  work.classList.remove("cy-out");
+}
+
+async function run() {
+  var my = ++token;
+  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
+  reset();
+  if (SK.reduced) { shown = cards.length - 1; mode = "set"; cards.forEach(function (c) { c.classList.add("live"); }); place(); setAsk(ASKS[0], false); return; }
+  try {
+    for (;;) {
+      await w(700);
+      for (var i = 0; i < ASKS.length; i++) {
+        var t = ASKS[i];
+        for (var k = 1; k <= t.length; k++) { setAsk(t.slice(0, k), true); await w(t[k - 1] === " " ? 46 : 20 + Math.random() * 24); }
+        setAsk(t, false);
+        await w(340);
+        send.classList.add("tap"); await w(150); send.classList.remove("tap");
+        comp.classList.add("working");
+        await w(1150);
+        comp.classList.remove("working");
+        reveal(i);
+        await w(i === 3 ? 3000 : 2300);
+        if (i < ASKS.length - 1) { setAsk("", false); await w(420); }
+      }
+      /* everything he made at the gate, side by side */
+      setAsk("", false);
+      mode = "set"; place();
+      await w(6200);
+      work.classList.add("cy-out");
+      await w(650);
+      reset();
+    }
+  } catch (e) {}
+}
+SK.onView(work, run, function () { token++; reset(); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+window.addEventListener("resize", function () { if (shown >= 0) place(); });
+
+} catch (e) { console.error("section 040-carry", e); }
+})();
+
+/* ===== 050-library ===== */
+;(function () {
+try {
+var root = document.getElementById("library");
+if (!root) return;
+var wall = document.getElementById("lb-wall"), stageEl = document.getElementById("lb-stage"), deckEl = document.getElementById("lb-deck");
+var ALL = ((SK.media && SK.media.selects) || []).filter(function (s) { return s.aspect === "9:16" && s.file; });
+if (!ALL.length) return;
+function bySlug(slug) { return ALL.filter(function (s) { return s.slug === slug; })[0]; }
+/* the whiteboard clip in the manifest cuts to two other scenes after two seconds; here it plays a cut that stays at the whiteboard */
+var FILE = { "cofounder-whiteboard": "assets/media/library/cofounder-whiteboard.mp4" };
+function fileOf(s) { return FILE[s.slug] || s.file; }
+
+/* a curated order: the two rows read as a mix of work, sport, travel and friends */
+var ORDER = ["run-club", "cofounder-whiteboard", "coastal-highway", "yacht", "tennis-forehand", "dinner-toast", "mountain-biking", "private-jet", "court-dap", "golf",
+  "surfing", "investor-intro", "house-party", "beach-volleyball", "coffee-friend-arrives", "race-track", "real-connections", "tropical-vacation", "get-together", "mountain-biking-fpv"];
+var LIST = ORDER.map(bySlug).filter(Boolean);
+ALL.forEach(function (s) { if (LIST.indexOf(s) < 0) LIST.push(s); });
+
+/* ---------- a clip tile: poster, video on demand, and its prompt on glass ---------- */
+/* only a teaser of the prompt is ever on the page: about 110 characters, then it blurs out */
+function teaser(s) {
+  var t = String(s.prompt_scene_teaser || s.prompt_teaser || "").replace(/…+\s*$/, "").replace(/\s*—\s*/g, ", ").replace(/\s+/g, " ").trim();
+  var TAIL = 36, cut = Math.min(110, Math.max(40, t.length - TAIL));
+  var sp = t.lastIndexOf(" ", cut);
+  if (sp > cut - 18) cut = sp + 1;
+  var tail = t.slice(cut, cut + TAIL), a = Math.ceil(tail.length / 3);
+  return [t.slice(0, cut), tail.slice(0, a), tail.slice(a, 2 * a), tail.slice(2 * a)];
+}
+function makeTile(s) {
+  var el = document.createElement("figure");
+  el.className = "lb-tile";
+  el.innerHTML = '<img alt="" width="404" height="720" loading="lazy" decoding="async">' +
+    '<figcaption class="lb-name"></figcaption>' +
+    '<div class="lb-pr"><p class="lb-pr-h"><span></span><b>Prompt</b></p><p class="lb-pr-t"><span class="gh"></span><span class="lv"><span class="f0"></span><span class="f1"></span><span class="f2"></span><span class="f3"></span></span></p><span class="lb-pr-tag">Full prompt in the app</span></div>';
+  el.querySelector("img").src = s.poster;
+  el.querySelector(".lb-name").textContent = s.title;
+  el.querySelector(".lb-pr-h span").textContent = s.title;
+  var parts = teaser(s);
+  el.querySelector(".gh").textContent = parts.join("");
+  return { el: el, s: s, parts: parts, spans: [].slice.call(el.querySelectorAll(".lv span")), v: null, live: false, open: false, run: 0, since: 0 };
+}
+function video(t) {
+  if (t.v) return t.v;
+  var v = document.createElement("video");
+  v.setAttribute("data-play", ""); v.setAttribute("data-src", fileOf(t.s));
+  v.loop = true; v.muted = true; v.playsInline = true; v.preload = "none";
+  v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
+  v.src = fileOf(t.s); /* preload is "none": nothing downloads until it plays */
+  v.addEventListener("playing", function () { t.el.classList.add("has"); });
+  /* the kit plays every video in view; this section decides which few are live */
+  v.addEventListener("play", function () { if (!t.live) v.pause(); });
+  t.el.insertBefore(v, t.el.querySelector(".lb-name"));
+  SK.videos(t.el);
+  t.v = v;
+  return v;
+}
+function setLive(t, on) {
+  if (on === t.live) return;
+  t.live = on; t.since = Date.now();
+  if (on) { if (!SK.reduced) { var p = video(t).play(); p && p.catch(function () {}); } }
+  else if (t.v) t.v.pause();
+}
+function openTile(t) {
+  if (t.open) return;
+  t.open = true;
+  var my = ++t.run;
+  t.spans.forEach(function (sp) { SK.type(sp, "", { instant: true }); });
+  t.el.classList.remove("done");
+  t.el.classList.add("open");
+  (async function () {
+    await SK.sleep(SK.reduced ? 0 : 260);
+    for (var i = 0; i < t.spans.length; i++) {
+      if (my !== t.run) return;
+      await SK.type(t.spans[i], t.parts[i], { ms: i ? 15 : 9 });
+    }
+    if (my === t.run) t.el.classList.add("done");
+  })();
+}
+function closeTile(t) {
+  if (!t.open) return;
+  t.open = false; t.run++;
+  t.el.classList.remove("open", "done");
+}
+
+/* ---------- the wall ---------- */
+var tiles = [], mode = "", wallIn = false, stageIn = false, hovered = null, demo = null, loopRAF = 0, rotT = 0, demoT = 0, railT = 0, autoT = 0;
+var railQ = matchMedia("(max-width: 760px), (hover: none)");
+function cap() { return stageIn ? 3 : 5; }
+function onScreen(t, pad) {
+  var r = t.el.getBoundingClientRect(), vw = window.innerWidth;
+  return r.right > r.width * pad && r.left < vw - r.width * pad;
+}
+
+/* pointer: two rows drifting in opposite directions */
+var rows = [], lastT = 0, speedK = 1;
+function buildRows() {
+  wall.classList.remove("is-rail");
+  wall.innerHTML = "";
+  tiles = []; rows = [];
+  var half = Math.ceil(LIST.length / 2);
+  [LIST.slice(0, half), LIST.slice(half)].forEach(function (set, ri) {
+    var row = document.createElement("div");
+    row.className = "lb-row";
+    set.concat(set).forEach(function (s) { var t = makeTile(s); tiles.push(t); row.appendChild(t.el); });
+    wall.appendChild(row);
+    rows.push({ el: row, n: set.length, x: 0, dir: ri ? 1 : -1, half: 0 });
+  });
+  tiles.forEach(function (t) {
+    t.el.addEventListener("pointerenter", function (e) {
+      if (e.pointerType !== "mouse") return;
+      if (demo && demo !== t) { closeTile(demo); demo = null; }
+      hovered = t; setLive(t, true); openTile(t);
+    });
+    t.el.addEventListener("pointerleave", function () { if (hovered === t) hovered = null; if (demo !== t) closeTile(t); });
+  });
+  fitRows();
+}
+function fitRows() {
+  rows.forEach(function (r) {
+    var a = r.el.children[0], b = r.el.children[1];
+    r.half = (b.offsetLeft - a.offsetLeft) * r.n;
+    if (r.dir > 0 && r.x === 0) r.x = -r.half;
+    place(r);
+  });
+}
+function place(r) { r.el.style.transform = "translate3d(" + r.x.toFixed(2) + "px,0,0)"; }
+function loop(now) {
+  loopRAF = 0;
+  if (!wallIn || mode !== "rows") return;
+  var dt = Math.min(64, now - (lastT || now));
+  lastT = now;
+  /* it slows to a stop while you are reading a prompt */
+  var want = hovered ? 0 : demo ? 0.35 : 1;
+  speedK += (want - speedK) * 0.06;
+  var step = (SK.reduced ? 0 : 19) * speedK * dt / 1000;
+  rows.forEach(function (r) {
+    if (!r.half) return;
+    r.x += r.dir * step;
+    if (r.x <= -r.half) r.x += r.half;
+    if (r.x > 0) r.x -= r.half;
+    place(r);
+  });
+  loopRAF = requestAnimationFrame(loop);
+}
+/* only a few clips play at once; which ones changes every couple of seconds */
+function rotate() {
+  if (!wallIn || mode !== "rows") return;
+  var vis = [], liveNow = [];
+  tiles.forEach(function (t) {
+    var on = onScreen(t, 0.35);
+    if (t.live && !on && t !== hovered) { setLive(t, false); if (t === demo) { closeTile(t); demo = null; } }
+    if (on) vis.push(t);
+    if (t.live) liveNow.push(t);
+  });
+  var idle = vis.filter(function (t) { return !t.live; });
+  if (!idle.length) return;
+  var free = liveNow.filter(function (t) { return t !== hovered && t !== demo; });
+  if (liveNow.length >= cap()) {
+    free.sort(function (a, b) { return a.since - b.since; });
+    while (free.length && liveNow.length >= cap()) { var old = free.shift(); setLive(old, false); liveNow.splice(liveNow.indexOf(old), 1); }
+    if (liveNow.length >= cap()) return;
+  }
+  /* prefer a clip that is not already playing in its twin */
+  var pick = idle.filter(function (t) { return !liveNow.some(function (l) { return l.s === t.s; }); });
+  pick = pick.length ? pick : idle;
+  setLive(pick[Math.floor(Math.random() * pick.length)], true);
+}
+/* with no pointer on it, one clip at a time shows its prompt by itself */
+function autoDemo() {
+  if (!wallIn || mode !== "rows" || hovered || SK.reduced) return;
+  if (demo) { closeTile(demo); demo = null; return; }
+  var vw = window.innerWidth;
+  var mid = tiles.filter(function (t) { var r = t.el.getBoundingClientRect(); return r.left > vw * 0.16 && r.right < vw * 0.84; });
+  if (!mid.length) return;
+  var liveMid = mid.filter(function (t) { return t.live; });
+  demo = (liveMid.length ? liveMid : mid)[Math.floor(Math.random() * (liveMid.length || mid.length))];
+  setLive(demo, true);
+  openTile(demo);
+}
+
+/* touch: one row to swipe; the clip in the middle plays and shows its prompt */
+var railMid = -1, railDir = 1, railHold = 0;
+function buildRail() {
+  wall.classList.add("is-rail");
+  wall.innerHTML = "";
+  tiles = LIST.map(function (s) { var t = makeTile(s); wall.appendChild(t.el); return t; });
+  railMid = -1;
+  wall.scrollLeft = 0;
+  railGo(1, true);
+  railPaint();
+}
+function railCenter(i) { var e = tiles[i].el; return e.offsetLeft + e.offsetWidth / 2 - wall.clientWidth / 2; }
+function railGo(i, instant) { i = Math.max(0, Math.min(tiles.length - 1, i)); wall.scrollTo({ left: railCenter(i), behavior: instant || SK.reduced ? "auto" : "smooth" }); }
+function railPaint() {
+  if (mode !== "rail") return;
+  var mid = wall.scrollLeft + wall.clientWidth / 2, best = 0, bd = 1e9;
+  tiles.forEach(function (t, i) { var d = Math.abs(t.el.offsetLeft + t.el.offsetWidth / 2 - mid); if (d < bd) { bd = d; best = i; } });
+  if (best !== railMid) {
+    railMid = best;
+    tiles.forEach(function (t, i) { t.el.classList.toggle("mid", i === best); if (i !== best) { closeTile(t); setLive(t, false); } });
+  }
+  clearTimeout(railT);
+  railT = setTimeout(function () { if (mode === "rail" && wallIn && tiles[railMid]) { setLive(tiles[railMid], true); openTile(tiles[railMid]); } }, 320);
+}
+function railAuto() {
+  if (mode !== "rail" || !wallIn || SK.reduced || Date.now() < railHold) return;
+  if (railMid + railDir > tiles.length - 1 || railMid + railDir < 0) railDir = -railDir;
+  railGo(railMid + railDir);
+}
+wall.addEventListener("scroll", function () { if (mode === "rail") requestAnimationFrame(railPaint); }, { passive: true });
+wall.addEventListener("touchstart", function () { railHold = Date.now() + 10000; }, { passive: true });
+wall.addEventListener("wheel", function () { railHold = Date.now() + 8000; }, { passive: true });
+
+function build() {
+  var next = railQ.matches ? "rail" : "rows";
+  if (next === mode) { if (mode === "rows") fitRows(); return; }
+  tiles.forEach(function (t) { if (t.v) t.v.pause(); });
+  hovered = demo = null;
+  mode = next;
+  if (mode === "rail") buildRail(); else buildRows();
+  if (wallIn) wake();
+}
+function wake() {
+  clearInterval(rotT); clearInterval(demoT); clearInterval(autoT);
+  if (mode === "rows") {
+    lastT = 0;
+    if (!loopRAF) loopRAF = requestAnimationFrame(loop);
+    rotate(); setTimeout(rotate, 500); setTimeout(rotate, 1000);
+    rotT = setInterval(rotate, 2100);
+    demoT = setInterval(autoDemo, 3300);
+    setTimeout(autoDemo, 1500);
+  } else {
+    railPaint();
+    autoT = setInterval(railAuto, 6200);
+    railHold = Date.now() + 3000;
+  }
+}
+function rest() {
+  clearInterval(rotT); clearInterval(demoT); clearInterval(autoT); clearTimeout(railT);
+  tiles.forEach(function (t) { setLive(t, false); closeTile(t); });
+  hovered = demo = null;
+}
+build();
+SK.onView(wall, function () { wallIn = true; wake(); }, function () { wallIn = false; rest(); }, { ratio: 0.12, threshold: [0, 0.12, 0.5] });
+var rz = 0;
+window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(build, 140); });
+window.addEventListener("load", function () { if (mode === "rows") fitRows(); });
+
+/* ---------- describe a scene: the line you type, the clip that comes to the front ---------- */
+var ASKS = [
+  ["Two founders at a whiteboard, afternoon sun", "cofounder-whiteboard"],
+  ["Friends on a coastal highway, convertible", "coastal-highway"],
+  ["A run club crossing the bridge", "run-club"]
+].filter(function (a) { return bySlug(a[1]); });
+var deck = ASKS.map(function (a, i) {
+  var t = makeTile(bySlug(a[1]));
+  t.el.setAttribute("data-pos", String(i - 1));
+  deckEl.appendChild(t.el);
+  return t;
+});
+var stepEl = document.getElementById("lb-step"), front = -1, askRun = 0;
+/* the beat in between: the line is matched against the library (thumbnails flick past), then the prompt is written */
+var matchEl = document.getElementById("lb-match"), matchTh = [].slice.call(matchEl.querySelectorAll(".lb-match-th i")), flickT = 0, flickN = 0;
+function flick() {
+  matchTh.forEach(function (th, k) { th.style.backgroundImage = 'url("' + LIST[(flickN * 3 + k * 5) % LIST.length].poster + '")'; });
+  flickN++;
+}
+function matching(on) {
+  clearInterval(flickT);
+  matchEl.classList.remove("done");
+  matchEl.classList.toggle("on", on);
+  if (on) { flick(); if (!SK.reduced) flickT = setInterval(flick, 130); }
+}
+function written(t) {
+  clearInterval(flickT);
+  /* the flicking settles on the clip it found */
+  matchTh.forEach(function (th, k) { th.style.backgroundImage = 'url("' + (k ? LIST[(k * 7) % LIST.length] : t.s).poster + '")'; });
+  matchEl.classList.add("done");
+}
+function bring(i) {
+  var n = deck.length;
+  deck.forEach(function (t, j) {
+    if (j !== i) { closeTile(t); setLive(t, false); }
+    var rel = j === i ? 0 : (j - i + n) % n === 1 ? 1 : -1;
+    t.el.setAttribute("data-pos", String(rel));
+    t.el.classList.toggle("front", j === i);
+  });
+  front = i;
+}
+if (deck.length) {
+  if (SK.reduced) { bring(0); openTile(deck[0]); matching(true); written(deck[0]); }
+  var field = SK.promptField(document.getElementById("lb-field"), {
+    placeholder: "Describe a scene",
+    scale: SK.mobile() ? 1.04 : 1.3,
+    prompts: SK.reduced ? [] : ASKS.map(function (a) { return a[0]; }),
+    onSend: async function (p, ctl, i) {
+      var my = ++askRun;
+      if (stepEl) stepEl.textContent = "0" + (i + 1) + " / 0" + deck.length;
+      if (front >= 0) { closeTile(deck[front]); }
+      matching(true);
+      await SK.sleep(1700);
+      if (my !== askRun) return;
+      written(deck[i]);
+      ctl.state("idle");
+      await SK.sleep(750);
+      if (my !== askRun) return;
+      bring(i);
+      await SK.sleep(650);
+      if (my !== askRun) return;
+      setLive(deck[i], true);
+      await SK.sleep(900);
+      if (my !== askRun) return;
+      openTile(deck[i]);
+      await SK.sleep(4600);
+      if (my !== askRun) return;
+      matching(false);
+      await SK.sleep(350);
+    }
+  });
+  SK.onView(stageEl, function () { stageIn = true; if (front >= 0 && !SK.reduced) setLive(deck[front], true); },
+    function () { stageIn = false; askRun++; matching(false); deck.forEach(function (t) { setLive(t, false); closeTile(t); }); }, { ratio: 0.15, threshold: [0, 0.15, 0.5] });
+}
+
+} catch (e) { console.error("section 050-library", e); }
+})();
+
+/* ===== 060-viral ===== */
+;(function () {
+try {
+var root = document.getElementById("viral");
+if (!root) return;
+var q = function (s) { return [].slice.call(root.querySelectorAll(s)); };
+var stage = root.querySelector(".vl-stage"), flow = root.querySelector(".vl-flow");
+var steps = q(".vl-step"), arrows = q(".vl-arrow"), you = root.querySelector(".vl-you video");
+var PROMPT = "Remake this viral video with my footage";
+var BASE = [0, 1750, 6700];          /* when each beat starts, ms after the prompt is sent */
+var timers = [], token = 0;
+
+function at(ms, fn) { timers.push(setTimeout(fn, Math.max(0, ms))); }
+function stop() { timers.forEach(clearTimeout); timers = []; }
+function show(el, instant) {
+  el.classList.add("on");
+  var v = el.querySelector && el.querySelector(".vl-v");
+  if (v) SK.type(v, v.getAttribute("data-text"), { ms: 26, instant: instant });
+}
+function lightStep(k) { steps[k].classList.add("on"); if (k > 0) arrows[k - 1].classList.add("on"); }
+
+/* one beat: its parts arrive in reading order. t0 = how far into the beat we start (0 = from its beginning) */
+function beat(k, shift) {
+  at(shift, function () {
+    lightStep(k);
+    if (k === 1) flow.classList.add("scan");
+    if (k === 2) { try { you.currentTime = 0; } catch (e) {} var p = you.play(); p && p.catch(function () {}); }
+  });
+  [].slice.call(steps[k].querySelectorAll("[data-at]")).forEach(function (el) {
+    at(shift + (+el.getAttribute("data-at") - BASE[k]), function () { show(el); });
+  });
+  if (k === 1) at(shift + 4500, function () { flow.classList.remove("scan"); flow.classList.add("studied"); });
+}
+
+function reset() {
+  stop();
+  flow.classList.remove("scan", "studied");
+  steps.forEach(function (s) { s.classList.remove("on"); });
+  arrows.forEach(function (a) { a.classList.remove("on"); });
+  q(".vl-flow [data-at]").forEach(function (el) { el.classList.remove("on"); });
+  q(".vl-v").forEach(function (v) { v._skType = (v._skType || 0) + 1; v.textContent = ""; });
+}
+
+/* the finished picture: what reduced motion shows, and what the stage rests on when you scroll away mid-loop */
+function finished() {
+  stop();
+  steps.forEach(function (s, k) { lightStep(k); });
+  q(".vl-flow [data-at]").forEach(function (el) { show(el, true); });
+  flow.classList.remove("scan");
+  flow.classList.add("studied");
+}
+
+var field = SK.promptField(document.getElementById("vl-field"), { placeholder: "What should we make?", scale: SK.mobile() ? 1.04 : 1.2, auto: false });
+
+if (SK.reduced) {
+  field.set(PROMPT);
+  finished();
+} else if (SK.mobile()) {
+  /* phones: the stage is taller than the screen, so each beat plays once, when you reach it */
+  var sent = false, waiting = [];
+  SK.onView(field.el, function () {
+    field.type(PROMPT).then(function () { return SK.sleep(420); }).then(function () {
+      field.send();
+      setTimeout(function () { field.state("idle"); }, 1900);
+      sent = true;
+      waiting.forEach(function (f) { f(); });
+    });
+  }, null, { once: true, ratio: 0.6, threshold: [0, 0.6] });
+  setTimeout(function () { if (!sent) { sent = true; waiting.forEach(function (f) { f(); }); } }, 6000);
+  steps.forEach(function (s, k) {
+    SK.onView(s, function () {
+      var go = function () { beat(k, k === 0 ? 150 : 250); };
+      if (sent) go(); else waiting.push(go);
+    }, null, { once: true, ratio: 0.3, threshold: [0, 0.3, 0.6] });
+  });
+} else {
+  /* desktop: the whole graphic is on screen, so it loops: ask, a video goes in, Claude studies it, the remake plays */
+  var loop = async function () {
+    var my = ++token, ok = function () { return my === token; };
+    while (ok()) {
+      field.state("idle").clear();
+      reset();
+      await SK.sleep(700); if (!ok()) return;
+      if (!(await field.type(PROMPT)) || !ok()) return;
+      await SK.sleep(420); if (!ok()) return;
+      field.send();
+      setTimeout(function () { if (ok()) field.state("idle"); }, 1900);
+      beat(0, 150); beat(1, BASE[1]); beat(2, BASE[2]);
+      await SK.sleep(14200); if (!ok()) return;
+    }
+  };
+  SK.onView(stage, loop, function () {
+    token++;
+    field.stop();
+    field.state("idle").set(PROMPT);
+    finished();
+  }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+}
+
+} catch (e) { console.error("section 060-viral", e); }
+})();
+
+/* ===== 070-notes ===== */
+;(function () {
+try {
+var root = document.getElementById("notes");
+if (!root) return;
+var ed = root.querySelector(".nt-ed"), cursor = root.querySelector(".nt-cursor"), screen = root.querySelector(".nt-screen");
+var q = function (s) { return [].slice.call(root.querySelectorAll(s)); };
+var NOTES = ["Make the logo land on the beat.", "Warmer music in the intro."];
+var FILM = 48.28, LOOP = 22000;   /* the film is 48 s long; the timeline plays through once per loop of the clip */
+
+/* waveforms for the audio tracks (drawn once) */
+function rnd(i, s) { var x = Math.sin(i * 12.9898 + s * 78.233) * 43758.5453; return x - Math.floor(x); }
+var SHAPES = {
+  voice: function (i) { return (i % 17 > 12 || i % 29 > 25) ? 5 : 22 + rnd(i, 1) * 68; },
+  calm: function (i) { return 14 + rnd(i, 2) * 20; },
+  warm: function (i, n) { return 30 + Math.sin((i / n) * Math.PI) * 34 + rnd(i, 3) * 24; },
+  rest: function (i) { return i % 6 === 0 ? 88 : 24 + rnd(i, 4) * 40; },
+  clip: function (i) { return 16 + rnd(i, 5) * 70; }
+};
+var COUNT = { voice: 96, calm: 24, warm: 24, rest: 78, clip: 16 };
+q("[data-wave]").forEach(function (el) {
+  var k = el.getAttribute("data-wave"), n = COUNT[k], h = "";
+  for (var i = 0; i < n; i++) h += '<u style="height:' + Math.round(SHAPES[k](i, n)) + '%"></u>';
+  el.insertAdjacentHTML("beforeend", h);
+});
+
+/* the send button (one in the bar, one under the notes on phones), with the border beam and a thinking orb */
+var sends = q(".nt-send");
+sends.forEach(function (b) { SK.beam(b, { size: "md", variant: "mirra", radius: b.classList.contains("nt-send-m") ? 20 : 999, boost: 1.9 }); });
+q(".nt-orb").forEach(function (c) { SK.orb(c, { size: 20, display: 18, state: "searching" }); });
+function shown(el) { return !!(el && el.offsetParent !== null); }
+
+var token = 0, t0 = 0, p0 = 0, clockT = 0;
+var tc = root.querySelector(".nt-tc b"), comp = root.querySelector(".nt-comp"), compText = root.querySelector(".nt-comp-text");
+function fmt(p) { var t = p * FILM, s = Math.floor(t); return "00:00:" + ("0" + s).slice(-2) + ":" + ("0" + Math.floor((t - s) * 60)).slice(-2); }
+function progress() { return (p0 + (performance.now() - t0) / LOOP) % 1; }
+function startClock(p) {
+  p0 = p; t0 = performance.now();
+  q(".nt-ph, .nt-scrub i").forEach(function (el) { el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; el.style.animationDelay = (-p * LOOP) + "ms"; });
+  clearInterval(clockT);
+  clockT = setInterval(function () { if (tc) tc.textContent = fmt(progress()); }, 250);
+}
+
+function place(el, fx, fy) {
+  var a = ed.getBoundingClientRect(), b = el.getBoundingClientRect();
+  cursor.style.transform = "translate3d(" + (b.left - a.left + b.width * fx).toFixed(1) + "px," + (b.top - a.top + b.height * fy).toFixed(1) + "px,0)";
+}
+function press() { cursor.classList.add("down"); return SK.sleep(170).then(function () { cursor.classList.remove("down"); }); }
+function setN(n) { q(".nt-n").forEach(function (b) { b.textContent = n + (n === 1 ? " comment" : " comments"); }); }
+function setState(s, label) { ed.setAttribute("data-s", s); var t = root.querySelector(".nt-state-t"); if (t) t.textContent = label; }
+function vers(n) { root.querySelector(".nt-vnum").textContent = "v0" + n; }
+
+function reset() {
+  ["has-notes", "cut", "v2a", "v2b", "v2c", "fade"].forEach(function (c) { ed.classList.remove(c); });
+  setState("idle", "In review"); vers(1); setN(0);
+  q(".nt-pin, .nt-scrub b, .nt-item").forEach(function (el) { el.classList.remove("on", "done"); });
+  q(".nt-text").forEach(function (el) { el._skType = (el._skType || 0) + 1; el.textContent = ""; el.classList.remove("typing"); });
+  compText._skType = (compText._skType || 0) + 1; compText.textContent = ""; comp.classList.remove("typing");
+  sends.forEach(function (b) { b.classList.remove("press"); });
+}
+
+/* everything in its finished state (reduced motion, and the resting frame) */
+function finished() {
+  reset();
+  ed.classList.add("has-notes", "v2a", "v2b", "v2c");
+  NOTES.forEach(function (text, k) {
+    var note = root.querySelector('.nt-item[data-note="' + (k + 1) + '"]');
+    note.querySelector(".nt-text").textContent = text;
+    note.classList.add("on", "done");
+    q('[data-pin="' + (k + 1) + '"]').forEach(function (el) { el.classList.add("on"); if (el.classList.contains("nt-pin")) el.classList.add("done"); });
+  });
+  setN(2); vers(2); setState("done", "New cut");
+}
+
+async function run() {
+  var my = ++token, ok = function () { return my === token; };
+  reset();
+  ed.classList.add("live");
+  startClock(0.815);
+  place(root.querySelector(".nt-side"), 0.5, 0.8);
+  await SK.sleep(500); if (!ok()) return;
+  cursor.classList.add("on");
+
+  var spots = [[0.64, 0.34], [0.30, 0.67]];
+  for (var k = 0; k < 2; k++) {
+    place(screen, spots[k][0], spots[k][1]);
+    await SK.sleep(1000); if (!ok()) return;
+    await press(); if (!ok()) return;
+    var p = progress(), note = root.querySelector('.nt-item[data-note="' + (k + 1) + '"]'), text = note.querySelector(".nt-text");
+    q('.nt-scrub [data-pin="' + (k + 1) + '"]').forEach(function (b) { b.style.setProperty("--l", (p * 100).toFixed(1) + "%"); });
+    q('[data-pin="' + (k + 1) + '"]').forEach(function (el) { el.classList.add("on"); });
+    note.querySelector(".nt-time").textContent = fmt(p);
+    comp.querySelector(".nt-time").textContent = fmt(p);
+    ed.classList.add("has-notes");
+    await SK.sleep(320); if (!ok()) return;
+    if (shown(comp)) {
+      /* typed in the composer, like in the app, then it lands in the list */
+      comp.classList.add("typing");
+      if (!(await SK.type(compText, NOTES[k], { ms: 36 }))) return;
+      await SK.sleep(340); if (!ok()) return;
+      var okB = comp.querySelector(".nt-ok"); okB.classList.add("tap");
+      await SK.sleep(160); if (!ok()) return;
+      okB.classList.remove("tap"); comp.classList.remove("typing"); compText.textContent = "";
+      text.textContent = NOTES[k];
+      note.classList.add("on");
+    } else {
+      note.classList.add("on");
+      text.classList.add("typing");
+      if (!(await SK.type(text, NOTES[k], { ms: 36 }))) return;
+      text.classList.remove("typing");
+    }
+    setN(k + 1);
+    await SK.sleep(520); if (!ok()) return;
+  }
+
+  var btn = sends.filter(shown)[0] || sends[0];
+  place(btn, 0.5, 0.56);
+  await SK.sleep(1050); if (!ok()) return;
+  await press(); if (!ok()) return;
+  btn.classList.add("press");
+  await SK.sleep(170); if (!ok()) return;
+  btn.classList.remove("press");
+  setState("busy", "Re-cutting");
+  ed.classList.add("cut");
+  await SK.sleep(260); if (!ok()) return;
+  cursor.classList.remove("on");
+  await SK.sleep(790); if (!ok()) return;
+  ed.classList.add("v2a");                       /* the music under the intro is replaced */
+  await SK.sleep(750); if (!ok()) return;
+  ed.classList.add("v2b");                       /* the logo slides onto the beat */
+  await SK.sleep(1100); if (!ok()) return;
+
+  ed.classList.remove("cut");
+  ed.classList.add("v2c");
+  setState("done", "New cut"); vers(2);
+  for (var d = 1; d <= 2; d++) {
+    await SK.sleep(d === 1 ? 250 : 380); if (!ok()) return;
+    root.querySelector('.nt-item[data-note="' + d + '"]').classList.add("done");
+    root.querySelector('.nt-pin[data-pin="' + d + '"]').classList.add("done");
+  }
+  await SK.sleep(4600); if (!ok()) return;
+  ed.classList.add("fade");
+  await SK.sleep(480); if (!ok()) return;
+  run();
+}
+
+if (SK.reduced) finished();
+else SK.onView(ed, run, function () {
+  token++;
+  clearInterval(clockT);
+  ed.classList.remove("live");
+  cursor.classList.remove("on", "down");
+}, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+
+} catch (e) { console.error("section 070-notes", e); }
+})();
+
+/* ===== 080-phone ===== */
+;(function () {
+try {
+var root = document.getElementById("shoot");
+if (!root) return;
+
+/* the footage drifts a little against the scroll (only while on screen) */
+(function (el) {
+  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
+  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
+    el.removeAttribute("poster"); el.style.opacity = "0";
+    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
+  }
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+    var t = -p * r.height * 0.045;
+    y += (t - y) * 0.12;
+    if (Math.abs(t - y) < 0.05) y = t;
+    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* three batches of footage, each becomes its own film: the takes are frames of that film's own shots */
+var BATCHES = [
+  { slug: "run-club", cap: "Same crew.\nEvery morning." },
+  { slug: "coffee-friend-arrives", cap: "The corner table.\nSaturdays." },
+  { slug: "coastal-highway", cap: "Take the\nlong way." }
+];
+var card = root.querySelector(".sh-card"), clips = [].slice.call(card.querySelectorAll(".sh-clip"));
+var steps = [].slice.call(card.querySelectorAll(".sh-steps li")), status = card.querySelector(".sh-status");
+var filmBox = card.querySelector(".sh-film"), film = filmBox.querySelector("video"), cap = card.querySelector(".sh-cap"), token = 0, round = 0;
+var STATES = ["s0", "s1", "s2", "s2b", "s3", "s4", "s5", "sh-fade"];
+
+function fill(b) {
+  clips.forEach(function (c, i) { c.querySelector("img").src = "assets/media/shoot/" + b.slug + "-" + (i + 1) + ".jpg"; });
+  cap.textContent = b.cap;
+  var src = "assets/media/selects/" + b.slug + ".mp4";
+  film.poster = "assets/media/selects/" + b.slug + ".jpg";
+  film.setAttribute("data-src", src);
+  if (film.getAttribute("src") && film.getAttribute("src") !== src) film.src = src;      /* the kit has already armed it: swap the file */
+}
+function reset() {
+  STATES.forEach(function (s) { card.classList.remove(s); });
+  clips.forEach(function (c) { c.classList.remove("in"); });
+  steps.forEach(function (s) { s.classList.remove("on", "run"); });
+  status.textContent = "Drop clips here";
+}
+/* where each picked take has to travel to land in the middle of the film */
+function measure() {
+  var f = filmBox.getBoundingClientRect();
+  clips.forEach(function (c) {
+    if (!c.classList.contains("pick")) return;
+    var w = c.offsetWidth, h = c.offsetHeight, p = c.offsetParent ? c.offsetParent.getBoundingClientRect() : f;
+    c.style.setProperty("--dx", (f.left + f.width / 2 - (p.left + c.offsetLeft + w / 2)).toFixed(1) + "px");
+    c.style.setProperty("--dy", (f.top + f.height / 2 - (p.top + c.offsetTop + h / 2)).toFixed(1) + "px");
+  });
+}
+function job(n, ms, text) { var li = steps[n]; li.style.setProperty("--d", ms + "ms"); li.classList.add("run"); status.textContent = text; }
+function done(n) { steps[n].classList.remove("run"); steps[n].classList.add("on"); }
+
+async function run() {
+  var my = ++token;
+  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
+  if (SK.reduced) { reset(); fill(BATCHES[0]); clips.forEach(function (c) { c.classList.add("in"); }); steps.forEach(function (s) { s.classList.add("on"); }); ["s1", "s2", "s2b", "s3", "s4", "s5"].forEach(function (s) { card.classList.add(s); }); status.textContent = "Ready"; return; }
+  try {
+    for (;;) {
+      reset();
+      fill(BATCHES[round++ % BATCHES.length]);
+      await w(350);
+      clips.forEach(function (c) { c.classList.add("in"); }); status.textContent = "Dropped in"; card.classList.add("s0");
+      await w(1500);
+      job(0, 950, "Finding the best takes"); await w(950); done(0); card.classList.add("s1");
+      await w(650);
+      job(1, 900, "Cutting"); measure(); await w(250);
+      card.classList.add("s2"); try { film.currentTime = 0; var p = film.play(); p && p.catch(function () {}); } catch (e) {}
+      await w(900); done(1); card.classList.add("s2b");
+      job(2, 800, "Captioning"); await w(800); done(2); card.classList.add("s3");
+      job(3, 800, "Scoring"); await w(800); done(3); card.classList.add("s4");
+      await w(450);
+      card.classList.add("s5"); status.textContent = "Ready";
+      await w(4600);
+      card.classList.add("sh-fade");
+      await w(500);
+    }
+  } catch (e) {}
+}
+fill(BATCHES[0]);
+SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+
+} catch (e) { console.error("section 080-phone", e); }
+})();
+
+/* ===== 090-aesthetic ===== */
+;(function () {
+try {
+var root = document.getElementById("aesthetic");
+if (!root) return;
+
+/* the nine styles, read from the product library (aesthetic/styles.json). n = graphics in the style. */
+var P = "assets/media/aesthetic/";
+var STYLES = [
+  { id: "studio", name: "Studio", tag: "Terminal captions, tactical brackets, type on real footage.", made: "founders, product, personal brand", type: "Switzer, IBM Plex Mono", pal: ["#0E0F11", "#536878", "#A9B2B9", "#E5E4E2", "#F3F3F1"], n: 60 },
+  { id: "clean", name: "Clean", tag: "One neutral sans, generous space. Nothing clever, perfectly set.", made: "anyone, a safe start", type: "Inter", pal: ["#FFFFFF", "#FBFBFD", "#86868B", "#1D1D1F", "#000000"], n: 28 },
+  { id: "editorial", name: "Editorial", tag: "An elegant serif, tracked caps, slow fades.", made: "luxury, hospitality, fashion", type: "Instrument Serif, Jost", pal: ["#FAF7F2", "#F1ECE4", "#D9CFC1", "#8C6A4F", "#2A2420"], n: 46 },
+  { id: "docu", name: "Docu", tag: "Serif subtitles, quiet name bars, chapter cards.", made: "founder stories, interviews, testimonials", type: "Newsreader, Libre Franklin", pal: ["#141414", "#2A2A29", "#8C8A84", "#E6E3DC", "#C8B79A"], n: 38 },
+  { id: "glass", name: "Glass", tag: "Glass cards, fields and pills over live action.", made: "apps and products, creators, talking to camera", type: "Inter", pal: ["#0C1220", "#2B4A86", "#C9D6E4", "#F2F4F6", "#FFFFFF"], n: 39 },
+  { id: "horizon", name: "Horizon", tag: "One line of tiny bold caps, far apart across the scene.", made: "personal brand, travel, quiet luxury", type: "Instrument Serif, Inter", pal: ["#0F1B33", "#5E83A8", "#F3EFE6", "#F0913C", "#FFFFFF"], n: 33 },
+  { id: "journal", name: "Journal", tag: "Diary and data set straight on the picture.", made: "creators, travel, running and sport", type: "Outfit, Inter", pal: ["#0C1630", "#2B4A86", "#84A8BE", "#C9DAEF", "#FFFFFF"], n: 29 },
+  { id: "grid", name: "Grid", tag: "Hairlines, tiny caps, one gigantic word or numeral.", made: "launches, events, design and architecture", type: "Outfit", pal: ["#F1EEE7", "#E4E0D8", "#8E8B85", "#141414"], n: 27 },
+  { id: "cutout", name: "Cutout", tag: "One enormous word behind the person, everything else tiny.", made: "creators, fashion and sport, posters", type: "DIN Condensed, Inter", pal: ["#EFE9DD", "#C9BFAE", "#8F887B", "#1B1A17", "#FFFFFF"], n: 28 }
+];
+var DWELL = { journal: 4700, grid: 4700 }, BASE = 4300;
+
+var stage = root.querySelector(".ae-stage"), chipRow = root.querySelector(".ae-chips");
+var chips = [].slice.call(root.querySelectorAll(".ae-chip")), info = root.querySelector(".ae-info");
+var slots = [".ae-f", ".ae-m"].map(function (sel) { return { layers: [].slice.call(root.querySelectorAll(sel + " video")), cur: 0 }; });
+var still = { layers: [].slice.call(root.querySelectorAll(".ae-s img")), cur: 0 };
+var cur = 0, timer = 0, prepT = 0, inView = false, token = 0;
+
+/* a hidden layer never plays (the kit starts every video[data-play] it sees in view) */
+slots.forEach(function (s) {
+  s.layers.forEach(function (v) {
+    v.muted = true;
+    v.addEventListener("play", function () { if (!v.classList.contains("on")) v.pause(); });
+  });
+  s.layers[0]._want = s.layers[0].getAttribute("data-src");
+});
+still.layers[0]._want = still.layers[0].getAttribute("src");
+
+function play(v) { if (SK.reduced || !inView) return; var p = v.play(); p && p.catch(function () {}); }
+
+/* load a style into the hidden layers so the switch is instant */
+function prep(i) {
+  var id = STYLES[i].id;
+  slots.forEach(function (s, k) {
+    var v = s.layers[1 - s.cur], src = P + id + "-" + (k + 1) + ".mp4";
+    if (v._want === src) return;
+    v._want = src;
+    v.poster = P + id + "-" + (k + 1) + ".jpg";
+    v.preload = "auto";
+    v.src = src;
+    v.load();
+  });
+  var im = still.layers[1 - still.cur], s = P + id + "-s.jpg";
+  if (im._want !== s) { im._want = s; im.src = s; }
+}
+
+function paintInfo(i) {
+  var s = STYLES[i];
+  info.querySelector(".ae-count b").textContent = ("0" + (i + 1)).slice(-2);
+  info.querySelector(".ae-name").textContent = s.name;
+  info.querySelector(".ae-tag").textContent = s.tag;
+  info.querySelector(".ae-fact-for dd").textContent = s.made;
+  info.querySelector(".ae-fact-type dd").textContent = s.type;
+  info.querySelector(".ae-fact-n dd").textContent = s.n + " graphics";
+  info.querySelector(".ae-dots").innerHTML = s.pal.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("");
+}
+
+function schedule(mult) {
+  clearTimeout(timer); clearTimeout(prepT);
+  chips.forEach(function (c) { c.classList.remove("run"); });
+  if (!inView || SK.reduced) return;
+  var ms = (DWELL[STYLES[cur].id] || BASE) * (mult || 1), c = chips[cur];
+  c.style.setProperty("--ae-dwell", ms + "ms");
+  void c.offsetWidth;
+  c.classList.add("run");
+  prepT = setTimeout(function () { prep((cur + 1) % STYLES.length); }, 900);
+  timer = setTimeout(function () { go((cur + 1) % STYLES.length); }, ms);
+}
+
+function go(i, user) {
+  if (i === cur) { if (user) schedule(3); return; }
+  var my = ++token;
+  prep(i);
+  slots.forEach(function (s) {
+    var nv = s.layers[1 - s.cur], ov = s.layers[s.cur];
+    s.cur = 1 - s.cur;
+    try { nv.currentTime = 0; } catch (e) {}
+    nv.classList.add("on");
+    ov.classList.remove("on");
+    play(nv);
+    setTimeout(function () { if (!ov.classList.contains("on")) ov.pause(); }, 750);
+  });
+  still.layers[1 - still.cur].classList.add("on");
+  still.layers[still.cur].classList.remove("on");
+  still.cur = 1 - still.cur;
+
+  cur = i;
+  chips.forEach(function (c, k) { c.classList.toggle("on", k === i); c.setAttribute("aria-pressed", k === i ? "true" : "false"); });
+  /* keep the chosen chip in sight when the row scrolls (never scrolls the page) */
+  var c = chips[i], max = chipRow.scrollWidth - chipRow.clientWidth;
+  if (max > 0) chipRow.scrollTo({ left: Math.max(0, Math.min(max, c.offsetLeft - (chipRow.clientWidth - c.offsetWidth) / 2)), behavior: SK.reduced ? "auto" : "smooth" });
+  if (SK.reduced) paintInfo(i);
+  else {
+    info.classList.add("swap");
+    setTimeout(function () { if (my !== token) return; paintInfo(i); info.classList.remove("swap"); }, 260);
+  }
+  schedule(user ? 3 : 1);
+}
+
+chips.forEach(function (c, k) { c.addEventListener("click", function () { go(k, true); }); });
+
+SK.onView(stage, function () {
+  inView = true;
+  slots.forEach(function (s) { play(s.layers[s.cur]); });
+  schedule(1);
+}, function () {
+  inView = false;
+  clearTimeout(timer); clearTimeout(prepT);
+  chips.forEach(function (c) { c.classList.remove("run"); });
+  slots.forEach(function (s) { s.layers.forEach(function (v) { v.pause(); }); });
+}, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+
+} catch (e) { console.error("section 090-aesthetic", e); }
+})();
+
+/* ===== 100-social ===== */
+;(function () {
+try {
+var root = document.getElementById("social");
+if (!root) return;
+var M = SK.media || {};
+var THUMBS = (M.thumbs || []).map(function (t) { return t.file || t; });
+var POSTERS = (M.films || []).map(function (f) { return f.poster; });
+var NETS = ["ig", "tiktok", "youtube", "x", "linkedin", "facebook", "threads"];
+var TIMES = ["10a", "4p", "12p", "8a", "6p", "2p", "9a", "7p", "11a", "5p"];
+var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+/* posts per day across the 30 days, desktop (the counter shows whatever this really adds up to) */
+var PER_DAY = [3, 2, 4, 2, 3, 1, 2, 2, 3, 4, 2, 3, 2, 1, 4, 2, 3, 2, 2, 3, 1, 2, 3, 4, 2, 2, 3, 1, 2, 3];
+var BRAND = {};
+(M.films || []).forEach(function (f) { BRAND[f.slug] = /esignature/i.test(f.brand || "") ? "ces" : "mirra"; BRAND[f.poster] = BRAND[f.slug]; });
+(M.thumbs || []).forEach(function (t) { BRAND[t.file] = BRAND[t.from_slug] || "mirra"; });
+function rnd(i) { var x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+
+/* ================= the calendar ================= */
+var stage = document.getElementById("soc-stage"), tray = document.getElementById("soc-tray"), grid = document.getElementById("soc-grid");
+var elPosts = document.getElementById("soc-posts"), elAccts = document.getElementById("soc-accts"), elLeft = document.getElementById("soc-left"), elSay = document.getElementById("soc-say");
+var netEls = {};
+root.querySelectorAll("#soc-nets li").forEach(function (li) { netEls[li.getAttribute("data-net")] = li; });
+var posts = [], anims = [], token = 0, state = "pile", phone = SK.mobile();
+
+function cardHTML(src) { return '<span class="soc-fx"><span class="soc-fy"><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" decoding="async"><img class="br" src="assets/media/social/brand-' + (BRAND[src] || "mirra") + '.png" alt="" width="12" height="12" decoding="async"></span></span></span>'; }
+
+function build() {
+  grid.innerHTML = "";
+  posts = [];
+  /* every picture once before any repeat: the 28 frames first, then the film posters */
+  var pool = THUMBS.concat(POSTERS);
+  if (!pool.length) return;
+  var now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  var off = (today.getDay() + 6) % 7, first = new Date(today); first.setDate(today.getDate() - off);
+  var last = new Date(first); last.setDate(first.getDate() + 34);
+  document.getElementById("soc-month").textContent = first.getMonth() === last.getMonth() ? MONTHS[first.getMonth()] + " " + first.getFullYear() : MONTHS[first.getMonth()].slice(0, 3) + " · " + MONTHS[last.getMonth()].slice(0, 3) + " " + last.getFullYear();
+  var pi = 0, n = 0;
+  for (var c = 0; c < 35; c++) {
+    var d = new Date(first); d.setDate(first.getDate() + c);
+    var rel = c - off, cell = document.createElement("div");
+    cell.className = "soc-day" + (rel < 0 ? " past" : rel === 0 ? " today" : rel >= 30 ? " out" : "");
+    var lab = (d.getDate() === 1 && c > 0 ? MONTHS[d.getMonth()].slice(0, 3) + " " : "") + d.getDate();
+    cell.innerHTML = '<span class="soc-d">' + lab + "</span>";
+    var box = cell, count = rel < 0 ? (phone ? 1 : 2 + (c % 2)) : rel < 30 ? (phone ? 1 : PER_DAY[rel]) : 0;
+    for (var j = 0; j < count; j++) {
+      var p = document.createElement("div"), was = rel < 0;
+      p.className = "soc-post " + (was ? "was" : "sched pile");
+      p.innerHTML = cardHTML(pool[pi % pool.length]) + '<i class="soc-dot"></i><span class="soc-time">' + TIMES[(pi * 3 + j) % TIMES.length] + "</span>";
+      pi++;
+      box.appendChild(p);
+      if (!was) { posts.push({ el: p, fx: p.querySelector(".soc-fx"), fy: p.querySelector(".soc-fy"), card: p.querySelector(".soc-card"), net: null, i: n }); n++; }
+    }
+    grid.appendChild(cell);
+  }
+  /* accounts join in over the whole run, not all in the first second */
+  var joined = 1;
+  posts.forEach(function (p, i) {
+    if (joined < NETS.length && i >= Math.round((joined * joined * posts.length * .62) / (NETS.length * NETS.length) + joined)) joined++;
+    p.net = NETS[i < 1 ? 0 : joined > 1 && (i % 3 !== 0) ? (i * 5 + 1) % joined : joined - 1];
+  });
+}
+
+/* where each card rests in the tray: a loose stack, the first post to leave on top */
+function pile() {
+  if (!posts.length) return;
+  var tr = tray.getBoundingClientRect(), n = posts.length;
+  var w0 = posts[0].el.getBoundingClientRect().width || 28;
+  var tall = tr.height > tr.width * 1.4;
+  var s = tall ? 1.62 : phone ? 1.22 : 1.5, pw = w0 * s, ph = (pw * 16) / 9;
+  var padX = tall ? 18 : phone ? 14 : 20, top = tall ? 50 : phone ? 36 : 42;
+  var rects = posts.map(function (p) { return p.el.getBoundingClientRect(); });
+  posts.forEach(function (p, i) {
+    var slot = n - 1 - i, r = rects[i], x, y;
+    if (tall) {
+      var cols = 3, rows = Math.ceil(n / cols), row = Math.floor(slot / cols), col = slot % cols;
+      var uw = tr.width - padX * 2 - pw, uh = tr.height - top - 20 - ph;
+      x = tr.left + padX + pw / 2 + (uw * col) / (cols - 1) + (rnd(i) - .5) * 8;
+      y = tr.top + top + ph / 2 + (rows > 1 ? (uh * row) / (rows - 1) : 0) + (rnd(i + 50) - .5) * 8;
+    } else {
+      var uw2 = tr.width - padX * 2 - pw;
+      x = tr.left + padX + pw / 2 + (n > 1 ? (uw2 * slot) / (n - 1) : 0);
+      y = tr.top + top + ph / 2 + (rnd(i + 50) - .5) * 6;
+    }
+    p.dx = x - (r.left + r.width / 2);
+    p.dy = y - (r.top + (r.width * 16) / 18);
+    p.rot = (rnd(i + 9) - .5) * (tall ? 10 : 8);
+    p.s = pw / (r.width || 28);
+    p.el.style.zIndex = String(10 + slot);
+    p.el.classList.add("pile");
+    p.el.classList.remove("in");
+    p.fx.style.transform = "translateX(" + p.dx.toFixed(1) + "px)";
+    p.fy.style.transform = "translateY(" + p.dy.toFixed(1) + "px) rotate(" + p.rot.toFixed(2) + "deg) scale(" + p.s.toFixed(3) + ")";
+    p.card.style.transform = "";
+  });
+  state = "pile";
+}
+
+function counters(np, nets) {
+  elPosts.textContent = String(np);
+  elAccts.textContent = String(nets);
+  elLeft.textContent = String(posts.length - np);
+}
+function resetBoard() {
+  anims.forEach(function (a) { try { a.cancel(); } catch (e) {} });
+  anims = [];
+  NETS.forEach(function (k) { netEls[k] && netEls[k].classList.remove("on", "pop"); });
+  tray.classList.remove("done");
+  grid.classList.remove("clearing");
+  counters(0, 0);
+  elSay.textContent = "Ready";
+  pile();
+}
+function place(p) {
+  p.fx.style.transform = ""; p.fy.style.transform = ""; p.card.style.transform = "";
+  p.el.classList.remove("pile"); p.el.classList.add("in"); p.el.style.zIndex = "";
+}
+function finalBoard() {
+  posts.forEach(place);
+  NETS.forEach(function (k) { netEls[k] && netEls[k].classList.add("on"); });
+  counters(posts.length, Math.min(NETS.length, posts.length));
+  tray.classList.add("done");
+  elSay.textContent = "Scheduled";
+  state = "full";
+}
+
+var FLY = 860;
+function fly(my) {
+  state = "flying";
+  var landed = 0, lit = {}, gap = phone ? 100 : 58;
+  posts.forEach(function (p, i) {
+    var delay = i * gap;
+    p.fx.style.transform = ""; p.fy.style.transform = "";
+    anims.push(p.fx.animate([{ transform: "translateX(" + p.dx.toFixed(1) + "px)" }, { transform: "translateX(0)" }], { duration: FLY, delay: delay, easing: "cubic-bezier(.5, 0, .2, 1)", fill: "backwards" }));
+    anims.push(p.fy.animate([{ transform: "translateY(" + p.dy.toFixed(1) + "px) rotate(" + p.rot.toFixed(2) + "deg) scale(" + p.s.toFixed(3) + ")" }, { transform: "translateY(0) rotate(0deg) scale(1)" }], { duration: FLY, delay: delay, easing: "cubic-bezier(.3, 1.22, .42, 1)", fill: "backwards" }));
+    anims.push(p.card.animate([{ transform: "translateY(0) scale(1)" }, { transform: "translateY(-30px) scale(1.16)", offset: .42 }, { transform: "translateY(0) scale(1)" }], { duration: FLY, delay: delay, easing: "cubic-bezier(.4, 0, .4, 1)", fill: "backwards" }));
+    setTimeout(function () {
+      if (my !== token) return;
+      p.el.classList.remove("pile"); p.el.classList.add("in"); p.el.style.zIndex = "";
+      landed++;
+      var li = netEls[p.net];
+      if (li) { lit[p.net] = 1; li.classList.add("on", "pop"); setTimeout(function () { li.classList.remove("pop"); }, 240); }
+      counters(landed, Object.keys(lit).length);
+    }, delay + FLY * .8);
+  });
+  return SK.sleep((posts.length - 1) * gap + FLY + 120);
+}
+
+async function schedule(ctl) {
+  var my = ++token;
+  elSay.textContent = "Scheduling";
+  await SK.sleep(620);
+  if (my !== token) return;
+  pile(); /* measure again right before take-off, the page may have moved */
+  await fly(my);
+  if (my !== token) return;
+  anims = [];
+  tray.classList.add("done");
+  elSay.textContent = "Scheduled";
+  ctl.state("idle");
+  state = "full";
+  await SK.sleep(4200);
+  if (my !== token) return;
+  grid.classList.add("clearing");
+  await SK.sleep(520);
+  if (my !== token) return;
+  resetBoard();
+  await SK.sleep(700);
+}
+
+build();
+var field = SK.promptField(document.getElementById("soc-field"), {
+  placeholder: "What should we post?",
+  scale: phone ? 1.06 : 1.25,
+  auto: false,
+  prompts: ["Schedule the next 30 days for all my brands"],
+  onSend: function (p, ctl) { return schedule(ctl); }
+});
+if (SK.reduced) {
+  finalBoard();
+  field.set("Schedule the next 30 days for all my brands");
+} else {
+  requestAnimationFrame(function () { resetBoard(); });
+  SK.onView(stage, function () { resetBoard(); field.run(); }, function () { token++; field.stop(); field.state("idle").clear(); resetBoard(); }, { ratio: .5, threshold: [0, .25, .5, .75] });
+  var rz = 0;
+  window.addEventListener("resize", function () {
+    clearTimeout(rz);
+    rz = setTimeout(function () {
+      var ph = SK.mobile();
+      if (ph !== phone) { phone = ph; token++; field.stop(); field.state("idle").clear(); build(); resetBoard(); field.run(); return; }
+      if (state === "pile") pile();
+    }, 180);
+  });
+  window.addEventListener("load", function () { if (state === "pile") pile(); });
+}
+
+/* ================= any post can be an ad ================= */
+var adStage = document.getElementById("soc-ad"), week = document.getElementById("soc-week"), big = document.getElementById("soc-big"), chip = document.getElementById("soc-chip"), res = document.getElementById("soc-res");
+var forest = (M.films || []).filter(function (f) { return f.slug === "ces-forest"; })[0] || (M.films || [])[0];
+if (!adStage || !forest) return;
+var bigV = big.querySelector("video");
+bigV.poster = forest.poster;
+bigV.setAttribute("data-src", forest.loop);
+big.style.backgroundImage = "url(" + forest.poster + ")";
+big.querySelector(".soc-big-tag").textContent = forest.title || "";
+var WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], PICK = 3, wkT = ["t05", "t12", "t18", null, "t09", "t22", "t14"], pickCell;
+WD.forEach(function (d, i) {
+  var src = i === PICK ? forest.poster : "assets/media/thumbs/" + wkT[i] + ".jpg";
+  var c = document.createElement("div");
+  c.className = "soc-wd";
+  c.innerHTML = "<b>" + d + '</b><span><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" loading="lazy" decoding="async"></span><i class="soc-dot"></i></span>';
+  week.appendChild(c);
+  if (i === PICK) pickCell = c;
+});
+var adTok = 0, adAnim = null;
+function adReset() {
+  if (adAnim) { try { adAnim.cancel(); } catch (e) {} adAnim = null; }
+  big.style.opacity = "0"; big.classList.remove("up");
+  chip.classList.remove("on", "tap", "ran"); res.classList.remove("on");
+  pickCell.classList.remove("pick", "gone");
+}
+function adFrom() {
+  var a = pickCell.querySelector(".soc-card").getBoundingClientRect(), b = big.getBoundingClientRect();
+  var s = a.width / (b.width || 1);
+  return "translate(" + (a.left + a.width / 2 - (b.left + b.width / 2)).toFixed(1) + "px," + (a.top + a.height / 2 - (b.top + b.height / 2)).toFixed(1) + "px) scale(" + s.toFixed(4) + ")";
+}
+async function runAd(ctl) {
+  var my = ++adTok;
+  await SK.sleep(500);
+  if (my !== adTok) return;
+  pickCell.classList.add("pick");
+  await SK.sleep(650);
+  if (my !== adTok) return;
+  var from = adFrom();
+  big.style.opacity = "1";
+  pickCell.classList.add("gone");
+  adAnim = big.animate([{ transform: from }, { transform: "translate(0,0) scale(1)" }], { duration: 950, easing: "cubic-bezier(.3, 1.16, .4, 1)", fill: "backwards" });
+  await SK.sleep(820);
+  if (my !== adTok) return;
+  big.classList.add("up");
+  ctl.state("idle");
+  await SK.sleep(350);
+  if (my !== adTok) return;
+  chip.classList.add("on");
+  await SK.sleep(1050);
+  if (my !== adTok) return;
+  chip.classList.add("tap");
+  await SK.sleep(190);
+  if (my !== adTok) return;
+  chip.classList.remove("tap"); chip.classList.add("ran");
+  await SK.sleep(420);
+  if (my !== adTok) return;
+  res.classList.add("on");
+  await SK.sleep(3800);
+  if (my !== adTok) return;
+  chip.classList.remove("on"); res.classList.remove("on"); big.classList.remove("up");
+  await SK.sleep(300);
+  if (my !== adTok) return;
+  adAnim = big.animate([{ transform: "translate(0,0) scale(1)" }, { transform: adFrom() }], { duration: 700, easing: "cubic-bezier(.5, 0, .2, 1)", fill: "forwards" });
+  await SK.sleep(690);
+  if (my !== adTok) return;
+  adReset();
+  await SK.sleep(500);
+}
+var adField = SK.promptField(document.getElementById("soc-ad-field"), {
+  placeholder: "Which post?",
+  scale: 1,
+  auto: false,
+  prompts: ["Run the forest film as an ad"],
+  onSend: function (p, ctl) { return runAd(ctl); }
+});
+if (SK.reduced) {
+  adField.set("Run the forest film as an ad");
+  big.style.opacity = "1"; big.classList.add("up"); chip.classList.add("on", "ran"); res.classList.add("on"); pickCell.classList.add("pick", "gone");
+} else {
+  adReset();
+  SK.onView(adStage, function () { adReset(); adField.run(); }, function () { adTok++; adField.stop(); adField.state("idle").clear(); adReset(); }, { ratio: .55, threshold: [0, .3, .55, .8] });
+}
+
+} catch (e) { console.error("section 100-social", e); }
+})();
+
+/* ===== 110-sound ===== */
+;(function () {
+try {
+var root = document.getElementById("sound");
+if (!root) return;
+var phone = SK.mobile();
+function rnd(i) { var x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+var PLAY = '<span class="snd-play"><svg class="pl" viewBox="0 0 12 12"><path d="M2.6 1.2v9.6L10.8 6z"/></svg><svg class="pa" viewBox="0 0 12 12"><path d="M2.2 1.5h2.8v9H2.2zM7 1.5h2.8v9H7z"/></svg></span>';
+var MARK = '<svg aria-hidden="true"><use href="#studio-mark"/></svg>';
+
+/* ---------- music: invented titles, real genre names and counts from the library ---------- */
+var TRACKS = [
+  { t: "Morning Light", m: "Warm, hopeful", g: "Ambient", d: "2:14" },
+  { t: "Low Tide", m: "Calm, steady", g: "Lo-Fi", d: "1:48" },
+  { t: "Open Road", m: "Bright, driving", g: "Upbeat", d: "2:31" },
+  { t: "Glass Hour", m: "Slow build", g: "Cinematic", d: "3:02" }
+];
+var list = document.getElementById("snd-list"), NB = phone ? 44 : 84, rows = [];
+function shape(seed, n) {
+  var out = [];
+  for (var i = 0; i < n; i++) {
+    var x = i / n;
+    var env = .3 + .7 * Math.pow(Math.sin(Math.PI * Math.min(1, x * 1.08 + .04)), .55);
+    var sec = .72 + .28 * Math.sin(x * Math.PI * 2 * (2 + (seed % 3)) + seed * 1.7);
+    var beat = i % 4 === 0 ? 1 : i % 2 === 0 ? .82 : .66;
+    out.push(Math.max(.08, Math.min(1, env * sec * beat * (.5 + .5 * rnd(i * 7.3 + seed * 31)))));
+  }
+  return out;
+}
+TRACKS.forEach(function (tr, k) {
+  var li = document.createElement("li");
+  li.className = "snd-row";
+  li.innerHTML = PLAY + '<span class="snd-t"><b>' + tr.t + "</b><span>" + tr.m + '</span></span><span class="snd-wave">' +
+    shape(k + 2, NB).map(function (v) { return '<i style="height:' + Math.round(8 + v * 92) + '%"></i>'; }).join("") + '<em></em></span><span class="snd-genre">' + tr.g + '</span><span class="snd-dur">' + tr.d + "</span>";
+  list.appendChild(li);
+  rows.push({ el: li, wave: li.querySelector(".snd-wave"), bars: [].slice.call(li.querySelectorAll(".snd-wave i")), head: li.querySelector(".snd-wave em"), lit: 0, w: 0 });
+});
+var cur = 0;
+function setRow(k) {
+  rows.forEach(function (r, i) {
+    r.el.classList.toggle("on", i === k);
+    if (i !== k && r.lit) { for (var b = 0; b < r.lit; b++) r.bars[b].classList.remove("on"); r.lit = 0; r.head.style.transform = ""; }
+  });
+  cur = k;
+  rows[k].w = rows[k].wave.clientWidth;
+}
+function music(p) {
+  var r = rows[cur], n = Math.round(p * r.bars.length);
+  while (r.lit < n) { r.bars[r.lit].classList.add("on"); r.lit++; }
+  while (r.lit > n) { r.lit--; r.bars[r.lit].classList.remove("on"); }
+  r.head.style.transform = "translateX(" + (p * r.w).toFixed(1) + "px)";
+}
+
+/* ---------- sound: every visible action has a clip right under it ---------- */
+var CUTS = [.22, .68], WORDS = [["Your", .29], ["idea,", .385], ["on", .48], ["screen.", .575]], LOGO = .8;
+var lanes = { text: document.getElementById("snd-text"), shots: document.getElementById("snd-shots"), sfx: document.getElementById("snd-sfx"), names: document.getElementById("snd-names"), guides: document.getElementById("snd-guides"), ruler: document.getElementById("snd-ruler") };
+var tracks = document.getElementById("snd-tracks"), playhead = document.getElementById("snd-playhead"), EV = [];
+function put(lane, cls, a, b, html) {
+  var e = document.createElement(cls === "g" ? "i" : "div");
+  if (cls !== "g") e.className = cls;
+  e.style.left = (a * 100).toFixed(2) + "%";
+  if (b != null) e.style.width = ((b - a) * 100).toFixed(2) + "%";
+  if (html) e.innerHTML = html;
+  lane.appendChild(e);
+  return e;
+}
+function bars(vals) { return vals.map(function (v) { return '<i style="height:' + Math.round(v * 100) + '%"></i>'; }).join(""); }
+function hump(n) { var o = []; for (var i = 0; i < n; i++) o.push(.16 + .7 * Math.pow(Math.sin((Math.PI * (i + .5)) / n), 1.6) * (.75 + .25 * rnd(i + 3))); return o; }
+function decay(n) { var o = []; for (var i = 0; i < n; i++) o.push(Math.max(.1, .92 * Math.exp(-i / (n * .3)) * (.8 + .2 * rnd(i + 11)))); return o; }
+function name(at, txt) { var s = document.createElement("span"); s.style.left = (at * 100).toFixed(2) + "%"; s.textContent = txt; lanes.names.appendChild(s); return s; }
+[0, 2, 4, 6].forEach(function (s) { var e = document.createElement("span"); e.style.left = (s / 8 * 100) + "%"; e.textContent = s + "s"; lanes.ruler.appendChild(e); });
+/* shots */
+var shotA = put(lanes.shots, "snd-shot", 0, CUTS[0] - .004), shotB = put(lanes.shots, "snd-shot", CUTS[0] + .004, CUTS[1] - .004), shotC = put(lanes.shots, "snd-shot end", CUTS[1] + .004, 1, MARK);
+shotA.setAttribute("data-bg", "assets/media/thumbs/t04.jpg");
+shotB.setAttribute("data-bg", "assets/media/thumbs/t13.jpg");
+/* cuts: a whoosh that lands on the cut */
+CUTS.forEach(function (c) {
+  var clip = put(lanes.sfx, "snd-clip", c - .042, c + .034, bars(hump(phone ? 7 : 12)));
+  EV.push({ t: c, clip: clip, guide: put(lanes.guides, "g", c), name: name(c - .004, "Whoosh") });
+});
+/* words: a tick as each one is typed */
+var tickName = name((WORDS[0][1] + WORDS[3][1]) / 2 + .01, phone ? "Ticks" : "A tick per word");
+WORDS.forEach(function (w, i) {
+  var end = i < WORDS.length - 1 ? WORDS[i + 1][1] - .008 : CUTS[1] - .012;
+  var chip = put(lanes.text, "snd-word", w[1], end, w[0]);
+  var clip = put(lanes.sfx, "snd-clip tick", w[1], w[1] + .018, bars([.9, .42]));
+  EV.push({ t: w[1], chip: chip, clip: clip, guide: put(lanes.guides, "g", w[1]), name: tickName });
+});
+/* logo: a soft hit as it lands */
+var logoChip = put(lanes.text, "snd-word", LOGO, .965, MARK + (phone ? "" : "<span>Logo</span>"));
+EV.push({ t: LOGO, chip: logoChip, shot: shotC, clip: put(lanes.sfx, "snd-clip", LOGO, LOGO + .1, bars(decay(phone ? 8 : 13))), guide: put(lanes.guides, "g", LOGO), name: name(LOGO + .05, "Soft hit") });
+EV.sort(function (a, b) { return a.t - b.t; });
+
+function fire(e) {
+  e.chip && e.chip.classList.add("on");
+  e.shot && e.shot.classList.add("on");
+  [e.clip, e.guide, e.name].forEach(function (x) { if (x) { x.classList.add("hit"); setTimeout(function () { x.classList.remove("hit"); }, 420); } });
+}
+function clearTl() { EV.forEach(function (e) { e.chip && e.chip.classList.remove("on"); e.shot && e.shot.classList.remove("on"); }); }
+
+/* ---------- voices: stock voices that ship in the app (names and taglines from voices.json) ---------- */
+var VOICES = [["Ellen", "Serious, direct"], ["Emma", "Clear, confident"], ["Brad", "Warm, trusted"], ["Everett", "Low, confident"], ["Mark", "Easy, casual"], ["Ryan", "Real talk"]];
+var vs = document.getElementById("snd-vs"), vEls = [];
+VOICES.forEach(function (v, k) {
+  var li = document.createElement("li"), w = "";
+  for (var i = 0; i < (phone ? 14 : 20); i++) w += '<i style="height:' + Math.round(24 + 76 * rnd(i * 3.1 + k * 17) * (.45 + .55 * Math.sin((Math.PI * (i + .5)) / 20))) + "%;--d:" + (rnd(i + k * 9) * .9).toFixed(2) + '"></i>';
+  li.className = "snd-v";
+  li.innerHTML = '<span class="snd-face"><b>' + v[0][0] + '</b><img src="assets/media/voices/' + v[0].toLowerCase() + '.jpg" alt="" width="480" height="600" loading="lazy" decoding="async"><span class="snd-vw">' + w + '</span>' + PLAY + '</span><span class="snd-vt"><b>' + v[0] + "</b><em>" + v[1] + "</em></span>";
+  var im = li.querySelector("img");
+  im.addEventListener("error", function () { im.remove(); });
+  vs.appendChild(li);
+  vEls.push(li);
+});
+function voice(k) { vEls.forEach(function (e, i) { e.classList.toggle("on", i === k); }); }
+
+/* ---------- one clock for all three, only while on screen ---------- */
+var grid = document.getElementById("snd-grid"), D = 7600, REST = 1100, running = false, raf = 0, t0 = 0, ei = 0, loopN = 0, W = 0, vT = 0, vI = 0, resting = false;
+function measure() { W = lanes.shots.clientWidth; rows[cur].w = rows[cur].wave.clientWidth; }
+function frame(now) {
+  if (!running) return;
+  var el = now - t0;
+  if (el >= D + REST) { t0 = now; el = 0; ei = 0; loopN++; clearTl(); setRow(loopN % rows.length); resting = false; playhead.classList.remove("rest"); }
+  var p = Math.min(1, el / D);
+  if (el > D && !resting) { resting = true; playhead.classList.add("rest"); }
+  playhead.style.transform = "translateX(" + (p * W).toFixed(1) + "px)";
+  while (ei < EV.length && p >= EV[ei].t) { fire(EV[ei]); ei++; }
+  music(p);
+  raf = requestAnimationFrame(frame);
+}
+function start() {
+  if (running) return;
+  root.querySelectorAll("[data-bg]").forEach(function (e) { e.style.backgroundImage = "url(" + e.getAttribute("data-bg") + ")"; e.removeAttribute("data-bg"); });
+  measure();
+  running = true; t0 = performance.now(); ei = 0; resting = false; clearTl(); playhead.classList.remove("rest");
+  raf = requestAnimationFrame(frame);
+  voice(vI);
+  vT = setInterval(function () { vI = (vI + 1) % vEls.length; voice(vI); }, 3200);
+}
+function stop() { running = false; cancelAnimationFrame(raf); clearInterval(vT); voice(-1); }
+setRow(0);
+if (SK.reduced) {
+  root.querySelectorAll("[data-bg]").forEach(function (e) { e.style.backgroundImage = "url(" + e.getAttribute("data-bg") + ")"; });
+  measure(); EV.forEach(function (e) { e.chip && e.chip.classList.add("on"); e.shot && e.shot.classList.add("on"); });
+  playhead.classList.add("rest"); music(.38); voice(0);
+} else {
+  SK.onView(grid, start, stop, { ratio: .12, threshold: [0, .12, .4] });
+  window.addEventListener("resize", measure);
+}
+
+} catch (e) { console.error("section 110-sound", e); }
+})();
+
+/* ===== 120-chat ===== */
+;(function () {
+try {
+var root = document.getElementById("chat");
+if (!root) return;
+
+/* the footage drifts a little against the scroll (only while on screen) */
+(function (el) {
+  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
+  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
+    el.removeAttribute("poster"); el.style.opacity = "0";
+    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
+  }
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+    var t = -p * r.height * 0.045;
+    y += (t - y) * 0.12;
+    if (Math.abs(t - y) < 0.05) y = t;
+    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* one conversation, drawn on both screens so they stay in step */
+var film = ((SK.media.films || []).filter(function (f) { return f.slug === "ces-sea-cliffs"; })[0] || (SK.media.films || [])[0] || {}).poster || "";
+var IMG = function (w, h) { return '<img src="' + film + '" alt="" width="' + w + '" height="' + h + '" loading="lazy" decoding="async">'; };
+var SCRIPT = [
+  { who: "claude", text: "Your launch film is ready.", card:
+    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">v01</span></figure></div><p class="ch-foot"><span>Full edits</span><b class="still">Ready to watch</b></p></div>' },
+  { who: "you", text: "The new film is great. Make a square version for the feed and schedule both for Thursday." },
+  { who: "claude", doing: ["Making the square version", "Scheduling both"], text: "Done. Both are on Thursday at 10.", card:
+    '<div class="ch-card"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">9:16</span></figure><figure class="s">' + IMG(96, 96) + '<span class="ch-chip">1:1</span></figure></div><p class="ch-foot dot">Thursday · 10:00</p></div>' },
+  { who: "you", text: "And run the first one as an ad." },
+  { who: "claude", doing: ["Setting up the ad"], text: "It's live.", card:
+    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">Ad</span></figure></div><p class="ch-foot"><span><img src="assets/logos/social/meta.svg" alt="" width="24" height="24" loading="lazy" decoding="async">Facebook · Instagram</span><b>Live</b></p></div>' }
+];
+var SPARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#claude"/></svg>';
+var lists = [].slice.call(root.querySelectorAll(".ch-list")), rows = [];
+lists.forEach(function (list) {
+  SCRIPT.forEach(function (s, i) {
+    var m = document.createElement("div");
+    m.className = "ch-m " + s.who;
+    if (s.who === "you") m.textContent = s.text;
+    else {
+      m.innerHTML = '<span class="ch-think">' + SPARK + "<span></span><u><i></i><i></i><i></i></u></span>" + '<div class="ch-body"><p class="ch-who">' + SPARK + 'Claude</p><p class="ch-say"></p>' + (s.card || "") + "</div>";
+      m.querySelector(".ch-say").textContent = s.text;
+    }
+    list.appendChild(m);
+    (rows[i] = rows[i] || []).push(m);
+  });
+});
+
+var comps = [].slice.call(root.querySelectorAll(".ch-comp")), phone = root.querySelector(".ch-comp-ph");
+var ask = phone.querySelector(".ch-ask"), askT = phone.querySelector(".ch-ask-t"), send = phone.querySelector(".ch-send");
+var PLACEHOLDER = askT.textContent, token = 0;
+comps.forEach(function (c) { SK.beam(c, { size: "md", variant: "mirra", radius: c === phone ? (SK.mobile() ? 20 : 30) : 18 }); c.style.setProperty("--beam-strength", "0"); });
+
+/* keep the newest message in view, like a real thread */
+function fit(i) {
+  lists.forEach(function (list, v) {
+    var m = rows[i][v], box = list.parentNode;
+    if (!box.clientHeight) return;
+    var h = m.classList.contains("think") ? 44 : m.offsetHeight;
+    list.style.transform = "translate3d(0," + -Math.max(0, m.offsetTop + h + 8 - box.clientHeight) + "px,0)";
+  });
+}
+function show(i) { rows[i].forEach(function (m) { m.classList.remove("think"); m.classList.add("on"); }); fit(i); }
+function think(i, text) { rows[i].forEach(function (m) { m.querySelector(".ch-think span").textContent = text; m.classList.add("think"); }); fit(i); }
+function working(on) { comps.forEach(function (c) { c.classList.toggle("working", on); c.style.setProperty("--beam-strength", on ? "1" : "0"); }); }
+function setAsk(t, typing) {
+  askT.textContent = t || PLACEHOLDER;
+  ask.classList.toggle("ph", !t);
+  phone.classList.toggle("typing", !!typing);
+}
+function reset() {
+  rows.forEach(function (r) { r.forEach(function (m) { m.classList.remove("on", "think"); }); });
+  lists.forEach(function (l) { l.style.transform = ""; });
+  phone.classList.remove("talk");
+  working(false);
+  setAsk("", false);
+  root.classList.remove("ch-out");
+  show(0);                                        /* the thread always opens on the film Claude just delivered */
+}
+
+async function run() {
+  var my = ++token;
+  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
+  reset();
+  if (SK.reduced) { SCRIPT.forEach(function (s, i) { show(i); }); return; }
+  async function answer(i) {
+    working(true);
+    var d = SCRIPT[i].doing;
+    for (var k = 0; k < d.length; k++) { think(i, d[k]); await w(1250); }
+    working(false);
+    show(i);
+  }
+  try {
+    for (;;) {
+      await w(900);
+      /* the first request is typed */
+      var t = SCRIPT[1].text;
+      for (var i = 1; i <= t.length; i++) { setAsk(t.slice(0, i), true); await w(t[i - 1] === "." ? 190 : 18 + Math.random() * 24); }
+      await w(380);
+      send.classList.add("tap"); await w(160); send.classList.remove("tap");
+      setAsk("", false); show(1);
+      await w(600);
+      await answer(2);
+      /* the second one is said out loud */
+      await w(2400);
+      phone.classList.add("talk");
+      await w(1900);
+      phone.classList.remove("talk"); show(3);
+      await w(600);
+      await answer(4);
+      await w(5600);
+      root.classList.add("ch-out");
+      await w(550);
+      reset();
+    }
+  } catch (e) {}
+}
+SK.onView(root.querySelector(".ch-phone"), run, function () { token++; reset(); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+
+} catch (e) { console.error("section 120-chat", e); }
+})();
+
+/* ===== 130-steps ===== */
+;(function () {
+try {
+var root = document.getElementById("start");
+if (!root) return;
+
+var s1 = root.querySelector(".gs-s1"), s2 = root.querySelector(".gs-s2"), s3 = root.querySelector(".gs-s3");
+var bubbles = [].slice.call(s2.querySelectorAll(".gs-b")), kit = s2.querySelector(".gs-kit"), film = s3.querySelector("video");
+var field = SK.promptField(document.getElementById("gs-field"), { placeholder: "What should we make?", scale: 0.82, auto: false });
+
+var resets = [
+  function () { s1.classList.remove("a1", "a2", "a3"); },
+  function () { bubbles.forEach(function (b) { b.classList.remove("on"); }); kit.classList.remove("on"); },
+  function () { s3.classList.remove("on"); field.stop(); field.state("idle").clear(); }
+];
+/* each step plays in the order a person would do it; w() waits and stops the run if the step left the screen */
+var plays = [
+  async function (w) {
+    resets[0]();
+    await w(800); s1.classList.add("a1");           /* the icon goes into Applications */
+    await w(1500); s1.classList.add("a2");          /* it lands in the Dock */
+    await w(1150); s1.classList.add("a3");          /* and opens */
+    await w(2000);
+  },
+  async function (w) {
+    resets[1]();
+    await w(450); bubbles[0].classList.add("on");
+    await w(1500); bubbles[1].classList.add("on");
+    await w(950); kit.classList.add("on");
+    await w(2700);
+  },
+  async function (w) {
+    resets[2]();
+    await w(500);
+    await field.type("Make my first launch video");
+    await w(380); field.send();
+    await w(1300);
+    s3.classList.add("on"); field.state("idle");
+    try { film.currentTime = 0; } catch (e) {}
+    await w(2900);
+  }
+];
+
+var tok = [0, 0, 0, 0];
+function waiter(i, my) { return function (ms) { return SK.sleep(ms).then(function () { if (tok[i] !== my) throw 0; }); }; }
+function stacked() { return matchMedia("(max-width: 1020px)").matches; }
+function finish() { s1.classList.add("a1", "a2", "a3"); bubbles.forEach(function (b) { b.classList.add("on"); }); kit.classList.add("on"); field.set("Make my first launch video"); s3.classList.add("on"); }
+
+/* side by side: one, two, three, rest, again. Finished steps stay finished while the next one plays. */
+async function chain() {
+  var my = ++tok[3], w = waiter(3, my);
+  try {
+    for (;;) {
+      for (var i = 0; i < 3; i++) await plays[i](w);
+      await w(2600);
+    }
+  } catch (e) {}
+}
+/* stacked on a phone: each step loops by itself while it is on screen */
+async function solo(i) {
+  var my = ++tok[i], w = waiter(i, my);
+  try { for (;;) { await plays[i](w); await w(1400); } } catch (e) {}
+}
+
+if (SK.reduced) finish();
+else {
+  resets.forEach(function (r) { r(); });
+  bubbles[0].classList.add("on");
+  SK.onView(root.querySelector(".gs-grid"), function () { if (!stacked()) chain(); }, function () { tok[3]++; }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+  [s1, s2, s3].forEach(function (s, i) {
+    SK.onView(s, function () { if (stacked()) solo(i); }, function () { tok[i]++; }, { ratio: 0.5, threshold: [0, 0.5, 0.8] });
+  });
+}
+
+} catch (e) { console.error("section 130-steps", e); }
+})();
+
+/* ===== 140-views ===== */
+;(function () {
+try {
+var root = document.getElementById("views");
+if (!root) return;
+var WALLS = (SK.media.wallpapers || []).slice();
+if (!WALLS.length) return;
+
+/* where each wallpaper looks best in a tall phone frame, and the app's own id for it (the corner tag is keyed on that) */
+var MORE = {
+  "cumulus-sky": { id: "sky" }, "volcano-above-clouds": { id: "volcano" }, "peaks-in-cloud-sea": { id: "cloudsea" },
+  "half-dome-long-exposure": { id: "halfdome" }, "big-sur-coast": { id: "bigsur" }, "pebble-beach-cypress": { id: "pebble" },
+  "alpine-lake-mirror": { id: "lakemirror" }, "rockies-ember-peaks": { id: "ember" }, "lake-tahoe-blue-hour": { id: "tahoeblue" }
+};
+/* the same table and fallback the app uses for its corner coordinates */
+var PLACE = { pebble: [36.5687, -121.9654, 24], bigsur: [36.2704, -121.8081, 286], tahoeblue: [39.0968, -120.0324, 1897], halfdome: [37.7459, -119.5332, 2694], ember: [51.3271, -116.1856, 2710] };
+function geo(id) {
+  var seed = String(id || "studio").split("").reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) % 100003; }, 7);
+  var pl = PLACE[id] || [28 + (seed % 3400) / 100, -(64 + ((seed * 7) % 6000) / 100), 40 + ((seed * 13) % 2900)];
+  var deg = function (v, pos, neg) { return Math.abs(v).toFixed(4) + "° " + (v >= 0 ? pos : neg); };
+  return [deg(pl[0], "N", "S"), deg(pl[1], "E", "W"), "Elev " + ("000" + pl[2]).slice(-4) + " m"];
+}
+
+var layers = [].slice.call(root.querySelectorAll(".vw-img")), cur = 0, idx = 0, tk = 0, picked = false, inView = false, timer = 0, loaded = {};
+var chipsBox = root.querySelector(".vw-chips"), pillName = root.querySelector(".vw-pill-name"), pillTh = root.querySelector(".vw-pill-th");
+var lat = root.querySelector(".vw-lat"), lon = root.querySelector(".vw-lon"), elev = root.querySelector(".vw-elev"), dateEl = root.querySelector(".vw-date");
+function chipSrc(w) { return "assets/media/views/" + w.slug + "-chip.jpg"; }
+function fullSrc(w) { return SK.mobile() ? "assets/media/views/" + w.slug + "-m.jpg" : w.file; }
+function load(url) {
+  return loaded[url] || (loaded[url] = new Promise(function (res) { var im = new Image(); im.onload = function () { (im.decode ? im.decode().catch(function () {}) : Promise.resolve()).then(function () { res(true); }); }; im.onerror = function () { res(false); }; im.src = url; }));
+}
+
+/* today's date, the way the app writes it */
+try { dateEl.textContent = new Date().toLocaleDateString("en-US", { weekday: "long" }) + " · " + new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" }); } catch (e) {}
+
+var chips = WALLS.map(function (w, i) {
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "vw-chip"; b.setAttribute("aria-pressed", "false");
+  b.innerHTML = '<img src="' + chipSrc(w) + '" alt="" width="96" height="96" loading="lazy" decoding="async"><span></span>';
+  b.querySelector("span").textContent = w.name;
+  b.addEventListener("click", function () { picked = true; clearTimeout(timer); show(i); });
+  chipsBox.appendChild(b);
+  return b;
+});
+
+function label(i) {
+  var w = WALLS[i], g = geo((MORE[w.slug] || {}).id || w.slug);
+  chips.forEach(function (c, j) { c.classList.toggle("on", j === i); c.setAttribute("aria-pressed", j === i ? "true" : "false"); });
+  pillName.textContent = w.name; pillTh.src = chipSrc(w);
+  lat.textContent = g[0]; lon.textContent = g[1]; elev.textContent = g[2];
+  if (SK.mobile() && chips[i].scrollIntoView && picked) chips[i].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+}
+function show(i) {
+  var my = ++tk, w = WALLS[(i + WALLS.length) % WALLS.length], url = fullSrc(w);
+  idx = (i + WALLS.length) % WALLS.length;
+  label(idx);
+  return load(url).then(function (ok) {
+    if (my !== tk || !ok) return;
+    var next = layers[cur ^ 1], prev = layers[cur];
+    next.classList.remove("on");
+    next.src = url;
+    if (!SK.mobile() && w.focus) next.style.objectPosition = w.focus; else next.style.objectPosition = "";
+    void next.offsetWidth;                        /* restart the drift on the incoming picture */
+    next.classList.add("on", "top"); prev.classList.remove("top");
+    root.style.setProperty("--tint", w.tint_rgb ? String(w.tint_rgb).replace(/,/g, ", ") : "15, 22, 31");
+    cur ^= 1;
+    setTimeout(function () { if (my === tk) prev.classList.remove("on"); }, 1600);
+  });
+}
+/* it changes by itself until the visitor picks one */
+function auto() {
+  clearTimeout(timer);
+  if (picked || !inView || SK.reduced) return;
+  load(fullSrc(WALLS[(idx + 1) % WALLS.length]));
+  timer = setTimeout(function () { show(idx + 1).then(auto); }, 5200);
+}
+root.querySelectorAll(".vw-arrow").forEach(function (b) {
+  b.addEventListener("click", function () { picked = true; clearTimeout(timer); show(idx + +b.getAttribute("data-dir")); });
+});
+
+label(0);
+var started = false;
+SK.onView(root, function () { if (!started) { started = true; show(0); } }, null, { margin: "600px 0px", once: true });
+SK.onView(root, function () { inView = true; root.classList.add("live"); auto(); }, function () { inView = false; root.classList.remove("live"); clearTimeout(timer); }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
+
+} catch (e) { console.error("section 140-views", e); }
+})();
+
+/* ===== 150-integrations ===== */
+;(function () {
+try {
+var root = document.getElementById("connect");
+if (!root) return;
+var map = document.getElementById("con-map"), svg = document.getElementById("con-wires"), hub = document.getElementById("con-hub");
+var tiles = [].slice.call(map.querySelectorAll(".con-t")), NS = "http://www.w3.org/2000/svg", wires = [];
+
+/* wires from the Studio mark to every tile, drawn from where things really are */
+function draw() {
+  var m = map.getBoundingClientRect(), h = hub.getBoundingClientRect();
+  if (!m.width) return;
+  svg.setAttribute("viewBox", "0 0 " + m.width + " " + m.height);
+  svg.innerHTML = "";
+  wires = [];
+  var stacked = SK.mobile(), hx = h.left + h.width / 2 - m.left;
+  tiles.forEach(function (t, i) {
+    var r = t.getBoundingClientRect(), d;
+    if (stacked) {
+      /* phone: a spine down the gap between the two columns, a short branch to each tile */
+      var sy = h.bottom - m.top, ty = r.top + r.height / 2 - m.top, left = r.left + r.width / 2 < m.left + m.width / 2;
+      var ex = (left ? r.right : r.left) - m.left, q = 9;
+      d = "M" + hx + " " + sy + "L" + hx + " " + (ty - q) + "Q" + hx + " " + ty + " " + (hx + (left ? -q : q)) + " " + ty + "L" + ex + " " + ty;
+    } else {
+      /* desktop: a fan up to the top row and down to the bottom row */
+      var up = r.top < h.top, col = i % 4, sx = hx + (col - 1.5) * 18, sy2 = (up ? h.top : h.bottom) - m.top;
+      var ex2 = r.left + r.width / 2 - m.left, ey = (up ? r.bottom : r.top) - m.top, k = (ey - sy2) * .55;
+      d = "M" + sx.toFixed(1) + " " + sy2.toFixed(1) + "C" + sx.toFixed(1) + " " + (sy2 + k).toFixed(1) + " " + ex2.toFixed(1) + " " + (ey - k).toFixed(1) + " " + ex2.toFixed(1) + " " + ey.toFixed(1);
+    }
+    var base = document.createElementNS(NS, "path"), pulse = document.createElementNS(NS, "path");
+    base.setAttribute("d", d); pulse.setAttribute("d", d); pulse.setAttribute("class", "p");
+    svg.appendChild(base); svg.appendChild(pulse);
+    var len = pulse.getTotalLength();
+    wires.push({ tile: t, pulse: pulse, len: len });
+  });
+}
+
+var ORDER = [0, 5, 2, 7, 1, 4, 3, 6], step = 0, timer = 0, live = false;
+function ping() {
+  var w = wires[ORDER[step % ORDER.length]];
+  step++;
+  if (!w) return;
+  var seg = Math.min(64, w.len * .45), dur = Math.max(620, Math.min(1100, w.len * 3.4));
+  w.pulse.style.strokeDasharray = seg + " " + (w.len + seg);
+  w.pulse.animate([{ strokeDashoffset: seg, opacity: 0 }, { opacity: 1, offset: .15 }, { opacity: 1, offset: .8 }, { strokeDashoffset: -w.len, opacity: 0 }], { duration: dur, easing: "cubic-bezier(.45, 0, .25, 1)" });
+  setTimeout(function () {
+    if (!live) return;
+    w.tile.classList.add("on");
+    setTimeout(function () { w.tile.classList.remove("on"); }, 1500);
+  }, dur * .78);
+}
+function start() { if (live) return; live = true; draw(); ping(); timer = setInterval(ping, 1700); }
+function stop() { live = false; clearInterval(timer); tiles.forEach(function (t) { t.classList.remove("on"); }); }
+
+draw();
+window.addEventListener("load", draw);
+var rz = 0;
+window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(draw, 150); });
+if (!SK.reduced) SK.onView(map, start, stop, { ratio: .3, threshold: [0, .3, .6] });
+
+} catch (e) { console.error("section 150-integrations", e); }
+})();
+
+/* ===== 160-pricing ===== */
+;(function () {
+try {
+var root = document.getElementById("pricing");
+if (!root) return;
+var form = root.querySelector(".pr-form"), input = root.querySelector("#pr-code"), field = root.querySelector(".pr-field"), msg = root.querySelector(".pr-msg");
+var open = root.querySelector(".pr-open"), dl = root.querySelector("[data-dl]"), fine = root.querySelector("[data-pr-fine]"), sub = root.querySelector("[data-pr-sub]");
+var KEY = "studio-invite";
+function norm(s) { return String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); }
+function bytes(b64) { var s = atob(b64), u = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
+var gate = null;
+/* the download link is stored encrypted; only the right code turns it back into a link */
+async function tryCode(code) {
+  if (!window.crypto || !crypto.subtle) throw new Error("nocrypto");
+  if (!gate) gate = await (await fetch("assets/gate.json", { cache: "no-store" })).json();
+  var base = await crypto.subtle.importKey("raw", new TextEncoder().encode(norm(code)), "PBKDF2", false, ["deriveKey"]);
+  var key = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: bytes(gate.salt), iterations: gate.it, hash: "SHA-256" }, base, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+  var plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: bytes(gate.iv) }, key, bytes(gate.ct));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+function unlocked(info, start) {
+  SK.dl = info.url;
+  dl.href = info.url;
+  form.hidden = true; open.hidden = false;
+  sub.textContent = SK.mobile() ? "You're in. Studio is a Mac app: open this page on your Mac to download it." : "You're in. Your download is ready.";
+  fine.textContent = "Apple Silicon · macOS 13 or later" + (info.size ? " · " + info.size + " MB" : "");
+  document.querySelectorAll("[data-download] span").forEach(function (s) { if (/download/i.test(s.textContent) && s.closest(".nav")) s.textContent = "Download"; });
+  if (start && !SK.mobile()) setTimeout(function () { window.location.href = info.url; }, 500);
+}
+form.addEventListener("submit", async function (e) {
+  e.preventDefault();
+  var code = input.value;
+  if (!norm(code)) { input.focus(); return; }
+  msg.textContent = "Checking…";
+  try {
+    var info = await tryCode(code);
+    try { localStorage.setItem(KEY, norm(code)); } catch (err) {}
+    msg.textContent = "";
+    unlocked(info, true);
+  } catch (err) {
+    field.classList.remove("bad"); void field.offsetWidth; field.classList.add("bad");
+    msg.textContent = err && err.message === "nocrypto" ? "This browser can't check codes. Try Safari or Chrome." : "That code didn't work. Check it and try again.";
+    input.select();
+  }
+});
+input.addEventListener("input", function () { field.classList.remove("bad"); msg.textContent = ""; });
+var saved = null;
+try { saved = localStorage.getItem(KEY); } catch (err) {}
+if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
+
+} catch (e) { console.error("section 160-pricing", e); }
+})();
+
+window.SK && SK.start && SK.start();

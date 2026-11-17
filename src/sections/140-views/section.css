@@ -1,0 +1,70 @@
+/* 140 views: the frame is the wallpaper. Pick one and the whole studio changes. Prefix: vw- */
+.vw.frame { --tint: 15, 22, 31; margin-block: var(--frame-m); background: linear-gradient(180deg, #5f7892, #9fb2c4 60%, #cfd6dc); }
+.vw-bg { overflow: hidden; }
+.vw-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 0; transition: opacity 1.5s var(--ease); will-change: transform, opacity; }
+.vw-img.on { opacity: 1; }
+.vw-img.top { z-index: 1; }
+/* a slow push-in with a gentle drift, only while the section is on screen */
+.vw-img.on { animation: vw-drift 26s ease-in-out infinite alternate; animation-play-state: paused; }
+.vw.live .vw-img.on { animation-play-state: running; }
+@keyframes vw-drift { from { transform: scale(1.03) translate3d(-1%, 0, 0); } to { transform: scale(1.11) translate3d(1%, -.6%, 0); } }
+.vw > .shade { background:
+  radial-gradient(90% 80% at 0% 0%, rgba(var(--tint), .5), rgba(var(--tint), 0) 62%),
+  linear-gradient(0deg, rgba(var(--tint), .5) 0%, rgba(var(--tint), 0) 34%); transition: background-color .8s; }
+
+.vw-in { position: relative; flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 1fr auto; gap: clamp(22px, 3vw, 40px) clamp(20px, 3vw, 48px); padding: clamp(30px, 4.2vw, 60px); min-width: 0; }
+.vw-head { display: flex; flex-direction: column; align-items: flex-start; gap: clamp(14px, 1.5vw, 22px); }
+.vw-head .label { color: rgba(255, 255, 255, .9); }
+.vw-h { font-size: clamp(36px, 4.9vw, 74px); color: #fff; }
+.vw-h .two { color: rgba(255, 255, 255, .72); }
+.vw-head .lede { color: rgba(255, 255, 255, .9); }
+
+/* ---------- the Home echo ---------- */
+.vw-home { align-self: center; width: min(500px, 40vw); padding: 20px 22px 22px; border-radius: 28px; background: rgba(var(--tint), .3); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); color: #fff; transition: background-color 1.2s var(--ease); }
+.vw-top { display: flex; justify-content: space-between; gap: 14px; }
+.vw-top .mono { font-size: 9.5px; letter-spacing: .2em; color: rgba(255, 255, 255, .8); white-space: nowrap; }
+.vw-geo { display: flex; align-items: center; gap: 10px; }
+.vw-geo i { width: 6px; height: 6px; border: solid rgba(255, 255, 255, .8); border-width: 1.5px 0 0 1.5px; }
+.vw-elev { opacity: .6; }
+.vw-hello { margin-top: clamp(26px, 3.4vw, 46px); font: 300 clamp(38px, 4vw, 58px)/1 var(--sans); letter-spacing: -.04em; white-space: nowrap; }
+.vw-pick { display: flex; align-items: center; gap: 8px; margin-top: clamp(20px, 2.2vw, 30px); }
+.vw-arrow, .vw-pill { height: 44px; border-radius: 22px; background: rgba(var(--tint), .42); box-shadow: var(--rim-soft); transition: background-color .25s, transform .2s var(--ease); }
+.vw-arrow { flex: none; width: 44px; display: grid; place-items: center; }
+.vw-arrow:hover { background: rgba(255, 255, 255, .16); }
+.vw-arrow:active { transform: scale(.92); }
+.vw-arrow svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.vw-pill { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 0 16px 0 7px; font: 500 15px/1 var(--sans); letter-spacing: -.01em; }
+.vw-pill-th { flex: none; width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.vw-pill-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---------- the wallpapers ---------- */
+.vw-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+.vw-chip { display: inline-flex; align-items: center; gap: 9px; height: 42px; padding: 0 15px 0 5px; border-radius: 21px; background: rgba(var(--tint), .36); -webkit-backdrop-filter: blur(20px) saturate(150%); backdrop-filter: blur(20px) saturate(150%); box-shadow: var(--rim-soft); color: rgba(255, 255, 255, .92); font: 500 14px/1 var(--sans); letter-spacing: -.01em; white-space: nowrap; transition: background-color .3s var(--ease), color .3s, transform .2s var(--ease); }
+.vw-chip img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .2); }
+.vw-chip:hover { background: rgba(255, 255, 255, .2); }
+.vw-chip:active { transform: scale(.96); }
+.vw-chip.on { background: var(--pearl); color: #10151c; box-shadow: none; }
+
+@media (max-width: 1240px) {
+  .vw-date { display: none; }
+}
+@media (max-width: 900px) {
+  .vw-in { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; }
+  .vw-home { justify-self: start; align-self: end; width: min(500px, 100%); }
+}
+@media (max-width: 760px) {
+  .vw > .shade { background:
+    linear-gradient(180deg, rgba(var(--tint), .56) 0%, rgba(var(--tint), .2) 30%, rgba(var(--tint), 0) 46%),
+    linear-gradient(0deg, rgba(var(--tint), .5) 0%, rgba(var(--tint), 0) 30%); }
+  .vw-in { padding: 30px 8px 12px; gap: 14px; }
+  .vw-head { padding-inline: 16px; gap: 13px; }
+  .vw-h { font-size: clamp(34px, 9.6vw, 42px); line-height: 1.04; }
+  .vw-home { width: 100%; padding: 16px 16px 16px; border-radius: 24px; }
+  .vw-date { display: none; }
+  .vw-hello { margin-top: 20px; font-size: 40px; }
+  .vw-pick { margin-top: 18px; }
+  /* one row you can swipe */
+  .vw-chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -8px; padding: 2px 16px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 28px), transparent); }
+  .vw-chips::-webkit-scrollbar { display: none; }
+  .vw-chip { flex: none; scroll-snap-align: start; scroll-margin-left: 16px; -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(var(--tint), .58); }
+}

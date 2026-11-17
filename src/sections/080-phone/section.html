@@ -1,0 +1,43 @@
+<section class="frame tall sh" id="shoot" aria-labelledby="h-shoot">
+  <!-- BACKGROUND: one reel of people filming on their phones (reel.mp4 / reel-m.mp4 for phones / reel.jpg) -->
+  <video class="bg" data-play data-src="assets/media/people/reel.mp4" data-src-m="assets/media/people/reel-m.mp4" poster="assets/media/people/reel.jpg" loop muted playsinline aria-hidden="true"></video>
+  <div class="shade"></div>
+  <span class="sh-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+  <div class="sh-in">
+    <div class="sh-col">
+      <header class="sh-head">
+        <p class="label" data-reveal>Your footage</p>
+        <h2 id="h-shoot" class="h-lg sh-h">Shoot it on your phone.<br><span class="two">Studio does the rest.</span></h2>
+        <p class="lede" data-reveal style="--i:2">Drop in what you filmed. It finds the best takes, cuts them, captions them and scores them.</p>
+      </header>
+
+      <!-- raw clips drop into the tray, the four jobs tick off, the finished film plays -->
+      <div class="sh-card" data-reveal="scale" style="--i:3" aria-hidden="true">
+        <div class="sh-left">
+          <div class="sh-top"><b>Your footage</b><span class="mono sh-status">Drop clips here</span></div>
+          <div class="sh-tray">
+            <span class="sh-clip pick" style="--n:0;--r:-7deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:1;--r:5deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:2;--r:-4deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:3;--r:8deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:4;--r:-6deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+          </div>
+          <ul class="sh-steps">
+            <li><b></b><span>Best takes</span><i></i></li>
+            <li><b></b><span>Cut</span><i></i></li>
+            <li><b></b><span>Captions</span><i></i></li>
+            <li><b></b><span>Music</span><i></i></li>
+          </ul>
+        </div>
+        <div class="sh-film">
+          <video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video>
+          <span class="sh-wait"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><circle class="sh-ring" cx="20" cy="20" r="17" pathLength="100"/></svg><em class="mono">Your film</em></span>
+          <span class="sh-badge">Ready</span>
+          <p class="sh-cap"></p>
+          <span class="sh-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

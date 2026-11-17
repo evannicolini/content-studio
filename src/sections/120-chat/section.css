@@ -1,0 +1,155 @@
+/* 120 chat: "it is just a chat". People with laptops and phones behind; the same conversation on the Mac and on the phone. Prefix: ch- */
+.ch.frame { margin-block: var(--frame-m); overflow: visible; clip-path: inset(0 round var(--frame-r)); background: radial-gradient(70% 90% at 60% 30%, #7b766c 0%, #47443e 38%, #1d1d1f 78%, #131417 100%); }
+.ch > video.bg { top: -5%; height: 110%; object-position: 50% 50%; will-change: transform; transition: opacity .8s var(--ease); }
+/* people stand near the middle and the shots change fast: the words (top left) and the screens (right) each get a long
+   fall-off, and a progressive blur calms the left side. Never a flat overlay. */
+.ch > .shade { background:
+  radial-gradient(78% 90% at 0% 0%, rgba(9, 9, 11, .66) 0%, rgba(9, 9, 11, .4) 44%, rgba(9, 9, 11, 0) 76%),
+  linear-gradient(90deg, rgba(9, 9, 11, .5) 0%, rgba(9, 9, 11, .26) 24%, rgba(9, 9, 11, 0) 46%),
+  linear-gradient(270deg, rgba(9, 9, 11, .58) 0%, rgba(9, 9, 11, .34) 18%, rgba(9, 9, 11, 0) 36%),
+  linear-gradient(0deg, rgba(9, 9, 11, .3) 0%, rgba(9, 9, 11, 0) 24%); }
+.ch-pbs { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.ch-pbs i { position: absolute; inset: 0; -webkit-backdrop-filter: blur(var(--b)); backdrop-filter: blur(var(--b)); -webkit-mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); }
+.ch-pbs i:nth-child(1) { --b: 1.5px; --a: 55%; --z: 68%; }
+.ch-pbs i:nth-child(2) { --b: 5px; --a: 61%; --z: 80%; }
+.ch-pbs i:nth-child(3) { --b: 12px; --a: 68%; --z: 94%; }
+.ch-pbs i:nth-child(4) { --b: 6px; --dir: 90deg; --a: 72%; --z: 92%; }
+
+.ch-in { position: relative; flex: 1; display: flex; padding: clamp(30px, 4.2vw, 60px); min-width: 0; }
+.ch-zone { position: relative; flex: 1; display: flex; justify-content: space-between; gap: 30px; min-width: 0; }
+.ch-head { width: min(580px, 44%); display: flex; flex-direction: column; align-items: flex-start; gap: clamp(14px, 1.4vw, 20px); }
+.ch-head .label { color: rgba(255, 255, 255, .9); }
+.ch-h { font-size: clamp(34px, 3.9vw, 58px); color: #fff; }
+.ch-nw { white-space: nowrap; }
+.ch-h .two { color: rgba(255, 255, 255, .72); }
+.ch-head .lede { color: rgba(255, 255, 255, .9); max-width: 24em; }
+
+/* the lockup: Studio × Claude Code */
+.ch-lock { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px 0 9px; border-radius: 15px; background: rgba(9, 9, 11, .46); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: var(--rim); font: 500 16px/1 var(--sans); letter-spacing: -.012em; color: #fff; margin-bottom: 4px; }
+.ch-lock b, .ch-lk b, .ch-bar b { font-weight: 500; }
+.ch-lock i { font-style: normal; opacity: .5; margin: 0 4px; font-size: 15px; }
+.ch-tile { flex: none; width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: rgba(6, 8, 12, .92); box-shadow: var(--rim-soft); }
+.ch-tile svg { width: 21px; height: 21px; overflow: visible; }
+.ch-tile.sm { width: 24px; height: 24px; border-radius: 7.5px; background: rgba(255, 255, 255, .08); }
+.ch-tile.sm svg { width: 17px; height: 17px; }
+.ch-spark { width: 22px; height: 22px; fill: #d97757; }
+
+/* ---------- the two screens: the same glass as the carry-on composer ---------- */
+.ch-devices { flex: none; width: 420px; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 12px; min-width: 0; }
+.ch-panel { display: flex; flex-direction: column; background: rgba(9, 13, 19, .5); -webkit-backdrop-filter: blur(30px) saturate(150%); backdrop-filter: blur(30px) saturate(150%); box-shadow: var(--rim); color: #fff; }
+.ch-mac { width: 100%; height: 316px; padding: 10px; border-radius: 26px; }
+.ch-phone { width: 300px; height: 440px; padding: 10px; border-radius: 40px; }
+.ch-bar { flex: none; display: flex; align-items: center; gap: 9px; height: 36px; padding: 0 8px; font: 500 14.5px/1 var(--sans); letter-spacing: -.01em; }
+.ch-bar em { margin-left: auto; font-style: normal; font-size: 9.5px; color: var(--sand-2); white-space: nowrap; }
+.ch-dots3 { display: flex; gap: 6px; margin-right: 6px; }
+.ch-dots3 i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255, 255, 255, .24); }
+.ch-back { width: 18px; height: 18px; fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .85; }
+
+.ch-msgs { position: relative; flex: 1; min-height: 0; overflow: hidden; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 18px); mask-image: linear-gradient(180deg, transparent 0, #000 18px); }
+.ch-list { display: flex; flex-direction: column; gap: 10px; padding: 12px 6px 10px; font: 400 14.5px/1.38 var(--sans); transition: transform .7s var(--ease), opacity .45s var(--ease); will-change: transform; }
+.ch.ch-out .ch-list { opacity: 0; }
+.ch-m { position: relative; max-width: 88%; }
+.ch-m.you { align-self: flex-end; padding: 10px 14px; border-radius: 18px 18px 6px 18px; background: rgba(255, 255, 255, .17); opacity: 0; transform: translateY(10px) scale(.98); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.ch-m.you.on { opacity: 1; transform: none; }
+.ch-m.claude { align-self: flex-start; }
+.ch-body { opacity: 0; transform: translateY(10px) scale(.98); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.ch-m.claude.on .ch-body { opacity: 1; transform: none; }
+.ch-who { display: flex; align-items: center; gap: 6px; font: 500 9.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-2); margin: 2px 0 8px 2px; }
+.ch-who svg { width: 13px; height: 13px; fill: #d97757; }
+.ch-say { padding: 0 2px; }
+/* thinking: what Claude is doing right now */
+.ch-think { position: absolute; left: 0; top: 0; display: inline-flex; align-items: center; gap: 9px; padding: 10px 14px 10px 11px; border-radius: 16px; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); font: 400 13.5px/1 var(--sans); color: var(--sand-2); white-space: nowrap; opacity: 0; transition: opacity .3s var(--ease); }
+.ch-think svg { width: 14px; height: 14px; fill: #d97757; animation: ch-spin 3.2s linear infinite; }
+@keyframes ch-spin { to { transform: rotate(360deg); } }
+.ch-think u { display: inline-flex; gap: 3px; text-decoration: none; }
+.ch-think u i { width: 4px; height: 4px; border-radius: 50%; background: #fff; opacity: .5; animation: pf-dot 1.1s ease-in-out infinite; }
+.ch-think u i:nth-child(2) { animation-delay: .18s; } .ch-think u i:nth-child(3) { animation-delay: .36s; }
+.ch-m.claude.think .ch-think { opacity: 1; }
+/* a result card, same finish as the carry-on results */
+.ch-card { margin-top: 10px; padding: 8px 8px 10px; border-radius: 18px; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
+.ch-thumbs { display: flex; gap: 8px; }
+.ch-thumbs figure { position: relative; height: var(--th, 118px); border-radius: 12px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.ch-thumbs figure.v { aspect-ratio: 9 / 16; } .ch-thumbs figure.s { aspect-ratio: 1; }
+.ch-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.ch-chip { position: absolute; left: 6px; top: 6px; padding: 4px 6px 3px; border-radius: 6px; font: 500 8.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); }
+.ch-foot { display: flex; align-items: center; gap: 7px; margin: 10px 4px 0; font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sand-2); white-space: nowrap; }
+.ch-foot img { width: 15px; height: 15px; }
+.ch-foot b { display: inline-flex; align-items: center; gap: 7px; margin-left: auto; font: 500 13.5px/1 var(--sans); letter-spacing: -.01em; text-transform: none; color: #fff; }
+.ch-foot b::before, .ch-foot.dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pearl); }
+.ch-foot b::before { animation: ch-live 1.8s ease-out infinite; }
+.ch-foot b.still::before { animation: none; }
+@keyframes ch-live { 0% { box-shadow: 0 0 0 0 rgba(236, 233, 226, .55); } 100% { box-shadow: 0 0 0 9px rgba(236, 233, 226, 0); } }
+.ch-ad { display: flex; align-items: center; gap: 12px; }
+.ch-ad .ch-thumbs figure { height: calc(var(--th, 118px) * .8); }
+.ch-ad .ch-foot { flex-direction: column; align-items: flex-start; gap: 11px; margin: 0; }
+.ch-ad .ch-foot b { margin-left: 0; }
+.ch-ad .ch-foot span { display: inline-flex; align-items: center; gap: 7px; }
+.ch-mac .ch-list { font-size: 14px; padding-inline: 8px; }
+.ch-mac .ch-m { max-width: 80%; }
+.ch-mac .ch-thumbs { --th: 104px; }
+
+/* the composer, as in the carry-on section */
+.ch-comp { position: relative; flex: none; padding: 12px 8px 8px 14px; border-radius: 18px; background: rgba(5, 7, 11, .62); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); }
+.ch-comp-ph { border-radius: 30px; padding: 14px 8px 8px 16px; }
+.ch-ask { display: flex; flex-direction: column; justify-content: flex-end; height: 1.34em; overflow: hidden; padding-right: 8px; font: 400 15.5px/1.34 var(--sans); letter-spacing: -.01em; }
+.ch-comp-ph .ch-ask { height: 2.68em; font-size: 15px; }
+.ch-ask-t { display: block; }
+.ch-ask.ph .ch-ask-t { color: rgba(255, 255, 255, .44); }
+.ch-comp.typing .ch-ask-t::after { content: ""; display: inline-block; width: 2px; height: 1.05em; margin-left: 2px; border-radius: 1px; vertical-align: -.17em; background: #0a84ff; }
+.ch-caret { display: none; }
+.ch-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.ch-lk { display: inline-flex; align-items: center; gap: 7px; font: 500 13px/1 var(--sans); letter-spacing: -.01em; color: rgba(255, 255, 255, .92); }
+.ch-lk i { font-style: normal; opacity: .45; }
+.ch-lk .ch-spark { width: 15px; height: 15px; }
+.ch-state { margin-left: auto; font-size: 9px; color: var(--sand-2); opacity: 0; transition: opacity .3s; }
+.ch-comp.working .ch-state { opacity: 1; }
+.ch-send { position: relative; flex: none; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; gap: 3px; background: rgba(255, 255, 255, .1); transition: transform .25s var(--ease), background-color .25s; }
+.ch-send svg { width: 15px; height: 15px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.ch-send .mic + .up { display: none; }
+.ch-comp.typing .ch-send { background: var(--pearl); }
+.ch-comp.typing .ch-send svg { stroke: #10151c; }
+.ch-comp.typing .ch-send .mic { display: none; } .ch-comp.typing .ch-send .up { display: block; }
+.ch-send.tap { transform: scale(.86); }
+.ch-send i { display: none; width: 4px; height: 4px; border-radius: 50%; background: #fff; animation: pf-dot 1.1s ease-in-out infinite; }
+.ch-send i:nth-of-type(2) { animation-delay: .18s; } .ch-send i:nth-of-type(3) { animation-delay: .36s; }
+.ch-comp.working .ch-send svg { display: none; }
+.ch-comp.working .ch-send i { display: block; }
+/* hold to talk */
+.ch-wave { position: absolute; left: 16px; right: 16px; top: 14px; height: 2.68em; font-size: 15px; display: flex; align-items: center; gap: 3px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.ch-wave i { flex: 1; max-width: 3px; height: 24px; border-radius: 2px; background: #fff; transform: scaleY(.18); animation: ch-wave .9s ease-in-out infinite; animation-play-state: paused; }
+.ch-wave i:nth-child(2n) { animation-duration: .7s; animation-delay: -.25s; } .ch-wave i:nth-child(3n) { animation-duration: 1.1s; animation-delay: -.5s; } .ch-wave i:nth-child(5n) { animation-delay: -.12s; } .ch-wave i:nth-child(7n) { animation-duration: .6s; }
+@keyframes ch-wave { 0%, 100% { transform: scaleY(.18); } 50% { transform: scaleY(1); } }
+.ch-comp.talk .ch-ask { opacity: 0; }
+.ch-comp.talk .ch-wave { opacity: .95; }
+.ch-comp.talk .ch-wave i { animation-play-state: running; }
+.ch-comp.talk .ch-send { background: var(--pearl); transform: scale(1.1); }
+.ch-comp.talk .ch-send svg { stroke: #10151c; }
+.ch-send::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .6); opacity: 0; }
+.ch-comp.talk .ch-send::after { animation: ch-ring 1.3s var(--ease) infinite; }
+@keyframes ch-ring { 0% { opacity: .9; transform: scale(.9); } 100% { opacity: 0; transform: scale(1.45); } }
+
+@media (max-width: 1180px) {
+  .ch-mac { display: none; }
+  .ch-devices { width: 300px; }
+  .ch-phone { height: 520px; }
+}
+/* phones: the footage fills the top of the frame; the words and the chat sit below */
+@media (max-width: 760px) {
+  .ch.frame.tall { min-height: 1060px; }
+  .ch > .shade { background:
+    linear-gradient(0deg, rgba(9, 9, 11, .8) 0%, rgba(9, 9, 11, .62) 46%, rgba(9, 9, 11, .2) 64%, rgba(9, 9, 11, 0) 74%),
+    linear-gradient(180deg, rgba(9, 9, 11, .3) 0%, rgba(9, 9, 11, 0) 14%); }
+  .ch-pbs { --dir: 180deg; }
+  .ch-pbs i:nth-child(1) { --b: 2px; --a: 28%; --z: 40%; }
+  .ch-pbs i:nth-child(2) { --b: 6px; --a: 33%; --z: 52%; }
+  .ch-pbs i:nth-child(3) { --b: 14px; --a: 40%; --z: 66%; }
+  .ch-pbs i:nth-child(4) { display: none; }
+  .ch-in { padding: 30px 8px 8px; }
+  .ch-zone { flex-direction: column; justify-content: flex-end; gap: 22px; }
+  .ch-head { width: 100%; padding-inline: 16px; gap: 13px; }
+  .ch-lock { height: 42px; font-size: 15px; padding-right: 15px; }
+  .ch-h { font-size: clamp(36px, 10.4vw, 44px); line-height: 1.04; }
+  .ch-devices { width: 100%; display: block; }
+  .ch-phone { width: 100%; height: 388px; border-radius: 28px; }
+  .ch-comp-ph { border-radius: 20px; }
+}

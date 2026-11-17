@@ -1,0 +1,79 @@
+/* 090 aesthetic: the app's Aesthetic tab. Nine chips, one stage, the same three slots in every look. */
+.ae .sec-head { margin-bottom: clamp(30px, 4vw, 56px); }
+
+.ae-stage { position: relative; width: calc(100% - 2 * var(--frame-m)); max-width: 1520px; margin-inline: auto; padding: clamp(12px, 2.2vw, 34px); border-radius: var(--frame-r); overflow: hidden; isolation: isolate; background: #0c1016; color: var(--sand); color-scheme: dark; }
+.ae-bg { position: absolute; left: -15%; top: -15%; width: 130%; height: 130%; max-width: none; object-fit: cover; z-index: -2; filter: blur(48px) saturate(105%); }
+.ae-stage::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: linear-gradient(180deg, rgba(9, 12, 17, .56), rgba(9, 12, 17, .8)); box-shadow: var(--rim); pointer-events: none; }
+
+/* chips */
+.ae-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px; margin: -2px; }
+.ae-chips::-webkit-scrollbar { display: none; }
+.ae-chips::before, .ae-chips::after { content: ""; margin: auto; }
+.ae-chip { position: relative; flex: none; display: inline-flex; align-items: center; gap: 7px; height: 44px; padding: 0 18px; border-radius: 999px; overflow: hidden; font: 500 15px/1 var(--sans); letter-spacing: -.01em; white-space: nowrap; color: var(--sand-2); background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); transition: color .35s var(--ease), background-color .35s var(--ease); }
+.ae-chip small { font: 400 13px/1 var(--sans); opacity: .62; }
+.ae-chip:hover { background: rgba(255, 255, 255, .13); color: #fff; }
+.ae-chip.on { color: #101318; background: var(--pearl); box-shadow: none; }
+.ae-chip::after { content: ""; position: absolute; inset: 0; background: rgba(16, 19, 24, .11); transform: scaleX(0); transform-origin: 0 50%; pointer-events: none; }
+.ae-chip.on.run::after { animation: ae-run var(--ae-dwell, 4.4s) linear forwards; }
+@keyframes ae-run { to { transform: scaleX(1); } }
+
+/* body: what the style is (left), what it looks like (right) */
+.ae-body { display: grid; grid-template-columns: minmax(210px, 1fr) auto; gap: clamp(20px, 3.2vw, 52px); margin-top: clamp(14px, 2.2vw, 32px); }
+.ae-info { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-width: 0; padding: 6px 0 4px 6px; transition: opacity .28s var(--ease), transform .4s var(--ease); }
+.ae-info.swap { opacity: 0; transform: translateY(6px); }
+.ae-count { font: 500 11px/1 var(--mono); letter-spacing: .2em; color: var(--sand-3); }
+.ae-count b { font-weight: 500; color: var(--sand); }
+.ae-name { margin-top: 18px; font: 300 clamp(40px, 4.4vw, 64px)/.98 var(--sans); letter-spacing: -.04em; }
+.ae-tag { margin-top: 16px; max-width: 19em; font: 400 clamp(15px, 1.2vw, 17.5px)/1.42 var(--sans); letter-spacing: -.006em; color: var(--sand-2); text-wrap: pretty; }
+.ae-facts { display: grid; gap: 0; margin: 0; }
+.ae-facts > div { display: grid; grid-template-columns: 104px 1fr; align-items: center; gap: 10px; min-height: 44px; padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .1); }
+.ae-facts dt { font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); }
+.ae-facts dd { margin: 0; font: 400 14.5px/1.3 var(--sans); letter-spacing: -.005em; color: var(--sand); }
+.ae-dots { display: flex; gap: 6px; }
+.ae-dots i { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22); }
+
+.ae-tiles { display: flex; gap: clamp(8px, 1vw, 14px); height: clamp(330px, 36.5vw, 560px); }
+.ae-tile { position: relative; flex: none; height: 100%; aspect-ratio: 9 / 16; margin: 0; border-radius: clamp(12px, 1.3vw, 20px); overflow: hidden; background: #0a0d12; }
+.ae-tile.ae-s { aspect-ratio: 4 / 5; }
+.ae-tile video, .ae-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s var(--ease); }
+.ae-tile video.on, .ae-tile img.on { opacity: 1; }
+.ae-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); pointer-events: none; }
+.ae-show { display: flex; flex-direction: column; min-width: 0; }
+.ae-caps { display: flex; gap: clamp(8px, 1vw, 14px); margin-top: 12px; font: 500 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--sand-3); }
+.ae-caps span { flex: .5625 1 0; min-width: 0; padding-left: 4px; white-space: nowrap; }
+.ae-caps span:last-child { flex-grow: .8; }
+
+@media (max-width: 1180px) {
+  .ae-body { grid-template-columns: 1fr; }
+  .ae-info { flex-direction: row; align-items: flex-end; gap: 32px; padding: 8px 4px 0; }
+  .ae-info-top { flex: 1; min-width: 0; }
+  .ae-name { margin-top: 12px; }
+  .ae-facts { flex: 0 1 380px; }
+  .ae-facts > div { min-height: 38px; padding: 8px 0; }
+  .ae-tiles { height: auto; }
+  .ae-tile { flex: 0.5625 1 0; height: auto; min-width: 0; }
+  .ae-tile.ae-s { flex-grow: .8; }
+}
+@media (max-width: 700px) {
+  .ae-stage { padding: 12px 12px 12px; }
+  .ae-chips { margin: -2px -12px; padding: 2px 12px; }
+  .ae-chips::before, .ae-chips::after { content: none; }
+  .ae-chip { height: 40px; padding: 0 15px; font-size: 14.5px; }
+  .ae-info { flex-direction: column; align-items: stretch; gap: 14px; padding: 12px 4px 2px; }
+  .ae-count { display: none; }
+  .ae-name { margin-top: 0; font-size: 38px; }
+  .ae-tag { margin-top: 9px; min-height: 2.84em; font-size: 15px; }
+  .ae-facts { flex: none; grid-template-columns: 1fr auto; column-gap: 16px; }
+  .ae-facts > div { grid-template-columns: 1fr; gap: 6px; min-height: 0; padding: 10px 0 2px; align-content: start; }
+  .ae-fact-type, .ae-fact-n { display: none !important; }
+  .ae-tiles { gap: 8px; }
+  .ae-tile.ae-s, .ae-caps span:last-child { display: none; }
+  .ae-caps { gap: 8px; margin-top: 10px; font-size: 10px; }
+  .ae-caps span { flex: 1 1 0; }
+  .ae-tile { flex: 1 1 0; border-radius: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ae-chip.on.run::after { animation: none; }
+}
+
+.ae .vo { margin-top: 6px; }

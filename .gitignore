@@ -1,0 +1,4 @@
+_shots/
+assets/audio/_raw/
+.DS_Store
+node_modules

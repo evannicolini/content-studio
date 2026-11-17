@@ -1,0 +1,82 @@
+<section class="hero" id="hero" aria-labelledby="h-hero">
+  <div class="hero-bgs" aria-hidden="true"><picture><source media="(max-width: 700px)" srcset="assets/hero-sky-m.jpg"><img class="hero-bg on" src="assets/hero-sky.jpg" alt="" fetchpriority="high"></picture></div>
+  <div class="hero-shade"></div>
+
+  <div class="hero-in">
+    <p class="hero-lock" data-reveal>
+      <svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span>
+      <i aria-hidden="true">×</i>
+      <svg class="cl" aria-hidden="true"><use href="#claude"/></svg><span>Claude</span>
+    </p>
+    <h1 id="h-hero" class="h-xl" data-reveal style="--i:1">If you can dream it, <br class="hero-br"><span class="hero-two">you can post it.</span></h1>
+    <a class="btn btn-glass hero-dl" href="#pricing" data-download data-beam-auto="md" data-beam-variant="mirra" data-beam-boost="2.4" data-beam-radius="999" data-reveal style="--i:2"><svg class="apple" aria-hidden="true"><use href="#apple"/></svg><span>Download for Mac</span></a>
+
+    <div class="hero-rig" data-reveal="scale" style="--i:3">
+      <div class="hero-ask ask">
+        <div class="ask-top"><b>Ask Claude</b><span><em>Making&nbsp;&nbsp;</em><span id="hero-clock">00:00</span></span></div>
+        <div class="brk"><i></i><i></i><i></i><i></i><div id="hero-field" aria-label="Examples of what you can ask"></div></div>
+      </div>
+
+    <!-- what the prompt above turns into. Each .hs is one scene; [data-at] = ms after the scene starts -->
+    <div class="hero-stage" aria-hidden="true">
+      <div class="hero-app"><video class="ha a" muted playsinline preload="none"></video><video class="ha b" muted playsinline preload="none"></video></div>
+      <div class="hs hs-make live" data-dur="8200">
+        <ul class="hs-list">
+          <li data-at="350"><b></b><span>Script</span><em>6 lines</em></li>
+          <li data-at="1050"><b></b><span>Voice-over</span><em>recorded</em></li>
+          <li data-at="1750"><b></b><span>Footage</span><em>9 shots</em></li>
+          <li data-at="2450"><b></b><span>Motion graphics</span><em>your brand</em></li>
+          <li data-at="3150"><b></b><span>Music and sound</span><em>mixed</em></li>
+        </ul>
+        <div class="hs-player" data-at="3700"><video data-hero-film="launch" loop muted playsinline preload="none"></video><span class="hs-badge">v01</span></div>
+        <div class="hs-tracks">
+          <p class="mono">Timeline</p>
+          <div class="hs-track" data-at="3900"><span>Video</span><i style="--w:92%"></i></div>
+          <div class="hs-track" data-at="4150"><span>Voice</span><i style="--w:74%"></i></div>
+          <div class="hs-track" data-at="4400"><span>Music</span><i style="--w:100%"></i></div>
+          <div class="hs-track" data-at="4650"><span>Sound</span><i class="dots" style="--w:86%"></i></div>
+          <p class="hs-done" data-at="5200">Ready to watch</p>
+        </div>
+      </div>
+
+      <div class="hs hs-note" data-dur="7000">
+        <ul class="hs-list hs-vers">
+          <li class="on"><b></b><span>v01</span><em>first cut</em></li>
+          <li data-at="1700"><b></b><span>Your note</span><em>on the frame</em></li>
+          <li data-at="2700"><b></b><span>Claude</span><em>re-cutting</em></li>
+          <li data-at="4300"><b></b><span>v02</span><em>new cut</em></li>
+        </ul>
+        <div class="hs-player on"><video data-hero-film="launch" loop muted playsinline preload="none"></video><span class="hs-badge" data-at="4300" data-swap="v02">v01</span>
+          <span class="hs-pin" data-at="500">1</span>
+          <p class="hs-bubble" data-at="900">Make the ending hit harder.</p>
+        </div>
+        <div class="hs-tracks">
+          <p class="mono">Notes</p>
+          <p class="hs-line" data-at="900"><b>0:12</b> Make the ending hit harder.</p>
+          <p class="hs-sent" data-at="2100">Sent to Claude</p>
+          <p class="hs-done" data-at="4300">New cut is back</p>
+        </div>
+      </div>
+
+      <div class="hs hs-viral" data-dur="7400">
+        <div class="hs-ref">
+          <div class="hs-phone hs-phone-ref"><span class="hs-chip">Viral in your niche</span><span class="hs-views">1.2M views</span><div class="hs-scan" data-at="500"></div></div>
+          <ul class="hs-read">
+            <li data-at="900"><b>Hook</b> first 1.5 seconds</li>
+            <li data-at="1500"><b>Pace</b> a cut every 1.4 s</li>
+            <li data-at="2100"><b>Captions</b> one line, top third</li>
+            <li data-at="2700"><b>Sound</b> trending audio</li>
+          </ul>
+        </div>
+        <div class="hs-arrow" data-at="3200"><svg viewBox="0 0 40 16"><path d="M1 8h36M31 2l6 6-6 6"/></svg></div>
+        <div class="hs-phone hs-phone-you" data-at="3500"><video data-hero-film="viral" loop muted playsinline preload="none"></video><span class="hs-chip">Yours</span></div>
+      </div>
+
+      <div class="hs hs-cal" data-dur="7600">
+        <div class="hs-cal-head"><p class="mono">Next 30 days</p><p class="hs-cal-count"><b id="hs-count">0</b> posts scheduled</p></div>
+        <div class="hs-grid" id="hs-grid"></div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>

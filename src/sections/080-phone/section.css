@@ -1,0 +1,107 @@
+/* 080 phone: a reel of people filming on their phones; raw clips turning into one finished film. Prefix: sh- */
+.sh.frame { margin-block: var(--frame-m); overflow: visible; clip-path: inset(0 round var(--frame-r)); background: radial-gradient(70% 90% at 24% 30%, #777269 0%, #45433f 38%, #1c1d20 78%, #121418 100%); }
+.sh > video.bg { top: -5%; height: 110%; object-position: 50% 50%; will-change: transform; transition: opacity .8s var(--ease); }
+/* the footage cuts fast and people stand near the middle: a long fall-off and a progressive blur keep the left side calm */
+.sh > .shade { background:
+  linear-gradient(90deg, rgba(8, 9, 12, .74) 0%, rgba(8, 9, 12, .6) 22%, rgba(8, 9, 12, .32) 44%, rgba(8, 9, 12, .08) 60%, rgba(8, 9, 12, 0) 70%),
+  radial-gradient(84% 76% at 0% 0%, rgba(8, 9, 12, .48), rgba(8, 9, 12, 0) 72%),
+  linear-gradient(0deg, rgba(8, 9, 12, .34) 0%, rgba(8, 9, 12, 0) 28%); }
+.sh-pbs { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.sh-pbs i { position: absolute; inset: 0; -webkit-backdrop-filter: blur(var(--b)); backdrop-filter: blur(var(--b)); -webkit-mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); }
+.sh-pbs i:nth-child(1) { --b: 1.5px; --a: 38%; --z: 54%; }
+.sh-pbs i:nth-child(2) { --b: 4px; --a: 44%; --z: 62%; }
+.sh-pbs i:nth-child(3) { --b: 9px; --a: 50%; --z: 74%; }
+.sh-pbs i:nth-child(4) { --b: 20px; --a: 58%; --z: 90%; }
+
+.sh-in { position: relative; flex: 1; display: flex; padding: clamp(30px, 4.2vw, 60px); min-width: 0; }
+.sh-col { width: min(720px, 56%); display: flex; flex-direction: column; justify-content: space-between; gap: clamp(26px, 3vw, 40px); min-width: 0; }
+.sh-head { display: flex; flex-direction: column; align-items: flex-start; gap: clamp(14px, 1.5vw, 22px); }
+.sh-head .label { color: rgba(255, 255, 255, .9); }
+.sh-h { font-size: clamp(34px, 4.6vw, 68px); color: #fff; }
+.sh-h .two { color: rgba(255, 255, 255, .72); }
+.sh-head .lede { color: rgba(255, 255, 255, .9); max-width: 26em; }
+
+/* ---------- the panel: tray and jobs on the left, the finished film is the hero ---------- */
+.sh-card { display: flex; gap: 16px; width: min(600px, 100%); padding: 14px; border-radius: 30px; background: rgba(7, 8, 11, .72); -webkit-backdrop-filter: blur(30px) saturate(150%); backdrop-filter: blur(30px) saturate(150%); box-shadow: var(--rim); color: #fff; }
+.sh-left { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sh-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 4px 12px; }
+.sh-top b { font: 500 16px/1 var(--sans); letter-spacing: -.015em; }
+.sh-status { font-size: 10px; color: var(--sand-2); white-space: nowrap; }
+.sh-tray { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; padding: 10px; border-radius: 16px; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09); }
+.sh-clip { position: relative; display: block; aspect-ratio: 9 / 16; border-radius: 8px; background: rgba(255, 255, 255, .06); opacity: 0; transform: translate3d(0, -84px, 0) rotate(var(--r)) scale(1.12); transition: opacity .35s var(--ease), transform .75s cubic-bezier(.2, 1.25, .3, 1), box-shadow .4s var(--ease); will-change: transform, opacity; }
+.sh-clip img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.sh-clip.in { opacity: 1; transform: none; transition-delay: calc(var(--n) * 150ms); }
+.sh-clip b { position: absolute; right: -4px; top: -4px; width: 16px; height: 16px; border-radius: 50%; background: var(--pearl); transform: scale(0); transition: transform .4s cubic-bezier(.3, 1.6, .5, 1); }
+.sh-clip b::after { content: ""; position: absolute; left: 5.4px; top: 3px; width: 3.8px; height: 7.2px; border: solid #10151c; border-width: 0 1.7px 1.7px 0; transform: rotate(42deg); }
+.sh-card.s1 .sh-clip { transition-delay: 0s; }
+.sh-card.s1 .sh-clip.pick { box-shadow: 0 0 0 2px var(--pearl); }
+.sh-card.s1 .sh-clip.pick b { transform: none; transition-delay: calc(var(--n) * 90ms); }
+.sh-card.s1 .sh-clip:not(.pick) { opacity: .3; transform: scale(.92); }
+/* the picked takes travel into the film (--dx / --dy are measured in JS), then sit back in the tray, marked as used */
+.sh-card.s2 .sh-clip.pick { opacity: 0; transform: translate3d(var(--dx, 120px), var(--dy, 0), 0) scale(1.9); transition: transform .8s var(--ease-io), opacity .35s var(--ease) .5s; transition-delay: calc(var(--n) * 70ms), calc(.45s + var(--n) * 70ms); }
+.sh-card.s2b .sh-clip.pick { opacity: 1; transform: none; transition: transform 0s, opacity .6s var(--ease) .05s; }
+
+.sh-steps { display: grid; margin-top: auto; padding: 8px 4px 0; }
+.sh-steps li { display: flex; align-items: center; gap: 11px; padding: 10px 0; font: 500 15.5px/1.2 var(--sans); letter-spacing: -.012em; color: rgba(255, 255, 255, .5); transition: color .4s var(--ease); }
+.sh-steps li + li { border-top: 1px solid rgba(255, 255, 255, .08); }
+.sh-steps li.run, .sh-steps li.on { color: #fff; }
+.sh-steps b { position: relative; flex: none; width: 17px; height: 17px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .42); transition: background-color .3s, box-shadow .3s; }
+.sh-steps li.on b { background: var(--pearl); box-shadow: none; }
+.sh-steps li.on b::after { content: ""; position: absolute; left: 6px; top: 3.4px; width: 3.8px; height: 7.4px; border: solid #10151c; border-width: 0 1.7px 1.7px 0; transform: rotate(42deg); }
+.sh-steps span { flex: 1; }
+/* a little progress while each job runs */
+.sh-steps i { position: relative; flex: none; width: 64px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+.sh-steps i::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--pearl); transform: scaleX(0); transform-origin: 0 50%; }
+.sh-steps li.run i::after, .sh-steps li.on i::after { transform: none; transition: transform var(--d, 1s) linear; }
+
+.sh-film { position: relative; flex: none; width: clamp(150px, 14.2vw, 200px); aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); transition: box-shadow .5s var(--ease); }
+.sh-film video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.08); transition: opacity .6s var(--ease), transform 1s var(--ease); }
+.sh-wait { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; transition: opacity .4s; }
+.sh-wait svg { width: 40px; height: 40px; transform: rotate(-90deg); }
+.sh-wait circle { fill: none; stroke: rgba(255, 255, 255, .16); stroke-width: 2; }
+.sh-wait .sh-ring { stroke: var(--pearl); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.sh-card.s0 .sh-ring { stroke-dashoffset: 46; transition: stroke-dashoffset 3.2s linear; }
+.sh-wait em { font-style: normal; font-size: 9.5px; color: var(--sand-2); }
+.sh-card.s2 .sh-film video { opacity: 1; transform: none; }
+.sh-card.s2 .sh-wait { opacity: 0; }
+.sh-card.s5 .sh-film { box-shadow: 0 0 0 1.5px var(--pearl); }
+.sh-badge { position: absolute; left: 9px; top: 9px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px 4px; border-radius: 7px; font: 500 9.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); opacity: 0; transform: translateY(-4px); transition: opacity .4s, transform .5s var(--ease); }
+.sh-card.s5 .sh-badge { opacity: 1; transform: none; }
+.sh-cap { position: absolute; left: 8px; right: 8px; bottom: 19%; text-align: center; font: 600 clamp(13px, 1.1vw, 15.5px)/1.16 var(--sans); letter-spacing: -.01em; color: #fff; text-shadow: 0 1px 12px rgba(0, 0, 0, .6); white-space: pre-line; opacity: 0; transform: translateY(8px) scale(.94); transition: opacity .4s var(--ease), transform .55s cubic-bezier(.3, 1.5, .5, 1); }
+.sh-card.s3 .sh-cap { opacity: 1; transform: none; }
+.sh-eq { position: absolute; left: 10px; right: 10px; bottom: 11px; height: 17px; display: flex; align-items: flex-end; justify-content: center; gap: 3px; opacity: 0; transition: opacity .4s; }
+.sh-eq i { width: 3px; height: 100%; border-radius: 2px; background: #fff; transform: scaleY(.25); transform-origin: 50% 100%; animation: sh-eq 1s ease-in-out infinite; animation-play-state: paused; }
+.sh-eq i:nth-child(2n) { animation-duration: .8s; animation-delay: -.3s; } .sh-eq i:nth-child(3n) { animation-duration: 1.2s; animation-delay: -.6s; } .sh-eq i:nth-child(5n) { animation-delay: -.15s; }
+@keyframes sh-eq { 0%, 100% { transform: scaleY(.25); } 50% { transform: scaleY(1); } }
+.sh-card.s4 .sh-eq { opacity: .95; }
+.sh-card.s4 .sh-eq i { animation-play-state: running; }
+.sh-card.sh-fade .sh-film video, .sh-card.sh-fade .sh-cap, .sh-card.sh-fade .sh-eq, .sh-card.sh-fade .sh-badge { opacity: 0; }
+
+@media (max-width: 1060px) {
+  .sh-col { width: min(600px, 62%); }
+  .sh-card { width: min(520px, 100%); }
+  .sh-steps i { width: 44px; }
+}
+/* phones: the footage fills the top of the frame, the words and the panel sit below */
+@media (max-width: 760px) {
+  .sh.frame.tall { min-height: 940px; }
+  .sh > .shade { background:
+    linear-gradient(0deg, rgba(8, 9, 12, .8) 0%, rgba(8, 9, 12, .62) 40%, rgba(8, 9, 12, .22) 58%, rgba(8, 9, 12, 0) 70%),
+    linear-gradient(180deg, rgba(8, 9, 12, .3) 0%, rgba(8, 9, 12, 0) 16%); }
+  .sh-pbs { --dir: 180deg; }
+  .sh-pbs i:nth-child(1) { --b: 2px; --a: 34%; --z: 46%; }
+  .sh-pbs i:nth-child(2) { --b: 6px; --a: 39%; --z: 56%; }
+  .sh-pbs i:nth-child(3) { --b: 14px; --a: 45%; --z: 70%; }
+  .sh-pbs i:nth-child(4) { display: none; }
+  .sh-in { padding: 30px 8px 8px; }
+  .sh-col { width: 100%; justify-content: flex-end; gap: 22px; }
+  .sh-head { padding-inline: 16px; gap: 13px; }
+  .sh-h { font-size: clamp(31px, 8.7vw, 40px); line-height: 1.05; }
+  .sh-card { width: 100%; padding: 12px; gap: 12px; border-radius: 24px; }
+  .sh-tray { grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 8px; }
+  .sh-clip:nth-child(5) { display: none; }
+  .sh-steps li { padding: 8px 0; font-size: 14.5px; }
+  .sh-steps i { width: 34px; }
+  .sh-film { width: 37%; align-self: center; }
+  .sh-status { display: none; }
+}

@@ -1,0 +1,48 @@
+<section class="frame snd" id="sound" aria-labelledby="h-sound">
+  <img class="bg" src="assets/media/wallpapers/big-sur-coast.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
+  <div class="shade"></div>
+  <div class="snd-in">
+    <header class="snd-head">
+      <div>
+        <p class="label" data-reveal>Music · Sound · Voices</p>
+        <h2 id="h-sound" class="h-lg">It scores itself.</h2>
+      </div>
+      <p class="lede" data-reveal style="--i:1">Music that fits the cut. A sound on every action. A voice that sounds like a person. All placed for you.</p>
+    </header>
+
+    <p class="sr">Three parts of Studio: the Music list with a track playing, an editor timeline where each sound effect sits under the cut, word or logo it belongs to, and the saved Voices.</p>
+    <div class="snd-grid" id="snd-grid" aria-hidden="true">
+
+      <!-- Music: the app's Music tab -->
+      <div class="snd-p snd-music glass deep" data-reveal style="--i:1">
+        <div class="snd-ph"><h3>Music</h3>
+          <ul class="snd-chips"><li class="on">All <span>305</span></li><li>Cinematic <span>28</span></li><li>Lo-Fi <span>41</span></li><li>Ambient <span>16</span></li><li>Upbeat <span>14</span></li></ul>
+        </div>
+        <ul class="snd-list" id="snd-list"></ul>
+      </div>
+
+      <!-- Sound: the editor's tracks. One sound under every visible action -->
+      <div class="snd-p snd-fx glass deep" data-reveal style="--i:2">
+        <div class="snd-ph"><h3>Sound <span>1,419</span></h3><p class="snd-note">One sound for every action on screen</p></div>
+        <div class="snd-tl" id="snd-tl">
+          <div class="snd-lab"><span></span><span><b>V2</b> Text</span><span><b>V1</b> Shots</span><span><b>A2</b> SFX</span></div>
+          <div class="snd-tracks" id="snd-tracks">
+            <div class="snd-ruler" id="snd-ruler"></div>
+            <div class="snd-lane snd-text" id="snd-text"></div>
+            <div class="snd-lane snd-shots" id="snd-shots"></div>
+            <div class="snd-lane snd-sfx" id="snd-sfx"></div>
+            <div class="snd-names" id="snd-names"></div>
+            <div class="snd-guides" id="snd-guides"></div>
+            <i class="snd-playhead" id="snd-playhead"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Voices: the app's saved voices -->
+      <div class="snd-p snd-voices glass deep" data-reveal style="--i:3">
+        <div class="snd-ph"><h3>Voices <span>34</span></h3><p class="snd-note">Saved</p></div>
+        <ul class="snd-vs" id="snd-vs"></ul>
+      </div>
+    </div>
+  </div>
+</section>
