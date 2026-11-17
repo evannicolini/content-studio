@@ -2266,3 +2266,26 @@ button.wk-film .wk-dur { bottom: 19px; }
   .pr-bar-label { grid-column: 1 / -1; }
   .pr-need-grid { grid-template-columns: 1fr; }
 }
+
+/* ---------- the whole bill ---------- */
+.pr-needs-lede { margin: 12px auto 0; max-width: 34em; color: var(--sand-2); }
+.pr-bill { margin-top: clamp(20px, 2.4vw, 30px); padding: clamp(18px, 2.2vw, 30px); border-radius: clamp(22px, 2.2vw, 30px); background: rgba(var(--tint), .62); text-align: left; }
+.pr-bill-rows li { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto minmax(96px, auto); align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+.pr-bill-rows b { display: block; font: 500 16.5px/1.2 var(--sans); letter-spacing: -.01em; }
+.pr-bill-rows small { display: block; margin-top: 3px; font-size: 13.5px; line-height: 1.35; color: var(--sand-2); }
+.pr-bill-rows em { font: 400 clamp(16px, 1.4vw, 19px)/1 var(--sans); font-style: normal; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.pr-tag2 { font: 500 9.5px/1 var(--mono); font-style: normal; letter-spacing: .14em; text-transform: uppercase; padding: 6px 9px 5px; border-radius: 999px; color: var(--sand-2); box-shadow: var(--rim-soft); white-space: nowrap; }
+.pr-tag2.on { color: #10151c; background: var(--pearl); box-shadow: none; }
+.pr-bill-total { margin-top: clamp(18px, 2vw, 26px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.4vw, 18px); }
+.pr-bill-total > div { padding: clamp(16px, 1.8vw, 22px); border-radius: 18px; background: rgba(255, 255, 255, .05); box-shadow: var(--rim-soft); }
+.pr-bill-total .mono { color: var(--sand-3); font-size: 10px; }
+.pr-bill-total strong { display: block; margin-top: 12px; font: 300 clamp(28px, 3vw, 42px)/1 var(--sans); letter-spacing: -.035em; font-variant-numeric: tabular-nums; }
+.pr-bill-total strong small { display: block; margin-top: 6px; font: 400 12.5px/1 var(--sans); letter-spacing: 0; color: var(--sand-3); }
+.pr-bill-total span { display: block; margin-top: 12px; font-size: 13px; line-height: 1.35; color: var(--sand-2); }
+.pr-bill-vs strong s { color: var(--sand-3); text-decoration-thickness: 1.5px; }
+@media (max-width: 760px) {
+  .pr-bill-rows li { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 6px 12px; }
+  .pr-bill-rows .pr-tag2 { grid-column: 2; grid-row: 2; justify-self: start; }
+  .pr-bill-rows em { grid-column: 3; grid-row: 1 / span 2; }
+  .pr-bill-total { grid-template-columns: 1fr; }
+}
