@@ -6,7 +6,7 @@ var FILMS = { launch: film(/multivitamin/i) || (M.films || [])[0], viral: film(/
 
 /* What the field asks for, the app recording that answers it (desktop), and the drawn scene that answers it (phones). */
 var PROMPTS = [
-  { text: "Build me a launch commercial for my company", short: "Make me a launch commercial", clip: "launch", scene: 0 },
+  { text: "Build me a launch commercial for my company", short: "Make my launch commercial", clip: "launch", scene: 0 },
   { text: "Make the ending hit harder", clip: "note", scene: 1 },
   { text: "Recreate this viral video for my company", short: "Remake this viral video", clip: "viral", scene: 2 },
   { text: "Post all my content across all my channels", short: "Schedule my next 30 days", clip: "post", scene: 3 }
@@ -127,7 +127,7 @@ function probe(name) {
 }
 
 /* ---------- the loop ---------- */
-var field = SK.promptField(document.getElementById("hero-field"), { placeholder: "What should we make?", scale: SK.mobile() ? 1.08 : 1.3, auto: false });
+var field = SK.promptField(document.getElementById("hero-field"), { placeholder: "What should we make?", scale: SK.mobile() ? 1 : 1.3, auto: false });
 function tick(start) {
   clearInterval(clockT);
   clockT = setInterval(function () { var s = Math.floor((Date.now() - start) / 1000); clock.textContent = "00:" + ("0" + (s % 60)).slice(-2); }, 250);

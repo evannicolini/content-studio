@@ -353,7 +353,7 @@ input { font: inherit; color: inherit; }
 @media (max-width: 760px) {
   .hero { padding-top: 96px; }
   .hero-dl { height: 52px; font-size: 16px; }
-  .hero-ask { width: calc(100% - 44px); margin-bottom: calc(54px * 1.08 / -2); }
+  .hero-ask { width: calc(100% - 44px); margin-bottom: calc(54px / -2); }
   .hero-ask .ask-top { margin-bottom: 18px; }
   .hero-stage:not(.app) { height: 380px; }
   .hero-stage:not(.app) .hs { padding: 46px 14px 14px; gap: 14px; }
