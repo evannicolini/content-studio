@@ -3054,7 +3054,7 @@ function unlocked(info, start) {
   dl.href = info.url;
   form.hidden = true; open.hidden = false;
   sub.textContent = SK.mobile() ? "You're in. Studio is a Mac app: open this page on your Mac to download it." : "You're in. Your download is ready.";
-  fine.textContent = "Apple Silicon · macOS 13 or later" + (info.size ? " · " + info.size + " MB" : "");
+  fine.textContent = "Apple Silicon · macOS 13 or later" + (info.size ? " · " + (+info.size >= 1000 ? (info.size / 1024).toFixed(1) + " GB" : info.size + " MB") : "");
   document.querySelectorAll("[data-download] span").forEach(function (s) { if (/download/i.test(s.textContent) && s.closest(".nav")) s.textContent = "Download"; });
   if (start && !SK.mobile()) setTimeout(function () { window.location.href = info.url; }, 500);
 }
