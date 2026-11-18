@@ -679,7 +679,7 @@ SK.onView(hero, function () {
   hero.classList.add("off");
   if (started) { halt(); compose("", ""); }
 });
-function begin() { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); }
+function begin() { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); setTimeout(parallax, 400); }
 
 /* ---------- the intro, once ---------- */
 function intro() {
@@ -701,6 +701,58 @@ function rise(d) {
 if (!hero.classList.contains("pre")) { settled(); if (needGate) showGate(function () { setTimeout(begin, 600); }); else setTimeout(begin, 900); }
 else if (document.visibilityState === "hidden") document.addEventListener("visibilitychange", function once() { if (document.visibilityState !== "visible") return; document.removeEventListener("visibilitychange", once); intro(); });
 else intro();
+
+/* ---------- parallax: as the page scrolls past the hero, each layer moves at its own rate, scrubbed by the scroll and fully undone
+   when it scrolls back. p = scrollY / (0.9 x the window's height), eased toward its target at 0.14 a frame. Only individual transform
+   properties (translate, rotate, scale) are set, so they add to the intro's own transforms instead of fighting them. It starts after
+   the intro (and Enter site); never with reduced motion. The app's glass panels are re-lined up with the sky on every frame.
+     Desktop: sky +60px and 6% larger; lockup and headline -110px, fading to .35; Download -80px; composer -50px;
+              the app flattens from 16deg to about 5deg, rises 70px and grows 4%.
+     Phone:   the app slides left until its right edge sits 16px inside the screen, and flattens 4deg; text -40px, composer -24px. ---------- */
+function parallax() {
+  if (SK.reduced || parallax.on) return;
+  parallax.on = true;
+  var pic = sky.parentNode && sky.parentNode.tagName === "PICTURE" ? sky.parentNode : sky;
+  var head = hero.querySelector(".hx-head"), dlb = hero.querySelector(".hx-dl"), app3d = hero.querySelector(".hx-app3d");
+  var cur = 0, target = 0, raf = 0, slide = 0;
+  pic.style.position = "absolute"; pic.style.inset = "0"; pic.style.display = "block";
+  function measure() {
+    slide = 0;
+    if (!phone()) return;
+    var saved = app3d.style.translate; app3d.style.translate = "";
+    var r = stage.getBoundingClientRect(), k = r.width / (stage.offsetWidth || 1) || 1, dx = (window.innerWidth - 16) - r.right;
+    app3d.style.translate = saved;
+    slide = dx < 0 ? dx / k : 0;
+  }
+  function apply(p) {
+    var m = phone();
+    pic.style.translate = m ? "" : "0 " + (60 * p).toFixed(2) + "px";
+    pic.style.scale = m ? "" : (1 + 0.06 * p).toFixed(4);
+    head.style.translate = "0 " + ((m ? -40 : -110) * p).toFixed(2) + "px";
+    head.style.opacity = m ? "" : (1 - 0.65 * p).toFixed(3);
+    if (dlb) dlb.style.translate = "0 " + ((m ? -32 : -80) * p).toFixed(2) + "px";
+    cp.style.translate = "0 " + ((m ? -24 : -50) * p).toFixed(2) + "px";
+    app3d.style.rotate = "x " + ((m ? -4 : -11) * p).toFixed(3) + "deg";
+    app3d.style.translate = m ? (slide * p).toFixed(2) + "px 0" : "0 " + (-70 * p).toFixed(2) + "px";
+    app3d.style.scale = m ? "" : (1 + 0.04 * p).toFixed(4);
+    syncGlass();
+  }
+  function frame() {
+    raf = 0;
+    cur += (target - cur) * 0.14;
+    if (Math.abs(target - cur) < 0.0005) cur = target;
+    apply(cur);
+    if (cur !== target) raf = requestAnimationFrame(frame);
+  }
+  function onScroll() {
+    target = Math.min(1, Math.max(0, window.scrollY / (0.9 * (window.innerHeight || 1))));
+    if (!raf && target !== cur) raf = requestAnimationFrame(frame);
+  }
+  measure();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", function () { measure(); apply(cur); onScroll(); });
+  onScroll();
+}
 
 } catch (e) { console.error("section 010-hero", e); }
 })();
