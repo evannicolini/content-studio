@@ -1,121 +1,117 @@
 var root = document.getElementById("why");
 if (!root) return;
-var screen = document.getElementById("st-screen"), stage = document.getElementById("st-stage");
-var greys = [].slice.call(screen.querySelectorAll(".st-grey")), films = [].slice.call(screen.querySelectorAll(".st-film")), veil = screen.querySelector(".st-veil");
-var posts = greys.concat(films);
-function vid(f) { return f.querySelector("video"); }
+/* "Make people think" G. Two loops on one clock, both only while the section is in view:
+   the line types six sentences in one spot (type, hold, erase, next), and the phone's feed swipes past three posts, stops on a
+   Studio film, fills the heart and types the thought into the pill (every 10.4 s). Timings are the approved design's. */
+var line = root.querySelector(".st-big"), typed = root.querySelector(".st-typed"), phone = root.querySelector(".st-phone"), track = root.querySelector(".st-track");
+var pill = root.querySelector(".st-think"), pillT = root.querySelector(".st-think-t"), film = root.querySelector(".st-post video");
+var QUOTE = "“F*ck, I need that.”";
+var STORY = [QUOTE, "That thought is what sells.", "Great content earns it.", "Every single day.", "That’s hard to keep up.", "Studio does it for you."];
+var HOLD = [2400, 1600, 1600, 1600, 1600, 3400];
+var PHONE = matchMedia("(max-width: 900px) and (orientation: portrait)");
 
-/* the footage drifts a little against the scroll (only while on screen, desktop only: on phones the picture sits at the top) */
-(function (el) {
-  if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
-  function step() {
-    raf = 0;
-    if (!on) return;
-    if (SK.mobile()) { el.style.transform = ""; }
-    else {
-      var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
-      var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
-      var t = -p * r.height * 0.045;
-      y += (t - y) * 0.12;
-      if (Math.abs(t - y) < 0.05) y = t;
-      el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    }
-    raf = requestAnimationFrame(step);
-  }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
-})(root.querySelector("video.bg"));
-
-/* posters and sources for the films in the feed go on once the section is near (preload is "none": nothing downloads until a film
-   is about to land). Setting the source here also means a film can never be asked to play before it has one. */
+/* the feed's posters and film go on once the section is near. The posts sit clipped inside the phone screen, so lazy loading
+   or the kit's own near-view check would only start them as they slide in. */
 SK.onView(root, function () {
-  films.forEach(function (f) { var v = vid(f); v.poster = v.getAttribute("data-poster"); if (!v.getAttribute("src")) v.src = v.getAttribute("data-src"); });
+  [].forEach.call(root.querySelectorAll(".st-post img[data-src]"), function (im) { im.src = im.getAttribute("data-src"); });
+  if (film) { film.poster = film.getAttribute("data-poster"); if (!film.getAttribute("src")) { film.preload = "auto"; film.src = film.getAttribute("data-src"); } }
 }, null, { margin: "1200px 0px", once: true });
 
-/* The feed is an endless column of posts. Every fifth one is a Studio film; the rest is grey.
-   y = how many posts have gone by. Two grey slots and three film slots are recycled as it moves. */
-var EVERY = 5, HOLD = 3300, TA = 380, TC = 1050, TD = 900;
-function isFilm(k) { return k % EVERY === EVERY - 1; }
-function filmAt(k) { return films[(((k + 1) / EVERY - 1) % films.length + films.length) % films.length]; }
-function layout(y) {
-  var k = Math.floor(y), frac = y - k;
-  posts.forEach(function (p) { p._on = false; });
-  [k, k + 1].forEach(function (i, j) {
-    if (j === 1 && frac < 0.0005) return;
-    var el;
-    if (isFilm(i)) el = filmAt(i);
-    else { el = greys[i % 2]; if (el._k !== i) { el._k = i; el.setAttribute("data-v", String((i * 3 + 1) % 4)); } }
-    el.style.transform = "translate3d(0," + ((j - frac) * 100).toFixed(2) + "%,0)";
-    el._on = true;
-  });
-  posts.forEach(function (p) { if (!p._on && !p._off) p.style.transform = "translate3d(0,105%,0)"; p._off = !p._on; });
+/* the line is always one line: if the longest sentence (plus the caret) would run past the phone (desktop) or the frame's edge
+   (phones), the type shrinks to fit. At the artboard sizes it never does. */
+var meas = document.createElement("span");
+meas.className = "st-measure";
+meas.setAttribute("aria-hidden", "true");
+line.appendChild(meas);
+function fit() {
+  line.style.setProperty("--st-fit", "1");
+  var w = 0;
+  STORY.forEach(function (t) { meas.textContent = t; w = Math.max(w, meas.getBoundingClientRect().width); });
+  meas.textContent = "";
+  var fs = parseFloat(getComputedStyle(line).fontSize) || 80, scale = root.getBoundingClientRect().width / (root.offsetWidth || 1);
+  var need = w + (3 + 0.06 * fs) * scale, left = line.getBoundingClientRect().left;
+  var limit = PHONE.matches ? root.getBoundingClientRect().right - 2 * scale : phone.getBoundingClientRect().left - 0.3 * fs * scale;
+  var k = Math.min(1, (limit - left) / need);
+  if (k < 0.999) line.style.setProperty("--st-fit", Math.max(0.4, k).toFixed(4));
 }
-
-var y = 0, from = 0, to = EVERY - 1, phase = "idle", t0 = 0, raf = 0, live = false, likeT = 0, thinkT = 0, cur = null, fast = false, rewound = false;
-function lock(f) {
-  cur = f;
-  f.classList.add("lock");
-  var bar = f.querySelector(".st-watch u");
-  bar.style.transition = "none"; bar.style.transform = "scaleX(0)";
-  void bar.offsetWidth;
-  bar.style.transition = "transform " + HOLD + "ms linear"; bar.style.transform = "scaleX(1)";
-  clearTimeout(likeT); clearTimeout(thinkT);
-  thinkT = setTimeout(function () { stage.classList.remove("was-thought"); stage.classList.add("is-thought"); }, 480);
-  likeT = setTimeout(function () { f.classList.add("liked"); }, 1200);
-}
-function unlock() {
-  clearTimeout(likeT); clearTimeout(thinkT);
-  /* the thought drifts up and away as the thumb moves on, then waits below for the next film */
-  if (stage.classList.contains("is-thought")) { stage.classList.add("was-thought"); stage.classList.remove("is-thought"); setTimeout(function () { stage.classList.remove("was-thought"); }, 600); }
-  if (!cur) return;
-  var f = cur; cur = null;
-  f.classList.remove("lock", "liked");
-  var bar = f.querySelector(".st-watch u");
-  bar.style.transition = "none"; bar.style.transform = "scaleX(0)";
-}
-function warm(f) { var v = vid(f); if (!v.getAttribute("src")) v.src = v.getAttribute("data-src"); var p = v.play(); p && p.catch(function () {}); }
-function startMove(now) {
-  unlock();
-  phase = "move"; t0 = now; from = y; rewound = false;
-  to = Math.floor(y / EVERY + 1e-6) * EVERY + EVERY - 1;
-  if (to - from < 1) to += EVERY;
-  warm(filmAt(to));
-}
-function setFast(on) { if (on !== fast) { fast = on; screen.classList.toggle("fast", on); } }
-function frame(now) {
-  raf = 0;
-  if (!live) return;
-  if (phase === "idle") startMove(now);
-  if (phase === "move") {
-    var t = now - t0, D = to - from, V = D / (TA / 2 + TC + TD / 2), v, d;
-    if (t < TA) { v = V * (t / TA); d = (V * t * t) / (2 * TA); }
-    else if (t < TA + TC) { v = V; d = (V * TA) / 2 + V * (t - TA); }
-    else if (t < TA + TC + TD) {
-      var r = t - TA - TC;
-      v = V * (1 - r / TD); d = (V * TA) / 2 + V * TC + V * r - (V * r * r) / (2 * TD);
-      if (!rewound) { rewound = true; try { vid(filmAt(to)).currentTime = 0; } catch (e) {} }
-    } else { v = 0; d = D; }
-    y = from + d;
-    layout(y);
-    veil.style.opacity = (Math.pow(Math.min(1, v / V), 1.25) * 0.96).toFixed(3);
-    setFast(v / V > 0.5);
-    if (t >= TA + TC + TD) { y = to; layout(y); veil.style.opacity = "0"; setFast(false); phase = "hold"; t0 = now; lock(filmAt(to)); }
-  } else if (phase === "hold" && now - t0 > HOLD + 250) startMove(now);
-  raf = requestAnimationFrame(frame);
-}
+var fitQ = 0;
+function refit() { if (!fitQ) fitQ = requestAnimationFrame(function () { fitQ = 0; fit(); }); }
+fit();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+window.addEventListener("resize", refit);
 
 if (SK.reduced) {
-  /* no motion: the feed has already stopped on a Studio film, and the thought is there */
-  y = EVERY - 1; layout(y);
-  var f0 = filmAt(y); f0.classList.add("lock", "liked"); stage.classList.add("is-thought");
-  f0.querySelector(".st-watch u").style.transform = "scaleX(1)";
+  /* no motion: the thought is there, settled, and the feed has already stopped on the film */
+  typed.textContent = QUOTE;
+  track.classList.add("st-nt");
+  track.style.transform = "translateY(-300%)";
+  phone.classList.add("held", "liked");
   return;
 }
-layout(0);
-SK.onView(screen, function () {
-  live = true;
-  /* coming back into view: start with a fresh scroll rather than mid-hold */
-  if (phase === "hold") phase = "idle";
-  else if (phase === "move") { t0 = performance.now(); from = y; rewound = false; if (to - from < 0.5) to += EVERY; }
-  if (!raf) raf = requestAnimationFrame(frame);
-}, function () { live = false; }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
+
+var tm = [];
+function at(ms, f) { tm.push(setTimeout(f, ms)); }
+function stop() { tm.forEach(clearTimeout); tm = []; }
+function typing(on) { root.classList.toggle("typing", on); }
+
+/* the line: type, hold, erase, the next sentence */
+var k = 0, n = 0;
+function show() { typed.textContent = STORY[k].slice(0, Math.max(0, n)); }
+function typeHead(i) {
+  k = i; n = 0; show(); typing(true);
+  var text = STORY[k];
+  function step() {
+    n++; show();
+    if (n >= text.length) { typing(false); at(HOLD[k], eraseHead); return; }
+    var ch = text[n - 1];
+    at((ch === "," ? 300 : ch === "." ? 200 : ch === " " ? 90 : 58) * (0.7 + Math.random() * 0.6), step);
+  }
+  at(k === 0 ? 700 : 260, step);
+}
+function eraseHead() {
+  typing(true);
+  (function step() {
+    n--; show();
+    if (n > 0) { at(20, step); return; }
+    typeHead((k + 1) % STORY.length);
+  })();
+}
+
+/* the feed: swipe, swipe, swipe, stop on the film. The heart fills, the thought types out, hold, back to the top */
+function go(i) { track.style.transform = "translateY(" + (-100 * i) + "%)"; }
+function toTop() {
+  track.classList.add("st-nt"); go(0);
+  phone.classList.remove("liked", "held");
+  pill.classList.remove("on"); pillT.textContent = "";
+}
+function feed() {
+  toTop();
+  at(60, function () { track.classList.remove("st-nt"); });
+  at(900, function () { go(1); });
+  at(1700, function () { go(2); });
+  at(2600, function () { go(3); phone.classList.add("held"); });
+  at(3500, function () { phone.classList.add("liked"); });
+  at(3900, function () {
+    pill.classList.add("on");
+    var t = 0;
+    function step() { t++; pillT.textContent = QUOTE.slice(0, t); if (t < QUOTE.length) at(55 * (0.7 + Math.random() * 0.6), step); }
+    at(200, step);
+  });
+  at(9800, function () { pill.classList.remove("on"); });
+  at(10400, feed);
+}
+
+/* start fresh each time the section comes into view; everything stops when it leaves */
+typed.textContent = "";
+toTop();
+SK.onView(root, function () {
+  stop();
+  root.classList.remove("st-off");
+  toTop();
+  typeHead(0);
+  at(900, feed);
+}, function () {
+  stop();
+  root.classList.add("st-off");
+  typing(false);
+}, { ratio: 0.3, threshold: [0, 0.3, 0.6] });

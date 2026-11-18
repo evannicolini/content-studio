@@ -1,107 +1,106 @@
-/* 020 statement: a person on film, his phone's feed floating beside him in glass. Prefix: st-
-   Everything else gets scrolled past; a Studio film is the one that makes him think it. */
-.st.frame { margin-block: var(--frame-m); overflow: visible; clip-path: inset(0 round var(--frame-r)); background: radial-gradient(80% 90% at 74% 34%, #5e6670 0%, #353c46 40%, #171c24 78%, #10141a 100%); }
-.st > video.bg { top: -5%; height: 110%; object-position: 58% 50%; will-change: transform; }
-/* never a flat overlay: a side fall-off under the type, a little top and bottom, and a progressive blur toward the left */
-.st > .shade { background:
-  linear-gradient(90deg, rgba(7, 10, 15, .74) 0%, rgba(7, 10, 15, .56) 20%, rgba(7, 10, 15, .22) 40%, rgba(7, 10, 15, 0) 56%),
-  radial-gradient(80% 70% at 0% 100%, rgba(7, 10, 15, .4), rgba(7, 10, 15, 0) 70%),
-  linear-gradient(180deg, rgba(7, 10, 15, .26) 0%, rgba(7, 10, 15, 0) 20%); }
+/* 040 statement, "Make people think" G (approved design, canvas version 1794970326-8f2a). Prefix: st-
+   Her footage fills the frame. Bottom left, one line types a sequence of sentences in the same spot. On the right, 030's glass
+   phone: the feed swipes past three posts and stops on a Studio film, the heart fills, and the thought types out in a glass pill.
+   The design is drawn on a 1440 x 900 artboard (390 x 844 on phones). --u is one artboard pixel, so the whole section scales as
+   one piece: by width, or by height on short windows, so the phone always fits.
+   GLASS RULE: the phone and the pill blur the footage with backdrop-filter. Nothing between the frame and them may carry
+   opacity < 1, filter, mask, clip-path or will-change for those (it would become the backdrop root and the glass would go
+   see-through). So the frame clips with overflow + radius (no clip-path), nothing here uses [data-reveal], and the pill fades
+   on itself. */
+.st { --u: min(100vw / 1440, min(100vh, 1056px) / 900); --st-h: min(calc(100vh - 2 * var(--frame-m)), 1020px); }
+@supports (height: 100svh) { .st { --u: min(100vw / 1440, min(100svh, 1056px) / 900); --st-h: min(calc(100svh - 2 * var(--frame-m)), 1020px); } }
+.st.frame { margin-block: var(--frame-m); height: var(--st-h); background: #10151c; }
 .st-pbs { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.st-pbs i { position: absolute; inset: 0; -webkit-backdrop-filter: blur(var(--b)); backdrop-filter: blur(var(--b)); -webkit-mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); mask-image: linear-gradient(var(--dir, 270deg), transparent var(--a), #000 var(--z)); }
-.st-pbs i:nth-child(1) { --b: 1.5px; --a: 52%; --z: 66%; }
-.st-pbs i:nth-child(2) { --b: 4px; --a: 60%; --z: 78%; }
-.st-pbs i:nth-child(3) { --b: 9px; --a: 68%; --z: 90%; }
-.st-pbs i:nth-child(4) { --b: 16px; --a: 78%; --z: 100%; }
+/* the footage stays as it is (no flat overlay): a long fall-off under the words, and the site's progressive blur toward them */
+.st > .shade { background: radial-gradient(90% 95% at 0% 80%, rgba(9, 9, 11, .76) 0%, rgba(9, 9, 11, .5) 44%, rgba(9, 9, 11, 0) 78%), linear-gradient(90deg, rgba(9, 9, 11, .44) 0%, rgba(9, 9, 11, .2) 30%, rgba(9, 9, 11, 0) 52%); }
+.st-pbs i { position: absolute; inset: 0; -webkit-backdrop-filter: blur(var(--b)); backdrop-filter: blur(var(--b)); -webkit-mask-image: linear-gradient(270deg, transparent var(--a), #000 var(--z)); mask-image: linear-gradient(270deg, transparent var(--a), #000 var(--z)); }
+.st-pbs i:nth-child(1) { --b: 1.5px; --a: 55%; --z: 68%; }
+.st-pbs i:nth-child(2) { --b: 5px; --a: 61%; --z: 80%; }
+.st-pbs i:nth-child(3) { --b: 12px; --a: 68%; --z: 94%; }
 
-.st-in { position: relative; flex: 1; display: flex; align-items: flex-end; padding: clamp(30px, 4.2vw, 60px); min-width: 0; }
-.st-copy { width: min(560px, 41%); display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
-.st-copy .label { color: rgba(255, 255, 255, .88); }
-.st-h { margin-top: clamp(16px, 1.8vw, 26px); display: flex; flex-direction: column; align-items: flex-start; color: #fff; }
-.st-lead { font: 400 clamp(20px, 2.1vw, 31px)/1.14 var(--sans); letter-spacing: -.028em; color: rgba(255, 255, 255, .74); }
-.st-big { margin-top: clamp(10px, 1.1vw, 18px); font-size: clamp(52px, 6.5vw, 96px); line-height: .95; letter-spacing: -.05em; max-width: 5.6em; text-indent: calc(-1 * min(.4em, clamp(30px, 4.2vw, 60px) - 10px)); }
-.st-big * { text-indent: 0; }
-.st-p { margin-top: clamp(20px, 2.2vw, 32px); font: 400 clamp(15.5px, 1.24vw, 18.5px)/1.48 var(--sans); letter-spacing: -.01em; color: rgba(255, 255, 255, .8); max-width: 25em; text-wrap: pretty; }
-.st-p span { color: #fff; }
+/* ---------- the words ---------- */
+.st-copy { position: absolute; z-index: 2; left: calc(72 * var(--u)); bottom: calc(70 * var(--u)); width: calc(1000 * var(--u)); display: flex; flex-direction: column; }
+.st-label { color: rgba(255, 255, 255, .86); }
+.st-h { margin: calc(22 * var(--u)) 0 0; font: inherit; display: flex; flex-direction: column; }
+.st-lead { font: 300 calc(30 * var(--u))/1.14 var(--sans); letter-spacing: -.03em; color: rgba(245, 243, 238, .74); }
+/* the line: always one line. --st-fit (section.js) only ever shrinks it, if the longest sentence would not fit */
+.st-big { position: relative; margin-top: calc(14 * var(--u)); margin-left: -.06em; min-height: 1em; font: 300 calc(80 * var(--u) * var(--st-fit, 1))/.98 var(--sans); letter-spacing: -.045em; color: #fff; white-space: nowrap; }
+.st-measure { position: absolute; left: 0; top: 0; visibility: hidden; white-space: nowrap; pointer-events: none; }
+.st-caret { display: inline-block; width: 3px; height: .78em; margin-left: .06em; border-radius: 2px; vertical-align: -.04em; background: #0a84ff; animation: st-blink 1.06s steps(1) infinite; }
+.st.typing .st-caret { animation: none; opacity: 1; }
+.st.st-off .st-caret { animation-play-state: paused; }
+@keyframes st-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-/* ---------- his phone, in glass ---------- */
-.st-stage { --sw: clamp(150px, 14.6vw, 212px); position: absolute; left: var(--st-x, 71.5%); bottom: clamp(30px, 4.2vw, 60px); }
-.st-phone { position: relative; width: calc(var(--sw) + 16px); padding: 8px; border-radius: calc(var(--sw) * .19); background: rgba(9, 13, 19, .3); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); }
-.st-screen { position: relative; width: var(--sw); aspect-ratio: 9 / 16; border-radius: calc(var(--sw) * .15); overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); isolation: isolate; contain: layout paint; }
-.st-post { position: absolute; inset: 0; transform: translate3d(0, 105%, 0); will-change: transform; overflow: hidden; }
+/* ---------- the phone: 030's ch-phone. 9 by 19.5, glass, phone corners, no shadow ---------- */
+.st-ph { position: absolute; z-index: 2; right: calc(46 * var(--u)); bottom: calc(52 * var(--u)); }
+.st-phone { position: relative; width: calc(300 * var(--u)); height: calc(650 * var(--u)); padding: calc(10 * var(--u)); border-radius: calc(44 * var(--u)); display: flex; flex-direction: column; color: #fff; }
+.st-phone::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  background: rgba(13, 17, 24, .3);
+  -webkit-backdrop-filter: blur(30px) saturate(165%) brightness(.74); backdrop-filter: blur(30px) saturate(165%) brightness(.74);
+  box-shadow: var(--rim), inset 0 0 0 1px rgba(255, 255, 255, .09); }
+.st-phone > * { position: relative; }
+.st-status { flex: none; display: flex; align-items: center; justify-content: space-between; height: calc(30 * var(--u)); padding: 0 calc(16 * var(--u)) 0 calc(20 * var(--u)); font: 600 calc(13.5 * var(--u))/1 var(--sans); letter-spacing: -.01em; }
+.st-status b { font-weight: 600; width: calc(46 * var(--u)); }
+.st-island { width: calc(74 * var(--u)); height: calc(22 * var(--u)); border-radius: calc(12 * var(--u)); background: rgba(3, 4, 6, .86); }
+.st-status svg { width: calc(46 * var(--u)); height: calc(12 * var(--u)); fill: #fff; }
+.st-status svg .o { fill: none; stroke: rgba(255, 255, 255, .5); stroke-width: 1; }
+.st-home { flex: none; display: block; width: calc(104 * var(--u)); height: calc(4 * var(--u)); margin: calc(9 * var(--u)) auto calc(1 * var(--u)); border-radius: calc(2 * var(--u)); background: rgba(255, 255, 255, .72); }
 
-/* what everyone else posts: nothing you can hold on to. Frosted, grey, see-through */
-.st-grey { background: radial-gradient(70% 42% at 32% 30%, rgba(255, 255, 255, .2), transparent 72%), radial-gradient(80% 46% at 72% 78%, rgba(255, 255, 255, .09), transparent 72%), linear-gradient(165deg, rgba(150, 156, 166, .2), rgba(60, 64, 72, .26)); }
-.st-grey[data-v="1"] { background: radial-gradient(64% 36% at 68% 26%, rgba(255, 255, 255, .22), transparent 70%), radial-gradient(90% 40% at 30% 66%, rgba(255, 255, 255, .08), transparent 72%), linear-gradient(200deg, rgba(160, 165, 174, .18), rgba(52, 56, 64, .3)); }
-.st-grey[data-v="2"] { background: radial-gradient(56% 30% at 50% 44%, rgba(255, 255, 255, .24), transparent 72%), radial-gradient(100% 34% at 50% 96%, rgba(255, 255, 255, .1), transparent 74%), linear-gradient(180deg, rgba(120, 126, 136, .2), rgba(66, 70, 78, .24)); }
-.st-grey[data-v="3"] { background: radial-gradient(74% 34% at 24% 62%, rgba(255, 255, 255, .2), transparent 70%), radial-gradient(60% 40% at 80% 20%, rgba(255, 255, 255, .1), transparent 72%), linear-gradient(150deg, rgba(146, 150, 160, .2), rgba(48, 52, 60, .3)); }
-.st-grey::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: rgba(255, 255, 255, .14); }
-.st-ui { position: absolute; left: 7%; bottom: 7.5%; width: 58%; display: grid; grid-template-columns: auto 1fr; gap: calc(var(--sw) * .022) calc(var(--sw) * .03); align-items: center; }
-.st-av { width: calc(var(--sw) * .09); aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, .22); grid-row: span 2; }
-.st-l1, .st-l2 { height: max(3px, calc(var(--sw) * .02)); border-radius: 3px; background: rgba(255, 255, 255, .22); }
-.st-l1 { width: 62%; align-self: end; }
-.st-l2 { width: 92%; align-self: start; background: rgba(255, 255, 255, .13); }
-.st-act { position: absolute; right: 6%; bottom: 7.5%; display: grid; gap: calc(var(--sw) * .05); justify-items: center; }
-.st-act > i { width: calc(var(--sw) * .1); aspect-ratio: 1; border-radius: 50%; background: rgba(255, 255, 255, .18); }
-.st-grey .st-ui, .st-grey .st-act { transition: opacity .18s linear; }
-.st-screen.fast .st-grey .st-ui, .st-screen.fast .st-grey .st-act { opacity: 0; }
+/* the feed */
+.st-scr { flex: 1; min-height: 0; margin-top: calc(6 * var(--u)); border-radius: calc(32 * var(--u)); overflow: hidden; position: relative; background: #0d1117; }
+.st-track { position: absolute; left: 0; right: 0; top: 0; height: 100%; transition: transform .55s cubic-bezier(.3, .7, .1, 1); }
+.st-track.st-nt { transition: none; }
+.st-post { position: absolute; left: 0; right: 0; height: 100%; }
+.st-post img, .st-post video { display: block; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.st-ui { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; height: 42%; padding: 0 calc(12 * var(--u)) calc(16 * var(--u)) calc(14 * var(--u)); display: flex; align-items: flex-end; gap: calc(10 * var(--u)); background: linear-gradient(0deg, rgba(5, 7, 10, .62), rgba(5, 7, 10, 0)); pointer-events: none; }
+.st-who { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: calc(6 * var(--u)); }
+.st-who p { display: flex; align-items: center; gap: calc(7 * var(--u)); font: 600 calc(12.5 * var(--u))/1 var(--sans); }
+.st-who p i { flex: none; width: calc(22 * var(--u)); height: calc(22 * var(--u)); border-radius: 50%; background: linear-gradient(135deg, #ece9e2, #8f95a0); box-shadow: 0 0 0 1.5px #fff; }
+.st-who span { font-size: calc(11.5 * var(--u)); line-height: 1.3; color: rgba(255, 255, 255, .86); }
+.st-act { flex: none; display: flex; flex-direction: column; align-items: center; gap: calc(15 * var(--u)); padding-bottom: calc(2 * var(--u)); }
+.st-act svg { width: calc(23 * var(--u)); height: calc(23 * var(--u)); fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.st-heart .f { fill: #ff3b5c; stroke: #ff3b5c; transform-box: fill-box; transform-origin: 50% 55%; transform: scale(0); transition: transform .45s cubic-bezier(.3, 1.8, .5, 1); }
+.st-phone.liked .st-heart .f { transform: scale(1); }
+/* watch progress: fills over 6 s while the feed holds on the film (scaleX, the same look as the design's width) */
+.st-bar { position: absolute; left: calc(14 * var(--u)); right: calc(14 * var(--u)); bottom: calc(6 * var(--u)); z-index: 3; height: 2px; border-radius: 2px; background: rgba(255, 255, 255, .25); overflow: hidden; }
+.st-bar i { display: block; height: 100%; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+.st-phone.held .st-bar i { transform: scaleX(1); transition: transform 6s linear; }
 
-/* a Studio film: solid, sharp, in colour, and it stays */
-.st-film { background: #14171c; }
-.st-film video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.st-cover { position: absolute; inset: 0; background: radial-gradient(70% 42% at 40% 34%, rgba(128, 132, 140, .96), rgba(84, 88, 96, .92) 60%), #3c4047; opacity: 1; transition: opacity .28s linear; }
-.st-film::after { content: ""; position: absolute; inset: auto 0 0; height: 34%; background: linear-gradient(180deg, transparent, rgba(6, 8, 12, .5)); pointer-events: none; }
-.st-film .st-ui, .st-film .st-act, .st-watch { z-index: 2; }
-.st-film.lock .st-cover { opacity: 0; transition: opacity .42s var(--ease); }
-.st-film .st-ui, .st-film .st-act { bottom: 10.5%; }
-.st-film .st-av { background: rgba(255, 255, 255, .5); }
-.st-film .st-l1 { background: rgba(255, 255, 255, .62); }
-.st-film .st-l2 { background: rgba(255, 255, 255, .34); }
-.st-film .st-act > i { background: rgba(255, 255, 255, .3); }
-.st-heart { width: calc(var(--sw) * .115); aspect-ratio: 1; overflow: visible; }
-.st-heart .o { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; }
-.st-heart .f { fill: #fff; transform: scale(0); transform-origin: 50% 55%; transform-box: fill-box; transition: transform .2s var(--ease); }
-.st-film.liked .st-heart .f { transform: none; transition: transform .55s cubic-bezier(.3, 1.9, .5, 1); }
-.st-watch { position: absolute; left: 7%; right: 7%; bottom: 4.2%; opacity: 0; transition: opacity .2s linear; }
-.st-film.lock .st-watch { opacity: 1; transition: opacity .4s var(--ease) .15s; }
-.st-watch i { display: block; height: 2.5px; border-radius: 2px; background: rgba(255, 255, 255, .26); overflow: hidden; }
-.st-watch u { display: block; height: 100%; border-radius: 2px; background: #fff; transform: scaleX(0); transform-origin: 0 50%; }
+/* ---------- the thought, rising off the phone: a glass pill that types (it fades on itself, never on a parent) ---------- */
+.st-think { position: absolute; z-index: 3; right: calc(392 * var(--u)); bottom: calc(470 * var(--u)); padding: calc(14 * var(--u)) calc(20 * var(--u)); border-radius: calc(22 * var(--u)); font: 400 calc(22 * var(--u))/1.15 var(--sans); letter-spacing: -.015em; color: #fff; white-space: nowrap;
+  background: rgba(13, 17, 24, .36); -webkit-backdrop-filter: blur(24px) saturate(160%) brightness(.8); backdrop-filter: blur(24px) saturate(160%) brightness(.8);
+  box-shadow: var(--rim), inset 0 0 0 1px rgba(255, 255, 255, .08);
+  opacity: 0; transform: translateY(calc(10 * var(--u))) scale(.96); transition: opacity .45s var(--ease), transform .6s var(--ease); }
+.st-think.on { opacity: 1; transform: none; }
 
-/* the blur of a thumb in a hurry */
-.st-veil { position: absolute; inset: 0; z-index: 3; opacity: 0; pointer-events: none; will-change: opacity; background: linear-gradient(90deg, rgba(200, 204, 212, .1) 0%, rgba(228, 231, 238, .3) 9%, rgba(120, 124, 132, .2) 22%, rgba(214, 218, 226, .26) 34%, rgba(236, 239, 245, .32) 47%, rgba(110, 114, 122, .2) 59%, rgba(220, 224, 232, .28) 72%, rgba(126, 130, 138, .2) 86%, rgba(206, 210, 218, .26) 100%); }
-.st-veil::after { content: ""; position: absolute; left: 0; right: 0; top: -100%; height: 200%; background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, .14) 11%, rgba(10, 12, 16, .14) 25%, rgba(255, 255, 255, 0) 50%); animation: st-rush .34s linear infinite; animation-play-state: paused; }
-.st-screen.fast .st-veil::after { animation-play-state: running; }
-@keyframes st-rush { from { transform: translate3d(0, 50%, 0); } to { transform: translate3d(0, 0, 0); } }
-.st-tabs { position: absolute; z-index: 4; left: 0; right: 0; top: 5%; display: flex; justify-content: center; gap: 6px; }
-.st-tabs i { width: 15%; height: max(3px, calc(var(--sw) * .018)); border-radius: 3px; background: rgba(255, 255, 255, .24); }
-.st-tabs i + i { background: rgba(255, 255, 255, .62); }
-
-/* the thought itself, rising off the film the moment the feed stops on it */
-.st-thought { position: absolute; z-index: 5; top: 9%; right: calc(100% - var(--sw) * .1); height: clamp(36px, 3vw, 44px); padding: 0 clamp(14px, 1.25vw, 18px); display: inline-flex; align-items: center; border-radius: 999px; font: 500 clamp(15px, 1.2vw, 17.5px)/1 var(--sans); letter-spacing: -.018em; color: #fff; white-space: nowrap; background: rgba(9, 13, 19, .44); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: var(--rim); opacity: 0; transform: translate3d(-8px, -16px, 0) scale(.96); transform-origin: 100% 100%; transition: opacity .28s linear, transform .4s var(--ease-io); }
-.st-stage.is-thought .st-thought { opacity: 1; transform: none; transition: opacity .4s var(--ease), transform .75s cubic-bezier(.3, 1.5, .5, 1); }
-.st-stage:not(.is-thought):not(.was-thought) .st-thought { transform: translate3d(22px, 30px, 0) scale(.84); transition: none; }
-
-@media (max-width: 1100px) {
-  .st-copy { width: min(440px, 42%); }
-  .st > video.bg { object-position: 46% 50%; }
-  .st-stage { left: var(--st-x, 77%); }
-  .st-pbs i:nth-child(1) { --a: 60%; --z: 72%; }
-  .st-pbs i:nth-child(2) { --a: 66%; --z: 82%; }
-  .st-pbs i:nth-child(3) { --a: 74%; --z: 92%; }
-  .st-pbs i:nth-child(4) { --a: 82%; --z: 100%; }
+/* ---------- phones (and portrait tablets): the 390 x 844 artboard. Phone top right, the words bottom left, the pill on the left ---------- */
+@media (max-width: 900px) and (orientation: portrait) {
+  .st { --u: min(100vw / 390, min(100vh, 1056px) / 844); }
+  @supports (height: 100svh) { .st { --u: min(100vw / 390, min(100svh, 1056px) / 844); } }
+  .st > .shade { background: linear-gradient(0deg, rgba(9, 9, 11, .88) 0%, rgba(9, 9, 11, .7) 40%, rgba(9, 9, 11, .05) 66%); }
+  .st-copy { left: calc(22 * var(--u)); right: calc(18 * var(--u)); width: auto; bottom: calc(30 * var(--u)); gap: calc(14 * var(--u)); }
+  .st-lead { font-size: calc(19 * var(--u)); }
+  .st-big { margin-top: calc(10 * var(--u)); font-size: calc(34 * var(--u) * var(--st-fit, 1)); }
+  .st-ph { right: calc(22 * var(--u)); top: calc(26 * var(--u)); bottom: auto; }
+  .st-phone { width: calc(172 * var(--u)); height: calc(372 * var(--u)); padding: calc(7 * var(--u)); border-radius: calc(30 * var(--u)); }
+  .st-status { height: calc(22 * var(--u)); padding: 0 calc(10 * var(--u)) 0 calc(14 * var(--u)); font-size: calc(10 * var(--u)); }
+  .st-island { width: calc(48 * var(--u)); height: calc(15 * var(--u)); }
+  .st-status svg { width: calc(32 * var(--u)); }
+  .st-scr { border-radius: calc(23 * var(--u)); margin-top: calc(4 * var(--u)); }
+  .st-ui { padding: 0 calc(8 * var(--u)) calc(10 * var(--u)) calc(9 * var(--u)); gap: calc(6 * var(--u)); }
+  .st-who p { font-size: calc(9.5 * var(--u)); }
+  .st-who p i { width: calc(15 * var(--u)); height: calc(15 * var(--u)); }
+  .st-who span { font-size: calc(8.5 * var(--u)); }
+  .st-act { gap: calc(9 * var(--u)); }
+  .st-act svg { width: calc(15 * var(--u)); height: calc(15 * var(--u)); }
+  .st-home { width: calc(64 * var(--u)); height: calc(3 * var(--u)); margin-top: calc(6 * var(--u)); }
+  .st-think { left: calc(22 * var(--u)); right: auto; top: calc(96 * var(--u)); bottom: auto; font-size: calc(15 * var(--u)); padding: calc(10 * var(--u)) calc(14 * var(--u)); border-radius: calc(16 * var(--u)); }
 }
-/* phones: he fills the top of the frame (4:5), his phone overlaps the lower corner of the picture, the words sit under it */
-@media (max-width: 760px) {
-  .st.frame.tall { min-height: 0; display: block; background: #10141a; }
-  .st > video.bg { inset: 0 0 auto 0; top: 0; height: auto; aspect-ratio: 4 / 5; object-position: 50% 50%; }
-  .st > .shade { inset: 0 0 auto 0; aspect-ratio: 4 / 5; transform: scaleY(1.012); transform-origin: 50% 0; background: linear-gradient(180deg, rgba(16, 20, 26, .3) 0%, rgba(16, 20, 26, 0) 18%, rgba(16, 20, 26, 0) 52%, rgba(16, 20, 26, .78) 86%, #10141a 100%); }
-  .st-pbs { display: none; }
-  .st-in { display: block; padding: calc(125% - 88px) 22px 34px; }
-  .st-copy { width: 100%; }
-  .st-lead { font-size: clamp(20px, 5.6vw, 26px); }
-  .st-big { font-size: clamp(50px, 14.8vw, 84px); text-indent: -.36em; }
-  .st-p { font-size: 16.5px; max-width: 23em; }
-  .st-stage { --sw: clamp(92px, 27vw, 128px); left: auto; right: 14px; bottom: auto; top: calc((100vw - 2 * var(--frame-m)) * 1.25 - var(--sw) * 1.778 - 124px); }
-  .st-phone { width: calc(var(--sw) + 12px); padding: 6px; }
-  .st-thought { height: 34px; font-size: 14.5px; padding: 0 13px; top: 36%; right: calc(100% - var(--sw) * .12); }
+/* a portrait tablet plays the wide clip: keep her in the middle of the frame */
+@media (min-width: 701px) and (max-width: 900px) and (orientation: portrait) {
+  .st > video.bg { object-position: 62% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .st-caret { animation: none; }
+  .st-track, .st-heart .f, .st-think { transition: none; }
 }
