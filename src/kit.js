@@ -289,7 +289,7 @@
 
   /* ---------- Kayla: the listen pill (fixed, .kp) and inline clips (.vo[data-src]) ----------
      Waveform bars and the length come from <audio file name>.json next to the mp3. Only one clip plays at a time. */
-  var audios = [];
+  var audios = []; SK.audios = audios; /* a section with its own players adds them here so only one clip plays at a time */
   var fmt = function (s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
   function player(box, src, bars) {
     var a = new Audio(), wave = box.querySelector("[data-wave]"), time = box.querySelector("[data-time]"), rateB = box.querySelector("[data-rate]"), els = [], dur = 0;
@@ -487,7 +487,7 @@
      full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
   function focusSections() {
     if (SK.reduced) return;
-    var els = [].slice.call(document.querySelectorAll("main > section")), blur = !SK.mobile() && matchMedia("(pointer: fine)").matches, queued = false;
+    var els = [].slice.call(document.querySelectorAll("main > section:not([data-own-focus])")), /* [data-own-focus]: the section dims its own groups (pricing) */ blur = !SK.mobile() && matchMedia("(pointer: fine)").matches, queued = false;
     if (!els.length) return;
     var clamp = function (x) { return Math.min(1, Math.max(0, x)); };
     function paint() {

@@ -1,46 +1,59 @@
-"""Studio's prices on the site come from the app's published pricing.json, never from this repo.
+"""Studio's plans on the site come from the app's published pricing.json, never from this repo.
 
-Where the file comes from (first that exists):
-    STUDIO_PRICING_URL      env: a URL to fetch the published pricing.json from
-    STUDIO_RELEASES         env: the app's Releases folder (default: the Dropbox copy on this Mac)
-The Releases folder's public link is not written here on purpose: it also serves the app downloads, which only an invite
-code unlocks (assets/gate.json). The synced folder holds the same published file.
+Where the file comes from:
+    STUDIO_PRICING_URL      env: a URL to fetch it from. Default: the licence server's public copy, the one source that also
+                            carries the sales switch ("sales", "mode") and the free trial ("trial_days").
 
-render(html) fills the {{pr:...}} holes of 160-pricing for the default period and repeats the <!--plan--> block once per plan.
-view() is what the page needs to switch periods without doing any maths itself (window.SK_PRICES).
-check(template, built) fails the build when a number on the site could differ from the file.
-The card maths is the app's own (Studio_App web/product/locked.html, drawPlans), line for line.
+render(html) fills the {{pr:...}} holes of 160-pricing (Pricing D) for the default period and writes the plan panel (desktop) and
+the plan cards (narrow screens) from the file's plans and comparison rows. view() is what the page needs to switch periods without
+doing any maths itself (window.SK_PRICES). check(template, script, built, view) fails the build when a number on the site could
+differ from the file.
+
+Buy buttons ("Try <Plan> free") show only when the file says "sales": true and "mode": "live". Otherwise every plan says
+"Coming soon": while Stripe is in test mode the server already sells, but only to test cards.
+The card maths is the app's own (Studio_App web/product/locked.html, drawPlans).
 """
 import html as H
 import json, os, re, urllib.request
 
-DEFAULT_RELEASES = "~/Library/CloudStorage/Dropbox/Studio Beta/Releases"
-ENTRY_TOOLS = 20 + 15   # Claude Pro + Higgsfield's entry plan
-DAILY_TOOLS = 200       # everything else in the bill, at the plans most people settle on
-# Dollar amounts on the pricing section that are not Studio's: the four salaries and their total, the agency range and the
-# outside tools' own monthly plans. Anything else written as $N in the section must come from pricing.json.
-OUTSIDE = {12000, 6000, 5900, 5200, 29100, 5000, 15000, 20, 100, 15, 49, 0, 25, 6, 22, 10}
+DEFAULT_URL = "https://studio-licence.studio-licence.workers.dev/pricing.json"
+CLAUDE_PRO = 20         # the least Claude plan Studio runs on; "the least you'll pay, all in" is Creator plus this
+# Dollar amounts on the pricing section that are not Studio's: the five salaries and their total, the agency range, the outside
+# tools' own monthly plans, and the founders' $0. Anything else written as $N in the section must come from pricing.json.
+OUTSIDE = {12000, 6000, 5900, 5200, 5400, 34500, 5000, 15000, 20, 100, 15, 49, 0, 25, 6, 22, 10}
+# row logos: file name in the pricing.json rows -> the site's file, and how it is drawn (w: white, g: grayscale)
+LOGOS = {"meta": ("assets/logos/svg/meta.svg", "w"), "claude": ("assets/logos/svg/claude.svg", "w"),
+         "higgsfield": ("assets/logos/svg/higgsfield.svg", "w"), "elevenlabs": ("assets/logos/svg/elevenlabs.svg", "g"),
+         "metricool": ("assets/logos/metricool.png", "g"), "instagram": ("assets/logos/social/ig.svg", "w"),
+         "ig": ("assets/logos/social/ig.svg", "w")}
 
 
 class PricingError(Exception):
     pass
 
 
+_cache = {"at": 0, "data": None}
+
+
 def load():
-    url = os.environ.get("STUDIO_PRICING_URL")
-    if url:
-        with urllib.request.urlopen(url, timeout=15) as r:
+    import time
+    if _cache["data"] is not None and time.time() - _cache["at"] < 30:  # the dev server rebuilds on every page load
+        return _cache["data"]
+    url = os.environ.get("STUDIO_PRICING_URL") or DEFAULT_URL
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "studio-site-build", "Cache-Control": "no-cache"})
+        with urllib.request.urlopen(req, timeout=15) as r:
             data = json.loads(r.read().decode("utf-8"))
-    else:
-        f = os.path.join(os.path.expanduser(os.environ.get("STUDIO_RELEASES") or DEFAULT_RELEASES), "pricing.json")
-        if not os.path.exists(f):
-            raise PricingError("no published pricing.json (looked in %s; set STUDIO_PRICING_URL or STUDIO_RELEASES)" % f)
-        data = json.load(open(f, encoding="utf-8"))
+    except Exception as e:
+        raise PricingError("could not read pricing.json from %s (%s)" % (url, e))
     plans = data.get("plans") or []
     if not plans or any(not isinstance((p.get("month") or {}).get("price"), int) or not isinstance((p.get("year") or {}).get("price"), int) for p in plans):
         raise PricingError("pricing.json: every plan needs whole-dollar month.price and year.price")
-    if not any(p.get("id") == "creator" for p in plans) or not any(p.get("id") == "team" for p in plans):
-        raise PricingError("pricing.json: the site's bill names Creator and Team; both plans must be in the file")
+    for row in data.get("rows") or []:
+        missing = [p["id"] for p in plans if p["id"] not in (row.get("values") or {})]
+        if missing:
+            raise PricingError("pricing.json: row %r has no value for %s" % (row.get("label"), ", ".join(missing)))
+    _cache.update(at=time.time(), data=data)
     return data
 
 
@@ -52,8 +65,8 @@ def usd(n):
     return "$" + format(jround(n), ",")
 
 
-def round50(n):
-    return jround(n / 50) * 50
+def live(data):
+    return data.get("sales") is True and data.get("mode") == "live"
 
 
 def card(p, period):
@@ -62,33 +75,33 @@ def card(p, period):
     per = jround(o["price"] / 12) if yearly else o["price"]
     was = p["month"]["price"] if yearly and p.get("month") and p["month"]["price"] > per else 0
     saved = p["month"]["price"] * 12 - o["price"] if was else 0
-    seat = "%d seats · %s each · " % (p["seats"], usd(jround(per / p["seats"]))) if p.get("seats") else ""
-    bill = seat + (("Billed %s yearly" % usd(o["price"])) + (" · Save %s" % usd(saved) if saved > 0 else "") if yearly else "Billed monthly · Cancel anytime")
-    return {"per": per, "was": was, "bill": bill, "url": o.get("url") or ""}
+    bill = ("Billed %s yearly" % usd(o["price"])) if yearly else "Billed monthly · Cancel anytime"
+    return {"per": per, "was": was, "bill": bill, "save": ("Save " + usd(saved)) if saved > 0 else "", "url": o.get("url") or ""}
 
 
 def period_view(data, period, team_cost):
-    cards = {p["id"]: card(p, period) for p in data["plans"]}
-    creator, team = cards["creator"]["per"], cards["team"]["per"]
-    low = min(c["per"] for c in cards.values())
+    cards = [(p, card(p, period)) for p in data["plans"]]
+    low = min(c["per"] for _, c in cards)
+    high = max(c["per"] for _, c in cards)
     v = {
-        "from": "from " + usd(low),
-        "bar": "%.2f%%" % max(0.2, low / team_cost * 100),
-        "range": "%s or %s" % (usd(creator), usd(team)),
-        "just": usd(creator + ENTRY_TOOLS),
-        "pipe": "about " + usd(round50(creator + DAILY_TOOLS)),
-        "pipeteam": usd(round50(team + DAILY_TOOLS)),
+        "from": usd(low),
+        "bar": "%.2f%%" % max(0.8, low / team_cost * 100),
+        "range": "%s to %s" % (usd(low), usd(high)),
+        "allin": usd(low + CLAUDE_PRO),
+        "founders": usd(high),
     }
-    for pid, c in cards.items():
-        v[pid + ".per"] = usd(c["per"])
-        v[pid + ".was"] = usd(c["was"]) if c["was"] else ""
-        v[pid + ".bill"] = c["bill"]
+    for p, c in cards:
+        v[p["id"] + ".per"] = usd(c["per"])
+        v[p["id"] + ".was"] = usd(c["was"]) if c["was"] else ""
+        v[p["id"] + ".bill"] = c["bill"]
+        v[p["id"] + ".save"] = c["save"]
+        v[p["id"] + ".url"] = c["url"] if live(data) else ""
     return v
 
 
 def view(data, team_cost):
     save = max([0] + [1 - p["year"]["price"] / (p["month"]["price"] * 12) for p in data["plans"]])
-    return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100),
+    return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100), "live": live(data),
             "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost)}
 
 
@@ -99,8 +112,97 @@ def team_cost(template):
     return sum(costs)
 
 
-CHECK = '<li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>%s</span></li>'
-ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>'
+# ---------- markup ----------
+CHECK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg>'
+DASH = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg>'
+ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8h9M8.5 4l4 4-4 4"/></svg>'
+MARK = '<svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>'
+
+
+def logos(row):
+    out = []
+    for name in row.get("logos") or []:
+        f = LOGOS.get(name)
+        if f:
+            out.append('<img class="lg%s" src="%s" alt="" width="16" height="16" loading="lazy">' % (" g" if f[1] == "g" else "", f[0]))
+    return "".join(out)
+
+
+def cell(v):
+    """(class, inner html) for one plan's value in a comparison row"""
+    if v is True:
+        return "", CHECK
+    if v is False or v is None:
+        return " n", DASH
+    if isinstance(v, str) and v.lower() == "coming soon":
+        return " s", '<span class="pd-soon">Coming soon</span>'
+    return " big", "<span>%s</span>" % H.escape(str(v))
+
+
+def head(p, c, vw):
+    pid = H.escape(p["id"])
+    tag = ('<span class="pd-tag" data-beam-auto="sm" data-beam-boost="1.6" data-beam-radius="13"><span class="tx">%s</span></span>' % H.escape(p["tag"])) if p.get("tag") else ""
+    if vw["live"] and c["url"]:
+        btn = '<a class="pd-btn%s" href="%s" data-pv-href="%s.url">Try %s free %s</a>' % (" go" if p.get("best") else "", H.escape(c["url"]), pid, H.escape(p["name"]), ARROW)
+    else:
+        btn = '<span class="pd-btn soon" aria-disabled="true">Coming soon</span>'
+    clip = "assets/audio/kayla-why-%s.mp3" % pid
+    kayla = ('<button type="button" class="pd-k" data-clip="%s" hidden aria-label="Kayla: why %s?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy">'
+             '<span class="t"><b>Why %s?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span>'
+             '<span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button>'
+             % (clip, H.escape(p["name"]), H.escape(p["name"])))
+    return ('<div class="pd-nm"><span class="nmx">%s%s</span>%s</div>'
+            '<p class="pd-pr"><span class="was pd-num" data-pv="%s.was">%s</span><span class="pd-num" data-pv="%s.per">%s</span><small>/ month</small></p>'
+            '<p class="pd-billed"><span class="pd-num" data-pv="%s.bill">%s</span><span class="pd-save pd-num" data-pv="%s.save">%s</span></p>'
+            '%s%s') % (MARK, H.escape(p["name"]), tag, pid, usd(c["was"]) if c["was"] else "", pid, usd(c["per"]), pid, H.escape(c["bill"]), pid, H.escape(c["save"]), kayla, btn)
+
+
+def plans_html(data, vw):
+    plans, rows = data["plans"], data.get("rows") or []
+    period = vw["default"]
+    n = len(plans)
+    best = [i for i, p in enumerate(plans) if p.get("best")]
+    # desktop: one panel, rows read straight across; the best plan is one dark beamed column from its price to its last row
+    g = ['<div class="pd-panel pd-glass" style="--n:%d; --rows:%d">' % (n, len(rows))]
+    if best:
+        g.append('<div class="pd-pro" style="grid-column:%d; grid-row:1 / %d"><span class="pd-pbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span></div>' % (best[0] + 2, len(rows) + 2))
+    g.append('<div class="pd-h lead" style="grid-column:1; grid-row:1"><span class="pd-brand"><svg aria-hidden="true"><use href="#studio-mark"/></svg>Studio</span>'
+             '<span class="pd-mono">Same rows, read across</span><p>Every plan does the work. <span>Pick by how many brands you run.</span></p></div>')
+    for i, p in enumerate(plans):
+        g.append('<div class="pd-h" style="grid-column:%d; grid-row:1">%s</div>' % (i + 2, head(p, card(p, period), vw)))
+    for r, row in enumerate(rows):
+        z = " z" if r % 2 == 0 else ""
+        g.append('<div class="pd-c lab%s%s" style="grid-column:1; grid-row:%d"><span>%s</span>%s</div>' % (z, " first" if z else "", r + 2, H.escape(row["label"]), logos(row)))
+        for i, p in enumerate(plans):
+            cls, inner = cell(row["values"][p["id"]])
+            g.append('<div class="pd-c%s%s%s" style="grid-column:%d; grid-row:%d">%s</div>' % (cls, z, " last" if z and i == n - 1 else "", i + 2, r + 2, inner))
+    g.append("</div>")
+    # narrow screens: a card per plan, every row in the same place on every card
+    c = ['<div class="pd-cards">']
+    for p in plans:
+        b = bool(p.get("best"))
+        c.append('<article class="pd-card pd-glass%s">' % (" best" if b else ""))
+        if b:
+            c.append('<span class="pd-pbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>')
+        c.append('<div class="pd-ch">%s</div><ul class="pd-clist">' % head(p, card(p, period), vw))
+        for row in rows:
+            cls, inner = cell(row["values"][p["id"]])
+            if cls == " big":
+                c.append('<li class="pd-cr big">%s</li>' % inner)
+            else:
+                label = '<span>%s</span>%s' % (H.escape(row["label"]), logos(row))
+                c.append('<li class="pd-cr%s">%s%s</li>' % (cls, inner if cls != " s" else "", label + (inner if cls == " s" else "")))
+        c.append("</ul></article>")
+    c.append("</div>")
+    return "".join(g) + "".join(c)
+
+
+def trial_html(data):
+    d = data.get("trial_days")
+    if not isinstance(d, int) or d <= 0:
+        return ""
+    return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything, free. Card required. You won\'t be charged for %d days. '
+            'On a smaller plan, extra brands are locked, never deleted.</p>' % (d, d))
 
 
 def render(template):
@@ -108,29 +210,8 @@ def render(template):
     tc = team_cost(template)
     vw = view(data, tc)
     cur = vw[vw["default"]]
-    m = re.search(r"<!--plan-->(.*?)<!--/plan-->", template, re.S)
-    if not m:
-        raise PricingError("160-pricing: no <!--plan--> block")
-    blocks = []
-    for i, p in enumerate(data["plans"]):
-        c = card(p, vw["default"])
-        best = bool(p.get("best"))
-        if c["url"]:
-            btn = '<a class="pr-btn go%s" href="%s"%s>Choose %s %s</a>' % (" sand" if best else "", H.escape(c["url"]), ' data-beam-auto="sm"' if best else "", H.escape(p["name"]), ARROW)
-        else:
-            btn = '<span class="pr-btn soon" aria-disabled="true">Opening soon</span>'
-        fill = {
-            "id": H.escape(p["id"]), "i": str(i), "name": H.escape(p["name"]), "note": H.escape(p.get("note", "")),
-            "cls": " best" if best else "",
-            "beam": '<span class="pr-beam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' if best else "",
-            "tag": '<span class="pr-tag on">%s</span>' % H.escape(p["tag"]) if p.get("tag") else "",
-            "per": cur[p["id"] + ".per"], "was": cur[p["id"] + ".was"], "bill": H.escape(cur[p["id"] + ".bill"]),
-            "features": "".join(CHECK % H.escape(f) for f in p.get("features", [])), "button": btn,
-        }
-        blocks.append(re.sub(r"\{\{pr:([\w.]+)\}\}", lambda k: fill[k.group(1)], m.group(1)))
-    out = template[: m.start()] + "".join(blocks) + template[m.end():]
-    out = out.replace("{{pr:save}}", str(vw["save"]))
-    out = out.replace("{{pr:period}}", vw["default"])
+    out = template.replace("{{pr:plans}}", plans_html(data, vw)).replace("{{pr:trial}}", trial_html(data))
+    out = out.replace("{{pr:save}}", str(vw["save"])).replace("{{pr:period}}", vw["default"])
     out = re.sub(r"\{\{pr:([\w.]+)\}\}", lambda k: H.escape(cur[k.group(1)]), out)
     return out, vw
 
