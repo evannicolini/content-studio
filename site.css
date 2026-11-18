@@ -387,7 +387,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 #hero .sa img, #hero .sa svg { display: block; }
 #hero .sa .ic { fill: none; stroke: currentColor; stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; }
 #hero .sa-mono { font: 500 10.5px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace; text-transform: uppercase; }
-#hero .sa-side { position: absolute; left: 16px; top: 16px; bottom: 16px; width: 244px; border-radius: 28px; padding: 16px 12px 12px; display: flex; flex-direction: column; overflow: hidden; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--vrim); }
+#hero .sa-side { position: absolute; left: 16px; top: 16px; bottom: 16px; width: 244px; border-radius: 28px; padding: 16px 12px 12px; display: flex; flex-direction: column; overflow: hidden; background: linear-gradient(var(--glass), var(--glass)), var(--gb-img, none) var(--gb-pos, 50% 50%) / var(--gb-size, cover) no-repeat, rgba(18, 30, 46, .55); box-shadow: var(--vrim); }
 #hero .sa-brand { display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 8px; margin-bottom: 6px; flex: none; }
 #hero .sa-brand > svg:first-child { width: 30px; height: 30px; overflow: visible; flex: none; }
 #hero .sa-brand span { font: 600 20px/1 'Hanken Grotesk', sans-serif; letter-spacing: -.02em; }
@@ -410,7 +410,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 #hero .sa-ask svg { width: 22px; height: 22px; flex: none; }
 #hero .sa-ask kbd { margin-left: auto; font: 500 10px/1 'IBM Plex Mono', ui-monospace, Menlo, monospace; color: var(--sand3); }
 #hero .sa-set { margin-top: 6px; }
-#hero .sa-home { position: absolute; top: 16px; left: 276px; right: 16px; bottom: 16px; border-radius: 28px; box-shadow: var(--vrim); color: #FFFBF4; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+#hero .sa-home { position: absolute; top: 16px; left: 276px; right: 16px; bottom: 16px; border-radius: 28px; box-shadow: var(--vrim); color: #FFFBF4; background: linear-gradient(var(--glass), var(--glass)), var(--gb-img, none) var(--gb-pos, 50% 50%) / var(--gb-size, cover) no-repeat, rgba(18, 30, 46, .55); }
 #hero .sa-coord { position: absolute; top: 22px; right: 30px; display: flex; gap: 14px; letter-spacing: .2em; white-space: nowrap; }
 #hero .sa-coord .sa-dim { opacity: .55; }
 #hero .sa-hbtns { position: absolute; top: 48px; right: 22px; display: flex; gap: 8px; align-items: center; }
@@ -555,7 +555,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 #hero .ed-tc span { display: block; font-size: 10px; color: var(--sand3); }
 #hero .ed-pin { position: absolute; left: 58%; top: 64%; z-index: 2; width: 26px; height: 26px; border-radius: 50% 50% 50% 4px; display: grid; place-items: center; font: 600 12px/1 'Hanken Grotesk', sans-serif; color: #0d1117; background: #BFE3FF; transform: scale(0) rotate(-12deg); transform-origin: 0 100%; transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
 #hero .sa.s2 .ed-pin { transform: none; transition-delay: .2s; }
-#hero .ed-bubble { position: absolute; left: 8%; right: 8%; bottom: 7%; z-index: 2; padding: 10px 12px; border-radius: 13px; font-size: 13px; line-height: 1.3; background: rgba(10, 14, 20, .7); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09); opacity: 0; transform: translateY(8px); transition: opacity .5s var(--e), transform .6s var(--e); }
+#hero .ed-bubble { position: absolute; left: 8%; right: 8%; bottom: 7%; z-index: 2; padding: 10px 12px; border-radius: 13px; font-size: 13px; line-height: 1.3; background: rgba(10, 14, 20, .86); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .09); opacity: 0; transform: translateY(8px); transition: opacity .5s var(--e), transform .6s var(--e); }
 #hero .sa.s2 .ed-bubble { opacity: 1; transform: none; transition-delay: .55s; }
 #hero .ed-cmt { display: flex; flex-direction: column; height: 100%; }
 #hero .ed-tabs { display: flex; gap: 2px; }
@@ -684,6 +684,13 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
   @keyframes hx-rise-m { 0% { transform: translate3d(0, 620px, 0) rotateX(0deg); animation-timing-function: cubic-bezier(.16, .84, .3, 1); } 58% { transform: translate3d(0, 0, 0) rotateX(0deg); animation-timing-function: cubic-bezier(.45, 0, .25, 1); } 100% { transform: translate3d(0, 0, 0) rotateX(var(--tilt)); } }
 }
 @media (max-width: 860px) { #hero { --hx-top: calc(64px - 64 * var(--hx-u)); } }
+
+/* Safari: backdrop-filter inside a 3D-tilted, scaled layer (the app leaning back) is unreliable there: panels flicker between
+   blurred and see-through as the compositor re-tiles. The app's glass therefore does not sample the page at all. Each panel paints
+   a pre-blurred copy of the same sky (assets/hero/sky-blur.jpg: blur, saturate 145%, contrast 1.06 baked in, as --blur did), sized
+   and placed by section.js (syncGlass) so it lines up with the sky behind it. Same look in every browser, nothing to flicker. */
+#hero { --gb-img: url("assets/hero/sky-blur.jpg"); }
+@media (max-width: 700px) and (max-aspect-ratio: 3/4) { #hero { --gb-img: url("assets/hero/sky-m-blur.jpg"); } }
 
 
 /* ===== 020-phone ===== */

@@ -14,6 +14,10 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Hero intro (src/sections/010-hero): the nav is part of the hero's opening, so it starts hidden and arrives with the button and
+     the composer. The classes go on here, before any stylesheet, so the nav is never painted first; the hero's section.js takes
+     them off again (after 7 s they come off by themselves if that script never runs). Not with reduced motion. -->
+<script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">

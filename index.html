@@ -14,12 +14,16 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<!-- Hero intro (src/sections/010-hero): the nav is part of the hero's opening, so it starts hidden and arrives with the button and
+     the composer. The classes go on here, before any stylesheet, so the nav is never painted first; the hero's section.js takes
+     them off again (after 7 s they come off by themselves if that script never runs). Not with reduced motion. -->
+<script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=0db1f94a">
+<link rel="stylesheet" href="site.css?v=fbf18839">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -65,9 +69,9 @@
 <!-- 010-hero -->
 <section class="hx" id="hero" aria-labelledby="h-hero">
 <!-- The approved "Hero A · App leans back": a 1440 artboard (390 on phones) that scales as one piece (--k, see section.css).
-     This script puts the opening state on before the first paint. Without JavaScript, or with reduced motion, the hero is
-     simply shown settled. If site.js never arrives, the nav and the words come back by themselves. -->
-<script>(function (d) { var h = d.currentScript.parentNode, r = d.documentElement; if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; h.className = "hx pre w0"; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { h.className = "hx"; r.classList.remove("hx-pre", "hx-intro"); }, 7000); })(document);</script>
+     The opening state goes on here, before any of the hero is painted (shell.html has already hidden the nav the same way).
+     Without JavaScript, or with reduced motion, the hero is simply shown settled. -->
+<script>(function (d) { if (d.documentElement.classList.contains("hx-pre")) d.currentScript.parentNode.className = "hx pre w0"; })(document);</script>
 <svg class="hx-defs" width="0" height="0" aria-hidden="true" focusable="false">
 <symbol id="hx-mark" viewBox="36 36 440 440"><path fill="url(#mk-l)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/><path fill="url(#mk-r)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/><path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/></symbol>
 <symbol id="hx-meta" viewBox="0 0 22 13"><path d="M6 1.8C3.4 1.8 1.6 4.1 1.6 6.7s1.5 4.5 3.4 4.5c3.3 0 5.4-9.4 11-9.4 2.4 0 4.4 2.2 4.4 4.9s-1.6 4.5-3.6 4.5C13.4 11.2 11.2 1.8 6 1.8Z"/></symbol>
@@ -1544,6 +1548,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=0db1f94a"></script>
+<script src="site.js?v=fbf18839"></script>
 </body>
 </html>

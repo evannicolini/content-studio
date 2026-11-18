@@ -2022,7 +2022,32 @@ function loop(i) {
   }, CHAR_MS);
 }
 
-if (SK.reduced) { clearTimeout(window.__hxSafe); hero.className = "hx"; html.classList.remove("hx-pre", "hx-intro"); return; }
+function settled() { clearTimeout(window.__hxSafe); hero.classList.remove("pre", "w0"); html.classList.remove("hx-pre", "hx-intro"); }
+/* ---------- the app's glass: line each panel's pre-blurred sky up with the sky behind it (see section.css, "Safari") ----------
+   The sky is object-fit: cover at 50% 32% and slowly pushes in, the panels are scaled and tilted, so this is measured, not fixed:
+   on every frame of the intro, then once a second while in view (a few rects, no layout writes besides two custom properties). */
+var glassPanels = [].slice.call(hero.querySelectorAll(".sa-side, .sa-home")), IW = 2560, IH = 1429;
+function syncGlass() {
+  var r = sky.getBoundingClientRect();
+  if (!r.width) return;
+  var m = sky.currentSrc && /sky-m\.jpg/.test(sky.currentSrc), iw = m ? 1072 : IW, ih = IH;
+  var sc = Math.max(r.width / iw, r.height / ih), w = iw * sc, h = ih * sc, x = r.left + (r.width - w) * 0.5, y = r.top + (r.height - h) * 0.32;
+  glassPanels.forEach(function (p) {
+    var q = p.getBoundingClientRect();
+    if (!p.offsetWidth || !q.width) return;
+    var ex = q.width / p.offsetWidth, ey = q.height / p.offsetHeight;
+    p.style.setProperty("--gb-size", (w / ex).toFixed(1) + "px " + (h / ey).toFixed(1) + "px");
+    p.style.setProperty("--gb-pos", ((x - q.left) / ex).toFixed(1) + "px " + ((y - q.top) / ey).toFixed(1) + "px");
+  });
+}
+var glassT = 0;
+function glassFor(ms) { var end = performance.now() + ms; (function f() { syncGlass(); if (performance.now() < end) requestAnimationFrame(f); })(); }
+SK.onView(hero, function () { syncGlass(); clearInterval(glassT); glassT = setInterval(syncGlass, 1000); }, function () { clearInterval(glassT); });
+window.addEventListener("resize", function () { requestAnimationFrame(syncGlass); });
+window.addEventListener("load", function () { glassFor(5200); });
+glassFor(5200);
+
+if (SK.reduced) { settled(); return; }
 
 /* in view: the loop runs. Out of view: timers stop, CSS animations pause (.off), and it picks up at the next prompt on return. */
 SK.onView(hero, function () {
@@ -2034,6 +2059,7 @@ SK.onView(hero, function () {
   hero.classList.add("off");
   if (started) { halt(); compose("", ""); }
 });
+function begin() { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); }
 
 /* ---------- the intro, once ---------- */
 function intro() {
@@ -2043,11 +2069,13 @@ function intro() {
     fit();
     setTimeout(function () { hero.classList.remove("w0"); }, 120);
     setTimeout(function () { hero.classList.remove("pre"); hero.classList.add("go"); html.classList.remove("hx-pre"); }, 1500);
-    setTimeout(function () { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); }, 3300);
+    setTimeout(begin, 3300);
   });
 }
-if (!hero.classList.contains("pre")) { hero.className = "hx pre w0"; html.classList.add("hx-pre", "hx-intro"); }
-if (document.visibilityState === "hidden") document.addEventListener("visibilitychange", function once() { if (document.visibilityState !== "visible") return; document.removeEventListener("visibilitychange", once); intro(); });
+/* the opening state was put on before the first paint (shell.html, section.html). If it is not there (the 7 s safety net already
+   showed the hero because this script was slow to arrive), there is no intro to play: just start the prompts. */
+if (!hero.classList.contains("pre")) { settled(); setTimeout(begin, 900); }
+else if (document.visibilityState === "hidden") document.addEventListener("visibilitychange", function once() { if (document.visibilityState !== "visible") return; document.removeEventListener("visibilitychange", once); intro(); });
 else intro();
 
 } catch (e) { console.error("section 010-hero", e); }
