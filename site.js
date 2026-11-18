@@ -16,6 +16,7 @@ window.SK_PRICES = {"default":"year","save":20,"year":{"from":"from $79","bar":"
      [data-reveal] (+ style="--i:2")                                                    fades up once in view
      [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
      [data-download]                                                                    scrolls to pricing and focuses the invite code
+     [data-vo-play="kayla-pricing"]                                                     on click, plays that section's Kayla clip from the top
      [data-film="slug"]                                                                 opens that film from the manifest on click */
 (function () {
   "use strict";
@@ -339,7 +340,7 @@ window.SK_PRICES = {"default":"year","save":20,"year":{"from":"from $79","bar":"
       var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
       var onGesture = function (e) {
         if (started) return off();
-        if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm")) { started = true; return off(); }
+        if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play]")) { started = true; return off(); }
         if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
         tryPlay();
       };
@@ -359,6 +360,19 @@ window.SK_PRICES = {"default":"year","save":20,"year":{"from":"from $79","bar":"
       /* on paper the beam has to be drawn much stronger to read: the colour run, on the light preset, with its stroke and bloom set by hand */
       SK.beam(box.querySelector(".vo-pill"), paper ? { size: "sm", variant: "mirra", theme: "light", stroke: 1, inner: 0.34, bloom: 0.75, width: 1.5, radius: 50 } : { size: "sm", variant: "mirra", boost: 2, radius: 50 });
       va.addEventListener("play", function () { document.documentElement.classList.add("vo-heard"); try { sessionStorage.setItem("vo-heard", "1"); } catch (e) {} });
+      box._audio = va;
+    });
+    /* a link with data-vo-play="<clip name>" starts that section's clip from the top as it scrolls there (the Pricing links).
+       It plays inside the click so Safari and iOS count it as the visitor's gesture, even with reduced motion; a clip already
+       playing is left alone. Everything after is the clip's own play: wave, time, vo-heard, and Kayla's intro stays quiet. */
+    document.querySelectorAll("[data-vo-play]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var box = document.querySelector('.vo[data-src*="' + link.getAttribute("data-vo-play") + '"]'), va = box && box._audio;
+        if (!va || !va.paused) return;
+        SK.kayla && SK.kayla.pause();
+        try { va.currentTime = 0; } catch (e) {}
+        var p = va.play(); p && p.catch(function () {});
+      });
     });
   }
 
