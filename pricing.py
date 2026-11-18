@@ -134,8 +134,8 @@ def cell(v):
         return "", CHECK
     if v is False or v is None:
         return " n", DASH
-    if isinstance(v, str) and v.lower() == "coming soon":
-        return " s", '<span class="pd-soon">Coming soon</span>'
+    if isinstance(v, str) and v.lower() in ("coming soon", "soon"):
+        return " s", '<span class="pd-soon">Soon</span>'
     return " big", "<span>%s</span>" % H.escape(str(v))
 
 
