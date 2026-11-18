@@ -322,14 +322,38 @@
   var PLAY = '<svg class="pl" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z"/></svg>';
   function kayla() {
     var kp = document.querySelector(".kp");
-    if (kp) { var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46); SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } }; }
+    var heard = false;
+    try { heard = sessionStorage.getItem("vo-heard") === "1"; } catch (e) {}
+    if (heard) document.documentElement.classList.add("vo-heard");
+    if (kp) {
+      var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46);
+      SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } };
+      /* Kayla starts by herself, from the beginning. Browsers only allow sound without a gesture on some visits, so when the
+         first try is refused she starts on the reader's first click, tap or key press anywhere (unless they chose a clip themselves). */
+      a.preload = "auto";
+      SK.beam(kp.querySelector(".kp-pill"), { size: "sm", variant: "mirra", boost: 2, radius: 22 });
+      var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
+      var onGesture = function (e) {
+        if (started) return off();
+        if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm")) { started = true; return off(); }
+        if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
+        tryPlay();
+      };
+      var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
+      a.addEventListener("play", function () { started = true; off(); });
+      EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
+      if (!SK.reduced) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay));
+    }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
       box.setAttribute("role", "group"); box.setAttribute("aria-label", box.getAttribute("data-label") || "Kayla explains");
-      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="Kayla" width="88" height="88" loading="lazy"></span>' +
+      box.innerHTML = '<span class="vo-pill"><span class="vo-face"><img src="assets/kayla.jpg" alt="Kayla" width="88" height="88" loading="lazy"></span>' +
         '<button class="vo-play" data-play aria-label="Play">' + PLAY + '</button>' +
-        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span>';
-      player(box, box.getAttribute("data-src"), 34);
+        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span>' +
+        '<span class="vo-nudge" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.2 2.6v6.8L9.4 6z"/></svg>Tap to listen</span>';
+      var va = player(box, box.getAttribute("data-src"), 34), paper = !!box.closest(".on-paper");
+      SK.beam(box.querySelector(".vo-pill"), { size: "sm", variant: paper ? "mono" : "mirra", theme: paper && BS.sizeThemePresets.sm.light ? "light" : "dark", boost: paper ? 1.4 : 2, radius: 50 });
+      va.addEventListener("play", function () { document.documentElement.classList.add("vo-heard"); try { sessionStorage.setItem("vo-heard", "1"); } catch (e) {} });
     });
   }
 
@@ -417,7 +441,11 @@
     });
     var nav = document.querySelector(".nav");
     var kpEl = document.querySelector(".kp");
-    if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7); }; on(); window.addEventListener("scroll", on, { passive: true }); }
+    if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7);
+      if (kpEl) { var pr = kpEl.getBoundingClientRect(), stack = document.elementsFromPoint ? document.elementsFromPoint(window.innerWidth / 2, Math.min(window.innerHeight - 2, pr.bottom - 30)) : [], hit = null;
+        for (var hi = 0; hi < stack.length; hi++) { if (!kpEl.contains(stack[hi])) { hit = stack[hi]; break; } }
+        var sec = hit && hit.closest ? hit.closest("section, footer") : null, fr = hit && hit.closest ? hit.closest(".frame") : null;
+        kpEl.classList.toggle("light", !!(sec && sec.classList.contains("on-paper") && !(fr && fr !== sec))); } }; on(); window.addEventListener("scroll", on, { passive: true }); }
     /* the nav slides away while scrolling down and returns only on a deliberate scroll up: the upward travel has to add up to
        14% of the screen (at least 110px) with no downward movement in between. Always shown near the top. */
     if (nav) (function () {
