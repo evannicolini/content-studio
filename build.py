@@ -9,11 +9,14 @@ Layout
     src/base.css, src/kit.js    the shared look and the shared behaviour (window.SK)
     src/sections/NN-name/       section.html (required), section.css, section.js (each optional)
     assets/media/manifest.json  inlined as window.SK_MEDIA so sections can read what media exists
+    pricing.py                  Studio's prices, from the app's published pricing.json; the build fails if the site could differ
 
 Each section.js is wrapped in its own function and only runs if its <section> is on the page.
 Nothing here needs a package: plain Python 3.
 """
 import hashlib, http.server, json, os, re, sys
+
+import pricing
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
@@ -42,11 +45,17 @@ def build():
     except ValueError:
         pass
     js.append("window.SK_MEDIA = %s;" % manifest)
+    prices_at = len(js)
     js.append(read(SRC, "kit.js"))
     for n in names:
         h = read(secdir, n, "section.html").strip()
         if not h:
             continue
+        if "{{pr:" in h:  # Studio's prices: from the app's published pricing.json, checked (pricing.py)
+            t = h
+            h, vw = pricing.render(t)
+            pricing.check(t, read(secdir, n, "section.js"), h, vw)
+            js.insert(prices_at, "window.SK_PRICES = %s;" % json.dumps(vw, separators=(",", ":"), ensure_ascii=False))
         html.append("<!-- %s -->\n%s" % (n, h))
         c = read(secdir, n, "section.css")
         if c.strip():

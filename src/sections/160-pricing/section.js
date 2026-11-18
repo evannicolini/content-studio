@@ -69,3 +69,25 @@ if (anchor) {
     setTimeout(function () { anchor.classList.add("done"); }, 250 + rows.length * 620 + 1300);
   }, null, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
 }
+
+/* ---------- Monthly | Yearly: every price in the section follows the switch. The text for both periods comes from the
+   app's pricing.json, worked out at build time (pricing.py); nothing is calculated here. ---------- */
+var PR = window.SK_PRICES, swapT = 0;
+function setPeriod(p) {
+  if (!PR || !PR[p] || root.getAttribute("data-period") === p) return;
+  var v = PR[p];
+  root.setAttribute("data-period", p);
+  root.querySelectorAll(".pr-period [data-period]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-period") === p)); });
+  clearTimeout(swapT);
+  if (!SK.reduced) root.classList.add("swap");
+  swapT = setTimeout(function () {
+    root.querySelectorAll("[data-pv]").forEach(function (el) { var k = el.getAttribute("data-pv"); if (k in v) el.textContent = v[k]; });
+    var bar = root.querySelector("[data-pv-bar]");
+    if (bar) bar.style.setProperty("--bar", v.bar);
+    root.classList.remove("swap");
+  }, SK.reduced ? 0 : 180);
+}
+root.querySelectorAll(".pr-period [data-period]").forEach(function (b) {
+  b.setAttribute("aria-pressed", String(b.getAttribute("data-period") === root.getAttribute("data-period")));
+  b.addEventListener("click", function () { setPeriod(b.getAttribute("data-period")); });
+});
