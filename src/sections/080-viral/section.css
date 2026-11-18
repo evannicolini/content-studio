@@ -115,6 +115,7 @@
 /* ---------- the library: the app's Viral Lab tab (Studio_App web/product/viral.css: cards, chips, the open video) ---------- */
 .vlb-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: clamp(20px, 4vw, 64px); margin-top: clamp(64px, 8vw, 120px); margin-bottom: clamp(26px, 3.2vw, 44px); }
 .vlb-head .lede { justify-self: end; max-width: 27em; }
+.vlb-head-l { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; min-width: 0; }
 
 .vlb { --on: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 5px -2px rgba(196, 214, 238, .62), inset -2px -2px 5px -2px rgba(242, 226, 220, .62);
   width: calc(100% - 2 * var(--frame-m)); max-width: 1520px; margin-inline: auto; color: var(--sand); color-scheme: dark; }
@@ -274,6 +275,7 @@
 @media (max-width: 900px) {
   .vlb-head { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 14px; }
   .vlb-head .lede { justify-self: center; }
+  .vlb-head-l { align-items: center; }
   .vlb-body { grid-template-columns: minmax(0, 1fr); }
   .vlb-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .vlb-tile:nth-child(n + 7) { display: none; }

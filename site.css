@@ -137,7 +137,7 @@ input { font: inherit; color: inherit; }
    kit geometry: 54 high, radius 16, padding 0 8 0 15, gap 11, orb 20, Switzer 14.5/400, trailing 38 with an 18px glyph at .6,
    caret 2x18 #0A84FF, bevel = two inset hairlines at .5, dark glass with a real backdrop blur, md border beam around the edge */
 .pf { --k: 1.3; position: relative; width: 100%; border-radius: calc(16px * var(--k)); }
-.pf-field { position: relative; display: flex; align-items: center; gap: calc(11px * var(--k)); width: 100%; height: calc(54px * var(--k)); padding: 0 calc(8px * var(--k)) 0 calc(15px * var(--k)); border-radius: calc(16px * var(--k)); overflow: hidden; background-color: var(--pf-fill, rgba(5, 7, 11, .62)); -webkit-backdrop-filter: blur(24px) saturate(130%); backdrop-filter: blur(24px) saturate(130%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); transition: background-color .24s var(--ease-io); }
+.pf-field { position: relative; display: flex; align-items: center; gap: calc(11px * var(--k)); width: 100%; height: calc(54px * var(--k)); padding: 0 calc(8px * var(--k)) 0 calc(15px * var(--k)); border-radius: calc(16px * var(--k)); overflow: hidden; background-color: var(--pf-fill, rgba(14, 20, 28, .34)); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); transition: background-color .24s var(--ease-io); }
 .pf[data-state="focus"] .pf-field { background-image: linear-gradient(rgba(255, 255, 255, .05), rgba(255, 255, 255, .05)); }
 .pf-orb { display: block; flex: none; width: calc(20px * var(--k)); height: calc(20px * var(--k)); }
 .pf-input { position: relative; flex: 1; min-width: 0; height: calc(34px * var(--k)); overflow: hidden; display: flex; align-items: center; font: 400 calc(14.5px * var(--k))/1 Switzer, var(--sans); letter-spacing: 0; color: #fff; white-space: pre; text-align: left; }
@@ -211,26 +211,26 @@ input { font: inherit; color: inherit; }
 }
 
 /* ---------- an inline Kayla clip: <div class="vo" data-src="assets/audio/x.mp3" data-label="Kayla on …"></div> ---------- */
-/* A voice message from Kayla, as it would arrive in a chat: her face, her name, and a glass pill with play, the waveform and the length. */
-.vo { display: inline-flex; align-items: flex-end; gap: 10px; max-width: 100%; color: var(--sand); text-align: left; vertical-align: top; }
-.vo-face { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; flex: none; background: #2a313b; margin-bottom: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .22); }
-.vo-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
-.vo-mid { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.vo-label { padding-left: 16px; font: 500 12px/1 var(--sans); letter-spacing: -.005em; color: var(--sand-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-.vo-bub { display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 18px 0 7px; border-radius: 50px; background: rgba(255, 255, 255, .13); -webkit-backdrop-filter: blur(26px) saturate(160%); backdrop-filter: blur(26px) saturate(160%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), inset 0 1px 0 rgba(255, 255, 255, .22); transition: background-color .3s var(--ease); }
-.vo:hover .vo-bub, .vo.playing .vo-bub { background: rgba(255, 255, 255, .18); }
-.vo-wave { display: flex; align-items: center; gap: 2px; width: clamp(120px, 15vw, 190px); height: 22px; cursor: pointer; }
-.vo-wave i, .kp-wave i { flex: 1; min-width: 1px; border-radius: 1px; background: rgba(255, 255, 255, .34); transition: background-color .15s; }
-.vo-wave i.on, .kp-wave i.on { background: #fff; }
-.vo-time { font: 500 11px/1 var(--mono); letter-spacing: .06em; color: var(--sand-2); min-width: 30px; text-align: right; }
-.vo-play { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #0b0e13; flex: none; transition: transform .2s var(--ease); }
+/* A voice message from Kayla: one glass pill, lit like a selected tab in the app (bright rim, soft inner glow), with her face, play, the waveform and the length inside it. */
+.vo { display: inline-flex; align-items: center; gap: 10px; height: 56px; max-width: 100%; padding: 0 18px 0 7px; border-radius: 50px; color: var(--sand); text-align: left; vertical-align: top;
+  background: rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%);
+  box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 6px -2px rgba(196, 214, 238, .62), inset -2px -2px 6px -2px rgba(242, 226, 220, .62);
+  transition: background-color .3s var(--ease); }
+.vo:hover, .vo.playing { background: rgba(255, 255, 255, .16); }
+.vo-face { position: relative; width: 42px; height: 42px; border-radius: 50%; flex: none; background: #2a313b; box-shadow: 0 0 0 1px rgba(255, 255, 255, .3); }
+.vo-face img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
+.vo-play { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; background: #fff; color: #0b0e13; transition: transform .2s var(--ease); }
 .vo-play:active { transform: scale(.94); }
-.vo-play svg { width: 14px; height: 14px; fill: currentColor; }
+.vo-play svg { width: 13px; height: 13px; fill: currentColor; }
 .vo-play .pl { margin-left: 2px; }
-.on-paper .vo { color: var(--ink); }
-.on-paper .vo-label, .on-paper .vo-time { color: rgba(21, 23, 27, .6); }
-.on-paper .vo-bub { background: rgba(21, 23, 27, .06); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .1); }
-.on-paper .vo:hover .vo-bub, .on-paper .vo.playing .vo-bub { background: rgba(21, 23, 27, .09); }
+.vo-play .pa { display: none; } .vo.playing .vo-play .pl { display: none; } .vo.playing .vo-play .pa { display: block; }
+.vo-wave { display: flex; align-items: center; gap: 2px; width: clamp(120px, 14vw, 184px); height: 24px; margin-left: 2px; cursor: pointer; }
+.vo-wave i, .kp-wave i { flex: 1; min-width: 1px; border-radius: 1px; background: rgba(255, 255, 255, .4); transition: background-color .15s; }
+.vo-wave i.on, .kp-wave i.on { background: #fff; }
+.vo-time { position: relative; font: 500 11px/1 var(--mono); letter-spacing: .06em; color: rgba(255, 255, 255, .82); min-width: 30px; text-align: right; pointer-events: none; }
+.on-paper .vo { color: var(--ink); background: rgba(21, 23, 27, .05); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .1), inset 0 1px 0 rgba(255, 255, 255, .7), 0 1px 2px rgba(21, 23, 27, .05); }
+.on-paper .vo:hover, .on-paper .vo.playing { background: rgba(21, 23, 27, .08); }
+.on-paper .vo-time { color: rgba(21, 23, 27, .62); }
 .on-paper .vo-wave i { background: rgba(21, 23, 27, .26); }
 .on-paper .vo-wave i.on { background: #15171b; }
 .on-paper .vo-play { background: #15171b; color: #fff; }
@@ -997,7 +997,7 @@ button.wk-film .wk-dur { bottom: 19px; }
 .cy-work { --mh: 288px; display: flex; flex-direction: column; gap: 14px; }
 .cy-stage { position: relative; height: calc(var(--mh) + 64px); transition: opacity .5s var(--ease); }
 .cy-work.cy-out .cy-stage { opacity: 0; }
-.cy-r { position: absolute; right: 0; bottom: 0; padding: 8px 8px 12px; border-radius: 22px; background: rgba(9, 13, 19, .56); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); color: #fff; opacity: 0; transform: translate3d(36px, 14px, 0) scale(.94); transform-origin: 100% 100%; transition: transform .95s var(--ease), opacity .55s var(--ease); will-change: transform, opacity; }
+.cy-r { position: absolute; right: 0; bottom: 0; padding: 8px 8px 12px; border-radius: 22px; background: rgba(14, 20, 28, .36); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); color: #fff; opacity: 0; transform: translate3d(36px, 14px, 0) scale(.94); transform-origin: 100% 100%; transition: transform .95s var(--ease), opacity .55s var(--ease); will-change: transform, opacity; }
 .cy-r::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #070a0f; opacity: var(--dim, 0); pointer-events: none; transition: opacity .8s var(--ease); }
 .cy-media { position: relative; height: var(--mh); border-radius: 15px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
 .cy-media > img, .cy-media > video { width: 100%; height: 100%; object-fit: cover; }
@@ -1027,7 +1027,7 @@ button.wk-film .wk-dur { bottom: 19px; }
 @keyframes cy-live { 0% { box-shadow: 0 0 0 0 rgba(236, 233, 226, .55); } 100% { box-shadow: 0 0 0 9px rgba(236, 233, 226, 0); } }
 
 /* ---------- the composer: a real chat composer, two lines tall ---------- */
-.cy-comp { position: relative; padding: 18px 12px 12px 20px; border-radius: 26px; background: rgba(5, 7, 11, .62); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); color: #fff; }
+.cy-comp { position: relative; padding: 18px 12px 12px 20px; border-radius: 26px; background: rgba(14, 20, 28, .34); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); color: #fff; }
 .cy-ask { min-height: 2.64em; padding-right: 8px; font: 400 19px/1.32 var(--sans); letter-spacing: -.012em; }
 .cy-ask.ph .cy-ask-t { color: rgba(255, 255, 255, .42); }
 .cy-caret { display: inline-block; width: 2px; height: 1.08em; margin-left: 2px; border-radius: 1px; vertical-align: -.18em; background: #0a84ff; opacity: 0; }
@@ -1187,6 +1187,18 @@ button.wk-film .wk-dur { bottom: 19px; }
   .lb-deck .lb-pr-t { font-size: 10px; }
 }
 
+/* the whole "Any shot" stage fits one screen on a laptop: the words tighten and the cards take whatever height is left */
+@media (min-width: 761px) {
+  .lb-stage-in { padding-top: clamp(26px, 3.6svh, 52px); padding-bottom: clamp(18px, 2.6svh, 36px); }
+  .lb-stage-head { gap: 10px; margin-bottom: clamp(14px, 2.2svh, 28px); }
+  .lb-stage-head .h-lg { font-size: clamp(34px, 5.6svh, 62px); }
+  .lb-stage-head .vo { margin-top: 4px; }
+  .lb-ask-top { margin-bottom: 16px; }
+  .lb-stage .lb-match { height: 46px; margin-top: 14px; }
+  .lb-stage .lb-match-th i { height: 32px; width: 19px; }
+  .lb-stage .lb-deck { --lb-w: clamp(150px, min(19.5vw, calc((100svh - 590px) * .5625)), 270px); margin-top: 16px; }
+}
+
 
 /* ===== 080-viral ===== */
 /* 080 viral. Prefix vl- for the three-beat graphic (driven by the prompt field), vlb- for the library below it (the app's Viral Lab tab). */
@@ -1306,6 +1318,7 @@ button.wk-film .wk-dur { bottom: 19px; }
 /* ---------- the library: the app's Viral Lab tab (Studio_App web/product/viral.css: cards, chips, the open video) ---------- */
 .vlb-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: clamp(20px, 4vw, 64px); margin-top: clamp(64px, 8vw, 120px); margin-bottom: clamp(26px, 3.2vw, 44px); }
 .vlb-head .lede { justify-self: end; max-width: 27em; }
+.vlb-head-l { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; min-width: 0; }
 
 .vlb { --on: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 5px -2px rgba(196, 214, 238, .62), inset -2px -2px 5px -2px rgba(242, 226, 220, .62);
   width: calc(100% - 2 * var(--frame-m)); max-width: 1520px; margin-inline: auto; color: var(--sand); color-scheme: dark; }
@@ -1465,6 +1478,7 @@ button.wk-film .wk-dur { bottom: 19px; }
 @media (max-width: 900px) {
   .vlb-head { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 14px; }
   .vlb-head .lede { justify-self: center; }
+  .vlb-head-l { align-items: center; }
   .vlb-body { grid-template-columns: minmax(0, 1fr); }
   .vlb-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .vlb-tile:nth-child(n + 7) { display: none; }

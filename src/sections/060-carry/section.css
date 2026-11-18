@@ -24,7 +24,7 @@
 .cy-work { --mh: 288px; display: flex; flex-direction: column; gap: 14px; }
 .cy-stage { position: relative; height: calc(var(--mh) + 64px); transition: opacity .5s var(--ease); }
 .cy-work.cy-out .cy-stage { opacity: 0; }
-.cy-r { position: absolute; right: 0; bottom: 0; padding: 8px 8px 12px; border-radius: 22px; background: rgba(9, 13, 19, .56); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); color: #fff; opacity: 0; transform: translate3d(36px, 14px, 0) scale(.94); transform-origin: 100% 100%; transition: transform .95s var(--ease), opacity .55s var(--ease); will-change: transform, opacity; }
+.cy-r { position: absolute; right: 0; bottom: 0; padding: 8px 8px 12px; border-radius: 22px; background: rgba(14, 20, 28, .36); -webkit-backdrop-filter: blur(26px) saturate(150%); backdrop-filter: blur(26px) saturate(150%); box-shadow: var(--rim); color: #fff; opacity: 0; transform: translate3d(36px, 14px, 0) scale(.94); transform-origin: 100% 100%; transition: transform .95s var(--ease), opacity .55s var(--ease); will-change: transform, opacity; }
 .cy-r::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: #070a0f; opacity: var(--dim, 0); pointer-events: none; transition: opacity .8s var(--ease); }
 .cy-media { position: relative; height: var(--mh); border-radius: 15px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
 .cy-media > img, .cy-media > video { width: 100%; height: 100%; object-fit: cover; }
@@ -54,7 +54,7 @@
 @keyframes cy-live { 0% { box-shadow: 0 0 0 0 rgba(236, 233, 226, .55); } 100% { box-shadow: 0 0 0 9px rgba(236, 233, 226, 0); } }
 
 /* ---------- the composer: a real chat composer, two lines tall ---------- */
-.cy-comp { position: relative; padding: 18px 12px 12px 20px; border-radius: 26px; background: rgba(5, 7, 11, .62); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); color: #fff; }
+.cy-comp { position: relative; padding: 18px 12px 12px 20px; border-radius: 26px; background: rgba(14, 20, 28, .34); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); color: #fff; }
 .cy-ask { min-height: 2.64em; padding-right: 8px; font: 400 19px/1.32 var(--sans); letter-spacing: -.012em; }
 .cy-ask.ph .cy-ask-t { color: rgba(255, 255, 255, .42); }
 .cy-caret { display: inline-block; width: 2px; height: 1.08em; margin-left: 2px; border-radius: 1px; vertical-align: -.18em; background: #0a84ff; opacity: 0; }

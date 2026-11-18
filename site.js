@@ -1752,10 +1752,10 @@ window.SK_MEDIA = {
     if (kp) { var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46); SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } }; }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
+      box.setAttribute("role", "group"); box.setAttribute("aria-label", box.getAttribute("data-label") || "Kayla explains");
       box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="Kayla" width="88" height="88" loading="lazy"></span>' +
-        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-bub"><button class="vo-play" data-play aria-label="Play">' + PLAY + '</button>' +
-        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span></span>';
-      box.querySelector(".vo-label").textContent = box.getAttribute("data-label") || "Listen";
+        '<button class="vo-play" data-play aria-label="Play">' + PLAY + '</button>' +
+        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span>';
       player(box, box.getAttribute("data-src"), 34);
     });
   }
