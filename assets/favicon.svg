@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="p" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c3038"/><stop offset="1" stop-color="#0c0e12"/></linearGradient>
+    <linearGradient id="l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".92"/><stop offset="1" stop-color="#fff" stop-opacity=".62"/></linearGradient>
+    <linearGradient id="r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity=".7"/></linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="114" fill="url(#p)"/>
+  <rect x="1.5" y="1.5" width="509" height="509" rx="112.5" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="3"/>
+  <g transform="translate(256 256) scale(.78) translate(-256.5 -257)">
+    <path fill="url(#l)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#r)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="#fff" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </g>
+</svg>
