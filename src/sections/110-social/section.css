@@ -83,6 +83,12 @@
    Ads tab sizes follow the app (Studio_App web/product/empties.css .ex-kpi / .ex-ad); the app's lime "on" is pearl here. ---------- */
 .sad-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: clamp(20px, 4vw, 64px); margin-top: clamp(72px, 9vw, 136px); margin-bottom: clamp(26px, 3.2vw, 44px); }
 .sad-head .lede { justify-self: end; max-width: 26em; }
+.sad-head-l { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; min-width: 0; }
+.sad-lock { display: inline-flex; align-items: center; gap: 8px; margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .86); }
+.sad-lock b { font-weight: 500; }
+.sad-lock i { font-style: normal; color: rgba(255, 255, 255, .45); margin: 0 2px; }
+.sad-lock .sad-mk { width: 22px; height: 22px; overflow: visible; }
+.sad-lock img { width: 22px; height: 22px; object-fit: contain; }
 
 .sad > .bg { object-position: 50% 38%; }
 .sad > .shade { background: linear-gradient(180deg, rgba(6, 9, 13, .34), rgba(6, 9, 13, .12) 36%, rgba(6, 9, 13, .2) 70%, rgba(6, 9, 13, .44)); }
@@ -213,6 +219,7 @@
 @media (max-width: 980px) {
   .sad-head { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 14px; }
   .sad-head .lede { justify-self: center; }
+  .sad-head-l { align-items: center; }
   /* the week turns into a strip; the preview sits beside the four numbers; the Ads tab's parts each become their own glass */
   .sad-board { --ph: auto; grid-template-columns: minmax(0, 262px) minmax(0, 1fr); grid-template-areas: "week week" "head head" "prev kpis" "camp camp"; gap: 8px; }
   .sad-week { grid-area: week; padding: 12px 8px 8px; border-radius: 20px; }

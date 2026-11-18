@@ -192,7 +192,9 @@ input { font: inherit; color: inherit; }
 .kp.playing .kp-tag, .kp.used .kp-tag { opacity: 0; }
 .kp-pill { display: flex; align-items: center; gap: 12px; height: 62px; padding: 0 9px; border-radius: 22px; background: rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%);
   box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 6px -2px rgba(196, 214, 238, .6), inset -2px -2px 6px -2px rgba(242, 226, 220, .6); transition: background-color .4s var(--ease), box-shadow .4s var(--ease); }
-.kp.light .kp-pill { background: rgba(255, 255, 255, .5); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .1), inset 0 1px 0 rgba(255, 255, 255, .9), 0 1px 3px rgba(21, 23, 27, .06); }
+.kp.light .kp-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .34) 46%, rgba(255, 255, 255, .5));
+  box-shadow: inset 0 1.5px 0 #fff, inset 0 0 0 1px rgba(255, 255, 255, .7), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5), 0 0 0 1px rgba(21, 23, 27, .07), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
+.kp.light .kp-play { background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 0 0 1px rgba(21, 23, 27, .08), 0 3px 8px -3px rgba(21, 23, 27, .3); }
 .kp-face { position: relative; width: 44px; height: 44px; border-radius: 14px; overflow: hidden; flex: none; background: #2a313b; }
 .kp-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 .kp-face::after { content: ""; position: absolute; right: 3px; bottom: 3px; width: 8px; height: 8px; border-radius: 50%; background: var(--pearl); box-shadow: 0 0 0 2px rgba(12, 18, 26, .9); }
@@ -244,15 +246,19 @@ input { font: inherit; color: inherit; }
 .vo-wave i.on, .kp-wave i.on { background: #fff; }
 .vo-time { position: relative; font: 500 11px/1 var(--mono); letter-spacing: .06em; color: rgba(255, 255, 255, .82); min-width: 30px; text-align: right; pointer-events: none; }
 .on-paper .vo { color: var(--ink); }
-.on-paper .vo-pill { background: rgba(21, 23, 27, .05); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .1), inset 0 1px 0 rgba(255, 255, 255, .7), 0 1px 2px rgba(21, 23, 27, .05); }
-.on-paper .vo:hover .vo-pill, .on-paper .vo.playing .vo-pill { background: rgba(21, 23, 27, .08); }
-.on-paper .vo-time { color: rgba(21, 23, 27, .62); }
+/* glass on a light page: there is nothing behind it to blur, so the glass is drawn: a clear body that is brighter at the top, a hard white
+   highlight along the upper edge, a darker lower lip, a faint cool and warm tint inside the rim (as in the app), and a soft contact shadow so it lifts off the paper */
+.on-paper .vo-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .34) 46%, rgba(255, 255, 255, .5)); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(255, 255, 255, .7), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5),
+    0 0 0 1px rgba(21, 23, 27, .07), 0 1px 2px rgba(21, 23, 27, .06), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
+.on-paper .vo:hover .vo-pill, .on-paper .vo.playing .vo-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5) 46%, rgba(255, 255, 255, .64)); }
+.on-paper .vo-time { color: rgba(21, 23, 27, .66); }
 .on-paper .vo-wave i { background: rgba(21, 23, 27, .26); }
 .on-paper .vo-wave i.on { background: #15171b; }
-.on-paper .vo-play { color: #15171b; background: rgba(21, 23, 27, .08); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .12), inset 0 1px 0 rgba(255, 255, 255, .8); }
-.on-paper .vo-play:hover { background: rgba(21, 23, 27, .13); }
-.on-paper .vo-play::after { box-shadow: 0 0 0 1.5px rgba(21, 23, 27, .45); }
-.on-paper .vo-nudge { color: #15171b; background: rgba(242, 240, 235, .82); box-shadow: inset 0 0 0 1px rgba(21, 23, 27, .1), inset 0 1px 0 rgba(255, 255, 255, .8); }
+.on-paper .vo-play { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 0 0 1px rgba(21, 23, 27, .08), 0 3px 8px -3px rgba(21, 23, 27, .3); }
+.on-paper .vo-play:hover { background: #fff; }
+.on-paper .vo-play::after { box-shadow: 0 0 0 1.5px rgba(21, 23, 27, .4); }
+.on-paper .vo-nudge { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .7)); box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(21, 23, 27, .08), 0 4px 10px -4px rgba(21, 23, 27, .25); }
 .on-paper .vo-face { box-shadow: 0 0 0 1px rgba(21, 23, 27, .12); }
 .vo-play .pa { display: none; } .vo.playing .vo-play .pl { display: none; } .vo.playing .vo-play .pa { display: block; }
 

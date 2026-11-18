@@ -1477,7 +1477,7 @@ window.SK_MEDIA = {
     var css = BS.generateBeamCSS({
       id: id, borderRadius: o.radius != null ? o.radius : sp.borderRadius, borderWidth: o.width || sp.borderWidth,
       duration: o.duration || (o.size === "line" ? 3.1 : 1.96),
-      strokeOpacity: cap(tp.strokeOpacity * k), innerOpacity: cap(tp.innerOpacity * k), bloomOpacity: cap(tp.bloomOpacity * k),
+      strokeOpacity: cap(o.stroke != null ? o.stroke : tp.strokeOpacity * k), innerOpacity: cap(o.inner != null ? o.inner : tp.innerOpacity * k), bloomOpacity: cap(o.bloom != null ? o.bloom : tp.bloomOpacity * k),
       innerShadow: tp.innerShadow, size: o.size, colorVariant: o.variant, staticColors: o.variant === "mono",
       brightness: o.brightness || (tp.brightness || 1.3), saturation: tp.saturation, hueRange: /^mirra/.test(o.variant) ? 6 : 30, theme: o.theme,
       hairlineOpacity: tp.hairlineOpacity, glowSize: o.glow || 1
@@ -1779,7 +1779,8 @@ window.SK_MEDIA = {
         '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span>' +
         '<span class="vo-nudge" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.2 2.6v6.8L9.4 6z"/></svg>Tap to listen</span>';
       var va = player(box, box.getAttribute("data-src"), 34), paper = !!box.closest(".on-paper");
-      SK.beam(box.querySelector(".vo-pill"), { size: "sm", variant: paper ? "mono" : "mirra", theme: paper && BS.sizeThemePresets.sm.light ? "light" : "dark", boost: paper ? 1.4 : 2, radius: 50 });
+      /* on paper the beam has to be drawn much stronger to read: the colour run, on the light preset, with its stroke and bloom set by hand */
+      SK.beam(box.querySelector(".vo-pill"), paper ? { size: "sm", variant: "mirra", theme: "light", stroke: 1, inner: 0.34, bloom: 0.75, width: 1.5, radius: 50 } : { size: "sm", variant: "mirra", boost: 2, radius: 50 });
       va.addEventListener("play", function () { document.documentElement.classList.add("vo-heard"); try { sessionStorage.setItem("vo-heard", "1"); } catch (e) {} });
     });
   }
