@@ -1,0 +1,128 @@
+<section class="sec soc" id="social" aria-labelledby="h-social">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="label" data-reveal>Social</p>
+      <h2 id="h-social" class="h-lg">Thirty days of posts.<br><span class="two">One sentence.</span></h2>
+      <p class="lede" data-reveal style="--i:2">Every account, every brand, one calendar. Ask Claude to fill it.</p>
+      <div class="vo" data-src="assets/audio/kayla-social.mp3" data-label="Kayla on posting"></div>
+    </header>
+  </div>
+
+  <!-- the app's Social calendar: you ask once, every post finds its day -->
+  <div class="frame soc-stage" id="soc-stage" data-reveal="fade">
+    <img class="bg" src="assets/media/wallpapers/lake-tahoe-blue-hour.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">The Social calendar in Studio. Claude is asked to schedule the next 30 days for every brand, and each post moves from the ready tray into its day.</p>
+    <div class="soc-in" aria-hidden="true">
+      <div class="ask soc-ask" id="soc-ask">
+        <div class="ask-top"><b>Ask Claude</b><span id="soc-say">Ready</span></div>
+        <div class="brk"><i></i><i></i><i></i><i></i><div id="soc-field"></div></div>
+      </div>
+
+      <div class="soc-board">
+        <div class="soc-tray glass" id="soc-tray">
+          <p class="soc-tray-t"><span>Ready to post</span><b id="soc-left">0</b></p>
+          <p class="soc-tray-done"><i></i>All scheduled</p>
+        </div>
+
+        <div class="soc-cal glass deep" id="soc-cal">
+          <div class="soc-nav">
+            <ul class="soc-tabs"><li>Posts</li><li>Accounts</li><li class="on">Calendar</li><li>Weekly read</li><li>Best times</li></ul>
+            <p class="soc-legend"><span class="p"><i></i>Posted</span><span class="s"><i></i>Scheduled</span></p>
+          </div>
+          <div class="soc-calh">
+            <span class="soc-chip sq">&#8249;</span><b class="soc-month" id="soc-month">This month</b><span class="soc-chip sq">&#8250;</span><span class="soc-chip soc-now">Today</span>
+            <span class="soc-brands">
+              <span class="soc-chip on"><img src="assets/media/social/brand-mirra.png" alt="" width="16" height="16" loading="lazy" decoding="async">MIRRA</span>
+              <span class="soc-chip on"><img src="assets/media/social/brand-ces.png" alt="" width="16" height="16" loading="lazy" decoding="async"><em>Custom Esignature</em></span>
+            </span>
+            <ul class="soc-nets" id="soc-nets">
+              <li data-net="ig"><img src="assets/logos/social/ig.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="tiktok"><img src="assets/logos/social/tiktok.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="youtube"><img src="assets/logos/social/youtube.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="x"><img src="assets/logos/social/x.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="linkedin"><img src="assets/logos/social/linkedin.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="facebook"><img src="assets/logos/social/facebook.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+              <li data-net="threads"><img src="assets/logos/social/threads.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
+            </ul>
+            <p class="soc-count"><b id="soc-posts">0</b> posts <i>·</i> <b id="soc-accts">0</b> platforms</p>
+          </div>
+          <ol class="soc-dow"><li>Mon</li><li>Tue</li><li>Wed</li><li>Thu</li><li>Fri</li><li>Sat</li><li>Sun</li></ol>
+          <div class="soc-grid" id="soc-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- second beat: a post from the calendar becomes a Meta ad. Ask, the ad is built and shown as people will see it, the app's Ads tab reports on it -->
+  <div class="wrap sad-head">
+    <h3 class="h-md">Any post can be an ad.</h3>
+    <p class="lede" data-reveal>Connect Meta once. Tell Claude which post to put money behind.</p>
+  </div>
+
+  <div class="frame sad" id="soc-ad">
+    <img class="bg" src="assets/media/wallpapers/half-dome-long-exposure.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">Claude is asked to run one post from this week as an ad for 40 dollars a day. The post becomes an Instagram and Facebook ad preview, and the Ads tab in Studio shows it on Meta with spend, results and cost per result. It starts paused and can be paused again at any time. The numbers are examples.</p>
+    <div class="sad-in" aria-hidden="true">
+      <div class="ask sad-ask" id="sad-ask">
+        <div class="ask-top"><b>Ask Claude</b><span id="sad-say">Ready</span></div>
+        <div class="brk"><i></i><i></i><i></i><i></i><div id="sad-field"></div></div>
+      </div>
+
+      <div class="sad-board">
+        <!-- the post, where it sits in the calendar -->
+        <div class="sad-week glass deep">
+          <p class="sad-h"><b>This week</b><small>7 posts</small></p>
+          <ol class="sad-days" id="sad-days"></ol>
+        </div>
+
+        <!-- the ad, as people will see it -->
+        <div class="sad-prev">
+          <p class="sad-tag"><b>Ad preview</b><span><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="assets/logos/social/facebook.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></span></p>
+          <div class="brk sad-pbrk"><i></i><i></i><i></i><i></i>
+            <div class="sad-slot"><span>Your ad</span></div>
+            <div class="sad-pc" id="sad-pc">
+              <video data-play loop muted playsinline></video>
+              <span class="sad-pv-top"><img src="assets/logos/social/ig.svg" alt="" width="13" height="13" loading="lazy" decoding="async">Reels ad</span>
+              <span class="sad-pv-ic"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2Z"/></svg><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.7 7.1L4 20l1.3-4.3A8 8 0 1 1 20 11.6Z"/></svg><svg viewBox="0 0 24 24"><path d="M20.5 3.5 3.5 10.2l6.8 3.5m10.2-10.2-6.7 17-3.5-6.8m10.2-10.2-10.2 10.2"/></svg></span>
+              <span class="sad-pv-who"><img src="assets/media/social/brand-ces.png" alt="" width="28" height="28" loading="lazy" decoding="async"><span><b>Custom Esignature</b><em>Sponsored</em></span></span>
+              <span class="sad-pv-cta">Learn more<svg viewBox="0 0 16 16"><path d="m6 3.5 4.5 4.5-4.5 4.5"/></svg></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- the app's Ads tab -->
+        <div class="sad-ads glass deep" id="sad-ads">
+          <div class="sad-ah sad-g">
+            <span class="sad-meta"><img src="assets/logos/svg/meta.svg" alt="Meta" width="28" height="28" loading="lazy" decoding="async"></span>
+            <div class="sad-at"><b>Ads</b><small>Meta<span> <i>·</i> Instagram and Facebook</span></small></div>
+            <span class="sad-ex">Example<i> numbers</i></span>
+            <span class="sad-live" id="sad-live"><i></i><b>2</b> live</span>
+          </div>
+          <div class="sad-kpis">
+            <div class="sad-kpi sad-g"><span>Spent</span><b id="sad-k-sp">$384</b><small>Last 7 days</small></div>
+            <div class="sad-kpi sad-g"><span>Results</span><b id="sad-k-re">32</b><small>Sign-ups</small></div>
+            <div class="sad-kpi sad-g"><span>Cost per result</span><b id="sad-k-cp">$12.00</b><small>Per sign-up</small></div>
+            <div class="sad-kpi sad-g"><span>Live now</span><b id="sad-k-lv">2</b><small id="sad-k-bd">$80 a day</small></div>
+          </div>
+          <div class="sad-camp sad-g">
+            <p class="sad-h"><b>Running</b><small>Test <i>·</i> $40 a day each</small><span class="sad-safe"><svg viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9"/></svg>Pause any time</span></p>
+            <div class="sad-rows">
+              <div class="sad-row sad-new" id="sad-new">
+                <i class="sad-tg" id="sad-tg"></i>
+                <span class="sad-th"><img alt="" width="180" height="320" loading="lazy" decoding="async"></span>
+                <span class="sad-an"><b id="sad-n-name"></b><small id="sad-n-sub">Paused until you say go</small></span>
+                <svg class="sad-sp" id="sad-n-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline pathLength="100" points="0,25 12,23 25,22 37,17 50,16 62,11 75,10 87,6 100,4"/></svg>
+                <span class="sad-c sp"><em>Spent</em><b>$0</b></span><span class="sad-c re"><em>Results</em><b>0</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>—</b></span>
+                <span class="sad-next">Your next ad</span>
+              </div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-company-becoming/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Look like the company you're becoming</b><small>Day 6 · Instagram and Facebook</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,22 14,20 28,21 42,15 57,13 71,9 85,10 100,5"/></svg><span class="sad-c sp"><em>Spent</em><b>$236</b></span><span class="sad-c re"><em>Results</em><b>21</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$11.24</b></span></div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-sea-cliffs/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Signature anatomy · sea cliffs</b><small>Day 4 · Instagram</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,23 14,22 28,18 42,19 57,14 71,15 85,11 100,10"/></svg><span class="sad-c sp"><em>Spent</em><b>$148</b></span><span class="sad-c re"><em>Results</em><b>11</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$13.45</b></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

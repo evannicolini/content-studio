@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=d7441048">
+<link rel="stylesheet" href="site.css?v=53a2dba3">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -146,7 +146,181 @@
   </div>
 </section>
 
-<!-- 020-statement -->
+<!-- 020-phone -->
+<section class="sh-sec" id="shoot" aria-labelledby="h-shoot">
+<!-- SCREEN ONE (kept as it was): people filming on a phone, the headline, the "Your footage" card -->
+<div class="frame tall sh">
+  <!-- BACKGROUND: one reel of people filming on their phones (reel.mp4 / reel-m.mp4 for phones / reel.jpg) -->
+  <video class="bg" data-play data-src="assets/media/people/reel.mp4" data-src-m="assets/media/people/reel-m.mp4" poster="assets/media/people/reel.jpg" loop muted playsinline aria-hidden="true"></video>
+  <div class="shade"></div>
+  <span class="sh-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+  <div class="sh-in">
+    <div class="sh-col">
+      <header class="sh-head">
+        <p class="label" data-reveal>Your footage</p>
+        <h2 id="h-shoot" class="h-lg sh-h">Shoot it on your phone.<br><span class="two">Studio does the rest.</span></h2>
+        <p class="lede" data-reveal style="--i:2">Drop in what you filmed. It finds the best takes, cuts them, captions them and scores them.</p>
+      </header>
+
+      <!-- raw clips drop into the tray, the four jobs tick off, the finished film plays -->
+      <div class="sh-card" data-reveal="scale" style="--i:3" aria-hidden="true">
+        <div class="sh-left">
+          <div class="sh-top"><b>Your footage</b><span class="mono sh-status">Drop clips here</span></div>
+          <div class="sh-tray">
+            <span class="sh-clip pick" style="--n:0;--r:-7deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:1;--r:5deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:2;--r:-4deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:3;--r:8deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:4;--r:-6deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+          </div>
+          <ul class="sh-steps">
+            <li><b></b><span>Best takes</span><i></i></li>
+            <li><b></b><span>Cut</span><i></i></li>
+            <li><b></b><span>Captions</span><i></i></li>
+            <li><b></b><span>Music</span><i></i></li>
+          </ul>
+        </div>
+        <div class="sh-film">
+          <video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video>
+          <span class="sh-wait"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><circle class="sh-ring" cx="20" cy="20" r="17" pathLength="100"/></svg><em class="mono">Your film</em></span>
+          <span class="sh-badge">Ready</span>
+          <p class="sh-cap"></p>
+          <span class="sh-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN TWO: the whole camera roll goes into Studio, a set of finished videos comes out -->
+<div class="sho" id="shoot-out">
+  <header class="sho-head">
+    <div class="sho-ttl">
+      <p class="label" data-reveal>Footage in, videos out</p>
+      <h3 class="h-lg sho-h">Dump the camera roll.<br><span class="two">Get the week's videos.</span></h3>
+    </div>
+    <div class="sho-side">
+      <p class="lede" data-reveal style="--i:2">Everything you shot goes in as it is. Reels, stories, ads and teasers come back, ready to post.</p>
+      <div class="vo" data-src="assets/audio/kayla-shoot.mp3" data-label="Kayla on your footage"></div>
+    </div>
+  </header>
+
+  <div class="frame sho-stage">
+    <img class="bg" src="assets/media/wallpapers/alpine-lake-mirror.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">Thirty-eight raw phone clips leave the camera roll and go into Studio. Studio finds the best takes, cuts them, captions them and adds music. Six finished vertical videos come out: a reel, a story, an ad, a teaser, a short and a TikTok.</p>
+    <div class="sho-flow" aria-hidden="true">
+      <div class="sho-tray glass">
+        <p class="sho-cap"><span>Camera roll</span><b>38 clips</b></p>
+        <div class="sho-pile"></div>
+        <p class="sho-empty"><i></i>All in Studio</p>
+      </div>
+
+      <div class="sho-core">
+        <p class="sho-brand"><svg class="sho-mark" aria-hidden="true"><use href="#studio-mark"/></svg><b>Studio</b></p>
+        <p class="sho-status"><span>Drop in the camera roll</span></p>
+        <ol class="sho-bars"><li></li><li></li><li></li><li></li></ol>
+        <div class="sho-nums">
+          <p><b class="sho-in">0</b><span>clips in</span></p>
+          <p><b class="sho-n-out">0</b><span>videos out</span></p>
+        </div>
+      </div>
+
+      <div class="sho-out glass">
+        <p class="sho-cap"><span>Ready to post</span></p>
+        <div class="sho-grid">
+            <figure class="sho-vid" style="--n:0"><span class="sho-card"><video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video><em class="sho-tag">Reel</em><span class="sho-line">Same crew.
+Every morning.</span></span></figure>
+            <figure class="sho-vid" style="--n:1"><span class="sho-card"><video data-play data-src="assets/media/selects/surfing.mp4" poster="assets/media/selects/surfing.jpg" loop muted playsinline></video><em class="sho-tag">Story</em><span class="sho-line">Out past
+the break.</span></span></figure>
+            <figure class="sho-vid" style="--n:2"><span class="sho-card"><video data-play data-src="assets/media/selects/coastal-highway.mp4" poster="assets/media/selects/coastal-highway.jpg" loop muted playsinline></video><em class="sho-tag">Ad</em><span class="sho-line">Take the
+long way.</span></span></figure>
+            <figure class="sho-vid" style="--n:3"><span class="sho-card"><video data-play data-src="assets/media/selects/coffee-friend-arrives.mp4" poster="assets/media/selects/coffee-friend-arrives.jpg" loop muted playsinline></video><em class="sho-tag">Teaser</em><span class="sho-line">The corner table.
+Saturdays.</span></span></figure>
+            <figure class="sho-vid" style="--n:4"><span class="sho-card"><video data-play data-src="assets/media/selects/dinner-toast.mp4" poster="assets/media/selects/dinner-toast.jpg" loop muted playsinline></video><em class="sho-tag">Short</em><span class="sho-line">Long table.
+Good people.</span></span></figure>
+            <figure class="sho-vid" style="--n:5"><span class="sho-card"><video data-play data-src="assets/media/selects/tennis-forehand.mp4" poster="assets/media/selects/tennis-forehand.jpg" loop muted playsinline></video><em class="sho-tag">TikTok</em><span class="sho-line">One more
+set.</span></span></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- 030-chat -->
+<section class="frame tall ch" id="chat" aria-labelledby="h-chat">
+  <!-- BACKGROUND: one reel of people working from anywhere (chatreel.mp4 / chatreel-m.mp4 for phones / chatreel.jpg) -->
+  <video class="bg" data-play data-src="assets/media/people/chatreel.mp4" data-src-m="assets/media/people/chatreel-m.mp4" poster="assets/media/people/chatreel.jpg" loop muted playsinline aria-hidden="true"></video>
+  <div class="shade"></div>
+  <span class="ch-pbs" aria-hidden="true"><i></i><i></i><i></i></span>
+
+  <!-- words top left, Kayla under them; the Mac window and the phone side by side, bottom right. Nothing between the footage and the glass may fade,
+       filter, mask or clip (that would stop the glass blurring the footage), so the panels are direct children here. -->
+  <div class="ch-in">
+    <header class="ch-head">
+      <p class="ch-lock" data-reveal aria-label="Studio and Claude Code">
+        <span class="ch-tile"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
+        <i aria-hidden="true">×</i>
+        <svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude Code</b>
+      </p>
+      <p class="label" data-reveal style="--i:1">Runs on Claude Code</p>
+      <h2 id="h-chat" class="h-lg ch-h"><span class="ch-nw">No timeline.</span> <span class="ch-nw">No buttons.</span><br><span class="two">Just say it.</span></h2>
+      <p class="lede" data-reveal style="--i:3">Studio runs on Claude Code. It isn't code. It's a chat, on your Mac and on your phone.</p>
+    </header>
+    <div class="ch-vo"><div class="vo" data-src="assets/audio/kayla-chat.mp3" data-label="Kayla on just saying it"></div></div>
+
+    <!-- the same chat, on the Mac … -->
+    <div class="ch-mac ch-panel" aria-hidden="true">
+      <div class="ch-bar">
+        <span class="ch-dots3"><i></i><i></i><i></i></span>
+        <span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
+        <em class="mono">On your Mac</em>
+      </div>
+      <div class="ch-msgs"><div class="ch-list"></div></div>
+      <div class="ch-comp">
+        <p class="ch-ask ph"><span class="ch-ask-t">Ask Claude…</span></p>
+        <div class="ch-row">
+          <span class="ch-lk"><span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b><i>×</i><svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude</b></span>
+          <span class="ch-state mono">Working</span>
+          <span class="ch-send"><svg class="up" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg><i></i><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- … and on the phone -->
+    <div class="ch-phone ch-panel" aria-hidden="true">
+      <div class="ch-status">
+        <b>9:41</b>
+        <i class="ch-island"></i>
+        <svg viewBox="0 0 46 12" aria-hidden="true"><path d="M1 8.5h2.2V11H1zM5 6.5h2.2V11H5zM9 4.2h2.2V11H9zM13 1.6h2.2V11H13z"/><rect class="o" x="22.6" y="1.6" width="19" height="9.4" rx="2.8"/><rect x="24.4" y="3.4" width="12.6" height="5.8" rx="1.3"/><path d="M43 4.6c.9.3 1.4.9 1.4 1.7s-.5 1.4-1.4 1.7z"/></svg>
+      </div>
+      <div class="ch-bar">
+        <svg class="ch-back" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+        <span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
+        <em class="mono">On your phone</em>
+      </div>
+      <div class="ch-msgs"><div class="ch-list"></div></div>
+      <div class="ch-comp ch-comp-ph">
+        <p class="ch-ask ph"><span class="ch-ask-t">Ask Claude, or hold to talk</span></p>
+        <span class="ch-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        <div class="ch-row">
+          <span class="ch-lk"><span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b><i>×</i><svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude</b></span>
+          <span class="ch-state mono">Working</span>
+          <span class="ch-send">
+            <svg class="mic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.6" y="1.6" width="4.8" height="8" rx="2.4"/><path d="M3.2 7.6a4.8 4.8 0 0 0 9.6 0M8 12.4v2.2"/></svg>
+            <svg class="up" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg>
+            <i></i><i></i><i></i>
+          </span>
+        </div>
+      </div>
+      <i class="ch-home"></i>
+    </div>
+  </div>
+</section>
+
+<!-- 040-statement -->
 <section class="frame tall st" id="why" aria-labelledby="h-why">
   <video class="bg" data-play data-src="assets/media/people/want.mp4" data-src-m="assets/media/people/want-m.mp4" poster="assets/media/people/want.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade"></div>
@@ -192,7 +366,7 @@
   </div>
 </section>
 
-<!-- 030-work -->
+<!-- 050-work -->
 <section class="sec on-paper wk" id="work" aria-labelledby="h-work">
   <div class="wrap wk-top">
     <div class="sec-head left">
@@ -268,9 +442,9 @@
   </div>
 </section>
 
-<!-- 040-carry -->
+<!-- 060-carry -->
 <section class="frame tall cy" id="anywhere" aria-labelledby="h-anywhere">
-  <video class="bg" data-play data-src="assets/media/people/airport.mp4" data-src-m="assets/media/people/airport-m.mp4" poster="assets/media/people/airport.jpg" loop muted playsinline aria-hidden="true"></video>
+  <video class="bg" data-play data-src="assets/media/people/go.mp4" data-src-m="assets/media/people/go-m.mp4" poster="assets/media/people/go.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade"></div>
   <span class="cy-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
 
@@ -281,7 +455,7 @@
         <h2 id="h-anywhere" class="h-lg cy-h">A whole studio.<br><span class="two">In your carry-on.</span></h2>
       </header>
 
-      <!-- one person at an airport gate: each request is typed into the composer, each answer lands as a real result -->
+      <!-- people working on the go (a travel terminal, a harbour promenade): each request is typed into the composer, each answer lands as a real result -->
       <div class="cy-work" data-reveal="fade" style="--i:2" aria-hidden="true">
         <div class="cy-stage">
           <article class="cy-r cy-r-film">
@@ -349,7 +523,7 @@
   </div>
 </section>
 
-<!-- 050-library -->
+<!-- 070-library -->
 <section class="sec lb" id="library" aria-labelledby="h-library">
   <div class="wrap">
     <div class="sec-head">
@@ -372,9 +546,15 @@
 
   <!-- you type a scene, you get footage -->
   <div class="frame lb-stage" id="lb-stage">
-    <video class="bg" data-play data-src="assets/media/selects/above-the-clouds.mp4" poster="assets/media/selects/above-the-clouds.jpg" loop muted playsinline aria-hidden="true"></video>
+    <img class="bg lb-sky" src="assets/media/wallpapers/above-the-clouds.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
     <div class="shade"></div>
     <div class="lb-stage-in">
+      <div class="lb-stage-head">
+        <p class="label" data-reveal>Describe it</p>
+        <h3 class="h-lg">Any shot.<br><span class="two">One prompt.</span></h3>
+        <p class="lede" data-reveal style="--i:1">Say the scene. Get footage that looks filmed.</p>
+        <div class="vo" data-src="assets/audio/kayla-library.mp3" data-label="Kayla on the AI Library"></div>
+      </div>
       <div class="lb-ask" data-reveal>
         <div class="lb-ask-top"><span class="label bare">Describe a scene</span><span class="label bare lb-step" id="lb-step" aria-hidden="true">01 / 03</span></div>
         <div class="brk"><i></i><i></i><i></i><i></i><div id="lb-field" aria-label="Examples of scenes you can ask for"></div></div>
@@ -386,13 +566,14 @@
   </div>
 </section>
 
-<!-- 060-viral -->
+<!-- 080-viral -->
 <section class="sec on-paper vl" id="viral" aria-labelledby="h-viral">
   <div class="wrap">
     <header class="sec-head">
       <p class="label" data-reveal>Viral Lab</p>
       <h2 id="h-viral" class="h-lg">See what's working.<br><span class="two">Make it yours.</span></h2>
       <p class="lede" data-reveal style="--i:2">Give Studio your footage. It finds what's going viral in your niche, works out why, and remakes it with you in it.</p>
+      <div class="vo" data-src="assets/audio/kayla-viral.mp3" data-label="Kayla on Viral Lab"></div>
     </header>
   </div>
 
@@ -449,24 +630,77 @@
     </ol>
   </div>
 
-  <!-- the library: every video you save is studied once and kept -->
-  <div class="wrap vl-lib">
-    <div class="vl-lib-head">
-      <h3 class="h-md">Build a library of what works.</h3>
-      <p class="lede" data-reveal>Save any video you love. Claude studies it once and it's ready whenever you want it remade.</p>
+  <!-- the library: the app's Viral Lab tab. A video is added, Claude studies it once, the study is kept, and it can be remade for your brand any time -->
+  <div class="wrap vlb-head">
+    <h3 class="h-md">Build a library<br><span class="two">of what works.</span></h3>
+    <p class="lede" data-reveal>Save any video you love. Claude studies it once and it's ready whenever you want it remade.</p>
+  </div>
+
+  <div class="frame vlb" id="vlb">
+    <img class="bg" src="assets/media/wallpapers/peaks-in-cloud-sea.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">The Viral Lab library in Studio. A video is added with a link, Claude studies it once and keeps the study: the hook, the cut rhythm, the captions and the music. One tap on Remake for my brand makes a new vertical cut for your brand next to it.</p>
+    <div class="vlb-in" aria-hidden="true">
+      <div class="vlb-app glass deep">
+        <div class="vlb-bar">
+          <span class="vlb-seg"><b class="on">Videos <i id="vlb-n">7</i></b><b>Formats <i>3</i></b></span>
+          <span class="vlb-find"><svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.2"/><path d="m10.2 10.2 3.2 3.2"/></svg>Search hooks, accounts, formats</span>
+          <span class="vlb-about"><b id="vlb-ok">7</b> of <b id="vlb-all">7</b> studied</span>
+          <span class="vlb-add" id="vlb-add">Add a video<svg viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span>
+        </div>
+
+        <div class="vlb-body">
+          <ul class="vlb-grid">
+            <li class="vlb-tile vlb-new" id="vlb-new">
+              <span class="vlb-empty"><i><svg viewBox="0 0 16 16"><path d="M8 3v10M3 8h10"/></svg></i><b>Add a video</b></span>
+              <span class="vlb-link"><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><span id="vlb-url"></span></span>
+              <video class="vlb-pic" data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video>
+              <span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st" id="vlb-chip"><i></i><em>Saved</em></span></span>
+              <span class="vlb-big"><b>1.2M</b><em>views</em></span>
+              <i class="vlb-scan"></i>
+            </li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/private-jet.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/youtube.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>1.1M</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/surfing.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>312K</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/dinner-toast.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/tiktok.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>860K</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/mountain-biking-fpv.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>2.4M</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/tennis-forehand.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/tiktok.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>540K</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/cofounder-whiteboard.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>96K</b><em>views</em></span></li>
+        <li class="vlb-tile"><img class="vlb-pic" src="assets/media/selects/golf.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"><span class="vlb-top"><i class="vlb-plat"><img src="assets/logos/social/youtube.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></i><span class="vlb-st ok"><i></i>Studied</span></span><span class="vlb-big"><b>1.8M</b><em>views</em></span></li>
+          </ul>
+
+          <div class="vlb-open" id="vlb-open">
+            <div class="vlb-main">
+              <div class="vlb-oh">
+                <span class="vlb-thumb"><img src="assets/media/selects/run-club.jpg" alt="" width="404" height="720" loading="lazy" decoding="async"></span>
+                <div class="vlb-ot"><b>Run club reel</b><small>Instagram · 0:06<span> · 1.2M views</span></small></div>
+                <span class="vlb-stat"><i></i><em class="a">Studying…</em><em class="b">Studied</em></span>
+                <p class="vlb-none">Open any video to see what Claude kept.</p>
+              </div>
+              <ul class="vlb-rows">
+                <li class="vlb-row"><span class="vlb-k">Hook <i>0:00 to 0:02</i></span><b class="vlb-v" data-text="Opens mid-run, faces first"></b><i class="vlb-viz vlb-z-hook"><u></u></i></li>
+                <li class="vlb-row"><span class="vlb-k">Cut rhythm</span><b class="vlb-v" data-text="6 shots in 6 seconds"></b><i class="vlb-viz vlb-z-cut"><u style="--x:14.6%"></u><u style="--x:34%"></u><u style="--x:49.3%"></u><u style="--x:70.8%"></u><u style="--x:91%"></u></i></li>
+                <li class="vlb-row"><span class="vlb-k">Captions</span><b class="vlb-v" data-text="None. The faces carry it"></b><i class="vlb-viz vlb-z-cap"><u></u></i></li>
+                <li class="vlb-row"><span class="vlb-k">Music</span><b class="vlb-v" data-text="Up-tempo, cuts on the beat"></b><i class="vlb-viz vlb-z-mus"><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u></i></li>
+              </ul>
+              <div class="vlb-acts">
+                <span class="vlb-go" id="vlb-go"><em class="a">Remake for my brand</em><em class="b">Making your cut</em><em class="c">Remade for MIRRA</em><svg class="ar" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg><span class="dots"><i></i><i></i><i></i></span><svg class="ck" viewBox="0 0 16 16"><path d="m3.5 8.4 3 3 6-6.6"/></svg></span>
+                <span class="vlb-kept">Kept in your library</span>
+              </div>
+            </div>
+            <div class="vlb-re" id="vlb-re">
+              <span class="vlb-re-l">Your remake</span>
+              <video data-play data-src="assets/media/films/founders-retreat/loop.mp4" poster="assets/media/films/founders-retreat/poster.jpg" loop muted playsinline></video>
+              <span class="vlb-re-b"><img src="assets/media/social/brand-mirra.png" alt="" width="16" height="16" loading="lazy" decoding="async">MIRRA</span>
+              <span class="vlb-re-v"><i></i>New cut · v01</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <ul class="vl-shelf" aria-label="Studied reference videos, shown as stand-ins">
-      <li class="vl-ref-s" style="--a:#8794a8;--b:#39424f;--c:#d8c4b0;--i:0" data-reveal><div class="vl-ab"></div><span class="vl-tag"><i></i>Studied</span><b>Fast hook</b></li>
-      <li class="vl-ref-s" style="--a:#b99a82;--b:#4a3a33;--c:#ead7c4;--i:1" data-reveal><div class="vl-ab"></div><span class="vl-tag"><i></i>Studied</span><b>One-line captions</b></li>
-      <li class="vl-ref-s" style="--a:#6f7fa6;--b:#262d44;--c:#cdd3e6;--i:2" data-reveal><div class="vl-ab"></div><span class="vl-tag"><i></i>Studied</span><b>Cut on beat</b></li>
-      <li class="vl-ref-s" style="--a:#a88a96;--b:#40313a;--c:#e6d2d6;--i:3" data-reveal><div class="vl-ab"></div><span class="vl-tag"><i></i>Studied</span><b>Question comes first</b></li>
-      <li class="vl-ref-s" style="--a:#9aa0a8;--b:#30343b;--c:#dcdad4;--i:4" data-reveal><div class="vl-ab"></div><span class="vl-tag"><i></i>Studied</span><b>Proof comes early</b></li>
-      <li class="vl-ref-s vl-ref-add" style="--i:5" data-reveal><span class="vl-plus"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg></span><b>Add a video</b></li>
-    </ul>
   </div>
 </section>
 
-<!-- 070-notes -->
+<!-- 090-notes -->
 <section class="frame tall nt" id="notes" aria-labelledby="h-notes">
   <img class="bg" src="assets/media/wallpapers/lake-tahoe-blue-hour.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
   <div class="shade"></div>
@@ -476,6 +710,7 @@
       <div class="nt-head-l">
         <p class="label" data-reveal>Full edits</p>
         <h2 id="h-notes" class="h-lg">Leave a note.<br><span class="two">Get a new cut.</span></h2>
+        <div class="vo" data-src="assets/audio/kayla-notes.mp3" data-label="Kayla on notes"></div>
       </div>
       <p class="lede" data-reveal style="--i:2">Click the frame, say what's off, send it to Claude. A new version comes back. No timeline to learn.</p>
     </header>
@@ -562,52 +797,7 @@
   </div>
 </section>
 
-<!-- 080-phone -->
-<section class="frame tall sh" id="shoot" aria-labelledby="h-shoot">
-  <!-- BACKGROUND: one reel of people filming on their phones (reel.mp4 / reel-m.mp4 for phones / reel.jpg) -->
-  <video class="bg" data-play data-src="assets/media/people/reel.mp4" data-src-m="assets/media/people/reel-m.mp4" poster="assets/media/people/reel.jpg" loop muted playsinline aria-hidden="true"></video>
-  <div class="shade"></div>
-  <span class="sh-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-
-  <div class="sh-in">
-    <div class="sh-col">
-      <header class="sh-head">
-        <p class="label" data-reveal>Your footage</p>
-        <h2 id="h-shoot" class="h-lg sh-h">Shoot it on your phone.<br><span class="two">Studio does the rest.</span></h2>
-        <p class="lede" data-reveal style="--i:2">Drop in what you filmed. It finds the best takes, cuts them, captions them and scores them.</p>
-      </header>
-
-      <!-- raw clips drop into the tray, the four jobs tick off, the finished film plays -->
-      <div class="sh-card" data-reveal="scale" style="--i:3" aria-hidden="true">
-        <div class="sh-left">
-          <div class="sh-top"><b>Your footage</b><span class="mono sh-status">Drop clips here</span></div>
-          <div class="sh-tray">
-            <span class="sh-clip pick" style="--n:0;--r:-7deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
-            <span class="sh-clip" style="--n:1;--r:5deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
-            <span class="sh-clip pick" style="--n:2;--r:-4deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
-            <span class="sh-clip pick" style="--n:3;--r:8deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
-            <span class="sh-clip" style="--n:4;--r:-6deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
-          </div>
-          <ul class="sh-steps">
-            <li><b></b><span>Best takes</span><i></i></li>
-            <li><b></b><span>Cut</span><i></i></li>
-            <li><b></b><span>Captions</span><i></i></li>
-            <li><b></b><span>Music</span><i></i></li>
-          </ul>
-        </div>
-        <div class="sh-film">
-          <video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video>
-          <span class="sh-wait"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><circle class="sh-ring" cx="20" cy="20" r="17" pathLength="100"/></svg><em class="mono">Your film</em></span>
-          <span class="sh-badge">Ready</span>
-          <p class="sh-cap"></p>
-          <span class="sh-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 090-aesthetic -->
+<!-- 100-aesthetic -->
 <section class="sec on-paper ae" id="aesthetic" aria-labelledby="h-aesthetic">
   <div class="wrap">
     <header class="sec-head">
@@ -670,13 +860,14 @@
   </div>
 </section>
 
-<!-- 100-social -->
+<!-- 110-social -->
 <section class="sec soc" id="social" aria-labelledby="h-social">
   <div class="wrap">
     <header class="sec-head">
       <p class="label" data-reveal>Social</p>
       <h2 id="h-social" class="h-lg">Thirty days of posts.<br><span class="two">One sentence.</span></h2>
       <p class="lede" data-reveal style="--i:2">Every account, every brand, one calendar. Ask Claude to fill it.</p>
+      <div class="vo" data-src="assets/audio/kayla-social.mp3" data-label="Kayla on posting"></div>
     </header>
   </div>
 
@@ -726,35 +917,72 @@
     </div>
   </div>
 
-  <!-- second beat: any post can run as an ad -->
-  <div class="wrap soc-ad">
-    <div class="soc-ad-copy">
-      <h3 class="h-md">Any post can be an ad.</h3>
-      <p class="lede" data-reveal style="--i:1">Connect Meta once. Tell Claude which posts to put money behind.</p>
-    </div>
-    <div class="soc-ad-stage" id="soc-ad" data-reveal="fade" style="--i:1">
-      <img class="soc-ad-bg" src="assets/media/wallpapers/big-sur-coast.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
-      <p class="sr">Claude is asked to run one post as an ad. The post lifts out of the week, gets the Run as ad button, and is marked Ran as ad on Meta.</p>
-      <div class="soc-ad-in" aria-hidden="true">
-        <div class="soc-ad-left">
-          <div id="soc-ad-field"></div>
-          <div class="soc-week glass deep">
-            <p class="soc-week-t"><span>This week</span><span class="soc-legend"><span class="s"><i></i>Scheduled</span></span></p>
-            <div class="soc-week-g" id="soc-week"></div>
-          </div>
-          <div class="soc-res glass deep" id="soc-res">
-            <span class="soc-res-m"><img src="assets/logos/svg/meta.svg" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
-            <div>
-              <p class="soc-res-t">Ran as ad <i>·</i> Meta</p>
-              <p class="soc-res-s"><img src="assets/logos/social/facebook.svg" alt="" width="13" height="13" loading="lazy" decoding="async"><img src="assets/logos/social/ig.svg" alt="" width="13" height="13" loading="lazy" decoding="async"><span>Facebook and Instagram</span></p>
+  <!-- second beat: a post from the calendar becomes a Meta ad. Ask, the ad is built and shown as people will see it, the app's Ads tab reports on it -->
+  <div class="wrap sad-head">
+    <h3 class="h-md">Any post can be an ad.</h3>
+    <p class="lede" data-reveal>Connect Meta once. Tell Claude which post to put money behind.</p>
+  </div>
+
+  <div class="frame sad" id="soc-ad">
+    <img class="bg" src="assets/media/wallpapers/half-dome-long-exposure.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">Claude is asked to run one post from this week as an ad for 40 dollars a day. The post becomes an Instagram and Facebook ad preview, and the Ads tab in Studio shows it on Meta with spend, results and cost per result. It starts paused and can be paused again at any time. The numbers are examples.</p>
+    <div class="sad-in" aria-hidden="true">
+      <div class="ask sad-ask" id="sad-ask">
+        <div class="ask-top"><b>Ask Claude</b><span id="sad-say">Ready</span></div>
+        <div class="brk"><i></i><i></i><i></i><i></i><div id="sad-field"></div></div>
+      </div>
+
+      <div class="sad-board">
+        <!-- the post, where it sits in the calendar -->
+        <div class="sad-week glass deep">
+          <p class="sad-h"><b>This week</b><small>7 posts</small></p>
+          <ol class="sad-days" id="sad-days"></ol>
+        </div>
+
+        <!-- the ad, as people will see it -->
+        <div class="sad-prev">
+          <p class="sad-tag"><b>Ad preview</b><span><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="assets/logos/social/facebook.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></span></p>
+          <div class="brk sad-pbrk"><i></i><i></i><i></i><i></i>
+            <div class="sad-slot"><span>Your ad</span></div>
+            <div class="sad-pc" id="sad-pc">
+              <video data-play loop muted playsinline></video>
+              <span class="sad-pv-top"><img src="assets/logos/social/ig.svg" alt="" width="13" height="13" loading="lazy" decoding="async">Reels ad</span>
+              <span class="sad-pv-ic"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2Z"/></svg><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.7 7.1L4 20l1.3-4.3A8 8 0 1 1 20 11.6Z"/></svg><svg viewBox="0 0 24 24"><path d="M20.5 3.5 3.5 10.2l6.8 3.5m10.2-10.2-6.7 17-3.5-6.8m10.2-10.2-10.2 10.2"/></svg></span>
+              <span class="sad-pv-who"><img src="assets/media/social/brand-ces.png" alt="" width="28" height="28" loading="lazy" decoding="async"><span><b>Custom Esignature</b><em>Sponsored</em></span></span>
+              <span class="sad-pv-cta">Learn more<svg viewBox="0 0 16 16"><path d="m6 3.5 4.5 4.5-4.5 4.5"/></svg></span>
             </div>
           </div>
         </div>
-        <div class="soc-ad-right">
-          <div class="soc-big" id="soc-big">
-            <video data-play loop muted playsinline></video>
-            <span class="soc-big-tag">Forest · compose to inbox</span>
-            <span class="soc-run" id="soc-chip"><img src="assets/logos/svg/meta.svg" alt="" width="18" height="18" loading="lazy" decoding="async"><span class="a">Run as ad</span><span class="b">Ran as ad</span></span>
+
+        <!-- the app's Ads tab -->
+        <div class="sad-ads glass deep" id="sad-ads">
+          <div class="sad-ah sad-g">
+            <span class="sad-meta"><img src="assets/logos/svg/meta.svg" alt="Meta" width="28" height="28" loading="lazy" decoding="async"></span>
+            <div class="sad-at"><b>Ads</b><small>Meta<span> <i>·</i> Instagram and Facebook</span></small></div>
+            <span class="sad-ex">Example<i> numbers</i></span>
+            <span class="sad-live" id="sad-live"><i></i><b>2</b> live</span>
+          </div>
+          <div class="sad-kpis">
+            <div class="sad-kpi sad-g"><span>Spent</span><b id="sad-k-sp">$384</b><small>Last 7 days</small></div>
+            <div class="sad-kpi sad-g"><span>Results</span><b id="sad-k-re">32</b><small>Sign-ups</small></div>
+            <div class="sad-kpi sad-g"><span>Cost per result</span><b id="sad-k-cp">$12.00</b><small>Per sign-up</small></div>
+            <div class="sad-kpi sad-g"><span>Live now</span><b id="sad-k-lv">2</b><small id="sad-k-bd">$80 a day</small></div>
+          </div>
+          <div class="sad-camp sad-g">
+            <p class="sad-h"><b>Running</b><small>Test <i>·</i> $40 a day each</small><span class="sad-safe"><svg viewBox="0 0 16 16"><path d="M5.5 3.5v9M10.5 3.5v9"/></svg>Pause any time</span></p>
+            <div class="sad-rows">
+              <div class="sad-row sad-new" id="sad-new">
+                <i class="sad-tg" id="sad-tg"></i>
+                <span class="sad-th"><img alt="" width="180" height="320" loading="lazy" decoding="async"></span>
+                <span class="sad-an"><b id="sad-n-name"></b><small id="sad-n-sub">Paused until you say go</small></span>
+                <svg class="sad-sp" id="sad-n-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline pathLength="100" points="0,25 12,23 25,22 37,17 50,16 62,11 75,10 87,6 100,4"/></svg>
+                <span class="sad-c sp"><em>Spent</em><b>$0</b></span><span class="sad-c re"><em>Results</em><b>0</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>—</b></span>
+                <span class="sad-next">Your next ad</span>
+              </div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-company-becoming/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Look like the company you're becoming</b><small>Day 6 · Instagram and Facebook</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,22 14,20 28,21 42,15 57,13 71,9 85,10 100,5"/></svg><span class="sad-c sp"><em>Spent</em><b>$236</b></span><span class="sad-c re"><em>Results</em><b>21</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$11.24</b></span></div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-sea-cliffs/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Signature anatomy · sea cliffs</b><small>Day 4 · Instagram</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,23 14,22 28,18 42,19 57,14 71,15 85,11 100,10"/></svg><span class="sad-c sp"><em>Spent</em><b>$148</b></span><span class="sad-c re"><em>Results</em><b>11</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$13.45</b></span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -762,7 +990,7 @@
   </div>
 </section>
 
-<!-- 110-sound -->
+<!-- 120-sound -->
 <section class="frame snd" id="sound" aria-labelledby="h-sound">
   <img class="bg" src="assets/media/wallpapers/big-sur-coast.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
   <div class="shade"></div>
@@ -812,71 +1040,6 @@
   </div>
 </section>
 
-<!-- 120-chat -->
-<section class="frame tall ch" id="chat" aria-labelledby="h-chat">
-  <!-- BACKGROUND: one reel of people working from anywhere (chatreel.mp4 / chatreel-m.mp4 for phones / chatreel.jpg) -->
-  <video class="bg" data-play data-src="assets/media/people/chatreel.mp4" data-src-m="assets/media/people/chatreel-m.mp4" poster="assets/media/people/chatreel.jpg" loop muted playsinline aria-hidden="true"></video>
-  <div class="shade"></div>
-  <span class="ch-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-
-  <div class="ch-in">
-    <div class="ch-zone">
-      <header class="ch-head">
-        <p class="ch-lock" data-reveal aria-label="Studio and Claude Code">
-          <span class="ch-tile"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
-          <i aria-hidden="true">×</i>
-          <svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude Code</b>
-        </p>
-        <p class="label" data-reveal style="--i:1">Runs on Claude Code</p>
-        <h2 id="h-chat" class="h-lg ch-h"><span class="ch-nw">No timeline.</span> <span class="ch-nw">No buttons.</span><br><span class="two">Just say it.</span></h2>
-        <p class="lede" data-reveal style="--i:3">Studio runs on Claude Code. It isn't code. It's a chat, on your Mac and on your phone.</p>
-      </header>
-
-      <!-- the same chat, on the Mac and on the phone -->
-      <div class="ch-devices" data-reveal="fade" style="--i:4" aria-hidden="true">
-        <div class="ch-mac ch-panel">
-          <div class="ch-bar">
-            <span class="ch-dots3"><i></i><i></i><i></i></span>
-            <span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
-            <em class="mono">On your Mac</em>
-          </div>
-          <div class="ch-msgs"><div class="ch-list"></div></div>
-          <div class="ch-comp">
-            <p class="ch-ask ph"><span class="ch-ask-t">Ask Claude…</span></p>
-            <div class="ch-row">
-              <span class="ch-lk"><span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b><i>×</i><svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude</b></span>
-              <span class="ch-state mono">Working</span>
-              <span class="ch-send"><svg class="up" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg><i></i><i></i><i></i></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="ch-phone ch-panel">
-          <div class="ch-bar">
-            <svg class="ch-back" viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
-            <span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b>
-            <em class="mono">On your phone</em>
-          </div>
-          <div class="ch-msgs"><div class="ch-list"></div></div>
-          <div class="ch-comp ch-comp-ph">
-            <p class="ch-ask ph"><span class="ch-ask-t">Reply to Claude or hold to talk</span><i class="ch-caret"></i></p>
-            <span class="ch-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-            <div class="ch-row">
-              <span class="ch-lk"><span class="ch-tile sm"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><b>Studio</b><i>×</i><svg class="ch-spark" aria-hidden="true"><use href="#claude"/></svg><b>Claude</b></span>
-              <span class="ch-state mono">Working</span>
-              <span class="ch-send">
-                <svg class="mic" viewBox="0 0 16 16" aria-hidden="true"><rect x="5.6" y="1.6" width="4.8" height="8" rx="2.4"/><path d="M3.2 7.6a4.8 4.8 0 0 0 9.6 0M8 12.4v2.2"/></svg>
-                <svg class="up" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg>
-                <i></i><i></i><i></i>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- 130-steps -->
 <section class="sec on-paper gs" id="start" aria-labelledby="h-start">
   <div class="wrap">
@@ -886,7 +1049,7 @@
     </header>
 
     <ol class="gs-grid">
-      <!-- 1. drag it to Applications, it opens -->
+      <!-- 1. drag it to Applications, it lands in the Dock, it opens; then again -->
       <li class="gs-card card" data-reveal style="--i:1">
         <div class="gs-stage gs-s1" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -915,16 +1078,19 @@
         </div>
       </li>
 
-      <!-- 2. Claude asks about the brand, the kit builds itself -->
+      <!-- 2. Claude asks, the brand answers, the kit builds piece by piece; then again -->
       <li class="gs-card card" data-reveal style="--i:2">
         <div class="gs-stage gs-s2" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
           <div class="gs-chat">
             <div class="gs-b claude">
               <p class="gs-who"><svg aria-hidden="true"><use href="#claude"/></svg>Claude</p>
-              <p>What's your brand called, and what do you sell?</p>
+              <p class="gs-say"><span class="gs-dots"><i></i><i></i><i></i></span><span class="gs-t">What's your brand called, and what do you sell?</span></p>
             </div>
             <p class="gs-b you">Halden. Running gear.</p>
+            <div class="gs-b claude gs-b3">
+              <p class="gs-say"><span class="gs-t">Reading your website</span><span class="gs-dots"><i></i><i></i><i></i></span></p>
+            </div>
           </div>
           <div class="gs-kit">
             <div class="gs-kit-top">
@@ -943,7 +1109,7 @@
         </div>
       </li>
 
-      <!-- 3. one request, the first cut arrives -->
+      <!-- 3. a request is typed, the cut lands in Full edits, then the next request -->
       <li class="gs-card card" data-reveal style="--i:3">
         <div class="gs-stage gs-s3" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -954,7 +1120,14 @@
                 <video data-play data-src="assets/media/films/mirra-multivitamin/loop.mp4" poster="assets/media/films/mirra-multivitamin/poster.jpg" loop muted playsinline></video>
                 <span class="gs-chip">v01</span>
               </div>
-              <i class="gs-ghost"></i><i class="gs-ghost"></i>
+              <div class="gs-film">
+                <img src="assets/media/films/founders-retreat/poster.jpg" alt="" width="270" height="480" loading="lazy" decoding="async">
+                <span class="gs-chip">v01</span>
+              </div>
+              <div class="gs-film">
+                <img src="assets/media/films/lobby-hero-window/poster.jpg" alt="" width="270" height="480" loading="lazy" decoding="async">
+                <span class="gs-chip">v01</span>
+              </div>
             </div>
           </div>
           <div id="gs-field"></div>
@@ -977,7 +1150,7 @@
 <section class="frame tall vw" id="views" aria-labelledby="h-views">
   <!-- the frame's background is the wallpaper: two layers that cross-fade -->
   <div class="bg vw-bg" aria-hidden="true">
-    <img class="vw-img on top" src="assets/media/wallpapers/cumulus-sky-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
+    <img class="vw-img on top" src="assets/media/wallpapers/pebble-beach-cypress-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
     <img class="vw-img" alt="" width="2560" height="1428" decoding="async">
   </div>
   <div class="shade"></div>
@@ -987,6 +1160,7 @@
       <p class="label" data-reveal>Wallpapers</p>
       <h2 id="h-views" class="h-lg vw-h">Twelve hours a day<br><span class="two">deserves a view.</span></h2>
       <p class="lede" data-reveal style="--i:2">Change the whole studio with a click.</p>
+      <div class="vo" data-src="assets/audio/kayla-views.mp3" data-label="Kayla on your view"></div>
     </header>
 
     <!-- a light echo of the app's Home, so it reads as "this is your studio" -->
@@ -998,7 +1172,7 @@
       <p class="vw-hello" aria-hidden="true">Good morning.</p>
       <div class="vw-pick">
         <button class="vw-arrow" type="button" data-dir="-1" aria-label="Previous wallpaper"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg></button>
-        <span class="vw-pill"><img class="vw-pill-th" src="assets/media/views/cumulus-sky-chip.jpg" alt="" width="96" height="96" loading="lazy" decoding="async"><span class="vw-pill-name" aria-live="polite">Cumulus sky</span></span>
+        <span class="vw-pill"><img class="vw-pill-th" src="assets/media/views/pebble-beach-cypress-chip.jpg" alt="" width="96" height="96" loading="lazy" decoding="async"><span class="vw-pill-name" aria-live="polite">Pebble Beach, lone cypress</span></span>
         <button class="vw-arrow" type="button" data-dir="1" aria-label="Next wallpaper"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg></button>
       </div>
     </div>
@@ -1044,6 +1218,7 @@
     <div class="sec-head">
       <p class="label" data-reveal>Pricing</p>
       <h2 id="h-pr" class="h-lg">A whole content team.<br><span class="pr-two">One subscription.</span></h2>
+      <div class="vo" data-src="assets/audio/kayla-pricing.mp3" data-label="Kayla on what it costs"></div>
     </div>
 
     <!-- the anchor: what this work costs when people do it -->
@@ -1150,6 +1325,6 @@
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=d7441048"></script>
+<script src="site.js?v=53a2dba3"></script>
 </body>
 </html>

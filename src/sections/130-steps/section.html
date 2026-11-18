@@ -6,7 +6,7 @@
     </header>
 
     <ol class="gs-grid">
-      <!-- 1. drag it to Applications, it opens -->
+      <!-- 1. drag it to Applications, it lands in the Dock, it opens; then again -->
       <li class="gs-card card" data-reveal style="--i:1">
         <div class="gs-stage gs-s1" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -35,16 +35,19 @@
         </div>
       </li>
 
-      <!-- 2. Claude asks about the brand, the kit builds itself -->
+      <!-- 2. Claude asks, the brand answers, the kit builds piece by piece; then again -->
       <li class="gs-card card" data-reveal style="--i:2">
         <div class="gs-stage gs-s2" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
           <div class="gs-chat">
             <div class="gs-b claude">
               <p class="gs-who"><svg aria-hidden="true"><use href="#claude"/></svg>Claude</p>
-              <p>What's your brand called, and what do you sell?</p>
+              <p class="gs-say"><span class="gs-dots"><i></i><i></i><i></i></span><span class="gs-t">What's your brand called, and what do you sell?</span></p>
             </div>
             <p class="gs-b you">Halden. Running gear.</p>
+            <div class="gs-b claude gs-b3">
+              <p class="gs-say"><span class="gs-t">Reading your website</span><span class="gs-dots"><i></i><i></i><i></i></span></p>
+            </div>
           </div>
           <div class="gs-kit">
             <div class="gs-kit-top">
@@ -63,7 +66,7 @@
         </div>
       </li>
 
-      <!-- 3. one request, the first cut arrives -->
+      <!-- 3. a request is typed, the cut lands in Full edits, then the next request -->
       <li class="gs-card card" data-reveal style="--i:3">
         <div class="gs-stage gs-s3" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -74,7 +77,14 @@
                 <video data-play data-src="assets/media/films/mirra-multivitamin/loop.mp4" poster="assets/media/films/mirra-multivitamin/poster.jpg" loop muted playsinline></video>
                 <span class="gs-chip">v01</span>
               </div>
-              <i class="gs-ghost"></i><i class="gs-ghost"></i>
+              <div class="gs-film">
+                <img src="assets/media/films/founders-retreat/poster.jpg" alt="" width="270" height="480" loading="lazy" decoding="async">
+                <span class="gs-chip">v01</span>
+              </div>
+              <div class="gs-film">
+                <img src="assets/media/films/lobby-hero-window/poster.jpg" alt="" width="270" height="480" loading="lazy" decoding="async">
+                <span class="gs-chip">v01</span>
+              </div>
             </div>
           </div>
           <div id="gs-field"></div>

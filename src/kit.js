@@ -325,11 +325,11 @@
     if (kp) { var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46); SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } }; }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
-      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="" width="88" height="88" loading="lazy"></span>' +
-        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-wave" data-wave></span></span><span class="vo-time" data-time></span>' +
-        '<button class="vo-play" data-play aria-label="Play">' + PLAY + "</button>";
+      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="Kayla" width="88" height="88" loading="lazy"></span>' +
+        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-bub"><button class="vo-play" data-play aria-label="Play">' + PLAY + '</button>' +
+        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span></span>';
       box.querySelector(".vo-label").textContent = box.getAttribute("data-label") || "Listen";
-      player(box, box.getAttribute("data-src"), 40);
+      player(box, box.getAttribute("data-src"), 34);
     });
   }
 
@@ -418,6 +418,23 @@
     var nav = document.querySelector(".nav");
     var kpEl = document.querySelector(".kp");
     if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7); }; on(); window.addEventListener("scroll", on, { passive: true }); }
+    /* the nav slides away while scrolling down and returns only on a deliberate scroll up: the upward travel has to add up to
+       14% of the screen (at least 110px) with no downward movement in between. Always shown near the top. */
+    if (nav) (function () {
+      var lastY = window.scrollY, up = 0, raf = 0;
+      window.addEventListener("scroll", function () {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          raf = 0;
+          var y = Math.max(0, window.scrollY), dy = y - lastY;
+          lastY = y;
+          if (y < 80) { up = 0; nav.classList.remove("away"); }
+          else if (dy > 0) { up = 0; if (dy > 2) nav.classList.add("away"); }
+          else if (dy < 0) { up -= dy; if (up > Math.max(110, window.innerHeight * 0.14)) nav.classList.remove("away"); }
+        });
+      }, { passive: true });
+      nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
+    })();
     kayla();
     growFrames();
     focusSections();

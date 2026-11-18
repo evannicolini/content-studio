@@ -1,4 +1,5 @@
-/* 130 steps: download, tell Claude about the brand, ask for the first film. Each stage is a small live piece of the app. Prefix: gs- */
+/* 130 steps: download, tell Claude about the brand, ask for the first film. Each stage is a small live piece of the app that
+   loops by itself while it is on screen (section.js), each on its own clock so the three are never still together. Prefix: gs- */
 .gs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(12px, 1.4vw, 20px);  }
 .gs-card { display: flex; flex-direction: column; padding: 10px; border-radius: 28px; }
 .gs-copy { padding: 22px 14px 18px; }
@@ -35,6 +36,8 @@
 .gs-s1.a1 .gs-drag { transform: translate3d(140px, 4px, 0) scale(.5); opacity: 0; }
 .gs-s1.a1 .gs-folder i { transform: scale(1.1); transition-delay: .75s; }
 .gs-s1.a2 .gs-dmg { opacity: 0; transform: scale(.94); }
+/* starting over: the disk image fades back with its icon already in place (nothing flies backwards) */
+.gs-s1.rs .gs-drag, .gs-s1.rs .gs-folder i, .gs-s1.rs .gs-dock .gs-icon { transition: none; }
 
 .gs-dock { position: absolute; left: 50%; bottom: 14px; display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 19px; transform: translate3d(-50%, 90px, 0); transition: transform .8s var(--ease); }
 .gs-dock > i { width: 40px; height: 40px; border-radius: 11px; background: rgba(255, 255, 255, .16); }
@@ -55,6 +58,11 @@
 .gs-hello { margin-top: 8px; font: 300 clamp(26px, 2.5vw, 34px)/1 var(--sans); letter-spacing: -.035em; white-space: nowrap; }
 .gs-app-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: auto; height: 42%; }
 .gs-app-cards i { border-radius: 10px; background: rgba(var(--tint), .46); box-shadow: var(--rim-soft); }
+/* once open, the window fills in: the greeting, then the shelves, one after another */
+.gs-app-main .mono, .gs-hello, .gs-app-cards i, .gs-app-side > i { opacity: 0; transform: translateY(8px); transition: opacity .2s var(--ease), transform .2s var(--ease); }
+.gs-s1.a4 .gs-app-main .mono, .gs-s1.a4 .gs-hello, .gs-s1.a4 .gs-app-cards i, .gs-s1.a4 .gs-app-side > i { opacity: 1; transform: none; transition: opacity .45s var(--ease) calc(var(--n, 0) * 120ms), transform .6s var(--ease) calc(var(--n, 0) * 120ms); }
+.gs-hello { --n: 1; } .gs-app-side > i:nth-of-type(1) { --n: 2; } .gs-app-side > i:nth-of-type(2) { --n: 3; } .gs-app-side > i:nth-of-type(3) { --n: 4; } .gs-app-side > i:nth-of-type(4) { --n: 5; }
+.gs-app-cards i:nth-child(1) { --n: 3; } .gs-app-cards i:nth-child(2) { --n: 4; } .gs-app-cards i:nth-child(3) { --n: 5; }
 
 /* 2 · the brand */
 .gs-chat { display: flex; flex-direction: column; gap: 8px; padding: 16px 14px 0; font: 400 14.5px/1.36 var(--sans); }
@@ -64,18 +72,30 @@
 .gs-b.you { align-self: flex-end; background: linear-gradient(rgba(255, 255, 255, .16), rgba(255, 255, 255, .16)), rgba(var(--tint), .42); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); border-bottom-right-radius: 6px; }
 .gs-who { display: flex; align-items: center; gap: 6px; font: 500 9.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-2); margin-bottom: 6px; }
 .gs-who svg { width: 13px; height: 13px; fill: #d97757; }
+.gs-say { display: flex; align-items: center; gap: 8px; min-height: 1.36em; }
+.gs-dots { display: inline-flex; gap: 4px; flex: none; }
+.gs-dots i { width: 5px; height: 5px; border-radius: 50%; background: #fff; opacity: .5; animation: pf-dot 1.1s ease-in-out infinite; }
+.gs-dots i:nth-child(2) { animation-delay: .18s; } .gs-dots i:nth-child(3) { animation-delay: .36s; }
+/* Claude is writing: only the dots; then the words */
+.gs-b:not(.gs-b3) .gs-dots { display: none; }
+.gs-b.wait:not(.gs-b3) .gs-dots { display: inline-flex; margin: 7px 0; }
+.gs-b.wait:not(.gs-b3) .gs-t { display: none; }
+.gs-b3 { padding-block: 9px; color: var(--sand-2); }
+.gs-b3.done { color: #fff; }
+.gs-b3.done .gs-dots { display: none; }
 .gs-kit { position: absolute; left: 14px; right: 14px; bottom: 14px; padding: 12px; border-radius: 18px; opacity: 0; transform: translateY(14px) scale(.97); transition: opacity .5s var(--ease), transform .7s var(--ease); }
 .gs-kit.on { opacity: 1; transform: none; }
 .gs-kit-top { display: flex; align-items: center; gap: 11px; }
 .gs-logo { flex: none; width: 50px; height: 50px; border-radius: 13px; display: grid; place-items: center; padding-bottom: 5px; background: #15130f; color: #f1ede6; font: italic 400 36px/1 "New York", "Iowan Old Style", "Palatino Linotype", Georgia, serif; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
 .gs-kit-name { flex: 1; min-width: 0; font: 500 17px/1.1 var(--sans); letter-spacing: -.02em; }
-.gs-kit-name .mono { font-size: 9px; color: var(--sand-3); margin-bottom: 6px; }
+.gs-kit-name .mono { font-size: 9px; color: var(--sand-3); margin-bottom: 6px; white-space: nowrap; }
 .gs-font { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); font: 400 20px/1 var(--sans); letter-spacing: -.03em; }
 .gs-f1 { font: italic 400 22px/1 "New York", "Iowan Old Style", "Palatino Linotype", Georgia, serif; }
 .gs-sw { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 11px; }
 .gs-sw i { height: 34px; border-radius: 9px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
-.gs-kit .gs-logo, .gs-kit .gs-kit-name, .gs-kit .gs-font, .gs-kit .gs-sw i { opacity: 0; transform: scale(.8); transition: opacity .4s var(--ease), transform .55s cubic-bezier(.3, 1.5, .5, 1); transition-delay: calc(var(--n, 0) * 110ms + 250ms); }
+.gs-kit .gs-logo, .gs-kit .gs-kit-name, .gs-kit .gs-font, .gs-kit .gs-sw i { opacity: 0; transform: scale(.8); transition: opacity .4s var(--ease), transform .55s cubic-bezier(.3, 1.5, .5, 1); transition-delay: calc(var(--n, 0) * 140ms + 300ms); }
 .gs-kit.on .gs-logo, .gs-kit.on .gs-kit-name, .gs-kit.on .gs-font, .gs-kit.on .gs-sw i { opacity: 1; transform: none; }
+.gs-kit:not(.on) .gs-logo, .gs-kit:not(.on) .gs-kit-name, .gs-kit:not(.on) .gs-font, .gs-kit:not(.on) .gs-sw i { transition-delay: 0s; transition-duration: .25s; }
 .gs-kit .gs-kit-name { --n: 1; } .gs-kit .gs-sw i:nth-child(1) { --n: 2; } .gs-kit .gs-sw i:nth-child(2) { --n: 3; } .gs-kit .gs-sw i:nth-child(3) { --n: 4; } .gs-kit .gs-sw i:nth-child(4) { --n: 5; } .gs-kit .gs-sw i:nth-child(5) { --n: 6; } .gs-kit .gs-f1 { --n: 7; } .gs-kit .gs-f2 { --n: 8; }
 
 /* 3 · the first film */
@@ -87,20 +107,29 @@
 .gs-new::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--pearl); }
 .gs-s3.on .gs-new { opacity: 1; }
 .gs-lib-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.gs-film, .gs-ghost { display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; }
-.gs-ghost { background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
-.gs-film { position: relative; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
-.gs-film video { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.1); transition: opacity .6s var(--ease), transform 1s var(--ease); }
-.gs-chip { position: absolute; left: 7px; top: 7px; padding: 4px 6px 3px; border-radius: 6px; font: 500 9px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); opacity: 0; transition: opacity .4s; }
-.gs-s3.on .gs-film video { opacity: 1; transform: none; }
-.gs-s3.on .gs-film { box-shadow: 0 0 0 1.5px var(--pearl); }
-.gs-s3.on .gs-chip { opacity: 1; }
+.gs-film { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); transition: box-shadow .4s var(--ease); }
+.gs-film video, .gs-film img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.12); transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.gs-chip { position: absolute; left: 7px; top: 7px; padding: 4px 6px 3px; border-radius: 6px; font: 500 9px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); opacity: 0; transition: opacity .3s; }
+/* Claude is making this one: a light sweeps the empty slot */
+.gs-film::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, 0) 70%); transform: translateX(-100%); opacity: 0; }
+.gs-film.mk { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+.gs-film.mk::after { opacity: 1; animation: gs-sweep .9s var(--ease-io) infinite; }
+@keyframes gs-sweep { to { transform: translateX(100%); } }
+/* it lands */
+.gs-film.on { box-shadow: 0 0 0 1.5px var(--pearl); }
+.gs-film.on video, .gs-film.on img { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform 1s var(--ease); }
+.gs-film.on .gs-chip { opacity: 1; }
+/* the newest one keeps its ring; the earlier ones settle */
+.gs-film.on.old { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); }
 
 @media (max-width: 1020px) {
   .gs-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-  .gs-stage { height: 330px; }
+  .gs-stage { height: 348px; }
 }
 @media (max-width: 760px) {
   .gs-card { border-radius: 24px; padding: 8px; }
   .gs-copy { padding: 18px 12px 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gs-dots { display: none !important; }
 }

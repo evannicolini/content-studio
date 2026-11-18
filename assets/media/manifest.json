@@ -74,13 +74,13 @@
   },
   {
    "slug": "lobby-hero-window",
-   "title": "The Lobby \u00b7 Hero window, bigger",
+   "title": "The Lobby · Hero window, bigger",
    "brand": "MIRRA",
    "kind": "AI + motion graphics",
    "made_with": "AI people + MIRRA profile motion graphics, no VO",
    "version": "v06",
    "board_edit_id": "edit_lobby_hero_big",
-   "board_status": "Ready \u00b7 posted",
+   "board_status": "Ready · posted",
    "duration": 18.3,
    "aspect": "9:16",
    "loop": "assets/media/films/lobby-hero-window/loop.mp4",
@@ -110,7 +110,7 @@
   },
   {
    "slug": "ces-replied-booked",
-   "title": "Replied \u00d7 MIRRA \u00b7 Deleted, then booked",
+   "title": "Replied × MIRRA · Deleted, then booked",
    "brand": "Custom Esignature",
    "kind": "Commercial (AI + motion graphics)",
    "made_with": "AI live action + signature / MIRRA app motion graphics + VO",
@@ -145,13 +145,13 @@
   },
   {
    "slug": "ces-forest",
-   "title": "Forest \u00b7 compose to inbox",
+   "title": "Forest · compose to inbox",
    "brand": "Custom Esignature",
    "kind": "AI + motion graphics",
    "made_with": "AI forest plate + glass composer motion graphics, no VO",
    "version": "v02",
    "board_edit_id": "edit_ces_compose_forest",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad",
+   "board_status": "Ready · posted · ran as ad",
    "duration": 18.73,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-forest/loop.mp4",
@@ -180,7 +180,7 @@
   },
   {
    "slug": "ces-agent-kitchen",
-   "title": "Agent \u00b7 kitchen, real estate",
+   "title": "Agent · kitchen, real estate",
    "brand": "Custom Esignature",
    "kind": "Industry ad (AI + motion graphics)",
    "made_with": "AI kitchen plate + signature motion graphics + VO",
@@ -221,7 +221,7 @@
    "made_with": "AI live action + signature motion graphics + VO",
    "version": "v10",
    "board_edit_id": "edit_ces_launch_company_becoming",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite",
+   "board_status": "Ready · posted · ran as ad · favourite",
    "duration": 48.28,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-company-becoming/loop.mp4",
@@ -250,13 +250,13 @@
   },
   {
    "slug": "ces-sea-cliffs",
-   "title": "Signature anatomy \u00b7 sea cliffs",
+   "title": "Signature anatomy · sea cliffs",
    "brand": "Custom Esignature",
    "kind": "AI + motion graphics",
    "made_with": "AI sea-cliffs plate + signature motion graphics, no VO",
    "version": "v02",
    "board_edit_id": "edit_ces_sig_anatomy",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad",
+   "board_status": "Ready · posted · ran as ad",
    "duration": 16.18,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-sea-cliffs/loop.mp4",
@@ -291,7 +291,7 @@
    "made_with": "Evan on camera + phone screen demo, viral-format remake",
    "version": "v03",
    "board_edit_id": "edit_ces_is_this_a_signature",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite",
+   "board_status": "Ready · posted · ran as ad · favourite",
    "duration": 23.18,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-email-signature/loop.mp4",
@@ -323,7 +323,7 @@
  "carousels": [
   {
    "slug": "founder-sundays",
-   "title": "Stop figuring it out alone on Sundays \u00b7 Founder carousel",
+   "title": "Stop figuring it out alone on Sundays · Founder carousel",
    "brand": "MIRRA",
    "kind": "Carousel",
    "version": "v04",
@@ -342,7 +342,7 @@
   },
   {
    "slug": "founders-new-network",
-   "title": "A new network for young founders \u00b7 9:16 carousel",
+   "title": "A new network for young founders · 9:16 carousel",
    "brand": "MIRRA",
    "kind": "Carousel",
    "version": "v02",
@@ -385,7 +385,7 @@
     "source_duration": 15.04
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026",
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring…",
    "prompt_scene_teaser": null,
    "note": "The prompt recorded for this clip in SELECTS.md describes the private-airstrip scene, not the coastal drive: only the generic opening lines are safe to tease."
   },
@@ -410,8 +410,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026",
-   "prompt_scene_teaser": "Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring…",
+   "prompt_scene_teaser": "Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron…"
   },
   {
    "slug": "surfing",
@@ -434,7 +434,7 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
    "prompt_scene_teaser": null
   },
   {
@@ -458,8 +458,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood…"
   },
   {
    "slug": "mountain-biking-fpv",
@@ -482,8 +482,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park…"
   },
   {
    "slug": "run-club",
@@ -506,8 +506,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie\u2019s Point."
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost…",
+   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie’s Point."
   },
   {
    "slug": "cofounder-whiteboard",
@@ -530,8 +530,8 @@
     "source_duration": 6.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
-   "prompt_scene_teaser": "Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro\u2026"
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
+   "prompt_scene_teaser": "Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro…"
   },
   {
    "slug": "real-connections",
@@ -554,8 +554,8 @@
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
-   "prompt_scene_teaser": "Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden\u2026"
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
+   "prompt_scene_teaser": "Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden…"
   },
   {
    "slug": "house-party",
@@ -578,8 +578,8 @@
     "source_duration": 15.05
    },
    "used_in": null,
-   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026",
-   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"
+   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES—thin elongated streaks traveling horizontally across the image. No round…",
+   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each…"
   },
   {
    "slug": "get-together",
@@ -602,8 +602,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026",
-   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"
+   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES—thin elongated streaks traveling horizontally across the image. No round…",
+   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each…"
   },
   {
    "slug": "yacht",
@@ -626,8 +626,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated\u2026",
-   "prompt_scene_teaser": "Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated…",
+   "prompt_scene_teaser": "Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the…"
   },
   {
    "slug": "golf",
@@ -650,8 +650,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy…"
   },
   {
    "slug": "beach-volleyball",
@@ -674,7 +674,7 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No\u2026",
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No…",
    "prompt_scene_teaser": "Create a 12-second film of six established friends playing beach volleyball beside sparkling blue water, pale sand, healthy coastal greenery, and a clear sky."
   },
   {
@@ -698,8 +698,8 @@
     "source_duration": 12.06
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through…"
   },
   {
    "slug": "race-track",
@@ -722,8 +722,8 @@
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost…",
+   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.…"
   },
   {
    "slug": "tennis-forehand",
@@ -746,12 +746,12 @@
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL…",
    "prompt_scene_teaser": null
   },
   {
    "slug": "investor-intro",
-   "title": "Investor intro, caf\u00e9 terrace",
+   "title": "Investor intro, café terrace",
    "library_title": "Investor intro, cafe terrace (MIRRA Multivitamin)",
    "select_id": "vcf2ff8d516c980",
    "model": "Cinema Studio 4.0",
@@ -770,7 +770,7 @@
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL…",
    "prompt_scene_teaser": null
   },
   {
@@ -794,7 +794,7 @@
     "source_duration": 6.05
    },
    "used_in": "A day in people",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind…",
    "prompt_scene_teaser": null
   },
   {
@@ -818,7 +818,7 @@
     "source_duration": 5.05
    },
    "used_in": "A day in people",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind…",
    "prompt_scene_teaser": null
   },
   {
@@ -842,7 +842,7 @@
     "source_duration": 5.05
    },
    "used_in": "The Network Effect",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard…",
    "prompt_scene_teaser": null
   },
   {
@@ -866,7 +866,7 @@
     "source_duration": 10.05
    },
    "used_in": "Custom Esignature website",
-   "prompt_teaser": "Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white\u2026",
+   "prompt_teaser": "Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white…",
    "prompt_scene_teaser": null
   }
  ],
@@ -1109,6 +1109,46 @@
    "bytes": 574082,
    "thumb_bytes": 50719,
    "provenance": "AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 45fea6a6-7fb4-4e15-b266-8530fd7414b5 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.",
+   "provenance_note": "grain-free original"
+  },
+  {
+   "slug": "na-pali-coast",
+   "name": "Nā Pali coast",
+   "name_source": "made for the site 2026-11-17",
+   "scene": "coast",
+   "studio_group": "ocean",
+   "focus": "40% 50%",
+   "tint_rgb": "12,20,28",
+   "file": "assets/media/wallpapers/na-pali-coast.jpg",
+   "thumb": "assets/media/wallpapers/na-pali-coast-thumb.jpg",
+   "video": null,
+   "video_mobile": null,
+   "width": 2560,
+   "height": 1429,
+   "quality": 70,
+   "bytes": 398412,
+   "thumb_bytes": 34496,
+   "provenance": "AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e10830ea-027c-42a5-bc9b-d67cb6c37ecf. Not stock, no third-party photo.",
+   "provenance_note": "grain-free original"
+  },
+  {
+   "slug": "maui-palm-bay",
+   "name": "Maui, palm bay",
+   "name_source": "made for the site 2026-11-17",
+   "scene": "coast",
+   "studio_group": "ocean",
+   "focus": "70% 55%",
+   "tint_rgb": "14,22,30",
+   "file": "assets/media/wallpapers/maui-palm-bay.jpg",
+   "thumb": "assets/media/wallpapers/maui-palm-bay-thumb.jpg",
+   "video": null,
+   "video_mobile": null,
+   "width": 2560,
+   "height": 1429,
+   "quality": 70,
+   "bytes": 427959,
+   "thumb_bytes": 31460,
+   "provenance": "AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e446ba67-8370-4d7c-975f-0c2a5b01110b. Not stock, no third-party photo.",
    "provenance_note": "grain-free original"
   }
  ],

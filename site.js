@@ -74,13 +74,13 @@ window.SK_MEDIA = {
   },
   {
    "slug": "lobby-hero-window",
-   "title": "The Lobby \u00b7 Hero window, bigger",
+   "title": "The Lobby · Hero window, bigger",
    "brand": "MIRRA",
    "kind": "AI + motion graphics",
    "made_with": "AI people + MIRRA profile motion graphics, no VO",
    "version": "v06",
    "board_edit_id": "edit_lobby_hero_big",
-   "board_status": "Ready \u00b7 posted",
+   "board_status": "Ready · posted",
    "duration": 18.3,
    "aspect": "9:16",
    "loop": "assets/media/films/lobby-hero-window/loop.mp4",
@@ -110,7 +110,7 @@ window.SK_MEDIA = {
   },
   {
    "slug": "ces-replied-booked",
-   "title": "Replied \u00d7 MIRRA \u00b7 Deleted, then booked",
+   "title": "Replied × MIRRA · Deleted, then booked",
    "brand": "Custom Esignature",
    "kind": "Commercial (AI + motion graphics)",
    "made_with": "AI live action + signature / MIRRA app motion graphics + VO",
@@ -145,13 +145,13 @@ window.SK_MEDIA = {
   },
   {
    "slug": "ces-forest",
-   "title": "Forest \u00b7 compose to inbox",
+   "title": "Forest · compose to inbox",
    "brand": "Custom Esignature",
    "kind": "AI + motion graphics",
    "made_with": "AI forest plate + glass composer motion graphics, no VO",
    "version": "v02",
    "board_edit_id": "edit_ces_compose_forest",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad",
+   "board_status": "Ready · posted · ran as ad",
    "duration": 18.73,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-forest/loop.mp4",
@@ -180,7 +180,7 @@ window.SK_MEDIA = {
   },
   {
    "slug": "ces-agent-kitchen",
-   "title": "Agent \u00b7 kitchen, real estate",
+   "title": "Agent · kitchen, real estate",
    "brand": "Custom Esignature",
    "kind": "Industry ad (AI + motion graphics)",
    "made_with": "AI kitchen plate + signature motion graphics + VO",
@@ -221,7 +221,7 @@ window.SK_MEDIA = {
    "made_with": "AI live action + signature motion graphics + VO",
    "version": "v10",
    "board_edit_id": "edit_ces_launch_company_becoming",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite",
+   "board_status": "Ready · posted · ran as ad · favourite",
    "duration": 48.28,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-company-becoming/loop.mp4",
@@ -250,13 +250,13 @@ window.SK_MEDIA = {
   },
   {
    "slug": "ces-sea-cliffs",
-   "title": "Signature anatomy \u00b7 sea cliffs",
+   "title": "Signature anatomy · sea cliffs",
    "brand": "Custom Esignature",
    "kind": "AI + motion graphics",
    "made_with": "AI sea-cliffs plate + signature motion graphics, no VO",
    "version": "v02",
    "board_edit_id": "edit_ces_sig_anatomy",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad",
+   "board_status": "Ready · posted · ran as ad",
    "duration": 16.18,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-sea-cliffs/loop.mp4",
@@ -291,7 +291,7 @@ window.SK_MEDIA = {
    "made_with": "Evan on camera + phone screen demo, viral-format remake",
    "version": "v03",
    "board_edit_id": "edit_ces_is_this_a_signature",
-   "board_status": "Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite",
+   "board_status": "Ready · posted · ran as ad · favourite",
    "duration": 23.18,
    "aspect": "9:16",
    "loop": "assets/media/films/ces-email-signature/loop.mp4",
@@ -323,7 +323,7 @@ window.SK_MEDIA = {
  "carousels": [
   {
    "slug": "founder-sundays",
-   "title": "Stop figuring it out alone on Sundays \u00b7 Founder carousel",
+   "title": "Stop figuring it out alone on Sundays · Founder carousel",
    "brand": "MIRRA",
    "kind": "Carousel",
    "version": "v04",
@@ -342,7 +342,7 @@ window.SK_MEDIA = {
   },
   {
    "slug": "founders-new-network",
-   "title": "A new network for young founders \u00b7 9:16 carousel",
+   "title": "A new network for young founders · 9:16 carousel",
    "brand": "MIRRA",
    "kind": "Carousel",
    "version": "v02",
@@ -385,7 +385,7 @@ window.SK_MEDIA = {
     "source_duration": 15.04
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026",
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring…",
    "prompt_scene_teaser": null,
    "note": "The prompt recorded for this clip in SELECTS.md describes the private-airstrip scene, not the coastal drive: only the generic opening lines are safe to tease."
   },
@@ -410,8 +410,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026",
-   "prompt_scene_teaser": "Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring…",
+   "prompt_scene_teaser": "Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron…"
   },
   {
    "slug": "surfing",
@@ -434,7 +434,7 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
    "prompt_scene_teaser": null
   },
   {
@@ -458,8 +458,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood…"
   },
   {
    "slug": "mountain-biking-fpv",
@@ -482,8 +482,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park…"
   },
   {
    "slug": "run-club",
@@ -506,8 +506,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie\u2019s Point."
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost…",
+   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie’s Point."
   },
   {
    "slug": "cofounder-whiteboard",
@@ -530,8 +530,8 @@ window.SK_MEDIA = {
     "source_duration": 6.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
-   "prompt_scene_teaser": "Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro\u2026"
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
+   "prompt_scene_teaser": "Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro…"
   },
   {
    "slug": "real-connections",
@@ -554,8 +554,8 @@ window.SK_MEDIA = {
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026",
-   "prompt_scene_teaser": "Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden\u2026"
+   "prompt_teaser": "Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and…",
+   "prompt_scene_teaser": "Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden…"
   },
   {
    "slug": "house-party",
@@ -578,8 +578,8 @@ window.SK_MEDIA = {
     "source_duration": 15.05
    },
    "used_in": null,
-   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026",
-   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"
+   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES—thin elongated streaks traveling horizontally across the image. No round…",
+   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each…"
   },
   {
    "slug": "get-together",
@@ -602,8 +602,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026",
-   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"
+   "prompt_teaser": "PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES—thin elongated streaks traveling horizontally across the image. No round…",
+   "prompt_scene_teaser": "Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each…"
   },
   {
    "slug": "yacht",
@@ -626,8 +626,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated\u2026",
-   "prompt_scene_teaser": "Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated…",
+   "prompt_scene_teaser": "Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the…"
   },
   {
    "slug": "golf",
@@ -650,8 +650,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy…"
   },
   {
    "slug": "beach-volleyball",
@@ -674,7 +674,7 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No\u2026",
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No…",
    "prompt_scene_teaser": "Create a 12-second film of six established friends playing beach volleyball beside sparkling blue water, pale sand, healthy coastal greenery, and a clear sky."
   },
   {
@@ -698,8 +698,8 @@ window.SK_MEDIA = {
     "source_duration": 12.06
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin…",
+   "prompt_scene_teaser": "Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through…"
   },
   {
    "slug": "race-track",
@@ -722,8 +722,8 @@ window.SK_MEDIA = {
     "source_duration": 12.05
    },
    "used_in": null,
-   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026",
-   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.\u2026"
+   "prompt_teaser": "Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost…",
+   "prompt_scene_teaser": "Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.…"
   },
   {
    "slug": "tennis-forehand",
@@ -746,12 +746,12 @@ window.SK_MEDIA = {
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL…",
    "prompt_scene_teaser": null
   },
   {
    "slug": "investor-intro",
-   "title": "Investor intro, caf\u00e9 terrace",
+   "title": "Investor intro, café terrace",
    "library_title": "Investor intro, cafe terrace (MIRRA Multivitamin)",
    "select_id": "vcf2ff8d516c980",
    "model": "Cinema Studio 4.0",
@@ -770,7 +770,7 @@ window.SK_MEDIA = {
     "source_duration": 4.04
    },
    "used_in": "MIRRA Multivitamin",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL…",
    "prompt_scene_teaser": null
   },
   {
@@ -794,7 +794,7 @@ window.SK_MEDIA = {
     "source_duration": 6.05
    },
    "used_in": "A day in people",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind…",
    "prompt_scene_teaser": null
   },
   {
@@ -818,7 +818,7 @@ window.SK_MEDIA = {
     "source_duration": 5.05
    },
    "used_in": "A day in people",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind…",
    "prompt_scene_teaser": null
   },
   {
@@ -842,7 +842,7 @@ window.SK_MEDIA = {
     "source_duration": 5.05
    },
    "used_in": "The Network Effect",
-   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard\u2026",
+   "prompt_teaser": "Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard…",
    "prompt_scene_teaser": null
   },
   {
@@ -866,7 +866,7 @@ window.SK_MEDIA = {
     "source_duration": 10.05
    },
    "used_in": "Custom Esignature website",
-   "prompt_teaser": "Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white\u2026",
+   "prompt_teaser": "Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white…",
    "prompt_scene_teaser": null
   }
  ],
@@ -1109,6 +1109,46 @@ window.SK_MEDIA = {
    "bytes": 574082,
    "thumb_bytes": 50719,
    "provenance": "AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 45fea6a6-7fb4-4e15-b266-8530fd7414b5 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.",
+   "provenance_note": "grain-free original"
+  },
+  {
+   "slug": "na-pali-coast",
+   "name": "Nā Pali coast",
+   "name_source": "made for the site 2026-11-17",
+   "scene": "coast",
+   "studio_group": "ocean",
+   "focus": "40% 50%",
+   "tint_rgb": "12,20,28",
+   "file": "assets/media/wallpapers/na-pali-coast.jpg",
+   "thumb": "assets/media/wallpapers/na-pali-coast-thumb.jpg",
+   "video": null,
+   "video_mobile": null,
+   "width": 2560,
+   "height": 1429,
+   "quality": 70,
+   "bytes": 398412,
+   "thumb_bytes": 34496,
+   "provenance": "AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e10830ea-027c-42a5-bc9b-d67cb6c37ecf. Not stock, no third-party photo.",
+   "provenance_note": "grain-free original"
+  },
+  {
+   "slug": "maui-palm-bay",
+   "name": "Maui, palm bay",
+   "name_source": "made for the site 2026-11-17",
+   "scene": "coast",
+   "studio_group": "ocean",
+   "focus": "70% 55%",
+   "tint_rgb": "14,22,30",
+   "file": "assets/media/wallpapers/maui-palm-bay.jpg",
+   "thumb": "assets/media/wallpapers/maui-palm-bay-thumb.jpg",
+   "video": null,
+   "video_mobile": null,
+   "width": 2560,
+   "height": 1429,
+   "quality": 70,
+   "bytes": 427959,
+   "thumb_bytes": 31460,
+   "provenance": "AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e446ba67-8370-4d7c-975f-0c2a5b01110b. Not stock, no third-party photo.",
    "provenance_note": "grain-free original"
   }
  ],
@@ -1712,11 +1752,11 @@ window.SK_MEDIA = {
     if (kp) { var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46); SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } }; }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
-      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="" width="88" height="88" loading="lazy"></span>' +
-        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-wave" data-wave></span></span><span class="vo-time" data-time></span>' +
-        '<button class="vo-play" data-play aria-label="Play">' + PLAY + "</button>";
+      box.innerHTML = '<span class="vo-face"><img src="assets/kayla.jpg" alt="Kayla" width="88" height="88" loading="lazy"></span>' +
+        '<span class="vo-mid"><span class="vo-label"></span><span class="vo-bub"><button class="vo-play" data-play aria-label="Play">' + PLAY + '</button>' +
+        '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span></span>';
       box.querySelector(".vo-label").textContent = box.getAttribute("data-label") || "Listen";
-      player(box, box.getAttribute("data-src"), 40);
+      player(box, box.getAttribute("data-src"), 34);
     });
   }
 
@@ -1805,6 +1845,23 @@ window.SK_MEDIA = {
     var nav = document.querySelector(".nav");
     var kpEl = document.querySelector(".kp");
     if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7); }; on(); window.addEventListener("scroll", on, { passive: true }); }
+    /* the nav slides away while scrolling down and returns only on a deliberate scroll up: the upward travel has to add up to
+       14% of the screen (at least 110px) with no downward movement in between. Always shown near the top. */
+    if (nav) (function () {
+      var lastY = window.scrollY, up = 0, raf = 0;
+      window.addEventListener("scroll", function () {
+        if (raf) return;
+        raf = requestAnimationFrame(function () {
+          raf = 0;
+          var y = Math.max(0, window.scrollY), dy = y - lastY;
+          lastY = y;
+          if (y < 80) { up = 0; nav.classList.remove("away"); }
+          else if (dy > 0) { up = 0; if (dy > 2) nav.classList.add("away"); }
+          else if (dy < 0) { up -= dy; if (up > Math.max(110, window.innerHeight * 0.14)) nav.classList.remove("away"); }
+        });
+      }, { passive: true });
+      nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
+    })();
     kayla();
     growFrames();
     focusSections();
@@ -2027,7 +2084,402 @@ else (function () {
 } catch (e) { console.error("section 010-hero", e); }
 })();
 
-/* ===== 020-statement ===== */
+/* ===== 020-phone ===== */
+;(function () {
+try {
+var sec = document.getElementById("shoot");
+if (!sec) return;
+var root = sec.querySelector(".sh.frame");      /* screen one: the footage frame */
+
+/* the footage drifts a little against the scroll (only while on screen) */
+(function (el) {
+  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
+  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
+    el.removeAttribute("poster"); el.style.opacity = "0";
+    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
+  }
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+    var t = -p * r.height * 0.045;
+    y += (t - y) * 0.12;
+    if (Math.abs(t - y) < 0.05) y = t;
+    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* three batches of footage, each becomes its own film: the takes are frames of that film's own shots */
+var BATCHES = [
+  { slug: "run-club", cap: "Same crew.\nEvery morning." },
+  { slug: "coffee-friend-arrives", cap: "The corner table.\nSaturdays." },
+  { slug: "coastal-highway", cap: "Take the\nlong way." }
+];
+var card = root.querySelector(".sh-card"), clips = [].slice.call(card.querySelectorAll(".sh-clip"));
+var steps = [].slice.call(card.querySelectorAll(".sh-steps li")), status = card.querySelector(".sh-status");
+var filmBox = card.querySelector(".sh-film"), film = filmBox.querySelector("video"), cap = card.querySelector(".sh-cap"), token = 0, round = 0;
+var STATES = ["s0", "s1", "s2", "s2b", "s3", "s4", "s5", "sh-fade"];
+
+function fill(b) {
+  clips.forEach(function (c, i) { c.querySelector("img").src = "assets/media/shoot/" + b.slug + "-" + (i + 1) + ".jpg"; });
+  cap.textContent = b.cap;
+  var src = "assets/media/selects/" + b.slug + ".mp4";
+  film.poster = "assets/media/selects/" + b.slug + ".jpg";
+  film.setAttribute("data-src", src);
+  if (film.getAttribute("src") && film.getAttribute("src") !== src) film.src = src;      /* the kit has already armed it: swap the file */
+}
+function reset() {
+  STATES.forEach(function (s) { card.classList.remove(s); });
+  clips.forEach(function (c) { c.classList.remove("in"); });
+  steps.forEach(function (s) { s.classList.remove("on", "run"); });
+  status.textContent = "Drop clips here";
+}
+/* where each picked take has to travel to land in the middle of the film */
+function measure() {
+  var f = filmBox.getBoundingClientRect();
+  clips.forEach(function (c) {
+    if (!c.classList.contains("pick")) return;
+    var w = c.offsetWidth, h = c.offsetHeight, p = c.offsetParent ? c.offsetParent.getBoundingClientRect() : f;
+    c.style.setProperty("--dx", (f.left + f.width / 2 - (p.left + c.offsetLeft + w / 2)).toFixed(1) + "px");
+    c.style.setProperty("--dy", (f.top + f.height / 2 - (p.top + c.offsetTop + h / 2)).toFixed(1) + "px");
+  });
+}
+function job(n, ms, text) { var li = steps[n]; li.style.setProperty("--d", ms + "ms"); li.classList.add("run"); status.textContent = text; }
+function done(n) { steps[n].classList.remove("run"); steps[n].classList.add("on"); }
+
+async function run() {
+  var my = ++token;
+  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
+  if (SK.reduced) { reset(); fill(BATCHES[0]); clips.forEach(function (c) { c.classList.add("in"); }); steps.forEach(function (s) { s.classList.add("on"); }); ["s1", "s2", "s2b", "s3", "s4", "s5"].forEach(function (s) { card.classList.add(s); }); status.textContent = "Ready"; return; }
+  try {
+    for (;;) {
+      reset();
+      fill(BATCHES[round++ % BATCHES.length]);
+      await w(350);
+      clips.forEach(function (c) { c.classList.add("in"); }); status.textContent = "Dropped in"; card.classList.add("s0");
+      await w(1500);
+      job(0, 950, "Finding the best takes"); await w(950); done(0); card.classList.add("s1");
+      await w(650);
+      job(1, 900, "Cutting"); measure(); await w(250);
+      card.classList.add("s2"); try { film.currentTime = 0; var p = film.play(); p && p.catch(function () {}); } catch (e) {}
+      await w(900); done(1); card.classList.add("s2b");
+      job(2, 800, "Captioning"); await w(800); done(2); card.classList.add("s3");
+      job(3, 800, "Scoring"); await w(800); done(3); card.classList.add("s4");
+      await w(450);
+      card.classList.add("s5"); status.textContent = "Ready";
+      await w(4600);
+      card.classList.add("sh-fade");
+      await w(500);
+    }
+  } catch (e) {}
+}
+fill(BATCHES[0]);
+SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+
+
+/* ================= screen two: the camera roll goes into Studio, finished videos come out ================= */
+(function () {
+  var box = sec.querySelector(".sho");
+  if (!box) return;
+  var stage = box.querySelector(".sho-stage"), flow = box.querySelector(".sho-flow"), tray = box.querySelector(".sho-tray"), pile = box.querySelector(".sho-pile");
+  var core = box.querySelector(".sho-core"), statusBox = box.querySelector(".sho-status"), statusText = statusBox.querySelector("span");
+  var bars = [].slice.call(box.querySelectorAll(".sho-bars li")), nIn = box.querySelector(".sho-in"), nOut = box.querySelector(".sho-n-out");
+  var vids = [].slice.call(box.querySelectorAll(".sho-vid"));
+  var M = "assets/media/", RAW = [], STEP = 44, FLY = 850, IDLE = "Drop in the camera roll", tok = 0, laid = "";
+
+  /* 38 raw clips: frames of real footage already on the site (15 from the three shoots above, 23 more from the library) */
+  ["run-club", "coffee-friend-arrives", "coastal-highway"].forEach(function (s) { for (var i = 1; i <= 5; i++) RAW.push("shoot/" + s + "-" + i + ".jpg"); });
+  ["02", "04", "06", "08", "11", "13", "15", "17", "19", "21", "23", "25", "27"].forEach(function (n) { RAW.push("thumbs/t" + n + ".jpg"); });
+  ["dinner-toast", "get-together", "real-connections", "tropical-vacation", "race-track", "investor-intro", "court-dap", "golf", "surfing", "tennis-forehand"].forEach(function (s) { RAW.push("selects/" + s + ".jpg"); });
+  var TOTAL = RAW.length, OUT = vids.length;
+
+  /* the same "random" every visit, so the pile always looks composed */
+  var seed = 7;
+  function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+  for (var i = RAW.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)), t = RAW[i]; RAW[i] = RAW[j]; RAW[j] = t; }
+  var clips = RAW.map(function (src, n) {
+    var el = document.createElement("span"), inner = document.createElement("i"), img = document.createElement("img");
+    el.className = "sho-clip";
+    img.alt = ""; img.width = 180; img.height = 320; img.decoding = "async"; img.loading = "lazy"; img.src = M + src;
+    inner.appendChild(img); el.appendChild(inner); pile.appendChild(el);
+    return { el: el, jx: rnd() - .5, jy: rnd() - .5, r: (rnd() - .5) * 17, z: Math.floor(rnd() * 20), n: n };
+  });
+
+  /* place the pile for the box it has: a tall tray on wide screens, a low wide one on phones */
+  function layout() {
+    var W = pile.clientWidth, H = pile.clientHeight;
+    if (!W || !H) return false;
+    var key = W + "x" + H;
+    if (key === laid) return true;
+    laid = key;
+    var wide = W / H > 1.3, cols = wide ? 13 : 5, rows = Math.ceil(TOTAL / cols);
+    var cw = wide ? Math.min(W * .112, H * .6 * 9 / 16) : Math.min(W * .2, H * .2 * 9 / 16 + 30), ch = cw * 16 / 9;
+    clips.forEach(function (c, n) {
+      var col = n % cols, row = Math.floor(n / cols), last = row === rows - 1 ? TOTAL - row * cols : cols;
+      var fx = last > 1 ? (col + (cols - last) / 2) / (cols - 1) : .5, fy = rows > 1 ? row / (rows - 1) : .5;
+      var x = fx * (W - cw) + c.jx * cw * .34, y = fy * (H - ch) + c.jy * ch * .16;
+      c.el.style.width = cw.toFixed(1) + "px";
+      c.el.style.left = Math.max(0, Math.min(W - cw, x)).toFixed(1) + "px";
+      c.el.style.top = Math.max(0, Math.min(H - ch, y)).toFixed(1) + "px";
+      c.el.style.zIndex = c.z;
+      c.el.style.setProperty("--r", c.r.toFixed(1) + "deg");
+      c.el.style.setProperty("--n", n);
+    });
+    return true;
+  }
+  /* where everything has to travel: clips to the middle of Studio, videos from the middle of Studio to their place.
+     The stage may still be growing into place (the kit scales frames in), so screen distances are scaled back. */
+  function measure() {
+    var k = (stage.getBoundingClientRect().width / stage.offsetWidth) || 1, c = core.getBoundingClientRect();
+    var cx = c.left + c.width / 2, cy = c.top + c.height / 2, list = [];
+    clips.forEach(function (o) {
+      var r = o.el.getBoundingClientRect(), dx = cx - (r.left + r.width / 2), dy = cy - (r.top + r.height / 2);
+      o.el.style.setProperty("--dx", ((dx + o.jx * c.width * .3) / k).toFixed(1) + "px");
+      o.el.style.setProperty("--dy", ((dy + o.jy * c.height * .3) / k).toFixed(1) + "px");
+      list.push({ o: o, d: Math.sqrt(dx * dx + dy * dy) * (1 + o.jx * .5) });
+    });
+    list.sort(function (a, b) { return a.d - b.d; }).forEach(function (x, i) { x.o.el.style.setProperty("--k", i); });   /* the nearest leave first */
+    vids.forEach(function (v) {
+      var r = v.getBoundingClientRect(), card = v.querySelector(".sho-card");
+      card.style.setProperty("--fx", ((cx - (r.left + r.width / 2)) / k).toFixed(1) + "px");
+      card.style.setProperty("--fy", ((cy - (r.top + r.height / 2)) / k).toFixed(1) + "px");
+    });
+  }
+  function say(text) {
+    if (statusText.textContent === text) return;
+    statusBox.classList.add("swap");
+    var my = tok;
+    setTimeout(function () { if (my !== tok) return; statusText.textContent = text; statusBox.classList.remove("swap"); }, 170);
+  }
+  function bar(n, ms) { bars[n].style.setProperty("--d", ms + "ms"); bars[n].classList.add("run"); }
+  function barDone(n) { bars[n].classList.remove("run"); bars[n].classList.add("on"); }
+  /* a count that ticks, one step every `ms` */
+  function tick(el, from, to, ms, after) {
+    var my = tok, v = from, dir = to > from ? 1 : -1;
+    setTimeout(function next() {
+      if (my !== tok) return;
+      v += dir; el.textContent = v; el.classList.toggle("lit", v > 0);
+      if (v !== to) setTimeout(next, ms);
+    }, after || 0);
+  }
+  function reset() {
+    flow.classList.add("rst");
+    flow.classList.remove("s-in", "s-go", "s-back", "fade"); tray.classList.remove("done"); statusBox.classList.remove("swap");
+    vids.forEach(function (v) { v.classList.remove("on"); });
+    bars.forEach(function (b) { b.classList.remove("run", "on"); });
+    statusText.textContent = IDLE; nIn.textContent = "0"; nOut.textContent = "0";
+    nIn.classList.remove("lit"); nOut.classList.remove("lit");
+    void flow.offsetWidth;
+    flow.classList.remove("rst");
+  }
+  /* the finished picture, for people who asked for no motion */
+  function still() {
+    reset(); layout(); flow.classList.add("rst", "s-in");
+    vids.forEach(function (v) { v.classList.add("on"); });
+    bars.forEach(function (b) { b.classList.add("on"); });
+    statusText.textContent = OUT + " videos ready"; nIn.textContent = TOTAL; nOut.textContent = OUT;
+    nIn.classList.add("lit"); nOut.classList.add("lit");
+  }
+
+  async function run() {
+    var my = ++tok;
+    var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== tok) throw 0; }); };
+    if (SK.reduced) { still(); return; }
+    flow.style.setProperty("--step", STEP + "ms");
+    try {
+      for (;;) {
+        reset();
+        if (!layout()) { await w(400); continue; }
+        await w(350);
+        flow.classList.add("s-in");                                   /* the camera roll drops in */
+        await w(1500);
+        measure();
+        var intake = (TOTAL - 1) * STEP + FLY;
+        say("Finding the best takes"); bar(0, intake + 250);
+        flow.classList.add("s-go");                                   /* every clip streams under the glass, into Studio */
+        tick(nIn, 0, TOTAL, STEP, FLY - 200);
+        await w(intake + 250);
+        barDone(0); flow.classList.add("s-back"); tray.classList.add("done");
+        say("Cutting"); bar(1, 850); await w(850); barDone(1);
+        say("Captions"); bar(2, 800); await w(800); barDone(2);
+        say("Music"); bar(3, 800); await w(800); barDone(3);
+        await w(150);
+        measure();
+        say(OUT + " videos ready");
+        for (var n = 0; n < OUT; n++) {                               /* the videos come out, one by one, and take their names */
+          var v = vids[n], vid = v.querySelector("video");
+          try { vid.currentTime = 0; } catch (e) {}
+          v.classList.add("on");
+          tick(nOut, n, n + 1, 1, 420);
+          await w(330);
+        }
+        await w(5600);                                                /* rest on the finished set */
+        flow.classList.add("fade");
+        await w(650);
+      }
+    } catch (e) {}
+  }
+
+  layout();
+  var rz = 0;
+  window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { if (layout() && flow.classList.contains("s-go")) run(); }, 200); });
+  if (SK.reduced) { still(); return; }
+  SK.onView(flow, run, function () { tok++; reset(); }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
+})();
+
+} catch (e) { console.error("section 020-phone", e); }
+})();
+
+/* ===== 030-chat ===== */
+;(function () {
+try {
+var root = document.getElementById("chat");
+if (!root) return;
+
+/* the footage drifts a little against the scroll (only while on screen) */
+(function (el) {
+  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
+  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
+    el.removeAttribute("poster"); el.style.opacity = "0";
+    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
+  }
+  if (!el || SK.reduced) return;
+  var y = 0, raf = 0, on = false;
+  function step() {
+    raf = 0;
+    if (!on) return;
+    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
+    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
+    var t = -p * r.height * 0.045;
+    y += (t - y) * 0.12;
+    if (Math.abs(t - y) < 0.05) y = t;
+    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
+    raf = requestAnimationFrame(step);
+  }
+  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+})(root.querySelector("video.bg"));
+
+/* one conversation, drawn on both screens so they stay in step */
+var film = ((SK.media.films || []).filter(function (f) { return f.slug === "ces-sea-cliffs"; })[0] || (SK.media.films || [])[0] || {}).poster || "";
+var IMG = function (w, h) { return '<img src="' + film + '" alt="" width="' + w + '" height="' + h + '" loading="lazy" decoding="async">'; };
+var SCRIPT = [
+  { who: "claude", text: "Your launch film is ready.", card:
+    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">v01</span></figure></div><p class="ch-foot"><span>Full edits</span><b class="still">Ready to watch</b></p></div>' },
+  { who: "you", text: "The new film is great. Make a square version for the feed and schedule both for Thursday." },
+  { who: "claude", doing: ["Making the square version", "Scheduling both"], text: "Done. Both are on Thursday at 10.", card:
+    '<div class="ch-card"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">9:16</span></figure><figure class="s">' + IMG(96, 96) + '<span class="ch-chip">1:1</span></figure></div><p class="ch-foot dot">Thursday · 10:00</p></div>' },
+  { who: "you", text: "And run the first one as an ad." },
+  { who: "claude", doing: ["Setting up the ad"], text: "It's live.", card:
+    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">Ad</span></figure></div><p class="ch-foot"><span><img src="assets/logos/social/meta.svg" alt="" width="24" height="24" loading="lazy" decoding="async">Facebook · Instagram</span><b>Live</b></p></div>' }
+];
+var SPARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#claude"/></svg>';
+var lists = [].slice.call(root.querySelectorAll(".ch-list")), rows = [];
+lists.forEach(function (list) {
+  SCRIPT.forEach(function (s, i) {
+    var m = document.createElement("div");
+    m.className = "ch-m " + s.who;
+    if (s.who === "you") m.textContent = s.text;
+    else {
+      m.innerHTML = '<span class="ch-think">' + SPARK + "<span></span><u><i></i><i></i><i></i></u></span>" + '<div class="ch-body"><p class="ch-who">' + SPARK + 'Claude</p><p class="ch-say"></p>' + (s.card || "") + "</div>";
+      m.querySelector(".ch-say").textContent = s.text;
+    }
+    list.appendChild(m);
+    (rows[i] = rows[i] || []).push(m);
+  });
+});
+
+var macC = root.querySelector(".ch-mac .ch-comp"), phone = root.querySelector(".ch-phone .ch-comp");
+var comps = [macC, phone], token = 0, cur = 0;
+comps.forEach(function (c) { c._ph = c.querySelector(".ch-ask-t").textContent; });
+/* the border beam runs round both composers the whole time the section is on screen (SK.beam stops it out of view) */
+SK.beam(macC, { size: "md", variant: "mirra", radius: 18, boost: 2.2 });
+SK.beam(phone, { size: "md", variant: "mirra", radius: 30, boost: 2.2 });
+
+/* the panels slide in once; their glass and contents fade (never the panel itself, or the glass would stop blurring) */
+if (!SK.reduced) {
+  root.classList.add("ch-arm");
+  SK.onView(root.querySelector(".ch-in"), function () { root.classList.remove("ch-arm"); }, null, { once: true, ratio: 0.12, threshold: [0, 0.12, 0.3] });
+}
+
+/* keep the newest message in view, like a real thread */
+function fit(i) {
+  cur = i;
+  lists.forEach(function (list, v) {
+    var m = rows[i][v], box = list.parentNode;
+    if (!box.clientHeight) return;
+    var h = m.classList.contains("think") ? 44 : m.offsetHeight;
+    list.style.transform = "translate3d(0," + -Math.max(0, m.offsetTop + h + 8 - box.clientHeight) + "px,0)";
+  });
+}
+function show(i) { rows[i].forEach(function (m) { m.classList.remove("think"); m.classList.add("on"); }); fit(i); }
+function think(i, text) { rows[i].forEach(function (m) { m.querySelector(".ch-think span").textContent = text; m.classList.add("think"); }); fit(i); }
+function working(on) { comps.forEach(function (c) { c.classList.toggle("working", on); }); }
+function setAsk(c, t, typing) {
+  var box = c.querySelector(".ch-ask"), h = box.offsetHeight;
+  c.querySelector(".ch-ask-t").textContent = t || c._ph;
+  box.classList.toggle("ph", !t);
+  c.classList.toggle("typing", !!typing);
+  box.scrollTop = box.scrollHeight;               /* past two lines, the newest words stay in view */
+  if (box.offsetHeight !== h) fit(cur);           /* the field grew or shrank a line: keep the thread pinned to its newest message */
+}
+function reset() {
+  rows.forEach(function (r) { r.forEach(function (m) { m.classList.remove("on", "think"); }); });
+  lists.forEach(function (l) { l.style.transform = ""; });
+  phone.classList.remove("talk");
+  working(false);
+  comps.forEach(function (c) { setAsk(c, "", false); });
+  root.classList.remove("ch-out");
+  show(0);                                        /* the thread always opens on the film Claude just delivered */
+}
+
+async function run() {
+  var my = ++token;
+  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
+  reset();
+  if (SK.reduced) { SCRIPT.forEach(function (s, i) { show(i); }); return; }
+  async function answer(i) {
+    working(true);
+    var d = SCRIPT[i].doing;
+    for (var k = 0; k < d.length; k++) { think(i, d[k]); await w(1250); }
+    working(false);
+    show(i);
+  }
+  try {
+    for (;;) {
+      await w(900);
+      /* the first request is typed: on the Mac when the Mac window is showing, otherwise on the phone */
+      var c = macC.offsetParent ? macC : phone, send = c.querySelector(".ch-send"), t = SCRIPT[1].text;
+      for (var i = 1; i <= t.length; i++) { setAsk(c, t.slice(0, i), true); await w(t[i - 1] === "." ? 190 : 18 + Math.random() * 24); }
+      await w(380);
+      send.classList.add("tap"); await w(160); send.classList.remove("tap");
+      setAsk(c, "", false); show(1);
+      await w(600);
+      await answer(2);
+      /* the second one is said out loud, on the phone */
+      await w(2300);
+      phone.classList.add("talk");
+      await w(1900);
+      phone.classList.remove("talk"); show(3);
+      await w(600);
+      await answer(4);
+      await w(4200);
+      root.classList.add("ch-out");
+      await w(550);
+      reset();
+    }
+  } catch (e) {}
+}
+SK.onView(root.querySelector(".ch-phone"), run, function () { token++; reset(); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
+
+} catch (e) { console.error("section 030-chat", e); }
+})();
+
+/* ===== 040-statement ===== */
 ;(function () {
 try {
 var root = document.getElementById("why");
@@ -2152,10 +2604,10 @@ SK.onView(screen, function () {
   if (!raf) raf = requestAnimationFrame(frame);
 }, function () { live = false; }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
 
-} catch (e) { console.error("section 020-statement", e); }
+} catch (e) { console.error("section 040-statement", e); }
 })();
 
-/* ===== 030-work ===== */
+/* ===== 050-work ===== */
 ;(function () {
 try {
 var root = document.getElementById("work");
@@ -2315,10 +2767,10 @@ window.addEventListener("load", place);
 var rz = 0;
 window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(place, 120); });
 
-} catch (e) { console.error("section 030-work", e); }
+} catch (e) { console.error("section 050-work", e); }
 })();
 
-/* ===== 040-carry ===== */
+/* ===== 060-carry ===== */
 ;(function () {
 try {
 var root = document.getElementById("anywhere");
@@ -2474,10 +2926,10 @@ async function run() {
 SK.onView(work, run, function () { token++; reset(); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
 window.addEventListener("resize", function () { if (shown >= 0) place(); });
 
-} catch (e) { console.error("section 040-carry", e); }
+} catch (e) { console.error("section 060-carry", e); }
 })();
 
-/* ===== 050-library ===== */
+/* ===== 070-library ===== */
 ;(function () {
 try {
 var root = document.getElementById("library");
@@ -2801,10 +3253,10 @@ if (deck.length) {
     function () { stageIn = false; askRun++; matching(false); deck.forEach(function (t) { setLive(t, false); closeTile(t); }); }, { ratio: 0.15, threshold: [0, 0.15, 0.5] });
 }
 
-} catch (e) { console.error("section 050-library", e); }
+} catch (e) { console.error("section 070-library", e); }
 })();
 
-/* ===== 060-viral ===== */
+/* ===== 080-viral ===== */
 ;(function () {
 try {
 var root = document.getElementById("viral");
@@ -2903,10 +3355,83 @@ if (SK.reduced) {
   }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
 }
 
-} catch (e) { console.error("section 060-viral", e); }
+/* ================= the library: add a video, Claude studies it once, the study is kept, remake it any time ================= */
+var lib = document.getElementById("vlb");
+if (!lib) return;
+var L = function (s) { return lib.querySelector(s); }, LA = function (s) { return [].slice.call(lib.querySelectorAll(s)); };
+var addB = L("#vlb-add"), tile = L("#vlb-new"), url = L("#vlb-url"), chip = L("#vlb-chip"), chipT = chip.querySelector("em"), tileV = tile.querySelector("video");
+var sheet = L("#vlb-open"), rows = LA(".vlb-row"), go = L("#vlb-go"), re = L("#vlb-re"), reV = re.querySelector("video");
+var nAll = L("#vlb-n"), nOk = L("#vlb-ok"), nOf = L("#vlb-all");
+var LINK = SK.mobile() ? "Reel link" : "instagram.com/reel/…", SAVED = 7, libTok = 0;
+
+function count(all, ok) { nAll.textContent = String(all); nOf.textContent = String(all); nOk.textContent = String(ok); }
+function chipSet(t, ok) { chipT.textContent = t; chip.classList.toggle("ok", !!ok); }
+function rowOn(r, instant) { r.classList.add("on"); var v = r.querySelector(".vlb-v"); SK.type(v, v.getAttribute("data-text"), { ms: 24, instant: instant }); }
+function restart(v) { try { v.currentTime = 0; } catch (e) {} if (!SK.reduced) { var p = v.play(); p && p.catch(function () {}); } }
+function libReset() {
+  addB.classList.remove("tap");
+  tile.classList.remove("link", "saved", "studying");
+  url._skType = (url._skType || 0) + 1; url.textContent = "";
+  chipSet("Saved", false);
+  sheet.classList.remove("open", "studied");
+  rows.forEach(function (r) { r.classList.remove("on"); var v = r.querySelector(".vlb-v"); v._skType = (v._skType || 0) + 1; v.textContent = ""; });
+  go.classList.remove("ready", "tap", "busy", "done");
+  re.classList.remove("making", "on");
+  count(SAVED, SAVED);
+}
+/* the finished picture: reduced motion, and what the stage rests on when it is scrolled away mid-loop */
+function libDone() {
+  url._skType = (url._skType || 0) + 1; url.textContent = LINK;
+  tile.classList.remove("link", "studying"); tile.classList.add("saved");
+  chipSet("Studied", true);
+  sheet.classList.add("open", "studied");
+  rows.forEach(function (r) { rowOn(r, true); });
+  go.classList.remove("ready", "tap", "busy"); go.classList.add("done");
+  re.classList.remove("making"); re.classList.add("on");
+  count(SAVED + 1, SAVED + 1);
+}
+async function libLoop() {
+  var my = ++libTok, ok = function () { return my === libTok; }, wait = function (ms) { return SK.sleep(ms).then(ok); };
+  while (ok()) {
+    libReset();
+    if (!(await wait(900))) return;
+    addB.classList.add("tap");                                   /* Add a video */
+    if (!(await wait(240))) return;
+    addB.classList.remove("tap"); tile.classList.add("link");
+    if (!(await wait(380))) return;
+    await SK.type(url, LINK, { ms: 40 });                        /* a link goes in */
+    if (!(await wait(520))) return;
+    tile.classList.add("saved"); restart(tileV);                 /* saved: the real video, its numbers */
+    count(SAVED + 1, SAVED);
+    sheet.classList.add("open");
+    if (!(await wait(900))) return;
+    tile.classList.add("studying"); chipSet("Studying", false);  /* Claude studies it, once */
+    for (var i = 0; i < rows.length; i++) { if (!(await wait(i ? 680 : 500))) return; rowOn(rows[i]); }
+    if (!(await wait(1100))) return;
+    tile.classList.remove("studying"); chipSet("Studied", true);
+    sheet.classList.add("studied"); count(SAVED + 1, SAVED + 1);
+    if (!(await wait(700))) return;
+    go.classList.add("ready");                                   /* the study is kept: remake it whenever */
+    if (!(await wait(1300))) return;
+    go.classList.add("tap");
+    if (!(await wait(200))) return;
+    go.classList.remove("tap", "ready"); go.classList.add("busy"); re.classList.add("making");
+    if (!(await wait(1900))) return;
+    go.classList.remove("busy"); go.classList.add("done");
+    re.classList.remove("making"); re.classList.add("on"); restart(reV);   /* a new vertical cut, for your brand */
+    if (!(await wait(5400))) return;                             /* rest on the finished picture */
+  }
+}
+if (SK.reduced) libDone();
+else {
+  libReset();
+  SK.onView(lib, libLoop, function () { libTok++; libDone(); }, { ratio: SK.mobile() ? 0.25 : 0.4, threshold: [0, 0.25, 0.4, 0.7] });
+}
+
+} catch (e) { console.error("section 080-viral", e); }
 })();
 
-/* ===== 070-notes ===== */
+/* ===== 090-notes ===== */
 ;(function () {
 try {
 var root = document.getElementById("notes");
@@ -3060,109 +3585,10 @@ else SK.onView(ed, run, function () {
   cursor.classList.remove("on", "down");
 }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
 
-} catch (e) { console.error("section 070-notes", e); }
+} catch (e) { console.error("section 090-notes", e); }
 })();
 
-/* ===== 080-phone ===== */
-;(function () {
-try {
-var root = document.getElementById("shoot");
-if (!root) return;
-
-/* the footage drifts a little against the scroll (only while on screen) */
-(function (el) {
-  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
-  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
-    el.removeAttribute("poster"); el.style.opacity = "0";
-    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
-  }
-  if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
-  function step() {
-    raf = 0;
-    if (!on) return;
-    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
-    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
-    var t = -p * r.height * 0.045;
-    y += (t - y) * 0.12;
-    if (Math.abs(t - y) < 0.05) y = t;
-    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
-  }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
-})(root.querySelector("video.bg"));
-
-/* three batches of footage, each becomes its own film: the takes are frames of that film's own shots */
-var BATCHES = [
-  { slug: "run-club", cap: "Same crew.\nEvery morning." },
-  { slug: "coffee-friend-arrives", cap: "The corner table.\nSaturdays." },
-  { slug: "coastal-highway", cap: "Take the\nlong way." }
-];
-var card = root.querySelector(".sh-card"), clips = [].slice.call(card.querySelectorAll(".sh-clip"));
-var steps = [].slice.call(card.querySelectorAll(".sh-steps li")), status = card.querySelector(".sh-status");
-var filmBox = card.querySelector(".sh-film"), film = filmBox.querySelector("video"), cap = card.querySelector(".sh-cap"), token = 0, round = 0;
-var STATES = ["s0", "s1", "s2", "s2b", "s3", "s4", "s5", "sh-fade"];
-
-function fill(b) {
-  clips.forEach(function (c, i) { c.querySelector("img").src = "assets/media/shoot/" + b.slug + "-" + (i + 1) + ".jpg"; });
-  cap.textContent = b.cap;
-  var src = "assets/media/selects/" + b.slug + ".mp4";
-  film.poster = "assets/media/selects/" + b.slug + ".jpg";
-  film.setAttribute("data-src", src);
-  if (film.getAttribute("src") && film.getAttribute("src") !== src) film.src = src;      /* the kit has already armed it: swap the file */
-}
-function reset() {
-  STATES.forEach(function (s) { card.classList.remove(s); });
-  clips.forEach(function (c) { c.classList.remove("in"); });
-  steps.forEach(function (s) { s.classList.remove("on", "run"); });
-  status.textContent = "Drop clips here";
-}
-/* where each picked take has to travel to land in the middle of the film */
-function measure() {
-  var f = filmBox.getBoundingClientRect();
-  clips.forEach(function (c) {
-    if (!c.classList.contains("pick")) return;
-    var w = c.offsetWidth, h = c.offsetHeight, p = c.offsetParent ? c.offsetParent.getBoundingClientRect() : f;
-    c.style.setProperty("--dx", (f.left + f.width / 2 - (p.left + c.offsetLeft + w / 2)).toFixed(1) + "px");
-    c.style.setProperty("--dy", (f.top + f.height / 2 - (p.top + c.offsetTop + h / 2)).toFixed(1) + "px");
-  });
-}
-function job(n, ms, text) { var li = steps[n]; li.style.setProperty("--d", ms + "ms"); li.classList.add("run"); status.textContent = text; }
-function done(n) { steps[n].classList.remove("run"); steps[n].classList.add("on"); }
-
-async function run() {
-  var my = ++token;
-  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
-  if (SK.reduced) { reset(); fill(BATCHES[0]); clips.forEach(function (c) { c.classList.add("in"); }); steps.forEach(function (s) { s.classList.add("on"); }); ["s1", "s2", "s2b", "s3", "s4", "s5"].forEach(function (s) { card.classList.add(s); }); status.textContent = "Ready"; return; }
-  try {
-    for (;;) {
-      reset();
-      fill(BATCHES[round++ % BATCHES.length]);
-      await w(350);
-      clips.forEach(function (c) { c.classList.add("in"); }); status.textContent = "Dropped in"; card.classList.add("s0");
-      await w(1500);
-      job(0, 950, "Finding the best takes"); await w(950); done(0); card.classList.add("s1");
-      await w(650);
-      job(1, 900, "Cutting"); measure(); await w(250);
-      card.classList.add("s2"); try { film.currentTime = 0; var p = film.play(); p && p.catch(function () {}); } catch (e) {}
-      await w(900); done(1); card.classList.add("s2b");
-      job(2, 800, "Captioning"); await w(800); done(2); card.classList.add("s3");
-      job(3, 800, "Scoring"); await w(800); done(3); card.classList.add("s4");
-      await w(450);
-      card.classList.add("s5"); status.textContent = "Ready";
-      await w(4600);
-      card.classList.add("sh-fade");
-      await w(500);
-    }
-  } catch (e) {}
-}
-fill(BATCHES[0]);
-SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
-
-} catch (e) { console.error("section 080-phone", e); }
-})();
-
-/* ===== 090-aesthetic ===== */
+/* ===== 100-aesthetic ===== */
 ;(function () {
 try {
 var root = document.getElementById("aesthetic");
@@ -3283,10 +3709,10 @@ SK.onView(stage, function () {
   slots.forEach(function (s) { s.layers.forEach(function (v) { v.pause(); }); });
 }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
 
-} catch (e) { console.error("section 090-aesthetic", e); }
+} catch (e) { console.error("section 100-aesthetic", e); }
 })();
 
-/* ===== 100-social ===== */
+/* ===== 110-social ===== */
 ;(function () {
 try {
 var root = document.getElementById("social");
@@ -3482,93 +3908,147 @@ if (SK.reduced) {
   window.addEventListener("load", function () { if (state === "pile") pile(); });
 }
 
-/* ================= any post can be an ad ================= */
-var adStage = document.getElementById("soc-ad"), week = document.getElementById("soc-week"), big = document.getElementById("soc-big"), chip = document.getElementById("soc-chip"), res = document.getElementById("soc-res");
-var forest = (M.films || []).filter(function (f) { return f.slug === "ces-forest"; })[0] || (M.films || [])[0];
+/* ================= any post can be an ad =================
+   One loop: a post in this week is picked, the request is typed, the post becomes the ad preview, a paused ad lands in the Ads tab,
+   it is switched on, and its numbers run. All figures are examples (the panel says so) and add up: cost per result = spent / results. */
+var adStage = document.getElementById("soc-ad");
+var FILMS = {};
+(M.films || []).forEach(function (f) { FILMS[f.slug] = f; });
+var forest = FILMS["ces-forest"];
 if (!adStage || !forest) return;
-var bigV = big.querySelector("video");
-bigV.poster = forest.poster;
-bigV.setAttribute("data-src", forest.loop);
-big.style.backgroundImage = "url(" + forest.poster + ")";
-big.querySelector(".soc-big-tag").textContent = forest.title || "";
-var WD = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], PICK = 3, wkT = ["t05", "t12", "t18", null, "t09", "t22", "t14"], pickCell;
-WD.forEach(function (d, i) {
-  var src = i === PICK ? forest.poster : "assets/media/thumbs/" + wkT[i] + ".jpg";
-  var c = document.createElement("div");
-  c.className = "soc-wd";
-  c.innerHTML = "<b>" + d + '</b><span><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" loading="lazy" decoding="async"></span><i class="soc-dot"></i></span>';
-  week.appendChild(c);
-  if (i === PICK) pickCell = c;
+var A = function (id) { return document.getElementById(id); };
+var days = A("sad-days"), prev = adStage.querySelector(".sad-prev"), pc = A("sad-pc"), pcV = pc.querySelector("video"), say = A("sad-say");
+var rowNew = A("sad-new"), tg = A("sad-tg"), nSub = A("sad-n-sub"), nSpark = A("sad-n-sp").querySelector("polyline"), live = A("sad-live");
+var cSp = rowNew.querySelector(".sp b"), cRe = rowNew.querySelector(".re b"), cCp = rowNew.querySelector(".cp b");
+var kSp = A("sad-k-sp"), kRe = A("sad-k-re"), kCp = A("sad-k-cp"), kLv = A("sad-k-lv"), kBd = A("sad-k-bd");
+var ASK = "Run this as an ad, $40 a day", DAILY = 40, BASE_SP = 384, BASE_RE = 32, END_SP = 112, END_RE = 10, END_DAY = 3;
+var WEEK = [["Mon", "10a", "ces-sea-cliffs", "Sea cliffs", 1], ["Tue", "4p", "mirra-multivitamin", "Multivitamin", 1], ["Wed", "12p", "ces-company-becoming", "Launch film", 1], ["Thu", "9a", "ces-forest", "Forest", 1],
+  ["Fri", "6p", "founders-retreat", "Founders retreat", 0], ["Sat", "11a", "ces-agent-kitchen", "Agent kitchen", 0], ["Sun", "5p", "lobby-hero-window", "The Lobby", 0]];
+var pickEl;
+WEEK.forEach(function (d) {
+  var f = FILMS[d[2]] || forest, li = document.createElement("li");
+  li.className = "sad-day" + (d[4] ? " was" : "");
+  li.innerHTML = '<span class="sad-dt"><img src="' + f.poster + '" alt="" width="180" height="320" loading="lazy" decoding="async"></span><span class="sad-dn"><b>' + d[3] + "</b><small>" + d[0] + "<i> · " + d[1] + '</i></small></span><i class="sad-ck"></i>';
+  days.appendChild(li);
+  if (d[2] === "ces-forest") pickEl = li;
 });
-var adTok = 0, adAnim = null;
+pcV.poster = forest.poster;
+pcV.setAttribute("data-src", forest.loop);
+pc.style.backgroundImage = "url(" + forest.poster + ")";
+rowNew.querySelector(".sad-th img").src = forest.poster;
+A("sad-n-name").textContent = forest.title || "Forest";
+
+var usd = function (n) { return "$" + Math.round(n).toLocaleString("en-US"); }, usd2 = function (n) { return "$" + n.toFixed(2); };
+/* paint the Ads tab for a point in the new ad's run: p = 0 (just switched on) .. 1 (day three) */
+function paint(p, on) {
+  var sp = Math.round(END_SP * p), re = Math.floor(END_RE * p + 1e-6), day = Math.max(1, Math.min(END_DAY, Math.ceil(sp / DAILY)));
+  cSp.textContent = usd(sp); cRe.textContent = String(re); cCp.textContent = re ? usd2(sp / re) : "—";
+  kSp.textContent = usd(BASE_SP + sp); kRe.textContent = String(BASE_RE + re); kCp.textContent = usd2((BASE_SP + sp) / (BASE_RE + re));
+  kLv.textContent = on ? "3" : "2"; kBd.textContent = usd(DAILY * (on ? 3 : 2)) + " a day";
+  live.querySelector("b").textContent = on ? "3" : "2";
+  nSub.textContent = on ? "Day " + day + " · Instagram and Facebook" : "Paused until you say go";
+  nSpark.style.strokeDashoffset = String(100 - 100 * p);
+}
+var adTok = 0, adAnim = null, adRaf = 0;
 function adReset() {
   if (adAnim) { try { adAnim.cancel(); } catch (e) {} adAnim = null; }
-  big.style.opacity = "0"; big.classList.remove("up");
-  chip.classList.remove("on", "tap", "ran"); res.classList.remove("on");
-  pickCell.classList.remove("pick", "gone");
+  cancelAnimationFrame(adRaf);
+  pc.style.opacity = "0";
+  prev.classList.remove("has", "ad");
+  pickEl.classList.remove("pick");
+  rowNew.classList.remove("in", "go");
+  tg.classList.remove("on", "tap");
+  live.classList.remove("bump");
+  say.textContent = "Ready";
+  paint(0, false);
+}
+/* the finished picture: reduced motion, and what the stage rests on when it is scrolled away mid-loop */
+function adDone() {
+  if (adAnim) { try { adAnim.cancel(); } catch (e) {} adAnim = null; }
+  cancelAnimationFrame(adRaf);
+  pc.style.opacity = "1";
+  prev.classList.add("has", "ad");
+  pickEl.classList.add("pick");
+  rowNew.classList.add("in", "go");
+  tg.classList.remove("tap"); tg.classList.add("on");
+  live.classList.remove("bump");
+  say.textContent = "Live on Meta";
+  paint(1, true);
 }
 function adFrom() {
-  var a = pickCell.querySelector(".soc-card").getBoundingClientRect(), b = big.getBoundingClientRect();
-  var s = a.width / (b.width || 1);
+  var a = pickEl.querySelector(".sad-dt").getBoundingClientRect(), b = pc.getBoundingClientRect(), s = a.width / (b.width || 1);
   return "translate(" + (a.left + a.width / 2 - (b.left + b.width / 2)).toFixed(1) + "px," + (a.top + a.height / 2 - (b.top + b.height / 2)).toFixed(1) + "px) scale(" + s.toFixed(4) + ")";
 }
-async function runAd(ctl) {
-  var my = ++adTok;
-  await SK.sleep(500);
-  if (my !== adTok) return;
-  pickCell.classList.add("pick");
-  await SK.sleep(650);
-  if (my !== adTok) return;
-  var from = adFrom();
-  big.style.opacity = "1";
-  pickCell.classList.add("gone");
-  adAnim = big.animate([{ transform: from }, { transform: "translate(0,0) scale(1)" }], { duration: 950, easing: "cubic-bezier(.3, 1.16, .4, 1)", fill: "backwards" });
-  await SK.sleep(820);
-  if (my !== adTok) return;
-  big.classList.add("up");
-  ctl.state("idle");
-  await SK.sleep(350);
-  if (my !== adTok) return;
-  chip.classList.add("on");
-  await SK.sleep(1050);
-  if (my !== adTok) return;
-  chip.classList.add("tap");
-  await SK.sleep(190);
-  if (my !== adTok) return;
-  chip.classList.remove("tap"); chip.classList.add("ran");
-  await SK.sleep(420);
-  if (my !== adTok) return;
-  res.classList.add("on");
-  await SK.sleep(3800);
-  if (my !== adTok) return;
-  chip.classList.remove("on"); res.classList.remove("on"); big.classList.remove("up");
-  await SK.sleep(300);
-  if (my !== adTok) return;
-  adAnim = big.animate([{ transform: "translate(0,0) scale(1)" }, { transform: adFrom() }], { duration: 700, easing: "cubic-bezier(.5, 0, .2, 1)", fill: "forwards" });
-  await SK.sleep(690);
-  if (my !== adTok) return;
-  adReset();
-  await SK.sleep(500);
+function runNumbers(my, ms) {
+  return new Promise(function (done) {
+    var t0 = performance.now();
+    (function step(now) {
+      if (my !== adTok) return done(false);
+      var p = Math.min(1, (now - t0) / ms);
+      paint(1 - Math.pow(1 - p, 1.6), true);
+      if (p >= 1) return done(true);
+      adRaf = requestAnimationFrame(step);
+    })(t0);
+  });
 }
-var adField = SK.promptField(document.getElementById("soc-ad-field"), {
+async function runAd(ctl) {
+  var my = adTok, ok = function () { return my === adTok; }, wait = function (ms) { return SK.sleep(ms).then(ok); };
+  say.textContent = "Building the ad";
+  if (!(await wait(650))) return;
+  pc.style.opacity = "1"; prev.classList.add("has");                      /* the post becomes the ad */
+  try { pcV.currentTime = 0; } catch (e) {}
+  var pl = pcV.play(); pl && pl.catch(function () {});
+  adAnim = pc.animate([{ transform: adFrom(), borderRadius: "40px" }, { transform: "translate(0,0) scale(1)", borderRadius: "18px" }], { duration: 950, easing: "cubic-bezier(.3, 1.16, .4, 1)", fill: "backwards" });
+  if (!(await wait(900))) return;
+  prev.classList.add("ad");                                               /* as people will see it: Sponsored, Learn more */
+  if (!(await wait(900))) return;
+  rowNew.classList.add("in");                                             /* it lands in the Ads tab, paused */
+  say.textContent = "Paused until you say go";
+  ctl.state("idle");
+  if (!(await wait(1500))) return;
+  tg.classList.add("tap");                                                /* you say go */
+  if (!(await wait(200))) return;
+  tg.classList.add("on"); rowNew.classList.add("go"); live.classList.add("bump");
+  say.textContent = "Live on Meta";
+  paint(0, true);
+  if (!(await wait(420))) return;
+  tg.classList.remove("tap"); live.classList.remove("bump");
+  if (!(await runNumbers(my, 4200))) return;                              /* three days of results */
+  if (!(await wait(4200))) return;                                        /* rest on the finished picture */
+  adReset();
+  if (!(await wait(600))) return;
+  pick();                                                                 /* next pass: the post is picked again before the request is typed */
+}
+function pick() { pickEl.classList.add("pick"); say.textContent = "1 post picked"; }
+var adField = SK.promptField(document.getElementById("sad-field"), {
   placeholder: "Which post?",
-  scale: 1,
+  scale: phone ? 1.06 : 1.25,
   auto: false,
-  prompts: ["Run the forest film as an ad"],
+  prompts: [ASK],
   onSend: function (p, ctl) { return runAd(ctl); }
 });
+/* the post is picked first, then the request is typed about it */
+async function adLoop() {
+  var my = ++adTok;
+  adReset();
+  adField.state("idle").clear();
+  await SK.sleep(500);
+  if (my !== adTok) return;
+  pick();
+  adField.run();
+}
 if (SK.reduced) {
-  adField.set("Run the forest film as an ad");
-  big.style.opacity = "1"; big.classList.add("up"); chip.classList.add("on", "ran"); res.classList.add("on"); pickCell.classList.add("pick", "gone");
+  adField.set(ASK);
+  adDone();
 } else {
   adReset();
-  SK.onView(adStage, function () { adReset(); adField.run(); }, function () { adTok++; adField.stop(); adField.state("idle").clear(); adReset(); }, { ratio: .55, threshold: [0, .3, .55, .8] });
+  SK.onView(adStage, adLoop, function () { adTok++; adField.stop(); adField.state("idle").set(ASK); adDone(); }, { ratio: phone ? .3 : .45, threshold: [0, .3, .45, .7] });
 }
 
-} catch (e) { console.error("section 100-social", e); }
+} catch (e) { console.error("section 110-social", e); }
 })();
 
-/* ===== 110-sound ===== */
+/* ===== 120-sound ===== */
 ;(function () {
 try {
 var root = document.getElementById("sound");
@@ -3717,139 +4197,7 @@ if (SK.reduced) {
   window.addEventListener("resize", measure);
 }
 
-} catch (e) { console.error("section 110-sound", e); }
-})();
-
-/* ===== 120-chat ===== */
-;(function () {
-try {
-var root = document.getElementById("chat");
-if (!root) return;
-
-/* the footage drifts a little against the scroll (only while on screen) */
-(function (el) {
-  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
-  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
-    el.removeAttribute("poster"); el.style.opacity = "0";
-    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
-  }
-  if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
-  function step() {
-    raf = 0;
-    if (!on) return;
-    var r = root.getBoundingClientRect(), vh = window.innerHeight || 1;
-    var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2)));
-    var t = -p * r.height * 0.045;
-    y += (t - y) * 0.12;
-    if (Math.abs(t - y) < 0.05) y = t;
-    el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
-  }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
-})(root.querySelector("video.bg"));
-
-/* one conversation, drawn on both screens so they stay in step */
-var film = ((SK.media.films || []).filter(function (f) { return f.slug === "ces-sea-cliffs"; })[0] || (SK.media.films || [])[0] || {}).poster || "";
-var IMG = function (w, h) { return '<img src="' + film + '" alt="" width="' + w + '" height="' + h + '" loading="lazy" decoding="async">'; };
-var SCRIPT = [
-  { who: "claude", text: "Your launch film is ready.", card:
-    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">v01</span></figure></div><p class="ch-foot"><span>Full edits</span><b class="still">Ready to watch</b></p></div>' },
-  { who: "you", text: "The new film is great. Make a square version for the feed and schedule both for Thursday." },
-  { who: "claude", doing: ["Making the square version", "Scheduling both"], text: "Done. Both are on Thursday at 10.", card:
-    '<div class="ch-card"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">9:16</span></figure><figure class="s">' + IMG(96, 96) + '<span class="ch-chip">1:1</span></figure></div><p class="ch-foot dot">Thursday · 10:00</p></div>' },
-  { who: "you", text: "And run the first one as an ad." },
-  { who: "claude", doing: ["Setting up the ad"], text: "It's live.", card:
-    '<div class="ch-card ch-ad"><div class="ch-thumbs"><figure class="v">' + IMG(54, 96) + '<span class="ch-chip">Ad</span></figure></div><p class="ch-foot"><span><img src="assets/logos/social/meta.svg" alt="" width="24" height="24" loading="lazy" decoding="async">Facebook · Instagram</span><b>Live</b></p></div>' }
-];
-var SPARK = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#claude"/></svg>';
-var lists = [].slice.call(root.querySelectorAll(".ch-list")), rows = [];
-lists.forEach(function (list) {
-  SCRIPT.forEach(function (s, i) {
-    var m = document.createElement("div");
-    m.className = "ch-m " + s.who;
-    if (s.who === "you") m.textContent = s.text;
-    else {
-      m.innerHTML = '<span class="ch-think">' + SPARK + "<span></span><u><i></i><i></i><i></i></u></span>" + '<div class="ch-body"><p class="ch-who">' + SPARK + 'Claude</p><p class="ch-say"></p>' + (s.card || "") + "</div>";
-      m.querySelector(".ch-say").textContent = s.text;
-    }
-    list.appendChild(m);
-    (rows[i] = rows[i] || []).push(m);
-  });
-});
-
-var comps = [].slice.call(root.querySelectorAll(".ch-comp")), phone = root.querySelector(".ch-comp-ph");
-var ask = phone.querySelector(".ch-ask"), askT = phone.querySelector(".ch-ask-t"), send = phone.querySelector(".ch-send");
-var PLACEHOLDER = askT.textContent, token = 0;
-comps.forEach(function (c) { SK.beam(c, { size: "md", variant: "mirra", radius: c === phone ? (SK.mobile() ? 20 : 30) : 18 }); c.style.setProperty("--beam-strength", "0"); });
-
-/* keep the newest message in view, like a real thread */
-function fit(i) {
-  lists.forEach(function (list, v) {
-    var m = rows[i][v], box = list.parentNode;
-    if (!box.clientHeight) return;
-    var h = m.classList.contains("think") ? 44 : m.offsetHeight;
-    list.style.transform = "translate3d(0," + -Math.max(0, m.offsetTop + h + 8 - box.clientHeight) + "px,0)";
-  });
-}
-function show(i) { rows[i].forEach(function (m) { m.classList.remove("think"); m.classList.add("on"); }); fit(i); }
-function think(i, text) { rows[i].forEach(function (m) { m.querySelector(".ch-think span").textContent = text; m.classList.add("think"); }); fit(i); }
-function working(on) { comps.forEach(function (c) { c.classList.toggle("working", on); c.style.setProperty("--beam-strength", on ? "1" : "0"); }); }
-function setAsk(t, typing) {
-  askT.textContent = t || PLACEHOLDER;
-  ask.classList.toggle("ph", !t);
-  phone.classList.toggle("typing", !!typing);
-}
-function reset() {
-  rows.forEach(function (r) { r.forEach(function (m) { m.classList.remove("on", "think"); }); });
-  lists.forEach(function (l) { l.style.transform = ""; });
-  phone.classList.remove("talk");
-  working(false);
-  setAsk("", false);
-  root.classList.remove("ch-out");
-  show(0);                                        /* the thread always opens on the film Claude just delivered */
-}
-
-async function run() {
-  var my = ++token;
-  var w = function (ms) { return SK.sleep(ms).then(function () { if (my !== token) throw 0; }); };
-  reset();
-  if (SK.reduced) { SCRIPT.forEach(function (s, i) { show(i); }); return; }
-  async function answer(i) {
-    working(true);
-    var d = SCRIPT[i].doing;
-    for (var k = 0; k < d.length; k++) { think(i, d[k]); await w(1250); }
-    working(false);
-    show(i);
-  }
-  try {
-    for (;;) {
-      await w(900);
-      /* the first request is typed */
-      var t = SCRIPT[1].text;
-      for (var i = 1; i <= t.length; i++) { setAsk(t.slice(0, i), true); await w(t[i - 1] === "." ? 190 : 18 + Math.random() * 24); }
-      await w(380);
-      send.classList.add("tap"); await w(160); send.classList.remove("tap");
-      setAsk("", false); show(1);
-      await w(600);
-      await answer(2);
-      /* the second one is said out loud */
-      await w(2400);
-      phone.classList.add("talk");
-      await w(1900);
-      phone.classList.remove("talk"); show(3);
-      await w(600);
-      await answer(4);
-      await w(5600);
-      root.classList.add("ch-out");
-      await w(550);
-      reset();
-    }
-  } catch (e) {}
-}
-SK.onView(root.querySelector(".ch-phone"), run, function () { token++; reset(); }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
-
-} catch (e) { console.error("section 120-chat", e); }
+} catch (e) { console.error("section 120-sound", e); }
 })();
 
 /* ===== 130-steps ===== */
@@ -3859,70 +4207,84 @@ var root = document.getElementById("start");
 if (!root) return;
 
 var s1 = root.querySelector(".gs-s1"), s2 = root.querySelector(".gs-s2"), s3 = root.querySelector(".gs-s3");
-var bubbles = [].slice.call(s2.querySelectorAll(".gs-b")), kit = s2.querySelector(".gs-kit"), film = s3.querySelector("video");
+var bubbles = [].slice.call(s2.querySelectorAll(".gs-b")), kit = s2.querySelector(".gs-kit"), b3t = bubbles[2].querySelector(".gs-t");
+var slots = [].slice.call(s3.querySelectorAll(".gs-film")), film = s3.querySelector("video"), tag = s3.querySelector(".gs-new");
 var field = SK.promptField(document.getElementById("gs-field"), { placeholder: "What should we make?", scale: 0.82, auto: false });
+var ASKS = ["Make my first launch video", "Now one about the founders retreat", "And a short one for the lobby"];
+var TAGS = ["First cut", "2 cuts", "3 cuts"];
+var READING = b3t.textContent, READY = "Your brand kit is ready.";
 
+/* each scene starts clean … */
 var resets = [
-  function () { s1.classList.remove("a1", "a2", "a3"); },
-  function () { bubbles.forEach(function (b) { b.classList.remove("on"); }); kit.classList.remove("on"); },
-  function () { s3.classList.remove("on"); field.stop(); field.state("idle").clear(); }
+  function () { s1.classList.remove("a1", "a2", "a3", "a4"); },
+  function () { bubbles.forEach(function (b) { b.classList.remove("on", "wait", "done"); }); b3t.textContent = READING; kit.classList.remove("on"); },
+  function () { slots.forEach(function (f) { f.classList.remove("mk", "on", "old"); }); s3.classList.remove("on"); field.stop(); field.state("idle").clear(); }
 ];
-/* each step plays in the order a person would do it; w() waits and stops the run if the step left the screen */
+/* … and plays in the order a person would do it, then starts over. No step waits longer than about a second.
+   w() waits, and ends the run if the scene left the screen. */
 var plays = [
+  /* 1 · download and open */
   async function (w) {
-    resets[0]();
-    await w(800); s1.classList.add("a1");           /* the icon goes into Applications */
-    await w(1500); s1.classList.add("a2");          /* it lands in the Dock */
-    await w(1150); s1.classList.add("a3");          /* and opens */
-    await w(2000);
+    await w(450); s1.classList.add("a1");           /* the icon goes into Applications */
+    await w(1300); s1.classList.add("a2");          /* the disk image closes, Studio lands in the Dock */
+    await w(1050); s1.classList.add("a3");          /* it opens */
+    await w(650); s1.classList.add("a4");           /* and fills in: the greeting, the shelves */
+    await w(1900);
+    s1.classList.add("rs"); resets[0]();            /* back to the disk image */
+    await w(700); s1.classList.remove("rs");
   },
-  async function (w) {
+  /* 2 · Claude asks, the brand answers, the kit builds */
+  async function (w, first) {
+    if (first) bubbles[0].classList.add("on");              /* arriving: the question is already there, so this one is mid-story */
+    else {
+      await w(150); bubbles[0].classList.add("on", "wait"); /* Claude is writing */
+      await w(750); bubbles[0].classList.remove("wait");    /* the question */
+    }
+    await w(first ? 700 : 1000); bubbles[1].classList.add("on");   /* the answer */
+    await w(750); bubbles[2].classList.add("on");           /* "Reading your website" */
+    await w(650); kit.classList.add("on");                  /* logo, name, colours, type: one piece at a time */
+    await w(1900); b3t.textContent = READY; bubbles[2].classList.add("done");
+    await w(1100);
     resets[1]();
-    await w(450); bubbles[0].classList.add("on");
-    await w(1500); bubbles[1].classList.add("on");
-    await w(950); kit.classList.add("on");
-    await w(2700);
+    await w(380);
   },
+  /* 3 · say what you want: a request, the cut lands, the next request */
   async function (w) {
+    for (var i = 0; i < ASKS.length; i++) {
+      await w(i ? 450 : 200);
+      await field.type(ASKS[i], 34);
+      await w(300); field.send();
+      slots[i].classList.add("mk");                         /* Claude is making it */
+      await w(1000);
+      slots.forEach(function (f, k) { f.classList.toggle("old", k < i); });
+      slots[i].classList.remove("mk"); slots[i].classList.add("on");
+      tag.textContent = TAGS[i]; s3.classList.add("on");
+      if (!i) { try { film.currentTime = 0; } catch (e) {} }
+      field.state("idle").clear();
+    }
+    await w(1100);
     resets[2]();
-    await w(500);
-    await field.type("Make my first launch video");
-    await w(380); field.send();
-    await w(1300);
-    s3.classList.add("on"); field.state("idle");
-    try { film.currentTime = 0; } catch (e) {}
-    await w(2900);
+    await w(450);
   }
 ];
 
-var tok = [0, 0, 0, 0];
-function waiter(i, my) { return function (ms) { return SK.sleep(ms).then(function () { if (tok[i] !== my) throw 0; }); }; }
-function stacked() { return matchMedia("(max-width: 1020px)").matches; }
-function finish() { s1.classList.add("a1", "a2", "a3"); bubbles.forEach(function (b) { b.classList.add("on"); }); kit.classList.add("on"); field.set("Make my first launch video"); s3.classList.add("on"); }
-
-/* side by side: one, two, three, rest, again. Finished steps stay finished while the next one plays. */
-async function chain() {
-  var my = ++tok[3], w = waiter(3, my);
-  try {
-    for (;;) {
-      for (var i = 0; i < 3; i++) await plays[i](w);
-      await w(2600);
-    }
-  } catch (e) {}
-}
-/* stacked on a phone: each step loops by itself while it is on screen */
-async function solo(i) {
-  var my = ++tok[i], w = waiter(i, my);
-  try { for (;;) { await plays[i](w); await w(1400); } } catch (e) {}
+function finish() {
+  s1.classList.add("a1", "a2", "a3", "a4");
+  bubbles.forEach(function (b) { b.classList.add("on"); }); b3t.textContent = READY; bubbles[2].classList.add("done"); kit.classList.add("on");
+  slots.forEach(function (f, k) { f.classList.add("on"); f.classList.toggle("old", k < 2); }); tag.textContent = TAGS[2]; s3.classList.add("on");
+  field.set(ASKS[0]);
 }
 
 if (SK.reduced) finish();
 else {
-  resets.forEach(function (r) { r(); });
-  bubbles[0].classList.add("on");
-  SK.onView(root.querySelector(".gs-grid"), function () { if (!stacked()) chain(); }, function () { tok[3]++; }, { ratio: 0.3, threshold: [0, 0.3, 0.6] });
-  [s1, s2, s3].forEach(function (s, i) {
-    SK.onView(s, function () { if (stacked()) solo(i); }, function () { tok[i]++; }, { ratio: 0.5, threshold: [0, 0.5, 0.8] });
+  /* every scene loops by itself for as long as it is on screen, each from a different starting beat */
+  var tok = [0, 0, 0], HEAD = [0, 0, 250];
+  [s1, s2, s3].forEach(function (stage, i) {
+    resets[i]();
+    SK.onView(stage, async function () {
+      var my = ++tok[i], w = function (ms) { return SK.sleep(ms).then(function () { if (tok[i] !== my) throw 0; }); };
+      try { await w(HEAD[i]); for (var n = 0; ; n++) await plays[i](w, !n); } catch (e) {}
+    }, function () { tok[i]++; s1.classList.remove("rs"); resets[i](); }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
   });
 }
 
@@ -3934,17 +4296,20 @@ else {
 try {
 var root = document.getElementById("views");
 if (!root) return;
-var WALLS = (SK.media.wallpapers || []).slice();
+/* the picker's own order: the lone cypress first, then the peak above the clouds; two mountain views at most, the rest coast, sky and forest */
+var ORDER = ["pebble-beach-cypress", "volcano-above-clouds", "na-pali-coast", "maui-palm-bay", "big-sur-coast", "cumulus-sky", "rockies-ember-peaks", "misty-fir-forest", "orange-clouds-blue-sky", "above-the-clouds"];
+var ALL = SK.media.wallpapers || [];
+var WALLS = ORDER.map(function (s) { return ALL.filter(function (w) { return w.slug === s; })[0]; }).filter(Boolean);
 if (!WALLS.length) return;
 
 /* where each wallpaper looks best in a tall phone frame, and the app's own id for it (the corner tag is keyed on that) */
 var MORE = {
   "cumulus-sky": { id: "sky" }, "volcano-above-clouds": { id: "volcano" }, "peaks-in-cloud-sea": { id: "cloudsea" },
   "half-dome-long-exposure": { id: "halfdome" }, "big-sur-coast": { id: "bigsur" }, "pebble-beach-cypress": { id: "pebble" },
-  "alpine-lake-mirror": { id: "lakemirror" }, "rockies-ember-peaks": { id: "ember" }, "lake-tahoe-blue-hour": { id: "tahoeblue" }
+  "alpine-lake-mirror": { id: "lakemirror" }, "rockies-ember-peaks": { id: "ember" }, "lake-tahoe-blue-hour": { id: "tahoeblue" }, "na-pali-coast": { id: "napali" }, "maui-palm-bay": { id: "maui" }
 };
 /* the same table and fallback the app uses for its corner coordinates */
-var PLACE = { pebble: [36.5687, -121.9654, 24], bigsur: [36.2704, -121.8081, 286], tahoeblue: [39.0968, -120.0324, 1897], halfdome: [37.7459, -119.5332, 2694], ember: [51.3271, -116.1856, 2710] };
+var PLACE = { pebble: [36.5687, -121.9654, 24], bigsur: [36.2704, -121.8081, 286], tahoeblue: [39.0968, -120.0324, 1897], halfdome: [37.7459, -119.5332, 2694], ember: [51.3271, -116.1856, 2710], napali: [22.1757, -159.6431, 12], maui: [20.7159, -156.4470, 3] };
 function geo(id) {
   var seed = String(id || "studio").split("").reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) % 100003; }, 7);
   var pl = PLACE[id] || [28 + (seed % 3400) / 100, -(64 + ((seed * 7) % 6000) / 100), 40 + ((seed * 13) % 2900)];

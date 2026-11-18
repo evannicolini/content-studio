@@ -1,0 +1,316 @@
+/* 100-social. Prefix: soc-. The app's Social calendar filling itself, then one post becomes an ad.
+   Sizes, radii and colours of the calendar follow the app (Studio_App web/vista/social.css): cells, chips, dots, mono labels. */
+.soc { --v-g: rgba(255, 255, 255, .045); --v-on: rgba(255, 255, 255, .1); --pur: #c58bff;
+  --rim-on: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 5px -2px rgba(196, 214, 238, .62), inset -2px -2px 5px -2px rgba(242, 226, 220, .62); }
+.soc .sec-head { margin-bottom: clamp(30px, 4vw, 56px); }
+
+/* ---------- the stage ---------- */
+.soc-stage > .bg { object-position: 50% 62%; }
+.soc-stage > .shade { background: linear-gradient(180deg, rgba(6, 9, 13, .3), rgba(6, 9, 13, .06) 34%, rgba(6, 9, 13, .12) 70%, rgba(6, 9, 13, .36)); }
+.soc-in { position: relative; max-width: 1260px; margin-inline: auto; padding: clamp(24px, 3vw, 42px) clamp(10px, 2.4vw, 34px) clamp(10px, 2.4vw, 34px); }
+
+.soc-ask { width: min(640px, 100%); margin: 0 auto clamp(26px, 2.6vw, 36px); padding-inline: 14px; }
+.soc-ask .ask-top { margin: 0 -12px 20px; }
+.soc-ask .brk { color: rgba(255, 255, 255, .9); }
+
+.soc-board { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 12px; align-items: stretch; }
+
+/* the tray the posts start in. The cards live in the calendar and are only drawn here until they fly. */
+.soc-tray { position: relative; border-radius: 24px; padding: 18px 16px; min-height: 126px; background: rgba(var(--tint), .3); }
+.soc-tray-t { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand-2); }
+.soc-tray-t b { font: 500 12px/1 var(--mono); letter-spacing: 0; color: #fff; font-variant-numeric: tabular-nums; transition: opacity .4s var(--ease); }
+.soc-tray-done { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; font: 500 14px/1 var(--sans); letter-spacing: -.01em; color: var(--sand-2); opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .7s var(--ease); }
+.soc-tray-done i { position: relative; width: 30px; height: 30px; border-radius: 50%; background: rgba(255, 255, 255, .94); }
+.soc-tray-done i::after { content: ""; position: absolute; left: 11.5px; top: 7.5px; width: 6px; height: 11px; border: solid #0d1218; border-width: 0 1.8px 1.8px 0; transform: rotate(42deg); }
+.soc-tray.done .soc-tray-done { opacity: 1; transform: none; }
+.soc-tray.done .soc-tray-t b { opacity: 0; }
+
+/* the calendar */
+.soc-cal { position: relative; z-index: 2; border-radius: 26px; padding: 14px 16px 16px; min-width: 0; }
+.soc-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.soc-tabs { display: flex; gap: 2px; min-width: 0; }
+.soc-tabs li { flex: none; display: flex; align-items: center; height: 38px; padding: 0 12px; border-radius: 999px; font: 500 13.5px/1 var(--sans); color: var(--sand-2); white-space: nowrap; }
+.soc-tabs li.on { color: #fff; background: var(--v-on); box-shadow: var(--rim-on); }
+.soc-legend { display: flex; gap: 16px; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand-3); white-space: nowrap; }
+.soc-legend span { display: inline-flex; align-items: center; gap: 7px; }
+.soc-legend i { width: 7px; height: 7px; border-radius: 50%; background: var(--pur); }
+.soc-legend .p i { background: var(--pearl); }
+
+.soc-calh { display: flex; align-items: center; gap: 6px; margin: 10px 0 10px; min-width: 0; }
+.soc-chip { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 999px; font: 400 13px/1 var(--sans); color: var(--sand); white-space: nowrap; background: var(--v-g); box-shadow: var(--rim); }
+.soc-chip.sq { width: 38px; padding: 0 0 2px; font: 300 19px/1 var(--sans); }
+.soc-chip.on { font-weight: 500; font-size: 13.5px; background: var(--v-on); box-shadow: var(--rim-on); }
+.soc-chip img { width: 16px; height: 16px; border-radius: 4.5px; object-fit: cover; }
+.soc-chip em { font-style: normal; }
+.soc-month { flex: none; min-width: 132px; padding: 0 6px; text-align: center; font: 600 15px/1 var(--sans); letter-spacing: -.01em; white-space: nowrap; }
+.soc-brands { display: inline-flex; gap: 2px; margin-left: 12px; padding-left: 14px; border-left: 1px solid rgba(255, 255, 255, .12); }
+.soc-nets { display: flex; align-items: center; gap: 9px; margin-left: auto; }
+.soc-nets li { width: 18px; height: 18px; opacity: .26; filter: grayscale(1); transition: opacity .5s var(--ease), filter .5s var(--ease), transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+.soc-nets li.on { opacity: 1; filter: none; }
+.soc-nets li.pop { transform: scale(1.3); }
+.soc-nets img { width: 100%; height: 100%; }
+.soc-count { flex: none; min-width: 23ch; margin-left: 8px; text-align: right; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand-3); white-space: nowrap; }
+.soc-count b { font-weight: 500; color: #fff; font-variant-numeric: tabular-nums; }
+.soc-count i { font-style: normal; }
+
+.soc-dow, .soc-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.soc-dow li { height: 24px; padding: 0 9px 6px; display: flex; align-items: center; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; color: var(--sand-3); }
+
+.soc-day { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px 4px; align-content: start; min-width: 0; min-height: 106px; padding: 8px 6px 8px; border-radius: 14px; background: rgba(255, 255, 255, .035); }
+.soc-day.today { background: rgba(255, 255, 255, .09); box-shadow: var(--rim); }
+.soc-day.out > * { opacity: .36; }
+.soc-d { grid-column: 1 / -1; justify-self: start; height: 18px; padding: 0 4px; border-radius: 9px; font: 500 10.5px/18px var(--mono); color: var(--sand-2); white-space: nowrap; }
+.soc-day.today .soc-d { padding: 0 7px; color: #0d1218; background: rgba(255, 255, 255, .92); }
+
+/* one post. Three nested boxes so the flight can ease sideways, down and "hop" on separate curves (a real arc, transforms only). */
+.soc-post { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.soc-post.pile { z-index: 5; }
+.soc-fx, .soc-fy { display: block; width: 100%; }
+.soc-card { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 6px; overflow: hidden; background: #0b0e13; }
+.soc-card > img { width: 100%; height: 100%; object-fit: cover; }
+.soc-card > .br { position: absolute; left: 2px; top: 2px; width: 12px; height: 12px; border-radius: 3.5px; transition: opacity .4s var(--ease); }
+.soc-post.pile .soc-card > .br { opacity: 0; }
+.soc-post.pile .soc-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .26); }
+.soc-dot { position: absolute; right: 3px; top: 3px; width: 7px; height: 7px; border-radius: 50%; background: var(--pur); box-shadow: 0 0 0 1.5px rgba(8, 12, 18, .55); opacity: 0; transform: scale(.3); transition: opacity .35s var(--ease), transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+.soc-post.was .soc-dot { background: var(--pearl); }
+.soc-time { display: block; max-width: 100%; overflow: hidden; white-space: nowrap; text-align: center; font: 500 9px/1 var(--mono); color: var(--sand-2); opacity: 0; transition: opacity .45s var(--ease); }
+.soc-post.in .soc-time, .soc-post.was .soc-time { opacity: 1; }
+.soc-post.in .soc-dot, .soc-post.was .soc-dot { opacity: 1; transform: none; }
+.soc-post.sched { transition: opacity .45s var(--ease); }
+.soc-grid.clearing .soc-post.sched { opacity: 0; }
+
+/* ---------- any post can be an ad: the week (from the calendar), the ad as people see it, the app's Ads tab.
+   Ads tab sizes follow the app (Studio_App web/product/empties.css .ex-kpi / .ex-ad); the app's lime "on" is pearl here. ---------- */
+.sad-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; gap: clamp(20px, 4vw, 64px); margin-top: clamp(72px, 9vw, 136px); margin-bottom: clamp(26px, 3.2vw, 44px); }
+.sad-head .lede { justify-self: end; max-width: 26em; }
+
+.sad > .bg { object-position: 50% 38%; }
+.sad > .shade { background: linear-gradient(180deg, rgba(6, 9, 13, .34), rgba(6, 9, 13, .12) 36%, rgba(6, 9, 13, .2) 70%, rgba(6, 9, 13, .44)); }
+.sad-in { position: relative; max-width: 1260px; margin-inline: auto; padding: clamp(24px, 3vw, 42px) clamp(10px, 2.4vw, 34px) clamp(10px, 2.4vw, 34px); }
+.sad-ask { width: min(640px, 100%); margin: 0 auto clamp(26px, 2.6vw, 36px); padding-inline: 14px; }
+.sad-ask .ask-top { margin: 0 -12px 20px; white-space: nowrap; }
+.sad-ask .brk, .sad-pbrk { color: rgba(255, 255, 255, .9); }
+
+.sad-board { --ph: clamp(380px, 31.4vw, 452px); display: grid; grid-template-columns: minmax(170px, .44fr) auto minmax(0, 1.5fr); gap: clamp(22px, 2.4vw, 34px) ; align-items: stretch; }
+.sad-h { display: flex; align-items: baseline; gap: 10px; min-height: 22px; margin: 2px 4px 10px; white-space: nowrap; }
+.sad-h b { font: 600 15px/1 var(--sans); letter-spacing: -.01em; }
+.sad-h small, .sad-safe { font: 500 10px/1 var(--mono); letter-spacing: .13em; text-transform: uppercase; color: var(--sand-3); }
+.sad-h small i, .sad-at small i { font-style: normal; opacity: .6; }
+
+/* this week: one post a day, the way the calendar files them */
+.sad-week { border-radius: 24px; padding: 14px 10px 10px; display: flex; flex-direction: column; min-width: 0; }
+.sad-days { flex: 1; display: grid; grid-auto-rows: 1fr; gap: 4px; margin: 0; }
+.sad-day { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 11px; padding: 5px 12px 5px 7px; border-radius: 13px; background: rgba(255, 255, 255, .035); transition: background-color .5s var(--ease), box-shadow .5s var(--ease); }
+.sad-day.pick { background: rgba(255, 255, 255, .11); box-shadow: var(--rim-on); }
+.sad-dt { position: relative; display: block; width: 23px; aspect-ratio: 9 / 16; border-radius: 5px; overflow: hidden; background: #0b0e13; }
+.sad-dt img { width: 100%; height: 100%; object-fit: cover; }
+.sad-dn { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.sad-dn b { font: 500 13px/1.1 var(--sans); letter-spacing: -.005em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sad-dn small { font: 500 9.5px/1 var(--mono); letter-spacing: .13em; text-transform: uppercase; color: var(--sand-3); white-space: nowrap; }
+.sad-dn small i { font-style: normal; }
+.sad-day .sad-ck { position: absolute; right: 8px; top: 50%; width: 18px; height: 18px; margin-top: -9px; border-radius: 50%; background: rgba(255, 255, 255, .94); opacity: 0; transform: scale(.5); transition: opacity .35s var(--ease), transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+.sad-day .sad-ck::after { content: ""; position: absolute; left: 6.5px; top: 3.5px; width: 4px; height: 8px; border: solid #0d1218; border-width: 0 1.6px 1.6px 0; transform: rotate(42deg); }
+.sad-day.pick .sad-ck { opacity: 1; transform: none; }
+
+/* the ad preview */
+.sad-prev { display: flex; flex-direction: column; min-width: 0; padding-inline: 12px; }
+.sad-tag { display: flex; justify-content: space-between; align-items: center; height: 14px; margin: 0 -10px 16px; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .92); }
+.sad-tag b { font-weight: 500; display: inline-flex; align-items: center; gap: 7px; }
+.sad-tag b::before { content: ""; width: 4px; height: 11px; background: currentColor; }
+.sad-tag span { display: inline-flex; gap: 6px; }
+.sad-tag img { width: 14px; height: 14px; }
+.sad-pbrk { height: calc(var(--ph) - 42px); aspect-ratio: 9 / 16; }
+.sad-slot, .sad-pc { position: absolute; inset: 0; border-radius: 18px; }
+.sad-slot { display: grid; place-items: center; border: 1.5px dashed rgba(255, 255, 255, .4); background: rgba(8, 12, 18, .22); font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-2); transition: opacity .4s var(--ease); }
+.sad-prev.has .sad-slot { opacity: 0; }
+.sad-pc { overflow: hidden; background: #0d1117 center / cover no-repeat; opacity: 0; transform-origin: 50% 50%; }
+.sad-pc video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sad-pc::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .2), transparent 20%, transparent 56%, rgba(0, 0, 0, .58)); box-shadow: var(--rim); opacity: 0; transition: opacity .6s var(--ease); }
+.sad-pc > span { position: absolute; z-index: 2; opacity: 0; transition: opacity .5s var(--ease), transform .6s var(--ease); }
+.sad-pv-top { left: 9px; top: 9px; display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 7px; border-radius: 999px; font: 600 11px/1 var(--sans); color: #fff; white-space: nowrap; background: rgba(255, 255, 255, .14); -webkit-backdrop-filter: blur(14px) saturate(150%) brightness(.7); backdrop-filter: blur(14px) saturate(150%) brightness(.7); box-shadow: var(--rim); }
+.sad-pv-top img { width: 13px; height: 13px; }
+.sad-pv-ic { right: 9px; bottom: 62px; display: flex; flex-direction: column; gap: 13px; }
+.sad-pv-ic svg { width: 21px; height: 21px; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sad-pv-who { left: 11px; right: 44px; bottom: 60px; display: flex; align-items: center; gap: 8px; transform: translateY(6px); }
+.sad-pv-who img { flex: none; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .9); }
+.sad-pv-who span { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.sad-pv-who b { font: 600 12.5px/1 var(--sans); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sad-pv-who em { font: 400 11px/1 var(--sans); font-style: normal; color: rgba(255, 255, 255, .86); }
+.sad-pv-cta { left: 9px; right: 9px; bottom: 10px; display: flex; align-items: center; justify-content: space-between; height: 38px; padding: 0 12px 0 14px; border-radius: 11px; font: 600 13px/1 var(--sans); color: #101318; background: rgba(255, 255, 255, .94); transform: translateY(8px); }
+.sad-pv-cta svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sad-prev.ad .sad-pc::after { opacity: 1; }
+.sad-prev.ad .sad-pc > span { opacity: 1; transform: none; }
+.sad-prev.ad .sad-pv-who { transition-delay: .15s; }
+.sad-prev.ad .sad-pv-ic { transition-delay: .25s; }
+.sad-prev.ad .sad-pv-cta { transition-delay: .35s; }
+
+/* the Ads tab */
+.sad-ads { border-radius: 26px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.sad-ah { display: flex; align-items: center; gap: 12px; min-width: 0; padding: 0 2px; }
+.sad-meta { flex: none; width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; background: #f6f5f1; }
+.sad-meta img { width: 30px; height: 30px; }
+.sad-at { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+.sad-at b { font: 600 18px/1 var(--sans); letter-spacing: -.015em; }
+.sad-at small { font: 500 10px/1 var(--mono); letter-spacing: .13em; text-transform: uppercase; color: var(--sand-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sad-ex i { font-style: normal; white-space: pre; }
+.sad-ex { flex: none; display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; font: 500 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand-2); background: rgba(255, 255, 255, .06); box-shadow: var(--rim); white-space: nowrap; }
+.sad-live { flex: none; display: inline-flex; align-items: center; gap: 7px; height: 30px; padding: 0 13px 0 11px; border-radius: 999px; font: 500 13px/1 var(--sans); color: #fff; white-space: nowrap; background: rgba(255, 255, 255, .1); box-shadow: var(--rim-on); transition: background-color .5s var(--ease), color .5s var(--ease); }
+.sad-live b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.sad-live i { width: 7px; height: 7px; border-radius: 50%; background: var(--pearl); animation: pf-dot 1.6s ease-in-out infinite; }
+.sad-live.bump { color: #101318; background: var(--pearl); }
+.sad-live.bump i { background: #101318; }
+
+.sad-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.sad-kpi { display: flex; flex-direction: column; gap: 9px; padding: 14px 15px 13px; border-radius: 18px; background: rgba(255, 255, 255, .045); box-shadow: var(--rim); white-space: nowrap; min-width: 0; }
+.sad-kpi span, .sad-c em { font: 500 9.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; font-style: normal; color: var(--sand-3); overflow: hidden; text-overflow: ellipsis; }
+.sad-kpi b { font: 300 clamp(24px, 2.2vw, 31px)/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.sad-kpi small { font: 400 11.5px/1 var(--sans); color: var(--sand-2); }
+
+.sad-camp { flex: 1; display: flex; flex-direction: column; min-height: 0; padding: 12px 8px 8px; border-radius: 20px; background: rgba(255, 255, 255, .03); box-shadow: var(--rim); }
+.sad-camp .sad-h { margin: 0 6px 10px 8px; }
+.sad-safe { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--sand-2); }
+.sad-safe svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+.sad-rows { flex: 1; display: grid; grid-auto-rows: 1fr; gap: 6px; }
+.sad-row { position: relative; display: grid; grid-template-columns: 34px 27px minmax(0, 1.7fr) minmax(30px, .6fr) 50px 54px 114px; align-items: center; gap: 12px; min-height: 58px; padding: 6px 14px 6px 12px; border-radius: 16px; background: rgba(255, 255, 255, .045); box-shadow: var(--rim); white-space: nowrap; }
+.sad-tg { position: relative; width: 34px; height: 20px; border-radius: 999px; background: rgba(255, 255, 255, .16); transition: background-color .35s var(--ease), box-shadow .35s var(--ease); }
+.sad-tg::after { content: ""; position: absolute; left: 3px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: transform .4s cubic-bezier(.3, 1.4, .5, 1), background-color .35s var(--ease); }
+.sad-tg.on { background: var(--pearl); }
+.sad-tg.on::after { transform: translateX(14px); background: #12161c; }
+.sad-tg.tap { box-shadow: 0 0 0 6px rgba(255, 255, 255, .22); }
+.sad-th { display: block; width: 27px; aspect-ratio: 9 / 16; border-radius: 6px; overflow: hidden; background: #0b0e13; }
+.sad-th img { width: 100%; height: 100%; object-fit: cover; }
+.sad-an { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sad-an b { font: 600 13.5px/1.2 var(--sans); letter-spacing: -.005em; overflow: hidden; text-overflow: ellipsis; }
+.sad-an small { font: 400 11.5px/1 var(--sans); color: var(--sand-3); overflow: hidden; text-overflow: ellipsis; }
+.sad-sp { width: 100%; height: 26px; overflow: visible; }
+.sad-sp polyline { fill: none; stroke: rgba(255, 255, 255, .7); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.sad-c { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.sad-c b { font: 500 15px/1 var(--sans); font-variant-numeric: tabular-nums; }
+.sad-c em u { text-decoration: none; }
+/* the row a new ad lands in */
+.sad-new > * { transition: opacity .5s var(--ease); }
+.sad-new::before { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1.5px dashed rgba(255, 255, 255, .3); opacity: 0; transition: opacity .4s var(--ease); pointer-events: none; }
+.sad-next { position: absolute; inset: 0; display: grid; place-items: center; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); opacity: 0; }
+.sad-new:not(.in) { background: rgba(255, 255, 255, .02); box-shadow: none; }
+.sad-new:not(.in) > :not(.sad-next) { opacity: 0; }
+.sad-new:not(.in)::before, .sad-new:not(.in) .sad-next { opacity: 1; }
+.sad-new { transition: background-color .5s var(--ease), box-shadow .5s var(--ease); }
+.sad-new.go { background: rgba(255, 255, 255, .1); box-shadow: var(--rim-on); }
+.sad-new #sad-n-sp polyline { stroke: #fff; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.sad-new:not(.go) .sad-c b { color: var(--sand-3); }
+
+@media (max-width: 1180px) {
+  .sad-board { grid-template-columns: minmax(150px, .5fr) auto minmax(0, 1.5fr); gap: 20px; }
+  .sad-row { grid-template-columns: 34px 27px minmax(0, 1fr) 50px 82px; }
+  .sad-row .sad-c.re, .sad-c.cp em u { display: none; }
+  .sad-row .sad-sp { display: none; }
+  .sad-ex i { display: none; }
+  .sad-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sad-kpi { padding: 11px 14px 10px; gap: 7px; }
+  .sad-kpi b { font-size: 24px; }
+  .sad-board { --ph: 470px; }
+}
+@media (max-width: 980px) {
+  .sad-head { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 14px; }
+  .sad-head .lede { justify-self: center; }
+  /* the week turns into a strip; the preview sits beside the four numbers; the Ads tab's parts each become their own glass */
+  .sad-board { --ph: auto; grid-template-columns: minmax(0, 262px) minmax(0, 1fr); grid-template-areas: "week week" "head head" "prev kpis" "camp camp"; gap: 8px; }
+  .sad-week { grid-area: week; padding: 12px 8px 8px; border-radius: 20px; }
+  .sad-days { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 4px; }
+  .sad-day { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 6px; padding: 7px 0 8px; border-radius: 11px; }
+  .sad-dn { order: -1; }
+  .sad-dn b, .sad-dn small i { display: none; }
+  .sad-dt { width: min(27px, 62%); }
+  .sad-day .sad-ck { right: 50%; top: auto; bottom: 4px; width: 16px; height: 16px; margin: 0 -8px 0 0; }
+  .sad-day .sad-ck::after { left: 5.5px; top: 3px; }
+  .sad-ads { display: contents; }
+  .sad-g { background: rgba(var(--tint), .52); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
+  .sad-ah { grid-area: head; padding: 9px 12px 9px 9px; border-radius: 20px; }
+  .sad-kpis { grid-area: kpis; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .sad-kpi { justify-content: center; gap: 6px; padding: 8px 14px; border-radius: 16px; }
+  .sad-kpi small { display: none; }
+  .sad-prev { grid-area: prev; padding: 12px 12px 12px; }
+  .sad-tag { margin-bottom: 14px; }
+  .sad-pbrk { height: auto; width: 100%; }
+  .sad-camp { grid-area: camp; padding: 12px 8px 8px; border-radius: 20px; }
+  .sad-row:not(.sad-new) { display: none; }
+}
+@media (max-width: 700px) {
+  .sad-head { margin-top: 64px; }
+  .sad-in { padding: 22px 8px 8px; }
+  .sad-board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .sad-ask { margin-bottom: 24px; padding-inline: 16px; }
+  .sad-ask .ask-top { margin-bottom: 18px; }
+  .sad-meta { width: 38px; height: 38px; border-radius: 11px; }
+  .sad-meta img { width: 24px; height: 24px; }
+  .sad-at b { font-size: 16px; }
+  .sad-at small { font-size: 9px; letter-spacing: .1em; }
+  .sad-at small span { display: none; }
+  .sad-ex { height: 22px; padding: 0 8px; font-size: 9px; letter-spacing: .1em; }
+  .sad-live { height: 28px; font-size: 12.5px; }
+  .sad-kpi b { font-size: 23px; }
+  .sad-row { grid-template-columns: 34px 24px minmax(0, 1fr) auto; gap: 10px; padding: 6px 12px 6px 10px; }
+  .sad-th { width: 24px; }
+  .sad-row .sad-c:not(.cp) { display: none; }
+  .sad-c.cp em { display: none; }
+  .sad-safe { font-size: 9px; letter-spacing: .1em; }
+  .sad-camp .sad-h small { display: none; }
+  .sad-pc > .sad-pv-ic { display: none; }
+  .sad-pv-who { left: 8px; right: 8px; bottom: 52px; gap: 6px; }
+  .sad-pv-who img { width: 24px; height: 24px; }
+  .sad-pv-who b { font-size: 11px; }
+  .sad-pv-who em { font-size: 10px; }
+  .sad-pv-cta { left: 7px; right: 7px; bottom: 8px; height: 34px; font-size: 12px; border-radius: 10px; }
+  .sad-pv-top { left: 7px; top: 7px; height: 22px; font-size: 10px; }
+  .sad-slot, .sad-pc { border-radius: 15px; }
+}
+
+/* ---------- mid: tray becomes a strip above the calendar ---------- */
+@media (max-width: 1240px) {
+  .soc-chip em { display: none; }
+  .soc-count { min-width: 0; }
+}
+@media (max-width: 1100px) {
+  .soc-board { grid-template-columns: minmax(0, 1fr); }
+  .soc-tray { min-height: 118px; }
+  .soc-tray-t { justify-content: flex-start; }
+  .soc-tray-done { flex-direction: row; }
+  .soc-tray-done i { width: 22px; height: 22px; }
+  .soc-tray-done i::after { left: 8px; top: 4.5px; width: 5px; height: 9px; }
+  .soc-chip em { display: inline; }
+}
+@media (max-width: 900px) {
+  .soc-nav .soc-legend { display: none; }
+  .soc-chip.soc-now { display: none; }
+}
+
+/* ---------- phone: one post a day, still a full month ---------- */
+@media (max-width: 700px) {
+  .soc-in { padding: 22px 8px 8px; }
+  .soc-ask { margin-bottom: 24px; padding-inline: 16px; }
+  .soc-ask .ask-top { margin-bottom: 18px; }
+  .soc-board { gap: 8px; }
+  .soc-tray { min-height: 96px; padding: 12px 12px; border-radius: 20px; }
+  .soc-cal { padding: 8px 8px 8px; border-radius: 22px; }
+  .soc-tabs { width: 100%; justify-content: space-between; gap: 0; }
+  .soc-tabs li { height: 36px; padding: 0 9px; font-size: 12px; }
+  .soc-calh { flex-wrap: wrap; gap: 8px 4px; margin: 8px 0 8px; }
+  .soc-chip { height: 34px; padding: 0 11px; font-size: 12.5px; }
+  .soc-chip.on { font-size: 12.5px; }
+  .soc-chip.sq { width: 34px; }
+  .soc-month { min-width: 0; font-size: 14px; }
+  .soc-brands { order: 5; margin: 0; padding: 0; border: 0; }
+  .soc-brands .soc-chip { width: 40px; padding: 0; font-size: 0; gap: 0; }
+  .soc-count { margin-left: auto; font-size: 9.5px; letter-spacing: .1em; }
+  .soc-nets { order: 6; gap: 6px; }
+  .soc-nets li { width: 15px; height: 15px; }
+  .soc-dow, .soc-grid { gap: 3px; }
+  .soc-dow li { height: 20px; padding: 0 0 5px; justify-content: center; font-size: 9px; letter-spacing: .08em; }
+  .soc-day { grid-template-columns: minmax(0, 27px); justify-content: center; gap: 5px 0; min-height: 84px; padding: 5px 0 6px; border-radius: 11px; }
+  .soc-d { justify-self: center; font-size: 9.5px; padding: 0 3px; }
+  .soc-day.today .soc-d { padding: 0 6px; }
+  .soc-card > .br { width: 9px; height: 9px; left: 1.5px; top: 1.5px; border-radius: 2.5px; }
+  .soc-dot { width: 6px; height: 6px; right: 2px; top: 2px; }
+  .soc-time { font-size: 8.5px; }
+
+}

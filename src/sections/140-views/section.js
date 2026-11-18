@@ -1,16 +1,19 @@
 var root = document.getElementById("views");
 if (!root) return;
-var WALLS = (SK.media.wallpapers || []).slice();
+/* the picker's own order: the lone cypress first, then the peak above the clouds; two mountain views at most, the rest coast, sky and forest */
+var ORDER = ["pebble-beach-cypress", "volcano-above-clouds", "na-pali-coast", "maui-palm-bay", "big-sur-coast", "cumulus-sky", "rockies-ember-peaks", "misty-fir-forest", "orange-clouds-blue-sky", "above-the-clouds"];
+var ALL = SK.media.wallpapers || [];
+var WALLS = ORDER.map(function (s) { return ALL.filter(function (w) { return w.slug === s; })[0]; }).filter(Boolean);
 if (!WALLS.length) return;
 
 /* where each wallpaper looks best in a tall phone frame, and the app's own id for it (the corner tag is keyed on that) */
 var MORE = {
   "cumulus-sky": { id: "sky" }, "volcano-above-clouds": { id: "volcano" }, "peaks-in-cloud-sea": { id: "cloudsea" },
   "half-dome-long-exposure": { id: "halfdome" }, "big-sur-coast": { id: "bigsur" }, "pebble-beach-cypress": { id: "pebble" },
-  "alpine-lake-mirror": { id: "lakemirror" }, "rockies-ember-peaks": { id: "ember" }, "lake-tahoe-blue-hour": { id: "tahoeblue" }
+  "alpine-lake-mirror": { id: "lakemirror" }, "rockies-ember-peaks": { id: "ember" }, "lake-tahoe-blue-hour": { id: "tahoeblue" }, "na-pali-coast": { id: "napali" }, "maui-palm-bay": { id: "maui" }
 };
 /* the same table and fallback the app uses for its corner coordinates */
-var PLACE = { pebble: [36.5687, -121.9654, 24], bigsur: [36.2704, -121.8081, 286], tahoeblue: [39.0968, -120.0324, 1897], halfdome: [37.7459, -119.5332, 2694], ember: [51.3271, -116.1856, 2710] };
+var PLACE = { pebble: [36.5687, -121.9654, 24], bigsur: [36.2704, -121.8081, 286], tahoeblue: [39.0968, -120.0324, 1897], halfdome: [37.7459, -119.5332, 2694], ember: [51.3271, -116.1856, 2710], napali: [22.1757, -159.6431, 12], maui: [20.7159, -156.4470, 3] };
 function geo(id) {
   var seed = String(id || "studio").split("").reduce(function (a, c) { return (a * 31 + c.charCodeAt(0)) % 100003; }, 7);
   var pl = PLACE[id] || [28 + (seed % 3400) / 100, -(64 + ((seed * 7) % 6000) / 100), 40 + ((seed * 13) % 2900)];

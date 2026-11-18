@@ -1,0 +1,101 @@
+<section class="sh-sec" id="shoot" aria-labelledby="h-shoot">
+<!-- SCREEN ONE (kept as it was): people filming on a phone, the headline, the "Your footage" card -->
+<div class="frame tall sh">
+  <!-- BACKGROUND: one reel of people filming on their phones (reel.mp4 / reel-m.mp4 for phones / reel.jpg) -->
+  <video class="bg" data-play data-src="assets/media/people/reel.mp4" data-src-m="assets/media/people/reel-m.mp4" poster="assets/media/people/reel.jpg" loop muted playsinline aria-hidden="true"></video>
+  <div class="shade"></div>
+  <span class="sh-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+
+  <div class="sh-in">
+    <div class="sh-col">
+      <header class="sh-head">
+        <p class="label" data-reveal>Your footage</p>
+        <h2 id="h-shoot" class="h-lg sh-h">Shoot it on your phone.<br><span class="two">Studio does the rest.</span></h2>
+        <p class="lede" data-reveal style="--i:2">Drop in what you filmed. It finds the best takes, cuts them, captions them and scores them.</p>
+      </header>
+
+      <!-- raw clips drop into the tray, the four jobs tick off, the finished film plays -->
+      <div class="sh-card" data-reveal="scale" style="--i:3" aria-hidden="true">
+        <div class="sh-left">
+          <div class="sh-top"><b>Your footage</b><span class="mono sh-status">Drop clips here</span></div>
+          <div class="sh-tray">
+            <span class="sh-clip pick" style="--n:0;--r:-7deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:1;--r:5deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:2;--r:-4deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip pick" style="--n:3;--r:8deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+            <span class="sh-clip" style="--n:4;--r:-6deg"><img alt="" width="180" height="320" decoding="async"><b></b></span>
+          </div>
+          <ul class="sh-steps">
+            <li><b></b><span>Best takes</span><i></i></li>
+            <li><b></b><span>Cut</span><i></i></li>
+            <li><b></b><span>Captions</span><i></i></li>
+            <li><b></b><span>Music</span><i></i></li>
+          </ul>
+        </div>
+        <div class="sh-film">
+          <video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video>
+          <span class="sh-wait"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17"/><circle class="sh-ring" cx="20" cy="20" r="17" pathLength="100"/></svg><em class="mono">Your film</em></span>
+          <span class="sh-badge">Ready</span>
+          <p class="sh-cap"></p>
+          <span class="sh-eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN TWO: the whole camera roll goes into Studio, a set of finished videos comes out -->
+<div class="sho" id="shoot-out">
+  <header class="sho-head">
+    <div class="sho-ttl">
+      <p class="label" data-reveal>Footage in, videos out</p>
+      <h3 class="h-lg sho-h">Dump the camera roll.<br><span class="two">Get the week's videos.</span></h3>
+    </div>
+    <div class="sho-side">
+      <p class="lede" data-reveal style="--i:2">Everything you shot goes in as it is. Reels, stories, ads and teasers come back, ready to post.</p>
+      <div class="vo" data-src="assets/audio/kayla-shoot.mp3" data-label="Kayla on your footage"></div>
+    </div>
+  </header>
+
+  <div class="frame sho-stage">
+    <img class="bg" src="assets/media/wallpapers/alpine-lake-mirror.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
+    <div class="shade"></div>
+    <p class="sr">Thirty-eight raw phone clips leave the camera roll and go into Studio. Studio finds the best takes, cuts them, captions them and adds music. Six finished vertical videos come out: a reel, a story, an ad, a teaser, a short and a TikTok.</p>
+    <div class="sho-flow" aria-hidden="true">
+      <div class="sho-tray glass">
+        <p class="sho-cap"><span>Camera roll</span><b>38 clips</b></p>
+        <div class="sho-pile"></div>
+        <p class="sho-empty"><i></i>All in Studio</p>
+      </div>
+
+      <div class="sho-core">
+        <p class="sho-brand"><svg class="sho-mark" aria-hidden="true"><use href="#studio-mark"/></svg><b>Studio</b></p>
+        <p class="sho-status"><span>Drop in the camera roll</span></p>
+        <ol class="sho-bars"><li></li><li></li><li></li><li></li></ol>
+        <div class="sho-nums">
+          <p><b class="sho-in">0</b><span>clips in</span></p>
+          <p><b class="sho-n-out">0</b><span>videos out</span></p>
+        </div>
+      </div>
+
+      <div class="sho-out glass">
+        <p class="sho-cap"><span>Ready to post</span></p>
+        <div class="sho-grid">
+            <figure class="sho-vid" style="--n:0"><span class="sho-card"><video data-play data-src="assets/media/selects/run-club.mp4" poster="assets/media/selects/run-club.jpg" loop muted playsinline></video><em class="sho-tag">Reel</em><span class="sho-line">Same crew.
+Every morning.</span></span></figure>
+            <figure class="sho-vid" style="--n:1"><span class="sho-card"><video data-play data-src="assets/media/selects/surfing.mp4" poster="assets/media/selects/surfing.jpg" loop muted playsinline></video><em class="sho-tag">Story</em><span class="sho-line">Out past
+the break.</span></span></figure>
+            <figure class="sho-vid" style="--n:2"><span class="sho-card"><video data-play data-src="assets/media/selects/coastal-highway.mp4" poster="assets/media/selects/coastal-highway.jpg" loop muted playsinline></video><em class="sho-tag">Ad</em><span class="sho-line">Take the
+long way.</span></span></figure>
+            <figure class="sho-vid" style="--n:3"><span class="sho-card"><video data-play data-src="assets/media/selects/coffee-friend-arrives.mp4" poster="assets/media/selects/coffee-friend-arrives.jpg" loop muted playsinline></video><em class="sho-tag">Teaser</em><span class="sho-line">The corner table.
+Saturdays.</span></span></figure>
+            <figure class="sho-vid" style="--n:4"><span class="sho-card"><video data-play data-src="assets/media/selects/dinner-toast.mp4" poster="assets/media/selects/dinner-toast.jpg" loop muted playsinline></video><em class="sho-tag">Short</em><span class="sho-line">Long table.
+Good people.</span></span></figure>
+            <figure class="sho-vid" style="--n:5"><span class="sho-card"><video data-play data-src="assets/media/selects/tennis-forehand.mp4" poster="assets/media/selects/tennis-forehand.jpg" loop muted playsinline></video><em class="sho-tag">TikTok</em><span class="sho-line">One more
+set.</span></span></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
