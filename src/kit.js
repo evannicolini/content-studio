@@ -336,14 +336,14 @@
       var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
       var onGesture = function (e) {
         if (started) return off();
-        if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play]")) { started = true; return off(); }
+        if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play], [data-enter]")) { started = true; return off(); }
         if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
         tryPlay();
       };
       var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
       a.addEventListener("play", function () { started = true; off(); });
       EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
-      if (!SK.reduced) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay));
+      if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
     }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
