@@ -1,182 +1,122 @@
+/* 010 hero: the approved "Hero A · App leans back" (design canvas HeroA + StudioApp), in plain JS.
+   Intro: once per page load, then never again until a reload. Timings are the canvas's (ms after the type and the sky are ready,
+   1200 at most): 120 the words pull into focus, 1500 the head moves up and the nav, button, composer and app arrive, 3300 the
+   prompt loop starts. The loop types a prompt (46 ms a character), then +420 tap, +640 working, +1300 the app opens the screen
+   that answers it, +5600 the composer clears, +6200 the next prompt. After the last prompt it goes back to Home and starts again.
+   It only runs while the hero is in view. With reduced motion the hero is shown settled and nothing moves. */
 var hero = document.getElementById("hero");
 if (!hero) return;
-var M = SK.media || {};
-function film(re) { return (M.films || []).filter(function (f) { return re.test(f.slug) || re.test(f.title || ""); })[0]; }
-var FILMS = { launch: film(/multivitamin/i) || (M.films || [])[0], viral: film(/email.?signature|this.?is/i) || (M.films || [])[1] };
+var html = document.documentElement;
+var cp = hero.querySelector(".cp"), ask = hero.querySelector(".cp-t"), app = hero.querySelector(".sa"), stage = hero.querySelector(".hx-stage"), sky = hero.querySelector(".hx-sky");
+var DESK = matchMedia("(min-width: 861px) and (min-aspect-ratio: 5/4)"); /* the same query as section.css and base.css */
+function phone() { return !DESK.matches; }
 
-/* What the field asks for, the app recording that answers it (desktop), and the drawn scene that answers it (phones). */
-var PROMPTS = [
-  { text: "Build me a launch commercial for my company", short: "Make my launch commercial", clip: "launch", scene: 0 },
-  { text: "Make the ending hit harder", clip: "note", scene: 1 },
-  { text: "Recreate this viral video for my company", short: "Remake this viral video", clip: "viral", scene: 2 },
-  { text: "Post all my content across all my channels", short: "Schedule my next 30 days", clip: "post", scene: 3 }
-];
-var APP_DIR = "assets/media/app/hero-";
+/* each prompt opens the screen that answers it: editor, editor with the note, Aesthetic, Social, Ask Claude */
+var PROMPTS = ["Make me a launch commercial for my company", "Make the ending hit harder", "Give my brand a look people remember", "Post all my content across all my channels", "What should I post this week?"];
+var PROMPTS_M = ["Make my launch commercial", "Make the ending hit harder", "Give my brand a look", "Post everywhere this month", "What should I post this week?"];
+var VIEW = ["sa v-home", "sa v-edit s1", "sa v-edit s1 s2", "sa v-aes", "sa v-social", "sa v-ask"];
+var ASK = "What should we make?", CHAR_MS = 46;
 
-/* ---------- the sky: a slow push-in or drift, a new view every few seconds (grain-free wallpapers) ---------- */
+/* ---------- Social: November 2026, weeks start Monday (Oct 26 to Nov 29). Two posts on busy days, one on the rest. ---------- */
 (function () {
-  var box = hero.querySelector(".hero-bgs"), first = box.querySelector("img"), names = ["volcano-above-clouds", "cumulus-sky", "peaks-in-cloud-sea", "orange-clouds-blue-sky", "lake-tahoe-blue-hour"];
-  var urls = [first.currentSrc || first.src].concat(names.map(function (n) { return "assets/media/wallpapers/" + n + ".jpg"; }));
-  var MOVES = [
-    [{ transform: "scale(1.03)" }, { transform: "scale(1.15)" }],
-    [{ transform: "scale(1.12) translate3d(-2.2%, 0, 0)" }, { transform: "scale(1.12) translate3d(2.2%, 0, 0)" }],
-    [{ transform: "scale(1.15) translate3d(0, 1.2%, 0)" }, { transform: "scale(1.04) translate3d(0, -0.6%, 0)" }],
-    [{ transform: "scale(1.12) translate3d(2.2%, 0, 0)" }, { transform: "scale(1.12) translate3d(-2.2%, 0, 0)" }]
-  ];
-  var cur = first, i = 0, timer = 0, HOLD = 4600;
-  function move(img, k) { if (img.animate && !SK.reduced) img.animate(MOVES[k % MOVES.length], { duration: HOLD + 2600, easing: "linear", fill: "both" }); }
-  move(first, 0);
-  if (SK.reduced) return;
-  function next() {
-    i = (i + 1) % urls.length;
-    var img = new Image();
-    img.className = "hero-bg"; img.alt = ""; img.decoding = "async";
-    img.onload = function () {
-      box.appendChild(img);
-      move(img, i);
-      requestAnimationFrame(function () { requestAnimationFrame(function () { img.classList.add("on"); }); });
-      var old = cur; cur = img;
-      setTimeout(function () { var host = old.closest("picture") || old; host.parentNode && host.parentNode.removeChild(host); }, 2000);
-    };
-    img.src = urls[i];
+  var grid = hero.querySelector(".so-grid"), TIMES = ["10a", "4p", "6p", "9a", "12p", "11a", "4p", "10a"], BUSY = [3, 6, 10, 13, 16, 18, 20, 24, 27], k = 0, h = "";
+  for (var c = 0; c < 35; c++) {
+    var n = c < 6 ? 26 + c : c - 5, out = c < 6;
+    h += '<div class="so-d' + (out ? " out" : "") + (!out && n === 17 ? " today" : "") + '"><span class="n">' + n + '</span><div class="so-ps">';
+    if (!out) for (var j = 0; j < (BUSY.indexOf(n) >= 0 ? 2 : 1); j++, k++) {
+      h += '<div class="so-p" style="--i: ' + k + '"><img data-src="assets/hero/cal/t' + ("0" + ((k % 28) + 1)).slice(-2) + '.jpg" alt=""><b class="' + (n < 17 ? "dot-p" : "dot-s") + '"></b><span>' + TIMES[(n + j) % TIMES.length] + "</span></div>";
+    }
+    h += "</div></div>";
   }
-  SK.onView(hero, function () { clearInterval(timer); timer = setInterval(next, HOLD); }, function () { clearInterval(timer); });
+  grid.innerHTML = h;
 })();
 
-var rig = hero.querySelector(".hero-rig"), stage = hero.querySelector(".hero-stage"), ask = hero.querySelector(".hero-ask");
-var scenes = [].slice.call(stage.querySelectorAll(".hs")), vids = [].slice.call(stage.querySelectorAll(".ha"));
-var clock = document.getElementById("hero-clock"), clockT = 0, countEl = document.getElementById("hs-count");
+/* ---------- scale: --k is the artboard scale as a plain number, read from the length --hx-u (base.css) ----------
+   section.css already sets it with trig; this sets it only in browsers without it (their scale() comes out as none). In a window taller than the artboard the app
+   grows just enough to keep running past the bottom edge, as it does on the artboard. */
+var probe = document.createElement("i"), board = hero.querySelector(".hx-fit"), fitQ = 0, noTrig = false;
+probe.className = "hx-u";
+hero.appendChild(probe);
+function fit() {
+  fitQ = 0;
+  var k = probe.getBoundingClientRect().width / 1000;
+  if (!(k > 0)) return;
+  var base = phone() ? 0.5 : 0.8194, need = ((hero.clientHeight - board.offsetTop) / k - stage.offsetTop) / 884; /* 884 of the app's 900: where its glass panels end */
+  if (!noTrig && getComputedStyle(board).transform === "none") noTrig = true;
+  if (noTrig) hero.style.setProperty("--k", k.toFixed(5));
+  if (need > base) { need += 0.012; stage.style.setProperty("--as", need.toFixed(4)); stage.style.width = (1440 * need).toFixed(1) + "px"; stage.style.height = (900 * need).toFixed(1) + "px"; }
+  else if (stage.style.width) { stage.style.removeProperty("--as"); stage.style.width = ""; stage.style.height = ""; }
+}
+fit();
+window.addEventListener("resize", function () { if (!fitQ) fitQ = requestAnimationFrame(fit); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 
-/* ---------- drawn scenes (phones, and the fallback when a recording is missing) ---------- */
-hero.querySelectorAll("video[data-hero-film]").forEach(function (v) {
-  var f = FILMS[v.getAttribute("data-hero-film")];
-  if (!f) return;
-  v.poster = f.poster;
-  v.setAttribute("data-src", f.loop);
-  v.parentNode.style.backgroundImage = "url(" + f.poster + ")";
+/* ---------- beams: the composer's is the intense one (md, boost 3.2); its corner radius is 26 on desktop, 22 on phones ---------- */
+var beamM = SK.beam(cp, { size: "md", variant: "mirra", radius: 22, boost: 3.2, glow: 1.5, width: 1.5 }).getAttribute("data-beam");
+var beamD = SK.beam(cp, { size: "md", variant: "mirra", radius: 26, boost: 3.2, glow: 1.5, width: 1.5 }).getAttribute("data-beam");
+function branch() { if (beamM && beamD) cp.setAttribute("data-beam", phone() ? beamM : beamD); if (!fitQ) fitQ = requestAnimationFrame(fit); }
+branch();
+if (DESK.addEventListener) DESK.addEventListener("change", branch); else if (DESK.addListener) DESK.addListener(branch);
+
+/* ---------- pictures of the screens that are not open yet ---------- */
+function warm() {
+  hero.querySelectorAll("img[data-src]").forEach(function (im) { im.decoding = "async"; im.src = im.getAttribute("data-src"); im.removeAttribute("data-src"); });
+}
+
+/* ---------- the composer and the app ---------- */
+function compose(state, text) {
+  cp.className = "cp" + (state ? " " + state : "") + (text ? " has" : "");
+  ask.textContent = text || ASK;
+  ask.className = text ? "cp-t" : "cp-t ph";
+}
+function show(n) { app.className = VIEW[n]; }
+
+var tm = [], iv = 0, next = 0, started = false, inView = false;
+function at(ms, f) { tm.push(setTimeout(f, ms)); }
+function halt() { tm.forEach(clearTimeout); tm = []; clearInterval(iv); }
+function loop(i) {
+  var list = phone() ? PROMPTS_M : PROMPTS, k = i % list.length, text = list[k], n = 0;
+  next = i;
+  if (k === 0 && i > 0) show(0);
+  compose("typing", "");
+  clearInterval(iv);
+  iv = setInterval(function () {
+    n++;
+    compose("typing", text.slice(0, n));
+    if (n < text.length) return;
+    clearInterval(iv);
+    at(420, function () { compose("tap", text); });
+    at(640, function () { compose("working", text); });
+    at(1300, function () { show(k + 1); next = i + 1; });
+    at(5600, function () { compose("", ""); });
+    at(6200, function () { loop(i + 1); });
+  }, CHAR_MS);
+}
+
+if (SK.reduced) { clearTimeout(window.__hxSafe); hero.className = "hx"; html.classList.remove("hx-pre", "hx-intro"); return; }
+
+/* in view: the loop runs. Out of view: timers stop, CSS animations pause (.off), and it picks up at the next prompt on return. */
+SK.onView(hero, function () {
+  inView = true;
+  hero.classList.remove("off");
+  if (started) { halt(); at(600, function () { loop(next); }); }
+}, function () {
+  inView = false;
+  hero.classList.add("off");
+  if (started) { halt(); compose("", ""); }
 });
-var grid = document.getElementById("hs-grid"), thumbs = (M.thumbs || []).map(function (t) { return t.file || t; });
-var skip = { 4: 1, 11: 1, 17: 1, 23: 1, 27: 1 };
-for (var d = 0; d < 30; d++) {
-  var c = document.createElement("div");
-  c.className = "hs-cell";
-  c.innerHTML = "<span>" + (d + 1) + "</span>";
-  if (!skip[d] && thumbs.length) {
-    var im = document.createElement("img");
-    im.alt = ""; im.decoding = "async";
-    im.setAttribute("data-lazy", thumbs[d % thumbs.length]);
-    c.appendChild(im);
-    c.setAttribute("data-at", String(600 + d * 105));
-    c.setAttribute("data-post", "1");
-  }
-  grid.appendChild(c);
-}
-var sceneTok = 0;
-function playScene(i) {
-  var my = ++sceneTok, s = scenes[i];
-  scenes.forEach(function (x, j) {
-    x.classList.toggle("live", j === i);
-    if (j !== i) x.querySelectorAll("video").forEach(function (v) { v.pause(); });
-  });
-  s.querySelectorAll("[data-at]").forEach(function (el) {
-    el.classList.remove("on");
-    if (el.hasAttribute("data-swap")) el.textContent = el._orig || (el._orig = el.textContent);
-  });
-  s.querySelectorAll("img[data-lazy]").forEach(function (im) { im.src = im.getAttribute("data-lazy"); im.removeAttribute("data-lazy"); });
-  s.querySelectorAll("video").forEach(function (v) {
-    if (!v.src && v.getAttribute("data-src")) v.src = v.getAttribute("data-src");
-    try { v.currentTime = 0; } catch (e) {}
-    if (!SK.reduced) { var p = v.play(); p && p.catch(function () {}); }
-  });
-  var n = 0;
-  if (countEl && s.classList.contains("hs-cal")) countEl.textContent = "0";
-  s.querySelectorAll("[data-at]").forEach(function (el) {
-    setTimeout(function () {
-      if (my !== sceneTok) return;
-      el.classList.add("on");
-      if (el.hasAttribute("data-swap")) el.textContent = el.getAttribute("data-swap");
-      if (el.hasAttribute("data-post") && countEl) countEl.textContent = String(++n);
-    }, SK.reduced ? 0 : +el.getAttribute("data-at"));
-  });
-  return SK.sleep(+s.getAttribute("data-dur") || 6000);
-}
 
-/* ---------- the real app, recorded (desktop) ---------- */
-var have = {}, appMode = false, cur = -1;
-function clipURL(name) { return APP_DIR + name + (stage.clientWidth * (window.devicePixelRatio || 1) < 1500 ? "-1280" : "") + ".mp4"; }
-function showClip(name, alive) {
-  return new Promise(function (done) {
-    var next = vids[(cur + 1) % 2], prev = vids[cur < 0 ? 1 : cur % 2], finished = false;
-    cur++;
-    function end() { if (finished) return; finished = true; next.removeEventListener("ended", end); clearTimeout(guard); done(); }
-    var guard = setTimeout(end, 16000);
-    next.src = clipURL(name);
-    next.addEventListener("ended", end);
-    next.addEventListener("error", end, { once: true });
-    next.addEventListener("canplay", function () {
-      if (!alive()) return end();
-      next.classList.add("on"); prev.classList.remove("on");
-      var p = next.play(); p && p.catch(end);
-      setTimeout(function () { prev.pause(); }, 700);
-    }, { once: true });
-    next.load();
+/* ---------- the intro, once ---------- */
+function intro() {
+  clearTimeout(window.__hxSafe);
+  var ready = Promise.all([document.fonts ? document.fonts.ready : null, sky.decode ? sky.decode().catch(function () {}) : null]);
+  Promise.race([ready, SK.sleep(1200)]).then(function () {
+    fit();
+    setTimeout(function () { hero.classList.remove("w0"); }, 120);
+    setTimeout(function () { hero.classList.remove("pre"); hero.classList.add("go"); html.classList.remove("hx-pre"); }, 1500);
+    setTimeout(function () { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); }, 3300);
   });
 }
-function probe(name) {
-  return fetch(APP_DIR + name + "-1280.mp4", { method: "HEAD" }).then(function (r) { have[name] = r.ok; }).catch(function () { have[name] = false; });
-}
-
-/* ---------- the loop ---------- */
-var field = SK.promptField(document.getElementById("hero-field"), { placeholder: "What should we make?", scale: SK.mobile() ? 1 : 1.3, auto: false });
-function tick(start) {
-  clearInterval(clockT);
-  clockT = setInterval(function () { var s = Math.floor((Date.now() - start) / 1000); clock.textContent = "00:" + ("0" + (s % 60)).slice(-2); }, 250);
-}
-var run = 0, opened = false;
-async function loop(my) {
-  var alive = function () { return my === run; };
-  if (appMode && have.open && !opened) {
-    opened = true;
-    await showClip("open", alive);
-    if (!alive()) return;
-  }
-  var list = PROMPTS.filter(function (p) { return !appMode || have[p.clip]; });
-  if (!list.length) return;
-  for (var i = 0; alive(); i++) {
-    var p = list[i % list.length];
-    await SK.sleep(i ? 600 : 500);
-    if (!alive()) break;
-    if (!(await field.type(SK.mobile() && p.short ? p.short : p.text))) break;
-    await SK.sleep(420);
-    if (!alive()) break;
-    field.send();
-    ask.setAttribute("data-busy", "");
-    tick(Date.now());
-    setTimeout(function () { if (alive()) field.state("idle"); }, 1700);
-    await (appMode ? showClip(p.clip, alive) : playScene(p.scene));
-    clearInterval(clockT);
-    ask.removeAttribute("data-busy");
-    if (!alive()) break;
-    await SK.sleep(appMode ? 500 : 0);
-    field.state("idle").clear();
-  }
-}
-function begin() {
-  SK.onView(rig, function () { loop(++run); }, function () {
-    run++; sceneTok++; field.stop(); field.state("idle").clear(); clearInterval(clockT); ask.removeAttribute("data-busy");
-    stage.querySelectorAll("video").forEach(function (v) { v.pause(); });
-  }, { ratio: 0.2, threshold: [0, 0.2, 0.5] });
-}
-if (SK.mobile() || SK.reduced) begin();
-else (function () {
-  var names = ["open"].concat(PROMPTS.map(function (p) { return p.clip; })), listed = M.app ? JSON.stringify(M.app) : "";
-  if (listed) { names.forEach(function (n) { have[n] = listed.indexOf("hero-" + n + "-1280.mp4") >= 0; }); return Promise.resolve(); }
-  return Promise.all(names.map(probe));
-})().then(function () {
-  appMode = !!(have.open || PROMPTS.some(function (p) { return have[p.clip]; }));
-  if (appMode) {
-    stage.classList.add("app");
-    stage.querySelector(".hero-app").style.backgroundImage = "url(" + APP_DIR + "launch.jpg)";
-  }
-  begin();
-});
+if (!hero.classList.contains("pre")) { hero.className = "hx pre w0"; html.classList.add("hx-pre", "hx-intro"); }
+if (document.visibilityState === "hidden") document.addEventListener("visibilitychange", function once() { if (document.visibilityState !== "visible") return; document.removeEventListener("visibilitychange", once); intro(); });
+else intro();

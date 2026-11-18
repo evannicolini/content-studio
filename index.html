@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=6fb376c5">
+<link rel="stylesheet" href="site.css?v=0db1f94a">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -63,87 +63,287 @@
 <main id="top">
 
 <!-- 010-hero -->
-<section class="hero" id="hero" aria-labelledby="h-hero">
-  <div class="hero-bgs" aria-hidden="true"><picture><source media="(max-width: 700px)" srcset="assets/hero-sky-m.jpg"><img class="hero-bg on" src="assets/hero-sky.jpg" alt="" fetchpriority="high"></picture></div>
-  <div class="hero-shade"></div>
+<section class="hx" id="hero" aria-labelledby="h-hero">
+<!-- The approved "Hero A · App leans back": a 1440 artboard (390 on phones) that scales as one piece (--k, see section.css).
+     This script puts the opening state on before the first paint. Without JavaScript, or with reduced motion, the hero is
+     simply shown settled. If site.js never arrives, the nav and the words come back by themselves. -->
+<script>(function (d) { var h = d.currentScript.parentNode, r = d.documentElement; if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; h.className = "hx pre w0"; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { h.className = "hx"; r.classList.remove("hx-pre", "hx-intro"); }, 7000); })(document);</script>
+<svg class="hx-defs" width="0" height="0" aria-hidden="true" focusable="false">
+<symbol id="hx-mark" viewBox="36 36 440 440"><path fill="url(#mk-l)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/><path fill="url(#mk-r)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/><path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/></symbol>
+<symbol id="hx-meta" viewBox="0 0 22 13"><path d="M6 1.8C3.4 1.8 1.6 4.1 1.6 6.7s1.5 4.5 3.4 4.5c3.3 0 5.4-9.4 11-9.4 2.4 0 4.4 2.2 4.4 4.9s-1.6 4.5-3.6 4.5C13.4 11.2 11.2 1.8 6 1.8Z"/></symbol>
+</svg>
 
-  <div class="hero-in">
-    <p class="hero-lock" data-reveal>
-      <svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span>
-      <i aria-hidden="true">×</i>
-      <svg class="cl" aria-hidden="true"><use href="#claude"/></svg><span>Claude</span>
-    </p>
-    <h1 id="h-hero" class="h-xl" data-reveal style="--i:1">If you can dream it, <br class="hero-br"><span class="hero-two">you can post it.</span></h1>
-    <a class="btn btn-glass hero-dl" href="#pricing" data-download data-beam-auto="md" data-beam-variant="mirra" data-beam-boost="2.4" data-beam-radius="999" data-reveal style="--i:2"><svg class="apple" aria-hidden="true"><use href="#apple"/></svg><span>Download for Mac</span></a>
+<div class="hx-hero">
+<picture><source media="(max-width: 700px) and (max-aspect-ratio: 3/4)" srcset="assets/hero/sky-m.jpg"><img class="hx-sky" src="assets/hero/sky.jpg" alt="" width="2560" height="1429" fetchpriority="high" decoding="async"></picture>
+<div class="hx-shade" aria-hidden="true"></div>
 
-    <div class="hero-rig" data-reveal="scale" style="--i:3">
-      <div class="hero-ask ask">
-        <div class="ask-top"><b>Ask Claude</b><span><em>Making&nbsp;&nbsp;</em><span id="hero-clock">00:00</span></span></div>
-        <div class="brk"><i></i><i></i><i></i><i></i><div id="hero-field" aria-label="Examples of what you can ask"></div></div>
-      </div>
+<div class="hx-fit">
+<div class="hx-in">
+<div class="hx-col">
+<div class="hx-head">
+<p class="hx-lock">
+<svg class="mk" aria-hidden="true"><use href="#studio-mark"/></svg>
+<span>Studio</span><span class="x" aria-hidden="true">×</span>
+<svg class="cl" aria-hidden="true"><use href="#claude"/></svg>
+<span>Claude</span>
+</p>
+<h1 id="h-hero" class="hx-h1" aria-label="If you can dream it, you can post it."><span class="hx-bw" style="--n: 0" aria-hidden="true">If</span><span class="hx-bw" style="--n: 1" aria-hidden="true">you</span><span class="hx-bw" style="--n: 2" aria-hidden="true">can</span><span class="hx-bw" style="--n: 3" aria-hidden="true">dream</span><span class="hx-bw" style="--n: 4" aria-hidden="true">it,</span><br class="hx-br"><span class="hx-bw hx-two" style="--n: 5" aria-hidden="true">you</span><span class="hx-bw hx-two" style="--n: 6" aria-hidden="true">can</span><span class="hx-bw hx-two" style="--n: 7" aria-hidden="true">post</span><span class="hx-bw hx-two end" style="--n: 8" aria-hidden="true">it.</span></h1>
+</div>
 
-    <!-- what the prompt above turns into. Each .hs is one scene; [data-at] = ms after the scene starts -->
-    <div class="hero-stage" aria-hidden="true">
-      <div class="hero-app"><video class="ha a" muted playsinline preload="none"></video><video class="ha b" muted playsinline preload="none"></video></div>
-      <div class="hs hs-make live" data-dur="8200">
-        <ul class="hs-list">
-          <li data-at="350"><b></b><span>Script</span><em>6 lines</em></li>
-          <li data-at="1050"><b></b><span>Voice-over</span><em>recorded</em></li>
-          <li data-at="1750"><b></b><span>Footage</span><em>9 shots</em></li>
-          <li data-at="2450"><b></b><span>Motion graphics</span><em>your brand</em></li>
-          <li data-at="3150"><b></b><span>Music and sound</span><em>mixed</em></li>
-        </ul>
-        <div class="hs-player" data-at="3700"><video data-hero-film="launch" loop muted playsinline preload="none"></video><span class="hs-badge">v01</span></div>
-        <div class="hs-tracks">
-          <p class="mono">Timeline</p>
-          <div class="hs-track" data-at="3900"><span>Video</span><i style="--w:92%"></i></div>
-          <div class="hs-track" data-at="4150"><span>Voice</span><i style="--w:74%"></i></div>
-          <div class="hs-track" data-at="4400"><span>Music</span><i style="--w:100%"></i></div>
-          <div class="hs-track" data-at="4650"><span>Sound</span><i class="dots" style="--w:86%"></i></div>
-          <p class="hs-done" data-at="5200">Ready to watch</p>
-        </div>
-      </div>
+<a class="hx-btn hx-dl" href="#pricing" data-download data-beam-auto="md" data-beam-variant="mirra" data-beam-boost="2.4" data-beam-radius="999"><svg aria-hidden="true"><use href="#apple"/></svg><span>Download for Mac</span></a>
 
-      <div class="hs hs-note" data-dur="7000">
-        <ul class="hs-list hs-vers">
-          <li class="on"><b></b><span>v01</span><em>first cut</em></li>
-          <li data-at="1700"><b></b><span>Your note</span><em>on the frame</em></li>
-          <li data-at="2700"><b></b><span>Claude</span><em>re-cutting</em></li>
-          <li data-at="4300"><b></b><span>v02</span><em>new cut</em></li>
-        </ul>
-        <div class="hs-player on"><video data-hero-film="launch" loop muted playsinline preload="none"></video><span class="hs-badge" data-at="4300" data-swap="v02">v01</span>
-          <span class="hs-pin" data-at="500">1</span>
-          <p class="hs-bubble" data-at="900">Make the ending hit harder.</p>
-        </div>
-        <div class="hs-tracks">
-          <p class="mono">Notes</p>
-          <p class="hs-line" data-at="900"><b>0:12</b> Make the ending hit harder.</p>
-          <p class="hs-sent" data-at="2100">Sent to Claude</p>
-          <p class="hs-done" data-at="4300">New cut is back</p>
-        </div>
-      </div>
+<!-- the composer: section.js types the prompts into it; each one opens the app screen that answers it -->
+<div class="cp" role="img" aria-label="What you can ask Claude to make">
+<p class="cp-ask"><span class="cp-t ph">What should we make?</span><i class="cp-caret"></i></p>
+<div class="cp-row">
+<span class="cp-lock">
+<span class="cp-app"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span><span>Studio</span>
+<span class="x">×</span>
+<svg class="cp-spark" aria-hidden="true"><use href="#claude"/></svg><span>Claude</span>
+</span>
+<span class="cp-state">Working</span>
+<span class="cp-send"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg><i></i><i></i><i></i></span>
+</div>
+</div>
+</div>
 
-      <div class="hs hs-viral" data-dur="7400">
-        <div class="hs-ref">
-          <div class="hs-phone hs-phone-ref"><span class="hs-chip">Viral in your niche</span><span class="hs-views">1.2M views</span><div class="hs-scan" data-at="500"></div></div>
-          <ul class="hs-read">
-            <li data-at="900"><b>Hook</b> first 1.5 seconds</li>
-            <li data-at="1500"><b>Pace</b> a cut every 1.4 s</li>
-            <li data-at="2100"><b>Captions</b> one line, top third</li>
-            <li data-at="2700"><b>Sound</b> trending audio</li>
-          </ul>
-        </div>
-        <div class="hs-arrow" data-at="3200"><svg viewBox="0 0 40 16"><path d="M1 8h36M31 2l6 6-6 6"/></svg></div>
-        <div class="hs-phone hs-phone-you" data-at="3500"><video data-hero-film="viral" loop muted playsinline preload="none"></video><span class="hs-chip">Yours</span></div>
-      </div>
+<!-- the Studio app, drawn in markup at its own size (1440 x 900) and scaled; the class on .sa picks the screen -->
+<div class="hx-stage" aria-hidden="true">
+<div class="hx-app3d"><div class="hx-appfit">
+<div class="sa v-home">
 
-      <div class="hs hs-cal" data-dur="7600">
-        <div class="hs-cal-head"><p class="mono">Next 30 days</p><p class="hs-cal-count"><b id="hs-count">0</b> posts scheduled</p></div>
-        <div class="hs-grid" id="hs-grid"></div>
-      </div>
-    </div>
-    </div>
-  </div>
+<div class="sa-side">
+<div class="sa-brand">
+<svg aria-hidden="true"><use href="#hx-mark"/></svg>
+<span>Studio</span>
+<svg class="sa-pin" viewBox="0 0 16 16" aria-hidden="true" style="fill: currentColor"><path d="M10.2 1.6 14.4 5.8 12.8 6.4 10.6 8.6 10.9 11.6 9.8 12.7 7.2 10.1 3.4 13.9 2.1 13.9 2.1 12.6 5.9 8.8 3.3 6.2 4.4 5.1 7.4 5.4 9.6 3.2Z"/></svg>
+</div>
+<div class="sa-sel"><svg class="gr" viewBox="0 0 18 18" aria-hidden="true"><rect x="1" y="1" width="7" height="7" rx="2"/><rect x="10" y="1" width="7" height="7" rx="2"/><rect x="1" y="10" width="7" height="7" rx="2"/><rect x="10" y="10" width="7" height="7" rx="2"/></svg><span>All brands</span><svg class="ch ic" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></div>
+<div class="sa-tabs">
+<div class="sa-tab t-home"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.2 8 2.6l5.5 4.6v5.8a.6.6 0 0 1-.6.6H9.7V10H6.3v3.6H3.1a.6.6 0 0 1-.6-.6Z"/></svg>Home</div>
+<p class="sa-sec">Create</p>
+<div class="sa-tab t-aes"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5"/><circle cx="5.5" cy="6.5" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="11" cy="8.5" r="1"/></svg>Aesthetic<span class="sa-n">328</span></div>
+<div class="sa-tab t-edit"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="2"/><path d="m6.7 6 3.3 2-3.3 2z"/></svg>Full edits<span class="sa-n">25</span></div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 12h4M6.5 14.5h3M8 1.5a4.5 4.5 0 0 0-2.6 8.2c.4.3.6.8.6 1.3V12h4v-1c0-.5.2-1 .6-1.3A4.5 4.5 0 0 0 8 1.5z"/></svg>Concepts<span class="sa-n">4</span></div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.8 9.6 6l4.4.3-3.4 2.8 1.1 4.3L8 11l-3.7 2.4 1.1-4.3L2 6.3 6.4 6z"/></svg>AI Library<span class="sa-n">449</span></div>
+<p class="sa-sec">Grow</p>
+<div class="sa-tab t-social"><span class="sa-logos"><span style="background: linear-gradient(45deg, #f9b233, #e5326b 50%, #8a3ab9)"></span><span style="background: #000; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25)"></span><span style="background: #0a66c2"></span></span>Social<span class="sa-n">11</span></div>
+<div class="sa-tab"><svg class="meta" viewBox="0 0 22 13" aria-hidden="true" style="fill: none; stroke: #2d8cff; stroke-width: 1.8; stroke-linecap: round"><use href="#hx-meta"/></svg>Ads<span class="sa-n">0 live</span></div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 1.5h4M6.6 1.5v4.4L2.9 12.4a1.1 1.1 0 0 0 1 1.6h8.2a1.1 1.1 0 0 0 1-1.6L9.4 5.9V1.5M4.6 9.5h6.8"/></svg>Viral Lab<span class="sa-n">6</span></div>
+<p class="sa-sec">Library</p>
+<div class="sa-tab"><span class="sa-logos"><img decoding="async" src="assets/hero/brand-mirra.png" alt=""><img decoding="async" src="assets/hero/brand-ces.png" alt=""></span>Brand kit<span class="sa-n">2</span></div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.5h8v13l-4-3-4 3z"/></svg>References<span class="sa-n">17</span></div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 12.5V3.5l7-1.5v9"/><circle cx="4" cy="12.5" r="2"/><circle cx="11" cy="11" r="2"/></svg>Music<span class="sa-n">305</span></div>
+</div>
+<div class="sa-ask"><svg viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="8" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.1 3.1"/></svg>Ask Claude…<kbd>⌘K</kbd></div>
+<div class="sa-tab sa-set"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 1.5v3M10.5 1.5v3M3.5 4.5h9v2a4.5 4.5 0 0 1-9 0zM8 11v3.5"/></svg>Integrations</div>
+<div class="sa-tab"><svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.6v1.7M8 12.7v1.7M1.6 8h1.7M12.7 8h1.7M3.5 3.5l1.2 1.2M11.3 11.3l1.2 1.2M12.5 3.5l-1.2 1.2M4.7 11.3l-1.2 1.2"/></svg>Settings</div>
+</div>
+
+<div class="sa-home">
+
+<!-- ===================== Full edits: the editor ===================== -->
+<div class="scr scr-edit">
+<div class="ed">
+<div class="ed-top">
+<span class="ui-b r"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 3.5 3 8l4.5 4.5"/></svg></span>
+<span class="ed-title">Launch commercial</span>
+<span class="ui-b"><span class="ed-ver"><span class="b1">v01 · LATEST · 60 fps · rendered Nov 17</span><span class="b2">v02 · LATEST · 60 fps · rendered Nov 17</span></span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></span>
+<span class="ui-b r"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 4.5a1 1 0 0 1 1-1h3.4l1.5 1.6h6.1a1 1 0 0 1 1 1v6.4a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1z"/></svg></span>
+<span class="ed-fl"></span>
+<span class="ui-b"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="3"/></svg>Review</span>
+<span class="ui-b"><svg viewBox="0 0 16 16" aria-hidden="true" style="fill: #BFE3FF; stroke: none"><circle cx="8" cy="8" r="3"/></svg>In progress</span>
+<span class="ui-b"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 2 7 9M14 2l-4.5 12-2.5-5-5-2.5z"/></svg>Post</span>
+<span class="ui-b"><svg viewBox="0 0 22 13" aria-hidden="true" style="width: 18px; stroke: #2d8cff; stroke-width: 2"><use href="#hx-meta"/></svg>Run as ad</span>
+</div>
+<div class="ed-main">
+
+<div class="ed-card">
+<div class="ed-hd"><b>Video</b><span class="ed-saved">✓ SAVED</span><span class="ed-fl"></span><span class="ui-b" style="height: 30px">Hide</span></div>
+<div class="ed-ruler"><span>0s</span><span>10s</span><span>20s</span><span>30s</span><span>40s</span><span>50s</span><span>1:00</span></div>
+<div class="ed-lane"><p class="ed-lbl">V1<i>Shots</i></p><div class="ed-track"><div class="ed-clips"><img data-src="assets/hero/film-lobby-hero-window.jpg" alt=""><img data-src="assets/hero/film-mirra-multivitamin.jpg" alt=""><img data-src="assets/hero/film-founders-retreat.jpg" alt=""><img data-src="assets/hero/film-ces-company-becoming.jpg" alt=""></div><span class="ed-tag" style="position: absolute; left: 6px; top: 5px; font: 500 9px/1 'IBM Plex Mono', monospace; color: #fff">v01</span><i class="ed-head"></i></div></div>
+<div class="ed-lane"><p class="ed-lbl">A1<i>Clip sound</i></p><div class="ed-track ed-a1"></div></div>
+<div class="ed-grip"></div>
+<div class="ed-hd"><b>Volume</b></div>
+<div class="ed-vol">
+<div class="ed-vrow"><p>Voice <span class="ed-k">M</span><span class="ed-k">S</span><span>0.0 dB</span></p><div class="ed-wave" style="--w: linear-gradient(90deg, rgba(0,0,0,.35), #000 9%, rgba(0,0,0,.5) 17%, #000 26%, rgba(0,0,0,.6) 38%, #000 47%, rgba(0,0,0,.4) 58%, #000 70%, rgba(0,0,0,.55) 82%, #000 91%, rgba(0,0,0,.3))"></div></div>
+<div class="ed-vrow"><p>SFX <span class="ed-k">M</span><span class="ed-k">S</span><span>0.0 dB</span></p><div class="ed-wave" style="--w: linear-gradient(90deg, #000, rgba(0,0,0,.3) 12%, #000 20%, rgba(0,0,0,.25) 33%, #000 41%, rgba(0,0,0,.4) 55%, #000 63%, rgba(0,0,0,.2) 77%, #000 88%, rgba(0,0,0,.45))"></div></div>
+<div class="ed-vrow"><p>Music <span class="ed-k">M</span><span class="ed-k">S</span><span>0.0 dB</span></p><div class="ed-wave m" style="--w: linear-gradient(90deg, rgba(0,0,0,.6), #000 30%, rgba(0,0,0,.75) 60%, #000 85%, rgba(0,0,0,.5))"></div></div>
+</div>
+</div>
+
+<div class="ed-card ed-player">
+<div class="ed-tg"><span class="ui-b" style="height: 30px"><i class="ed-sw"></i>Instagram UI</span><span class="ui-b" style="height: 30px"><i class="ed-sw"></i>Reels crop</span></div>
+<div class="ed-stage">
+<div class="ed-video"><img data-src="assets/hero/film-mirra-multivitamin-lg.jpg" alt="The launch commercial playing in the editor"><span class="ed-pin">1</span><p class="ed-bubble">Make the ending hit harder.</p></div>
+<div class="ed-meter"><i></i><i></i></div>
+</div>
+<div class="ed-bar"><i></i></div>
+<div class="ed-ctl"><span class="ui-b r"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10"/></svg></span><span class="ui-b" style="height: 32px">-1s</span><span class="ui-b" style="height: 32px">+1s</span><span class="ui-b" style="height: 32px">1.0x</span><p class="ed-tc">00:00:52:10<span>00:01:04:27</span></p></div>
+</div>
+
+<div class="ed-card ed-cmt">
+<div class="ed-tabs"><span class="on">Comments</span><span>Mix</span><span>SFX</span><span>Media</span></div>
+<p class="ed-cnt"><span><span class="zero">0 comments</span><span class="one">1 comment</span></span><span class="x">Clear all</span></p>
+<p class="ed-empty">No comments yet. Pause anywhere, draw on the frame if it helps, and leave a comment below.</p>
+<div class="ed-list">
+<div class="ed-c" style="--d: 700"><p class="who"><span class="tc">00:52</span>You</p><p>Make the ending hit harder.</p></div>
+<div class="ed-c" style="--d: 1400"><p class="who"><svg aria-hidden="true"><use href="#claude"/></svg>Claude</p><p>Tighter last 8 seconds, the drop lands on the logo, louder hit.</p><p class="st"><i></i>v02 is ready</p></div>
+</div>
+<div class="ed-box">
+<p class="r1"><b>00:00:52:10</b>Leave your comment…<i><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3 5 8.6 9.5 3.4"/></svg></i></p>
+<p class="r2"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M11 2.5 13.5 5 6 12.5H3.5V10z"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.5-3.6M3 2.5V5h2.5"/></svg><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+<!-- ===================== Aesthetic ===================== -->
+<div class="scr scr-aes">
+<div class="sae">
+<h2 class="ui-h in-up">Aesthetic</h2>
+<p class="ui-sub in-up" style="--d: 60">Nine motion styles. Pick one and every title, caption and graphic comes out in your brand.</p>
+<div class="sae-chips in-up" style="--d: 120"><span>Studio <i>× by Evan Nicolini</i></span><span class="pick">Clean</span><span>Editorial</span><span>Docu</span><span>Glass</span><span>Horizon</span><span>Journal</span><span>Grid</span><span>Cutout</span></div>
+<div class="sae-body">
+<div class="sae-info in-up" style="--d: 200">
+<p class="sae-n">02 <span>/ 09</span></p>
+<p class="sae-name">Clean</p>
+<p class="sae-d">One neutral sans, generous space. Nothing clever, perfectly set.</p>
+<div class="sae-spec">
+<p><span class="ui-mono">Made for</span><span>MIRRA</span></p>
+<p><span class="ui-mono">Type</span><span>Inter</span></p>
+<p><span class="ui-mono">Colour</span><span class="dots"><i style="background: #fff"></i><i style="background: #ece9e2"></i><i style="background: #8a8f98"></i><i style="background: #25282d"></i><i style="background: #000"></i></span></p>
+<p><span class="ui-mono">In this style</span><span>28 graphics</span></p>
+</div>
+</div>
+<div class="sae-cards">
+<div class="sae-card in-up" style="--d: 300"><div class="im"><img data-src="assets/hero/look-clean-footage.jpg" alt=""><span class="tag"><img data-src="assets/hero/brand-mirra.png" alt="">Applied</span></div><p class="ui-mono">On footage</p></div>
+<div class="sae-card in-up" style="--d: 420"><div class="im"><img data-src="assets/hero/look-clean-motion.jpg" alt=""></div><p class="ui-mono">Motion graphic</p></div>
+<div class="sae-card in-up" style="--d: 540"><div class="im"><img data-src="assets/hero/look-clean-static.jpg" alt=""></div><p class="ui-mono">Static post</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ===================== Social: the calendar ===================== -->
+<div class="scr scr-social">
+<div class="so">
+<h2 class="ui-h in-up">Social</h2>
+<div class="so-tabs in-up" style="--d: 60"><span>Posts <i>64</i></span><span>Accounts <i>10</i></span><span class="on">Calendar <i>45</i></span><span>Weekly read</span><span>Best times</span><span class="ed-fl"></span><span class="ui-b"><span class="ui-mono" style="color: var(--sand2)">Updated just now</span></span></div>
+<div class="so-bar in-up" style="--d: 120"><span class="ui-b r"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></span><span class="so-month">November 2026</span><span class="ui-b r"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span><span class="ui-b">Today</span><span class="so-chip"><img data-src="assets/hero/brand-mirra.png" alt="">MIRRA</span><span class="so-chip"><img data-src="assets/hero/brand-ces.png" alt="">Custom Esignature</span><span class="so-leg ui-mono"><span>45 posts · 69 platforms</span><span><i class="dot-p"></i>Posted</span><span><i class="dot-s"></i>Scheduled</span></span></div>
+<div class="so-week ui-mono"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+<div class="so-grid"></div>
+</div>
+</div>
+
+<!-- ===================== Ask Claude ===================== -->
+<div class="scr scr-ask">
+<div class="ak">
+<div class="ak-col">
+<h2 class="ui-h in-up">Ask Claude</h2>
+<p class="ui-sub in-up" style="--d: 60">Anything about your brands, your posts, and what to make next.</p>
+<div class="ak-thread">
+<p class="ak-you in-up" style="--d: 250">What should I post this week?</p>
+<div class="ak-cl in-up" style="--d: 900">
+<p class="ak-who"><svg aria-hidden="true"><use href="#claude"/></svg>Claude</p>
+<p>Three picks, each already cut and captioned. Your launch film is pulling 2.6× your average, so it goes first.</p>
+<div class="ak-picks">
+<div class="ak-pick"><img data-src="assets/hero/film-mirra-multivitamin.jpg" alt=""><div><b>Launch commercial v02</b><span>Thu · 10a · Instagram</span><em>Schedule</em></div></div>
+<div class="ak-pick"><img data-src="assets/hero/film-founders-retreat.jpg" alt=""><div><b>Founders retreat</b><span>Fri · 4p · TikTok</span><em>Schedule</em></div></div>
+<div class="ak-pick"><img data-src="assets/hero/film-ces-email-signature.jpg" alt=""><div><b>This is an email signature?</b><span>Sat · 11a · Reels</span><em>Schedule</em></div></div>
+</div>
+</div>
+<p class="ak-status in-up" style="--d: 1700"><svg aria-hidden="true"><use href="#claude"/></svg>Scheduling all three<i></i><i></i><i></i></p>
+</div>
+<div class="ak-box in-up" style="--d: 120"><p>Ask Claude…</p><div><span class="mk"><svg aria-hidden="true"><use href="#hx-mark"/></svg></span>Studio<span class="x">×</span><svg class="sp" aria-hidden="true"><use href="#claude"/></svg>Claude<span class="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg></span></div></div>
+</div>
+</div>
+</div>
+
+<!-- ===================== Home ===================== -->
+<div class="scr scr-home">
+<p class="sa-coord sa-mono"><span>⌜ 30.5200° N</span><span>119.6400° W</span><span class="sa-dim">ELEV 2316 M</span></p>
+<div class="sa-hbtns">
+<span class="sa-round"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg></span>
+<span class="sa-view"><img loading="lazy" decoding="async" src="assets/hero/view-peak.jpg" alt="">Peak above the clouds<svg class="sm" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></span>
+<span class="sa-round"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span>
+<span class="sa-view txt"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 8s2.4-4.5 6.5-4.5S14.5 8 14.5 8s-2.4 4.5-6.5 4.5S1.5 8 1.5 8zM2.5 13.5l11-11"/></svg>Focus</span>
+<span class="sa-round"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/></svg></span>
+</div>
+
+<div class="sa-greet">
+<p class="sa-date sa-mono">Tuesday · November 17</p>
+<h2 class="sa-hello">Good morning, Evan</h2>
+<p class="sa-line">The best work of your life is still ahead of you.</p>
+<div class="sa-chips"><span class="sa-chip"><img loading="lazy" decoding="async" src="assets/hero/brand-mirra.png" alt="">MIRRA</span><span class="sa-chip"><img loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt="">Custom Esignature</span></div>
+</div>
+
+<div class="sa-band">
+<div class="sa-row">
+
+<div class="sa-w">
+<div class="sa-wh"><span class="sa-wt">To review</span><span class="sa-wn"><span>4</span></span><span class="sa-fl"></span><span class="sa-pill"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3 5 8.6 9.5 3.4"/></svg>Mark all read</span><span class="sa-tool"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg></span><span class="sa-tool"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 8 6 4.5 9.5"/></svg></span></div>
+<div class="sa-strip">
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-founders-retreat.jpg" alt=""><span class="sa-st"><i></i>Review v03</span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-lobby-hero-window.jpg" alt=""><span class="sa-st"><i></i>Review v01</span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-ces-replied-booked.jpg" alt=""><span class="sa-st"><i></i>Review v02</span></div>
+</div>
+</div>
+
+<div class="sa-w">
+<div class="sa-wh"><span class="sa-wt">Post next</span><span class="sa-ws">Claude's picks</span><span class="sa-fl"></span><span class="sa-tool"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.5 2.5 4 6l3.5 3.5"/></svg></span><span class="sa-tool"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.5 2.5 8 6 4.5 9.5"/></svg></span><span class="sa-pill">See all</span></div>
+<div class="sa-strip">
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-lobby-hero-window.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-mirra.png" alt=""></span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-ces-forest.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt=""></span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-ces-company-becoming.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt=""></span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-founders-retreat.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-mirra.png" alt=""></span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-ces-sea-cliffs.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt=""></span></div>
+<div class="sa-vt"><img loading="lazy" decoding="async" src="assets/hero/film-ces-agent-kitchen.jpg" alt=""><span class="sa-bl"><img loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt=""></span></div>
+</div>
+</div>
+
+<div class="sa-w">
+<div class="sa-wh"><span class="sa-wt">Crushing it</span><span class="sa-fl"></span><span class="sa-pill">See all</span></div>
+<div class="sa-crl">
+<div class="sa-crr"><img class="sa-crv" loading="lazy" decoding="async" src="assets/hero/film-ces-email-signature.jpg" alt=""><div class="sa-crb"><p class="sa-crx"><img class="sa-lg" loading="lazy" decoding="async" src="assets/hero/brand-ces.png" alt=""><span>2.6× avg</span></p><p class="sa-crn">16,120 views</p></div><span class="sa-ad"><svg viewBox="0 0 22 13" aria-hidden="true" style="fill: none; stroke: #2d8cff; stroke-width: 2; stroke-linecap: round"><use href="#hx-meta"/></svg>Run as ad</span></div>
+<div class="sa-crr"><img class="sa-crv" loading="lazy" decoding="async" src="assets/hero/film-mirra-multivitamin.jpg" alt=""><div class="sa-crb"><p class="sa-crx"><img class="sa-lg" loading="lazy" decoding="async" src="assets/hero/brand-mirra.png" alt=""><span>2.5× avg</span></p><p class="sa-crn">16,640 views</p></div><span class="sa-ad"><svg viewBox="0 0 22 13" aria-hidden="true" style="fill: none; stroke: #2d8cff; stroke-width: 2; stroke-linecap: round"><use href="#hx-meta"/></svg>Run as ad</span></div>
+<div class="sa-crr"><img class="sa-crv" loading="lazy" decoding="async" src="assets/hero/film-lobby-hero-window.jpg" alt=""><div class="sa-crb"><p class="sa-crx"><img class="sa-lg" loading="lazy" decoding="async" src="assets/hero/brand-mirra.png" alt=""><span>1.7× avg</span></p><p class="sa-crn">9,880 views</p></div><span class="sa-ad"><svg viewBox="0 0 22 13" aria-hidden="true" style="fill: none; stroke: #2d8cff; stroke-width: 2; stroke-linecap: round"><use href="#hx-meta"/></svg>Run as ad</span></div>
+</div>
+</div>
+
+</div>
+
+<div class="sa-calw">
+<div class="sa-wh"><span class="sa-wt">Going out</span><span class="sa-ws">Next 14 days</span><span class="sa-wn"><span><b>8</b> going out</span><span><b>5</b> empty days</span></span><span class="sa-fl"></span><span class="sa-pill"><svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="2.5" width="9" height="8" rx="1.5"/><path d="M1.5 5h9M4 1.5v2M8 1.5v2"/></svg>Calendar</span></div>
+<div class="sa-days">
+<div class="sa-dc past"><p class="sa-dlb"><span>Mon</span><span>16</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-lobby-hero-window.jpg" alt=""><span>9a</span></div><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-replied-booked.jpg" alt=""><span>10a</span></div></div></div>
+<div class="sa-dc today"><p class="sa-dlb"><span>Today</span><span>17</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-founders-retreat.jpg" alt=""><span>4p</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Wed</span><span>18</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-email-signature.jpg" alt=""><span>10a</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Thu</span><span>19</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-company-becoming.jpg" alt=""><span>10a</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Fri</span><span>20</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-forest.jpg" alt=""><span>4p</span></div></div></div>
+<div class="sa-dc gap"><p class="sa-dlb"><span>Sat</span><span>21</span></p><div class="sa-gw"><b>Gap</b><span>+ Fill</span></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Sun</span><span>22</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-sea-cliffs.jpg" alt=""><span>6p</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Mon</span><span>23</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-agent-kitchen.jpg" alt=""><span>4p</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Tue</span><span>24</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-lobby-hero-window.jpg" alt=""><span>9a</span></div></div></div>
+<div class="sa-dc"><p class="sa-dlb"><span>Wed</span><span>25</span></p><div class="sa-dps"><div class="sa-dp1"><img loading="lazy" decoding="async" src="assets/hero/film-ces-replied-booked.jpg" alt=""><span>10a</span></div></div></div>
+<div class="sa-dc gap"><p class="sa-dlb"><span>Thu</span><span>26</span></p><div class="sa-gw"><b>Gap</b><span>+ Fill</span></div></div>
+<div class="sa-dc gap"><p class="sa-dlb"><span>Fri</span><span>27</span></p><div class="sa-gw"><b>Gap</b><span>+ Fill</span></div></div>
+<div class="sa-dc gap"><p class="sa-dlb"><span>Sat</span><span>28</span></p><div class="sa-gw"><b>Gap</b><span>+ Fill</span></div></div>
+<div class="sa-dc gap"><p class="sa-dlb"><span>Sun</span><span>29</span></p><div class="sa-gw"><b>Gap</b><span>+ Fill</span></div></div>
+</div>
+</div>
+</div>
+<span class="sa-at" aria-hidden="true">@</span>
+</div>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+</div>
+</div>
 </section>
 
 <!-- 020-phone -->
@@ -1344,6 +1544,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=6fb376c5"></script>
+<script src="site.js?v=0db1f94a"></script>
 </body>
 </html>

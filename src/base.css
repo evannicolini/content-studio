@@ -122,6 +122,30 @@ input { font: inherit; color: inherit; }
 .nav-links a:hover { color: #fff; }
 @media (max-width: 860px) { .nav-links { display: none; } .nav { top: 10px; width: calc(100% - 20px); border-radius: 18px; --nav-h: 54px; padding-left: 14px; padding-right: 8px; } }
 
+/* ---------- the approved hero (sections/010-hero) and the nav ----------
+   The hero is drawn on a 1440 artboard (390 on phones) and scales as one piece. --hx-u is one artboard pixel, as a length:
+   desktop = window width / 1440 (never under .8, never over 1920 wide, eased off in very short windows); phones = window
+   width / 390 (held at the 430 size on wider windows unless the window is tall enough for more).
+   The nav is part of that artboard: its width follows the app's width, and on windows wider than 1440 it grows with the hero.
+   In the hero's opening it starts hidden and drops in with the button and the composer (html.hx-pre / .hx-intro are put on
+   by the hero before the first paint and taken off by its section.js). The Kayla pill waits until the hero has settled. */
+@property --hx-u { syntax: "<length>"; inherits: true; initial-value: 1px; }
+:root { --hx-u: min(100vw / 390, max(100vh / 844, 1.1026px)); }
+@supports (height: 100svh) { :root { --hx-u: min(100vw / 390, max(100svh / 844, 1.1026px)); } }
+@media (min-width: 861px) and (min-aspect-ratio: 5/4) {
+  :root { --hx-u: clamp(.8px, min(100vw / 1440, 100vh / 620), 1.3334px); --nav-u: max(1px, var(--hx-u)); }
+  .nav { top: calc(14 * var(--nav-u)); width: min(calc(1180 * var(--hx-u)), calc(100% - 28px)); height: calc(60 * var(--nav-u)); gap: calc(16 * var(--nav-u)); padding: 0 calc(10 * var(--nav-u)) 0 calc(18 * var(--nav-u)); border-radius: calc(20 * var(--nav-u)); }
+  .nav .brand { gap: calc(9 * var(--nav-u)); font-size: calc(18 * var(--nav-u)); }
+  .nav .brand .mark { width: calc(28 * var(--nav-u)); height: calc(28 * var(--nav-u)); }
+  .nav-links { gap: clamp(14px, 2.2vw, calc(30 * var(--nav-u))); font-size: calc(14.5 * var(--nav-u)); }
+  .nav-links a { padding: calc(8 * var(--nav-u)) calc(2 * var(--nav-u)); }
+  .nav .btn-sm { height: calc(40 * var(--nav-u)); padding: 0 calc(16 * var(--nav-u)); gap: calc(8 * var(--nav-u)); font-size: calc(14 * var(--nav-u)); }
+  .nav .btn-sm .apple { width: calc(14 * var(--nav-u)); height: calc(14 * var(--nav-u)); margin-top: calc(-2 * var(--nav-u)); }
+}
+html.hx-intro .nav { transition: opacity .7s var(--ease) .2s, transform .8s var(--ease) .2s; }
+html.hx-pre .nav { opacity: 0; transform: translate3d(-50%, -18px, 0); pointer-events: none; }
+html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
+
 /* ---------- headings: words reveal left to right, from out of focus to sharp (added by kit.js) ---------- */
 .bl .bw { display: inline-block; opacity: 0; filter: blur(14px); transform: translate3d(-.22em, 0, 0); transition: opacity .75s var(--ease), filter .95s var(--ease), transform .95s var(--ease); transition-delay: calc(var(--n) * var(--step, 70ms)); will-change: filter, opacity, transform; }
 .bl.bl-in .bw { opacity: 1; filter: blur(0); transform: none; }
