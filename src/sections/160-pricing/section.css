@@ -150,6 +150,27 @@ html.kp-away .kp:not(.playing) { transform: translate3d(-50%, 140%, 0); opacity:
 .pd-founders .fp s { font: 300 26px/1 var(--sans); color: var(--sand-3); text-decoration: line-through; text-decoration-thickness: 1.5px; }
 .pd-founders .fp b { font: 400 64px/1 var(--sans); letter-spacing: -.04em; }
 .pd-founders .fp small { font-size: 14px; color: var(--sand-3); }
+/* Early access (shown while sign-ups are on, 900-early): the founders card's shape, above the plans */
+.pd-early { position: relative; display: grid; grid-template-columns: 1fr auto 300px; align-items: center; gap: 34px; max-width: 1000px; margin: 34px auto 6px; padding: 30px 30px 30px 34px; border-radius: 26px; isolation: isolate;
+  background: rgba(8, 10, 14, .58); -webkit-backdrop-filter: var(--pd-blur); backdrop-filter: var(--pd-blur); box-shadow: var(--rim-on); }
+.pd-early[hidden] { display: none; }
+.pd-early > :not(.pd-fbeam) { position: relative; z-index: 1; min-width: 0; }
+.pd-early h3 { margin-top: 12px; font: 400 clamp(24px, 2vw, 28px)/1.1 var(--sans); letter-spacing: -.02em; text-wrap: balance; }
+.pd-early .el p { margin-top: 8px; max-width: 30em; font-size: 14.5px; line-height: 1.5; color: var(--sand-2); text-wrap: pretty; }
+.pd-early .ep { display: flex; align-items: center; gap: 12px; white-space: nowrap; }
+.pd-early .ep b { font: 400 64px/1 var(--sans); letter-spacing: -.04em; }
+.pd-early .ep span { font: 500 10.5px/1.35 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand-2); }
+.pd-early .er { display: flex; flex-direction: column; align-items: stretch; gap: 12px; text-align: center; }
+.pd-ebtn { width: 100%; height: 58px; font-size: 16px; }
+.pd-ebtn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease); }
+.pd-ebtn:hover svg { transform: translateX(3px); }
+@media (max-width: 900px) { .pd-early { grid-template-columns: 1fr auto; } .pd-early .er { grid-column: 1 / -1; } }
+@media (max-width: 760px) { .pd-early { grid-template-columns: 1fr; gap: 18px; padding: 24px 20px; margin-top: 26px; } .pd-early .ep { display: none; } .pd-early .er { grid-column: auto; } }
+/* the plans' "Coming soon" becomes "Get early access" while sign-ups are on */
+button.pd-btn { cursor: pointer; transition: background-color .25s var(--ease), transform .25s var(--ease); }
+button.pd-btn:hover { background: rgba(255, 255, 255, .16); }
+button.pd-btn.go:hover { background: #fff; }
+button.pd-btn:active { transform: scale(.98); }
 .pd-founders .pr-form { margin-top: 0; }
 .pd-founders .pr-field { height: 54px; }
 .pd-founders .pr-msg { min-height: 0; margin-top: 6px; }

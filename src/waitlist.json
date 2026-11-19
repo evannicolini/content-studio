@@ -1,0 +1,5 @@
+{
+  "_read_me": "Early access sign-ups (src/sections/900-early). Paste ONE of these and rebuild; the site switches to early access on its own. brevo_form: the action URL of a Brevo subscription form (https://….sibforms.com/serve/…). webhook: any URL that takes a JSON POST (Make, Zapier, a worker). Both empty: the live site stays as it is (Download for Mac), and only localhost or ?early shows the flow.",
+  "brevo_form": "",
+  "webhook": ""
+}

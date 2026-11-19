@@ -7,6 +7,7 @@
 Layout
     src/shell.html              the page frame; <!--SECTIONS--> is replaced by every section, in folder-name order
     src/base.css, src/kit.js    the shared look and the shared behaviour (window.SK)
+    src/waitlist.json           where early access sign-ups go (Brevo form or webhook); empty = the site stays on Download
     src/sections/NN-name/       section.html (required), section.css, section.js (each optional)
     assets/media/manifest.json  inlined as window.SK_MEDIA so sections can read what media exists
     pricing.py                  Studio's prices, from the app's published pricing.json; the build fails if the site could differ
@@ -45,6 +46,11 @@ def build():
     except ValueError:
         pass
     js.append("window.SK_MEDIA = %s;" % manifest)
+    try:  # early access sign-ups: where they go (src/waitlist.json, read by 900-early)
+        wl = {k: v for k, v in json.loads(read(SRC, "waitlist.json") or "{}").items() if not k.startswith("_")}
+    except ValueError:
+        wl = {}
+    js.append("window.SK_WAITLIST = %s;" % json.dumps(wl, separators=(",", ":")))
     prices_at = len(js)
     js.append(read(SRC, "kit.js"))
     for n in names:

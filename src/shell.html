@@ -30,12 +30,12 @@
 <!-- Enter site (src/sections/010-hero): on the first visit of a browser session the page holds still at the top until the visitor
      presses Enter. The hold goes on here, on the first frame, before anything can be scrolled: no wheel, touch, scroll keys,
      restored scroll or anchor jump moves it. The hero's section.js lifts it on Enter (window.__hxRelease), or at once when there is
-     no gate (already entered this session, an invite= link); after 12 s it lifts by itself if that script never runs. -->
+     no gate (already entered this session, an invite= link, an #early-access link); after 12 s it lifts by itself if that script never runs. -->
 <style>html.hx-hold, html.hx-hold body { overflow: hidden; overflow-anchor: none; overscroll-behavior: none; } html.hx-hold { scrollbar-gutter: stable; }</style>
 <script>(function (r, w) {
   var hold = true;
   try { hold = sessionStorage.getItem("studio-entered") !== "1"; } catch (e) {}
-  if (/[#&]invite=/.test(location.hash)) hold = false;
+  if (/[#&]invite=|^#early(-access)?(&|$)/.test(location.hash)) hold = false; /* invite links, and the early access sign-up link */
   w.__hxRelease = function () {};
   if (!hold) return;
   var KEYS = { " ": 1, Spacebar: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ArrowUp: 1, ArrowDown: 1, ArrowLeft: 1, ArrowRight: 1 }, o = { passive: false, capture: true };

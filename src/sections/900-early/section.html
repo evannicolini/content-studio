@@ -1,0 +1,92 @@
+<!-- Early access: the full-screen sign-up. Opened by every "Get early access" button and by links ending in #early-access.
+     Three one-tap questions, then the invite details. It stays out of the page until sign-ups are on (src/waitlist.json); section.js. -->
+<div class="wl" id="early-access" role="dialog" aria-modal="true" aria-labelledby="wl-h" hidden>
+  <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
+  <div class="wl-top">
+    <span class="wl-brand"><svg aria-hidden="true"><use href="#studio-mark"/></svg>Studio</span>
+    <button type="button" class="wl-x" data-wl-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+  </div>
+
+  <div class="wl-in">
+    <div class="wl-intro">
+      <p class="label">Early access</p>
+      <h2 id="wl-h" class="wl-h">Get early access<br><span>to Studio.</span></h2>
+      <p class="wl-lede">One prompt takes the idea in your head to a finished video. Join the list and you're first in when the doors open.</p>
+      <ul class="wl-perks">
+        <li><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.8"/></svg></i><div><b>14 days of everything, free</b><span>Every feature and every brand, the day your invite lands.</span></div></li>
+        <li><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.8"/></svg></i><div><b>First to know</b><span>We tell the list before anyone else.</span></div></li>
+        <li><i aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.8"/></svg></i><div><b>Made for Mac</b><span>Apple Silicon, macOS 13 or later. Claude does the work.</span></div></li>
+      </ul>
+    </div>
+
+    <div class="wl-card">
+      <div class="wl-prog" aria-hidden="true"><span class="wl-n"><b data-wl-n>01</b> / 04</span><span class="wl-bar"><i data-wl-bar></i></span></div>
+      <form class="wl-form" novalidate>
+        <div class="wl-steps">
+          <fieldset class="wl-q on" data-q="role">
+            <legend class="wl-qh">What best describes you?</legend>
+            <div class="wl-opts two">
+              <button type="button" class="wl-opt" data-v="Business owner"><b>Business owner</b></button>
+              <button type="button" class="wl-opt" data-v="Founder"><b>Founder</b></button>
+              <button type="button" class="wl-opt" data-v="Creator"><b>Creator</b></button>
+              <button type="button" class="wl-opt" data-v="Video editor"><b>Video editor</b></button>
+              <button type="button" class="wl-opt" data-v="Social media manager"><b>Social media manager</b></button>
+              <button type="button" class="wl-opt" data-v="Marketer"><b>Marketer</b></button>
+              <button type="button" class="wl-opt" data-v="Agency"><b>Agency</b></button>
+              <button type="button" class="wl-opt" data-v="Something else"><b>Something else</b></button>
+            </div>
+          </fieldset>
+
+          <fieldset class="wl-q" data-q="brands">
+            <legend class="wl-qh">How many brands do you make content for?</legend>
+            <div class="wl-opts three">
+              <button type="button" class="wl-opt big" data-v="1"><b>1</b><small>brand</small></button>
+              <button type="button" class="wl-opt big" data-v="2-3"><b>2–3</b><small>brands</small></button>
+              <button type="button" class="wl-opt big" data-v="4+"><b>4+</b><small>brands</small></button>
+            </div>
+          </fieldset>
+
+          <fieldset class="wl-q" data-q="claude">
+            <legend class="wl-qh">Do you use Claude yet?</legend>
+            <p class="wl-qs">Studio runs on Claude, so it helps us get you set up.</p>
+            <div class="wl-opts">
+              <button type="button" class="wl-opt row" data-v="Pro or Max"><b>Yes, on Pro or Max</b></button>
+              <button type="button" class="wl-opt row" data-v="Free plan"><b>Yes, on the free plan</b></button>
+              <button type="button" class="wl-opt row" data-v="Not yet"><b>Not yet</b></button>
+            </div>
+          </fieldset>
+
+          <fieldset class="wl-q" data-q="you">
+            <legend class="wl-qh">Where should we send your invite?</legend>
+            <div class="wl-fields">
+              <label class="wl-f"><span>First name</span><input name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></label>
+              <label class="wl-f"><span>Last name</span><input name="last" type="text" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></label>
+              <label class="wl-f wide"><span>Email</span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" required maxlength="120"></label>
+              <div class="wl-f wide wl-tel">
+                <label for="wl-phone">Phone</label>
+                <div class="wl-telrow">
+                  <span class="wl-cc"><select name="cc" aria-label="Country code" autocomplete="tel-country-code"></select><span class="wl-ccv" aria-hidden="true">+1</span></span>
+                  <input id="wl-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="done" required maxlength="24">
+                </div>
+              </div>
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <button type="submit" class="btn btn-light wl-go" data-beam-auto="md" data-beam-variant="mirra" data-beam-boost="2.4" data-beam-radius="999"><span class="t">Get early access</span><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
+            <p class="wl-fine">We'll email and text you about Studio's early access. Msg &amp; data rates may apply. Reply STOP to opt out or unsubscribe anytime.</p>
+          </fieldset>
+
+          <div class="wl-q wl-done" data-q="done" tabindex="-1">
+            <span class="wl-tick" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15.5 26.8l7 7 14-15.6"/></svg></span>
+            <h3 class="wl-qh" data-wl-done-h>You're on the list.</h3>
+            <p class="wl-qs">We'll email and text you the moment your invite is ready. When it lands, you get 14 days of everything, free.</p>
+            <div class="wl-done-act">
+              <button type="button" class="btn btn-light" data-wl-close><span>Back to Studio</span></button>
+              <button type="button" class="btn btn-glass" data-wl-share><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M6.2 7.4H5.1A1.6 1.6 0 0 0 3.5 9v5.4A1.6 1.6 0 0 0 5.1 16h7.8a1.6 1.6 0 0 0 1.6-1.6V9a1.6 1.6 0 0 0-1.6-1.6h-1.1"/><path d="M9 10.6V2.4M6.2 5.2 9 2.4l2.8 2.8"/></svg><span>Share Studio</span></button>
+            </div>
+          </div>
+        </div>
+      </form>
+      <button type="button" class="wl-back" data-wl-back hidden><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg>Back</button>
+    </div>
+  </div>
+</div>

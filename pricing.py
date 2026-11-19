@@ -145,7 +145,7 @@ def head(p, c, vw):
     if vw["live"] and c["url"]:
         btn = '<a class="pd-btn%s" href="%s" data-pv-href="%s.url">Try %s free %s</a>' % (" go" if p.get("best") else "", H.escape(c["url"]), pid, H.escape(p["name"]), ARROW)
     else:
-        btn = '<span class="pd-btn soon" aria-disabled="true">Coming soon</span>'
+        btn = '<span class="pd-btn soon%s" aria-disabled="true" data-plan="%s">Coming soon</span>' % (" best" if p.get("best") else "", pid)  # early access turns it into a button (900-early)
     clip = "assets/audio/kayla-why-%s.mp3" % pid
     kayla = ('<button type="button" class="pd-k" data-clip="%s" hidden aria-label="Kayla: why %s?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy">'
              '<span class="t"><b>Why %s?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span>'
