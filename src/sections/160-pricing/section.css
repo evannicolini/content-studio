@@ -15,6 +15,8 @@
 
 /* ---------- head ---------- */
 .pd-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; }
+.pd-head .vo { margin-top: 8px; }
+.pd-head .vo-nudge { display: none; } /* Evan: the "Tap to listen" tag crowded the heading here */
 .pd-h2 { font: 300 clamp(40px, 4.4vw, 62px)/1 var(--sans); letter-spacing: -.04em; }
 .pd-h2 span { opacity: .7; }
 
