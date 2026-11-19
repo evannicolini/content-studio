@@ -3188,6 +3188,23 @@ a.cr-mirra { color: inherit; text-decoration: none; }
   .cr .cr-feather { height: 90px; }
   .cr-wp { right: 50%; transform: translateX(50%); bottom: 16px; height: 36px; }
   .cr-wp span { min-width: 150px; font-size: 12px; }
+  /* phones: the profile phone fades out under the Ask field instead of being cut flat; Meet Evan on MIRRA sits right under it
+     (his profile, then the way to it), then the numbers, the tools, and what he founded */
+  .cr .cr-stage { clip-path: none; }
+  .cr .cr-stage .cr-phone { -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 87%); mask-image: linear-gradient(180deg, #000 74%, transparent 87%); }
+  .crb-side.r { display: contents; }
+  .crb-side.r > .cr-pair { order: 2; width: 100%; max-width: 520px; margin-top: -4px; }
+  .crb-side.l { order: 3; }
+  .crb-side.r > .crb-box { order: 4; width: 100%; max-width: 520px; }
+  .cr-tools.col { align-items: stretch; }
+  .cr-tools ul { display: grid; grid-template-columns: repeat(10, 1fr); justify-items: center; gap: 18px 6px; }
+  .crc-cred { gap: 16px; }
+}
+@media (max-width: 560px) {
+  .cr-tools ul { grid-template-columns: repeat(5, 1fr); }
+  .cr-tools svg { width: 24px; height: 24px; }
+  .cr-stat b { font-size: 32px; }
+  .cr-stat span { font-size: 13px; }
 }
 
 /* what he founded (the canvas's .crc-cred list, used by B) */
