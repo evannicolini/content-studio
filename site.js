@@ -15,7 +15,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
      <video data-play data-src="…" [data-src-m="…"] poster="…" muted playsinline loop>   loads near the viewport, plays only in view
      [data-reveal] (+ style="--i:2")                                                    fades up once in view
      [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
-     [data-download]                                                                    scrolls to pricing and focuses the invite code
+     [data-download]                                                                    scrolls to pricing and focuses the invite code (phones: Send to my Mac)
      [data-vo-play="kayla-pricing"]                                                     on click, plays that section's Kayla clip from the top
      [data-film="slug"]                                                                 opens that film from the manifest on click */
 (function () {
@@ -291,6 +291,57 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var p = v.play(); p && p.catch(function () {});
   };
 
+  /* ---------- Send to my Mac: on phones every Download button (the nav, the hero, the steps, the unlocked Private beta card) becomes
+     "Send to my Mac" and opens the phone's share sheet (AirDrop on an iPhone) with this page's #pricing link. When the invite code is
+     unlocked on the phone, the code rides along in the hash only (#pricing&invite=CODE), never in the query, and the Mac lands
+     unlocked (160-pricing). Without a share sheet, or when it fails, the link is copied instead. Desktop is unchanged. ---------- */
+  var SEND_ICON = '<svg class="send-ic" viewBox="0 0 18 18" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M6.2 7.4H5.1A1.6 1.6 0 0 0 3.5 9v5.4A1.6 1.6 0 0 0 5.1 16h7.8a1.6 1.6 0 0 0 1.6-1.6V9a1.6 1.6 0 0 0-1.6-1.6h-1.1"/><path d="M9 10.6V2.4M6.2 5.2 9 2.4l2.8 2.8"/></svg>';
+  var SEND = "Send to my Mac", SEND_HELP = "Studio runs on your Mac. Send this page there to download it.";
+  function sendLabel(b) { return b.querySelector(":scope > span:not([data-beam-bloom])"); }
+  function sendLabels() {
+    var m = SK.mobile();
+    document.querySelectorAll("[data-download], [data-dl]").forEach(function (b) {
+      var svg = b.querySelector(":scope > svg"), sp = sendLabel(b);
+      if (!sp) return;
+      if (m && !b._send) {
+        b._send = { svg: svg ? svg.outerHTML : "", txt: sp.textContent };
+        if (svg) svg.outerHTML = SEND_ICON; else b.insertAdjacentHTML("afterbegin", SEND_ICON);
+        sp.textContent = SEND; b.setAttribute("data-send", "");
+      } else if (!m && b._send) {
+        var ic = b.querySelector(":scope > svg.send-ic");
+        if (ic) { if (b._send.svg) ic.outerHTML = b._send.svg; else ic.remove(); }
+        sp.textContent = b._send.txt; b._send = null; b.removeAttribute("data-send");
+      }
+    });
+  }
+  SK.shareURL = function () {
+    var code = null;
+    try { code = localStorage.getItem("studio-invite"); } catch (e) {}
+    return location.origin + location.pathname + "#pricing" + (code ? "&invite=" + encodeURIComponent(code) : "");
+  };
+  function sendToMac(btn) {
+    var url = SK.shareURL();
+    if (navigator.share) {
+      try {
+        var q = navigator.share({ title: "Studio", text: "Open this on your Mac to download Studio.", url: url });
+        if (q && q.catch) q.catch(function (err) { if (!err || err.name !== "AbortError") copyLink(btn, url); });
+        return;
+      } catch (err) { /* fall through to copying the link */ }
+    }
+    copyLink(btn, url);
+  }
+  function copyLink(btn, url) {
+    var done = function () {
+      var sp = sendLabel(btn), h = btn.parentNode && btn.parentNode.querySelector("[data-send-help]");
+      if (sp) sp.textContent = "Link copied";
+      if (h) h.textContent = "Open it on your Mac to download.";
+      clearTimeout(btn._ct);
+      btn._ct = setTimeout(function () { if (sp && btn._send) sp.textContent = SEND; if (h) h.textContent = SEND_HELP; }, 2400);
+    };
+    var old = function () { var t = document.createElement("textarea"); t.value = url; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); done(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, old); else old();
+  }
+
   /* ---------- Kayla: the listen pill (fixed, .kp) and inline clips (.vo[data-src]) ----------
      Waveform bars and the length come from <audio file name>.json next to the mp3. Only one clip plays at a time. */
   var audios = []; SK.audios = audios; /* a section with its own players adds them here so only one clip plays at a time */
@@ -446,7 +497,12 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       var r = el.getAttribute("data-beam-radius");
       SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });
     });
+    sendLabels();
+    var mq = matchMedia("(max-width: 700px)");
+    if (mq.addEventListener) mq.addEventListener("change", sendLabels); else if (mq.addListener) mq.addListener(sendLabels);
     document.addEventListener("click", function (e) {
+      var snd = SK.mobile() && e.target.closest("[data-send]");
+      if (snd) { e.preventDefault(); sendToMac(snd); return; }
       var d = e.target.closest("[data-download]");
       if (d) {
         e.preventDefault();
@@ -643,6 +699,7 @@ glassFor(5200);
    goes on. Later visits in the session keep the plain intro and the start-on-first-click fallback (kit.js). ---------- */
 var gate = hero.querySelector(".hx-gate"), GATE_KEY = "studio-entered", needGate = false;
 try { needGate = !!gate && sessionStorage.getItem(GATE_KEY) !== "1"; } catch (e) { needGate = !!gate; }
+if (/[#&]invite=/.test(location.hash)) needGate = false; /* a link sent from a phone: straight to the download */
 if (needGate) SK.holdSound = true;
 function showGate(next) {
   html.classList.add("hx-hold");
@@ -3138,7 +3195,7 @@ function unlocked(info, start) {
   SK.dl = info.url;
   dl.href = info.url;
   form.hidden = true; open.hidden = false;
-  sub.textContent = SK.mobile() ? "You're in. Studio is a Mac app: open this page on your Mac to download it." : "You're in. Your download is ready.";
+  sub.textContent = SK.mobile() ? "You're in." : "You're in. Your download is ready.";
   fine.textContent = "Apple Silicon · macOS 13 or later" + (info.size ? " · " + (+info.size >= 1000 ? (info.size / 1024).toFixed(1) + " GB" : info.size + " MB") : "");
   document.querySelectorAll("[data-download] span").forEach(function (s) { if (/download/i.test(s.textContent) && s.closest(".nav")) s.textContent = "Download"; });
   if (start && !SK.mobile()) setTimeout(function () { window.location.href = info.url; }, 500);
@@ -3162,7 +3219,20 @@ form.addEventListener("submit", async function (e) {
 input.addEventListener("input", function () { field.classList.remove("bad"); msg.textContent = ""; });
 var saved = null;
 try { saved = localStorage.getItem(KEY); } catch (err) {}
-if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
+/* a link sent from a phone ("Send to my Mac") carries the code in the hash: unlock with it (no automatic download), go to Pricing,
+   then take the code out of the address bar */
+var shared = /[#&]invite=([^&]+)/.exec(location.hash);
+if (shared) {
+  var sc = ""; try { sc = decodeURIComponent(shared[1]); } catch (e) {}
+  var clean = function () { try { history.replaceState(null, "", location.pathname + location.search + "#pricing"); } catch (e) {} };
+  tryCode(sc).then(function (info) {
+    try { localStorage.setItem(KEY, norm(sc)); } catch (err) {}
+    unlocked(info, false);
+  }).catch(function () {}).then(function () {
+    clean();
+    setTimeout(function () { root.scrollIntoView({ behavior: "auto", block: "start" }); }, 300);
+  });
+} else if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
 
 /* ---------- the anchor: the bars trim in once, when it comes into view: the team's runs the whole track, then Studio's lands as a sliver ---------- */
 var anchor = root.querySelector(".pd-anchor");
@@ -3271,6 +3341,9 @@ function paintWave(c) {
   window.addEventListener("resize", req);
   paint();
 })();
+
+/* ---------- the floating Kayla player (.kp) slides away while Pricing is in view, unless it is playing (CSS: html.kp-away) ---------- */
+SK.onView(root, function () { document.documentElement.classList.add("kp-away"); }, function () { document.documentElement.classList.remove("kp-away"); });
 
 } catch (e) { console.error("section 160-pricing", e); }
 })();

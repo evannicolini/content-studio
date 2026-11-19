@@ -19,7 +19,7 @@ function unlocked(info, start) {
   SK.dl = info.url;
   dl.href = info.url;
   form.hidden = true; open.hidden = false;
-  sub.textContent = SK.mobile() ? "You're in. Studio is a Mac app: open this page on your Mac to download it." : "You're in. Your download is ready.";
+  sub.textContent = SK.mobile() ? "You're in." : "You're in. Your download is ready.";
   fine.textContent = "Apple Silicon · macOS 13 or later" + (info.size ? " · " + (+info.size >= 1000 ? (info.size / 1024).toFixed(1) + " GB" : info.size + " MB") : "");
   document.querySelectorAll("[data-download] span").forEach(function (s) { if (/download/i.test(s.textContent) && s.closest(".nav")) s.textContent = "Download"; });
   if (start && !SK.mobile()) setTimeout(function () { window.location.href = info.url; }, 500);
@@ -43,7 +43,20 @@ form.addEventListener("submit", async function (e) {
 input.addEventListener("input", function () { field.classList.remove("bad"); msg.textContent = ""; });
 var saved = null;
 try { saved = localStorage.getItem(KEY); } catch (err) {}
-if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
+/* a link sent from a phone ("Send to my Mac") carries the code in the hash: unlock with it (no automatic download), go to Pricing,
+   then take the code out of the address bar */
+var shared = /[#&]invite=([^&]+)/.exec(location.hash);
+if (shared) {
+  var sc = ""; try { sc = decodeURIComponent(shared[1]); } catch (e) {}
+  var clean = function () { try { history.replaceState(null, "", location.pathname + location.search + "#pricing"); } catch (e) {} };
+  tryCode(sc).then(function (info) {
+    try { localStorage.setItem(KEY, norm(sc)); } catch (err) {}
+    unlocked(info, false);
+  }).catch(function () {}).then(function () {
+    clean();
+    setTimeout(function () { root.scrollIntoView({ behavior: "auto", block: "start" }); }, 300);
+  });
+} else if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
 
 /* ---------- the anchor: the bars trim in once, when it comes into view: the team's runs the whole track, then Studio's lands as a sliver ---------- */
 var anchor = root.querySelector(".pd-anchor");
@@ -152,3 +165,6 @@ function paintWave(c) {
   window.addEventListener("resize", req);
   paint();
 })();
+
+/* ---------- the floating Kayla player (.kp) slides away while Pricing is in view, unless it is playing (CSS: html.kp-away) ---------- */
+SK.onView(root, function () { document.documentElement.classList.add("kp-away"); }, function () { document.documentElement.classList.remove("kp-away"); });

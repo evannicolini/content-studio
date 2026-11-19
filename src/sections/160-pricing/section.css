@@ -22,6 +22,9 @@
 .pd-anchor { max-width: 1000px; margin: 26px auto 0; padding: 24px clamp(18px, 2.4vw, 34px); background: rgba(14, 17, 23, .5); }
 .pd-a-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
 .pd-a-head h3 { font: 500 clamp(18px, 1.5vw, 21px)/1.2 var(--sans); letter-spacing: -.015em; }
+.pd-a-head .pd-mono { white-space: nowrap; }
+/* the floating Kayla player steps aside while Pricing is on screen (it has its own pills here), unless she is talking */
+html.kp-away .kp:not(.playing) { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
 .pd-rows li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 110px; align-items: center; gap: 16px; padding: 5px 0; }
 .pd-rows b { font: 500 clamp(16px, 1.3vw, 18px)/1.2 var(--sans); letter-spacing: -.012em; }
 .pd-rows .d { font-size: 15px; font-weight: 300; color: rgba(245, 243, 238, .7); }
@@ -149,6 +152,8 @@
 .pd-founders .pr-msg { min-height: 0; margin-top: 6px; }
 .pd-founders .pr-msg:empty { display: none; }
 .pd-founders .pr-open { margin-top: 0; }
+.pd-send-help { display: none; }
+@media (max-width: 700px) { .pd-send-help { display: block; margin-top: 12px; font: 500 10.5px/1.5 var(--mono); letter-spacing: .06em; color: var(--sand-3); } }
 .pd-founders .pr-fine { margin-top: 10px; padding-top: 0; text-align: center; }
 .pr-field { display: flex; align-items: center; gap: 8px; height: 58px; padding: 0 7px 0 20px; border-radius: 999px; background: rgba(0, 0, 0, .26); box-shadow: var(--rim); transition: background-color .2s; }
 .pr-field:focus-within { background: rgba(255, 255, 255, .06); }

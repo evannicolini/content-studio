@@ -123,6 +123,7 @@ glassFor(5200);
    goes on. Later visits in the session keep the plain intro and the start-on-first-click fallback (kit.js). ---------- */
 var gate = hero.querySelector(".hx-gate"), GATE_KEY = "studio-entered", needGate = false;
 try { needGate = !!gate && sessionStorage.getItem(GATE_KEY) !== "1"; } catch (e) { needGate = !!gate; }
+if (/[#&]invite=/.test(location.hash)) needGate = false; /* a link sent from a phone: straight to the download */
 if (needGate) SK.holdSound = true;
 function showGate(next) {
   html.classList.add("hx-hold");
