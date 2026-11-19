@@ -133,6 +133,7 @@ html.kp-away .kp:not(.playing) { transform: translate3d(-50%, 140%, 0); opacity:
 .pd-cr.s .pd-soon { margin-left: auto; }
 @media (max-width: 1180px) { .pd-panel { display: none; } .pd-cards { display: grid; } }
 @media (max-width: 1000px) { .pd-cards { grid-template-columns: 1fr; max-width: 560px; margin-inline: auto; } }
+@media (max-width: 760px) { .pd-card.best { background: rgba(5, 7, 11, .82); } } /* alone on a phone, without the panel glass under it, Pro needs a deeper fill to read as the dark column */
 .pd-trial { margin: 18px auto 0; max-width: 60em; text-align: center; font-size: 14px; color: var(--sand-2); text-wrap: balance; }
 
 /* ---------- Private beta, founders edition ---------- */
