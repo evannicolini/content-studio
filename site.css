@@ -3010,6 +3010,188 @@ button.wk-film .wk-dur { bottom: 19px; }
 }
 
 
+/* ===== 155-creator ===== */
+/* 155 the creator: the approved canvas "Creator B" (cr.css, B blocks, with A and C taken out), then the site's own frame:
+   on desktop the 1404 x 1010 board is scaled to the frame's width (section.js sets --crk); under 1100px it stacks. */
+/* The creator, round 4. Studio's own language: a wallpaper frame, soft dark glass with the plain rim, Hanken 300, mono brackets.
+   The phone is the Custom Esignature site's iPhone asset (978x2000, screen inset 2.15% 5.05%, radius 11.5%/5.6%) with Evan's
+   real MIRRA profile inside: his clip on top, the real app screen below it. The orb is thinking-orbs "working" (orbs.js). */
+.cr { --sand: #f5f3ee; --sand2: rgba(245, 243, 238, .76); --sand3: rgba(245, 243, 238, .5);
+  --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
+  --glass: rgba(18, 22, 30, .46); --blur: blur(40px) saturate(115%);
+  --sans: "Hanken Grotesk", "Helvetica Neue", Helvetica, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color: var(--sand); }
+.cr *, .cr *::before, .cr *::after { box-sizing: border-box; }
+:where(.cr) p, :where(.cr) h2, :where(.cr) h3, :where(.cr) ul { margin: 0; padding: 0; }
+:where(.cr) ul { list-style: none; }
+.cr-shade { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.cr-feather { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; z-index: 5; pointer-events: none; background: linear-gradient(0deg, rgba(7, 8, 10, .92) 0, rgba(7, 8, 10, .6) 40%, rgba(7, 8, 10, 0)); }
+.cr-glass { background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); border-radius: 26px; }
+.cr-label { font: 500 11px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--sand2); }
+.cr-label::before { content: "[ "; opacity: .55; } .cr-label::after { content: " ]"; opacity: .55; }
+.cr-mono { font: 500 10.5px/1.35 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--sand3); }
+.cr-h { font: 300 54px/1.03 var(--sans); letter-spacing: -.04em; text-wrap: balance; }
+.cr-h span { opacity: .6; }
+.cr-p { font: 400 17px/1.5 var(--sans); letter-spacing: -.005em; color: var(--sand2); text-wrap: pretty; }
+
+/* ---------- the phone ---------- */
+.cr-phone { position: absolute; z-index: 3; aspect-ratio: 978 / 2000; }
+.cr-scr { position: absolute; inset: 2.15% 5.05%; border-radius: 11.5% / 5.6%; overflow: hidden; background: #000; }
+.cr-scr video { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; }
+.cr-ui { position: absolute; inset: 0; width: 100%; height: 100%;
+  -webkit-mask: linear-gradient(180deg, #000 0, #000 11%, transparent 12.6%, transparent 53.6%, #000 56.6%); mask: linear-gradient(180deg, #000 0, #000 11%, transparent 12.6%, transparent 53.6%, #000 56.6%); }
+.cr-pframe { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---------- Ask Evan: typeable, Enter opens his Digital Persona ---------- */
+.cr-q { position: relative; padding: 22px 18px 18px; }
+.cr-br { position: absolute; width: 16px; height: 16px; border: solid rgba(255, 255, 255, .72); border-width: 0; }
+.cr-br.tl { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
+.cr-br.tr { right: 0; top: 0; border-right-width: 1.5px; border-top-width: 1.5px; }
+.cr-br.bl { left: 0; bottom: 0; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+.cr-br.br { right: 0; bottom: 0; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+.cr-qhead, .cr-qfoot { display: flex; align-items: center; justify-content: space-between; }
+.cr-qhead { margin-bottom: 10px; }
+.cr-qhead .cr-mono { color: var(--sand); }
+.cr-qhead .cr-mono::before { content: ""; display: inline-block; width: 3px; height: 10px; margin-right: 7px; vertical-align: -1px; background: #fff; }
+.cr-qfoot { margin-top: 10px; }
+.cr-field { position: relative; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 8px 0 16px; border-radius: 26px; isolation: isolate;
+  background: rgba(5, 7, 11, .72); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: var(--rim); }
+.cr-field > :not(.cr-beam) { position: relative; z-index: 4; }
+.cr-beam { position: absolute !important; inset: 0; z-index: 0; overflow: hidden; border-radius: 26px; pointer-events: none; --beam-strength: .9; }
+.cr-field canvas { flex: none; display: block; }
+.cr-field input { flex: 1; min-width: 0; height: 100%; border: 0; outline: 0; background: none; font: 400 17px/1 var(--sans); letter-spacing: -.01em; color: #fff; }
+.cr-field input::placeholder { color: rgba(255, 255, 255, .5); }
+.cr-go { width: 40px; height: 40px; border: 0; border-radius: 18px; display: grid; place-items: center; background: var(--sand); cursor: pointer; }
+.cr-go svg { width: 15px; height: 15px; stroke: #0b0c0e; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- the matched pair: his voice note, and the way to his MIRRA ---------- */
+.cr-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cr-pair.col { grid-template-columns: 1fr; }
+.cr-pill { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 12px; height: 56px; padding: 0 8px; border-radius: 18px; background: rgba(255, 255, 255, .09); box-shadow: var(--rim); min-width: 0; }
+.cr-pill > img { width: 40px; height: 40px; border-radius: 12px; object-fit: cover; object-position: 50% 20%; }
+.cr-pill .t { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-width: 0; }
+.cr-pill .t small { font: 500 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sand3); white-space: nowrap; }
+.cr-pill .t b { font: 500 13.5px/1 var(--sans); white-space: nowrap; }
+.cr-pill .t .wv { display: block; width: 100%; height: 13px; fill: rgba(255, 255, 255, .58); }
+.cr-pill .t .wm { display: block; height: 12px; width: auto; align-self: flex-start; }
+.cr-pill .sq { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--sand); }
+.cr-pill .sq svg { width: 13px; height: 13px; }
+.cr-pill .sq .pl { fill: #0b0c0e; stroke: #0b0c0e; stroke-width: 2.4; stroke-linejoin: round; margin-left: 2px; }
+.cr-pill .sq .ar { stroke: #0b0c0e; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; width: 15px; height: 15px; }
+
+/* ---------- credentials and tools ---------- */
+.cr-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.cr-stat { padding: 14px 16px 15px; border-radius: 18px; background: rgba(255, 255, 255, .06); box-shadow: var(--rim); }
+.cr-stat b { display: block; font: 300 34px/1 var(--sans); letter-spacing: -.035em; }
+.cr-stat span { display: block; margin-top: 8px; font-size: 12.5px; line-height: 1.3; color: var(--sand2); }
+.cr-tools { display: flex; align-items: center; gap: 18px; }
+.cr-tools .cr-mono { flex: none; }
+.cr-tools ul { display: flex; align-items: center; gap: 17px; flex-wrap: wrap; }
+.cr-tools svg { display: block; width: 22px; height: 22px; fill: var(--sand); opacity: .8; }
+.cr-tools.col { flex-direction: column; align-items: flex-start; gap: 14px; }
+
+/* ---------- A: Pale dunes. Glass story left, phone right with the live field popping out of it ---------- */
+
+/* ---------- B: Rockies. Phone centre, credentials in glass either side ---------- */
+.crb .crb .cr-shade { background: linear-gradient(180deg, rgba(8, 9, 11, .5), rgba(8, 9, 11, .28) 45%, rgba(8, 9, 11, .55)); }
+.crb-head { position: absolute; z-index: 4; left: 0; right: 0; top: 62px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+.crb .cr-phone { width: 400px; left: 50%; margin-left: -200px; top: 232px; }
+.crb .cr-q { position: absolute; z-index: 7; width: 540px; left: 50%; margin-left: -270px; top: 676px; }
+.crb-side { position: absolute; z-index: 4; top: 262px; width: 330px; display: flex; flex-direction: column; gap: 10px; }
+.crb-side.l { left: 84px; } .crb-side.r { right: 84px; }
+.crb-side .cr-stats { grid-template-columns: 1fr 1fr; }
+.crb-box { padding: 20px 20px 22px; border-radius: 22px; }
+.crb-side .cr-stat { background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+.crb-side .cr-pill { background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); }
+
+/* ---------- C: Sea stacks. "Ask him." with the field first, phone right ---------- */
+/* round 4b: on the phone, the live field sits exactly on the profile's own "Ask me anything" row and runs out past the
+   phone's left edge; no brackets or labels there, so it never covers the location line or the profile card */
+.cr-q.bare { padding: 0; }
+.cr-q.bare .cr-br, .cr-q.bare .cr-qhead, .cr-q.bare .cr-qfoot { display: none; }
+.crb .cr-q { left: 50%; margin-left: -268px; top: 705px; width: 536px; }
+/* the voice note pill: real clip, play / pause, a thin progress line under the waveform */
+.cr-pill.vn { cursor: pointer; }
+.cr-pill .t { position: relative; }
+.cr-pill .t b .tm { margin-left: 6px; font: 500 10px/1 var(--mono); font-style: normal; color: var(--sand3); }
+.cr-pill .t .prog { position: absolute; left: 0; bottom: -5px; height: 1.5px; border-radius: 1px; background: var(--sand); transition: width .25s linear; }
+.cr-pill .sq .pa { width: 12px; height: 12px; fill: #0b0c0e; }
+
+/* ---------- round 5: calmer glass, balance, a bracketed field, a wallpaper switcher (canvas only) ---------- */
+/* stats and the two pills: a quiet fill, no rim */
+.cr-stat { background: rgba(255, 255, 255, .07); box-shadow: none; }
+.cr-pill { background: rgba(255, 255, 255, .08); box-shadow: none; }
+.crb-side .cr-stat, .crb-side .cr-pill { background: rgba(14, 17, 23, .42); box-shadow: none; }
+.cr-tools svg { opacity: .72; }
+/* the field: only the brackets around it, no labels above or below */
+.cr-q { padding: 9px; }
+.cr-q .cr-qhead, .cr-q .cr-qfoot { display: none; }
+.cr-br { width: 14px; height: 14px; }
+/* A and C: panel and phone share one top line, equal outer margins, the gap between them is the same as the margins */
+/* wallpaper switcher */
+.cr-wp { position: absolute; z-index: 9; right: 22px; bottom: 20px; display: flex; align-items: center; gap: 4px; height: 40px; padding: 0 4px; border-radius: 999px;
+  background: rgba(10, 13, 18, .5); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); box-shadow: var(--rim); }
+.cr-wp button { width: 32px; height: 32px; border: 0; border-radius: 50%; display: grid; place-items: center; background: none; color: #fff; cursor: pointer; }
+.cr-wp button:hover { background: rgba(255, 255, 255, .1); }
+.cr-wp button svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.cr-wp span { min-width: 190px; text-align: center; font: 500 12.5px/1 var(--sans); color: var(--sand); white-space: nowrap; }
+.cr-wp span i { font: 500 10px/1 var(--mono); font-style: normal; color: var(--sand3); margin-left: 6px; }
+.crb-box.cr-glass { background: rgba(14, 17, 23, .42); box-shadow: none; }
+
+/* ---------- B, final (approved 2026-11-18): voice note centred in the header with the Ask Claude beam; Studio leads what he founded ---------- */
+.crb .crb-head { top: 58px; gap: 16px; }
+.cr-pill.vn.head { position: relative; isolation: isolate; width: 380px; margin-top: 6px; border-radius: 26px; background: rgba(10, 13, 18, .5);
+  -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); text-align: left; }
+.cr-pill.vn.head > :not(.cr-beam) { position: relative; z-index: 4; }
+.cr-pill.vn.head .cr-beam { border-radius: 26px; --beam-strength: 1.2; }
+.crb .cr-phone { top: 300px; }
+.crb-side { top: 330px; }
+.crb .cr-q { top: 773px; }
+
+
+/* ---------- the site frame ---------- */
+.cr.frame { margin-top: clamp(40px, 6vw, 96px); aspect-ratio: 1404 / 1010; }
+.cr .cr-shade { background: linear-gradient(180deg, rgba(8, 9, 11, .5), rgba(8, 9, 11, .28) 45%, rgba(8, 9, 11, .55)); }
+.cr .cr-feather { z-index: 5; }
+.cr-art { position: absolute; left: 0; top: 0; width: 1404px; height: 1010px; transform-origin: 0 0; transform: scale(var(--crk, 1)); }
+.cr-stage { position: absolute; z-index: 3; left: 50%; top: 300px; width: 536px; margin-left: -268px; }
+.cr .cr-stage .cr-phone { position: relative; left: auto; top: auto; margin: 0 auto; width: 400px; }
+.cr .cr-stage .cr-q { position: absolute; z-index: 7; left: 0; top: 473px; margin: 0; width: 536px; }
+button.cr-pill { border: 0; color: inherit; font: inherit; cursor: pointer; }
+a.cr-mirra { color: inherit; text-decoration: none; }
+.cr-pill.vn .sq .pa { display: none; }
+.cr-pill.vn.playing .sq .pa { display: block; }
+.cr-pill.vn.playing .sq .pl { display: none; }
+.cr-pill.vn .t .prog { width: var(--prog, 0%); }
+.cr-pill.vn:focus-visible, a.cr-mirra:focus-visible, .cr-go:focus-visible, .cr-wp button:focus-visible { outline: 2px solid var(--sand); outline-offset: 3px; }
+.cr .cr-field input { font-size: 17px; }
+
+/* ---------- narrow screens: stacked ---------- */
+@media (max-width: 1099px) {
+  .cr.frame { aspect-ratio: auto; }
+  .cr-art { position: relative; width: auto; height: auto; transform: none; display: flex; flex-direction: column; align-items: center; gap: 22px; padding: clamp(56px, 9vw, 80px) 16px 84px; }
+  .crb-head { position: static; padding: 0 4px; }
+  .cr-h { font-size: clamp(34px, 7vw, 48px); }
+  .cr-p { font-size: 16px; max-width: 30em; }
+  .cr-pill.vn.head { width: min(380px, 100%); }
+  .cr-stage { position: relative; left: auto; top: auto; margin: 6px 0 0; --pw: min(320px, 76vw); width: var(--pw); clip-path: inset(0 -100vw 13% -100vw); margin-bottom: calc(var(--pw) * -0.266); order: 1; }
+  .cr .cr-stage .cr-phone { width: 100%; }
+  .cr .cr-stage .cr-q { left: 50%; top: 57.8%; width: min(calc(100vw - 32px), 420px); transform: translateX(-50%); }
+  .crb-side { position: static; width: 100%; max-width: 520px; top: auto; order: 2; }
+  .crb-side.r { order: 3; }
+  .cr .cr-feather { height: 90px; }
+  .cr-wp { right: 50%; transform: translateX(50%); bottom: 16px; height: 36px; }
+  .cr-wp span { min-width: 150px; font-size: 12px; }
+}
+
+/* what he founded (the canvas's .crc-cred list, used by B) */
+.crc-cred { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+.crc-cred li b { display: block; font: 500 16px/1.2 var(--sans); }
+.crc-cred li span { display: block; margin-top: 4px; font-size: 13.5px; color: var(--sand2); }
+.crc-cred li.st b { display: flex; align-items: center; gap: 8px; }
+.crc-cred .mk { width: 20px; height: 20px; flex: none; overflow: visible; }
+
+
 /* ===== 160-pricing ===== */
 /* 160 pricing: Pricing D (approved canvas "Pricing D · Approved to ship"). Orange dune wallpaper; glass is a fill, a blur and the
    plain rim light, never a solid line. Plans, rows, prices and the sales switch come from the app's pricing.json (pricing.py). */
