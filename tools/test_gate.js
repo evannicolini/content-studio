@@ -1,7 +1,7 @@
 // Checks the invite gate: a wrong code is refused, the right one unlocks and points at the download. node tools/test_gate.js <code>
 const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true });
+  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic"] });
   const p = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
   let nav = null;
   await p.route("**/*dropbox.com/**", (r) => { nav = r.request().url(); r.fulfill({ status: 200, headers: { "content-type": "application/octet-stream", "content-disposition": "attachment; filename=Studio.dmg" }, body: "x" }); });

@@ -2,7 +2,7 @@
 const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
 (async () => {
   const w = +(process.argv[2] || 390);
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true });
+  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic"] });
   const p = await (await b.newContext({ viewport: { width: w, height: 844 }, deviceScaleFactor: 2, isMobile: w < 800, hasTouch: w < 800 })).newPage();
   await p.goto("http://127.0.0.1:8760/?s=" + Date.now()); await p.waitForTimeout(2500);
   const r = await p.evaluate(() => {

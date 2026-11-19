@@ -7,7 +7,7 @@ const opt = (k, d) => { const i = a.indexOf("--" + k); return i < 0 ? d : (a[i +
 (async () => {
   const mobile = !!opt("mobile", false);
   const w = +opt("w", mobile ? 390 : 1440), h = +opt("h", mobile ? 844 : 900);
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--autoplay-policy=no-user-gesture-required"] });
+  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
   const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
   const p = await ctx.newPage();
   const errs = [];

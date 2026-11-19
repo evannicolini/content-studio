@@ -2,7 +2,7 @@
 const pw = require("playwright-core");
 (async () => {
   const url = process.argv[2], code = process.argv[3];
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--autoplay-policy=no-user-gesture-required"] });
+  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
   for (const mobile of [false, true]) {
     const ctx = await b.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width: 1440, height: 900 }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
     const p = await ctx.newPage(), bad = new Set();
