@@ -124,7 +124,8 @@ glassFor(5200);
 var gate = hero.querySelector(".hx-gate"), GATE_KEY = "studio-entered", needGate = false;
 try { needGate = !!gate && sessionStorage.getItem(GATE_KEY) !== "1"; } catch (e) { needGate = !!gate; }
 if (/[#&]invite=/.test(location.hash)) needGate = false; /* a link sent from a phone: straight to the download */
-if (needGate) SK.holdSound = true;
+if (needGate) { SK.holdSound = true; window.__hxHoldSafe && window.__hxHoldSafe(); } /* the page has held still since the first frame (shell.html) */
+else if (window.__hxRelease) window.__hxRelease();
 function showGate(next) {
   html.classList.add("hx-hold");
   if (SK.reduced) hero.classList.add("hold");
@@ -141,7 +142,7 @@ function showGate(next) {
       try { sessionStorage.setItem(GATE_KEY, "1"); } catch (e) {}
       gate.classList.remove("on");
       setTimeout(function () { gate.hidden = true; }, SK.reduced ? 0 : 600);
-      html.classList.remove("hx-hold");
+      if (window.__hxRelease) window.__hxRelease(); else html.classList.remove("hx-hold"); /* scrolling works again, from the top */
       hero.classList.remove("hold");
       next();
     });

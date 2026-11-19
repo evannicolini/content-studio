@@ -57,7 +57,7 @@
 #hero .hx-g-mute { margin-top: 12px; padding: 6px 10px; border: 0; background: none; font: 400 13.5px/1 var(--sans); color: rgba(245, 243, 238, .6); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(245, 243, 238, .25); text-underline-offset: 4px; }
 #hero .hx-g-mute:hover { color: #f5f3ee; }
 /* while it waits: the page does not scroll; with reduced motion (no intro) the button and composer wait too */
-html.hx-hold, html.hx-hold body { overflow: hidden; }
+/* html.hx-hold (the page holds still until Enter) is styled in src/shell.html, so it is there on the first frame */
 #hero.hold .hx-dl, #hero.hold .cp { visibility: hidden; }
 @media (prefers-reduced-motion: reduce) { #hero .hx-gate { transition: none; } }
 /* ---------- the composer: the site's chat composer (060-carry), one line tall, tighter ---------- */

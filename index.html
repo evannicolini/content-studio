@@ -27,13 +27,57 @@
 <!-- Hero intro (src/sections/010-hero): the nav is part of the hero's opening, so it starts hidden and arrives with the button and
      the composer. The classes go on here, before any stylesheet, so the nav is never painted first; the hero's section.js takes
      them off again (after 7 s they come off by themselves if that script never runs). Not with reduced motion. -->
+<!-- Enter site (src/sections/010-hero): on the first visit of a browser session the page holds still at the top until the visitor
+     presses Enter. The hold goes on here, on the first frame, before anything can be scrolled: no wheel, touch, scroll keys,
+     restored scroll or anchor jump moves it. The hero's section.js lifts it on Enter (window.__hxRelease), or at once when there is
+     no gate (already entered this session, an invite= link); after 12 s it lifts by itself if that script never runs. -->
+<style>html.hx-hold, html.hx-hold body { overflow: hidden; overflow-anchor: none; overscroll-behavior: none; } html.hx-hold { scrollbar-gutter: stable; }</style>
+<script>(function (r, w) {
+  var hold = true;
+  try { hold = sessionStorage.getItem("studio-entered") !== "1"; } catch (e) {}
+  if (/[#&]invite=/.test(location.hash)) hold = false;
+  w.__hxRelease = function () {};
+  if (!hold) return;
+  var KEYS = { " ": 1, Spacebar: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ArrowUp: 1, ArrowDown: 1, ArrowLeft: 1, ArrowRight: 1 }, o = { passive: false, capture: true };
+  function top() { if (w.scrollY || w.scrollX) { r.style.scrollBehavior = "auto"; w.scrollTo(0, 0); r.style.scrollBehavior = ""; } }
+  function stop(e) { if (e.cancelable) e.preventDefault(); }
+  function touch(e) { if (e.touches && e.touches.length > 1) return; stop(e); } /* pinch zoom stays */
+  function key(e) {
+    if (!KEYS[e.key] || e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target, tag = t && t.tagName;
+    if ((e.key === " " || e.key === "Spacebar") && (tag === "BUTTON" || tag === "A")) return; /* Space presses the focused Enter button */
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (t && t.isContentEditable)) return;
+    stop(e);
+  }
+  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
+  r.classList.add("hx-hold");
+  w.addEventListener("wheel", stop, o);
+  w.addEventListener("touchmove", touch, o);
+  w.addEventListener("keydown", key, o);
+  w.addEventListener("scroll", top, true);
+  document.addEventListener("DOMContentLoaded", top);
+  w.addEventListener("load", top);
+  top();
+  var safe = setTimeout(function () { w.__hxRelease(); }, 12000);
+  w.__hxHoldSafe = function () { clearTimeout(safe); };
+  w.__hxRelease = function () {
+    w.__hxRelease = function () {};
+    clearTimeout(safe);
+    w.removeEventListener("wheel", stop, o);
+    w.removeEventListener("touchmove", touch, o);
+    w.removeEventListener("keydown", key, o);
+    w.removeEventListener("scroll", top, true);
+    r.classList.remove("hx-hold");
+    try { history.scrollRestoration = "auto"; } catch (e) {}
+  };
+})(document.documentElement, window);</script>
 <script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=7a231a35">
+<link rel="stylesheet" href="site.css?v=10ba00da">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1568,6 +1612,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=7a231a35"></script>
+<script src="site.js?v=10ba00da"></script>
 </body>
 </html>
