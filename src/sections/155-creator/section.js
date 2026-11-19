@@ -924,7 +924,7 @@ var orb = root.querySelector("canvas[data-orb]");
 if (orb && window.StudioOrbs) SK.onView(root, function () { if (!orb._orb) window.StudioOrbs.mount(orb, { state: "working", size: 32 }); }, function () { if (typeof orb._orb === "function") orb._orb(); });
 
 /* the wallpaper switcher (Evan's, for now): his six picks, in his order */
-var WPS = [["Orange clouds, blue sky", "orange-clouds-blue-sky"], ["Sea cliffs in haze", "sea-cliffs-haze"], ["Dune grass and ocean", "dune-grass-ocean"], ["Red mesas in haze", "red-mesas-haze"], ["Green hills, double exposure", "hills-double-exposure"], ["Frost hills, gold grass", "frost-hills-gold-grass"]];
+var WPS = [["Sea cliffs in haze", "sea-cliffs-haze"], ["Dune grass and ocean", "dune-grass-ocean"], ["Red mesas in haze", "red-mesas-haze"], ["Green hills, double exposure", "hills-double-exposure"], ["Frost hills, gold grass", "frost-hills-gold-grass"]];
 var bg = root.querySelector(".cr-bg"), nameEl = root.querySelector("[data-wp-name]"), wi = 0;
 root.querySelectorAll("[data-wp]").forEach(function (b) {
   b.addEventListener("click", function () {
