@@ -2,6 +2,21 @@ var sec = document.getElementById("shoot");
 if (!sec) return;
 var root = sec.querySelector(".sh.frame");      /* screen one: the footage frame */
 
+/* the two animations below start once enough of them is on screen and keep going while any of it is; they reset only once fully
+   scrolled away. "Enough": the given share of the box, or 40% of the screen when the box is taller than that (phones stack it tall). */
+function watch(el, enter, leave, share) {
+  if (!("IntersectionObserver" in window)) { enter(); return; }
+  var inside = false, th = [];
+  for (var i = 0; i <= 20; i++) th.push(i / 20);
+  new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      var need = Math.min(e.boundingClientRect.height * share, (window.innerHeight || 800) * 0.4);
+      if (!inside && e.isIntersecting && e.intersectionRect.height >= need - 1) { inside = true; enter(); }
+      else if (inside && !e.isIntersecting) { inside = false; leave(); }
+    });
+  }, { threshold: th }).observe(el);
+}
+
 /* the footage drifts a little against the scroll (only while on screen) */
 (function (el) {
   /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
@@ -90,7 +105,7 @@ async function run() {
   } catch (e) {}
 }
 fill(BATCHES[0]);
-SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold: [0, 0.35, 0.7] });
+watch(card, run, function () { token++; reset(); }, 0.35);
 
 
 /* ================= screen two: the camera roll goes into Studio, finished videos come out ================= */
@@ -101,7 +116,7 @@ SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold
   var core = box.querySelector(".sho-core"), statusBox = box.querySelector(".sho-status"), statusText = statusBox.querySelector("span");
   var bars = [].slice.call(box.querySelectorAll(".sho-bars li")), nIn = box.querySelector(".sho-in"), nOut = box.querySelector(".sho-n-out");
   var vids = [].slice.call(box.querySelectorAll(".sho-vid"));
-  var M = "assets/media/", RAW = [], STEP = 44, FLY = 850, IDLE = "Drop in the camera roll", tok = 0, laid = "";
+  var M = "assets/media/", RAW = [], STEP = 44, FLY = 850, IDLE = "Drop in the camera roll", tok = 0, laid = "", moved = false;
 
   /* 38 raw clips: frames of real footage already on the site (15 from the three shoots above, 23 more from the library) */
   ["run-club", "coffee-friend-arrives", "coastal-highway"].forEach(function (s) { for (var i = 1; i <= 5; i++) RAW.push("shoot/" + s + "-" + i + ".jpg"); });
@@ -127,7 +142,7 @@ SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold
     if (!W || !H) return false;
     var key = W + "x" + H;
     if (key === laid) return true;
-    laid = key;
+    laid = key; moved = true;
     var wide = W / H > 1.3, cols = wide ? 13 : 5, rows = Math.ceil(TOTAL / cols);
     var cw = wide ? Math.min(W * .112, H * .6 * 9 / 16) : Math.min(W * .2, H * .2 * 9 / 16 + 30), ch = cw * 16 / 9;
     clips.forEach(function (c, n) {
@@ -238,7 +253,8 @@ SK.onView(card, run, function () { token++; reset(); }, { ratio: 0.35, threshold
 
   layout();
   var rz = 0;
-  window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { if (layout() && flow.classList.contains("s-go")) run(); }, 200); });
+  /* only a real change of the pile's size restarts it: on phones a scroll shows and hides the browser bar, which fires resize too */
+  window.addEventListener("resize", function () { clearTimeout(rz); rz = setTimeout(function () { moved = false; if (layout() && moved && flow.classList.contains("s-go")) run(); }, 200); });
   if (SK.reduced) { still(); return; }
-  SK.onView(flow, run, function () { tok++; reset(); }, { ratio: 0.25, threshold: [0, 0.25, 0.6] });
+  watch(flow, run, function () { tok++; reset(); }, 0.25);
 })();
