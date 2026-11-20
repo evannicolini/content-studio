@@ -9,7 +9,7 @@ if (!root) return;
     el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
   }
   if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
+  var y = 0, raf = 0, on = false, lastT = NaN;
   function step() {
     raf = 0;
     if (!on) return;
@@ -19,9 +19,14 @@ if (!root) return;
     y += (t - y) * 0.12;
     if (Math.abs(t - y) < 0.05) y = t;
     el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
+    if (y !== t || t !== lastT) raf = requestAnimationFrame(step); /* settled two frames running: it rests until the page scrolls, resizes or moves (wake) */
+    lastT = t;
   }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+  function wake() { if (on && !raf) raf = requestAnimationFrame(step); }
+  window.addEventListener("scroll", wake, { passive: true });
+  window.addEventListener("resize", wake);
+  if ("ResizeObserver" in window) { var ro = new ResizeObserver(wake); ro.observe(document.body); ro.observe(root); }
+  SK.onView(root, function () { on = true; wake(); }, function () { on = false; });
 })(root.querySelector("video.bg"));
 
 /* one conversation, drawn on both screens so they stay in step */

@@ -544,7 +544,51 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     kayla();
     growFrames();
     focusSections();
+    restLoops();
   };
+
+  /* ---------- endless loops rest far off screen: a section more than a screen away pauses its endless CSS loops (beams, dots,
+     rings, drifts) and they carry on before it is a screen away again, so nothing on screen changes; the browser just stops
+     recomputing them every frame. Only endless loops are paused: a box that also runs a one-off animation (which JS may be timing)
+     is left alone. The hero pauses its own (.off, 010-hero). CSS: [data-sk-rest] in base.css. ---------- */
+  function restLoops() {
+    if (!("IntersectionObserver" in window) || !document.documentElement.getAnimations) return;
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) wakeLoops(e.target); else restSection(e.target); });
+    }, { rootMargin: "100% 0px" });
+    document.querySelectorAll("main > section:not(#hero)").forEach(function (s) { io.observe(s); });
+    /* a jump (a link, a restored scroll) can land on a resting section before the observer reports it: wake it in the same frame */
+    window.addEventListener("scroll", function () {
+      if (!rested.length) return;
+      var vh = window.innerHeight || 1;
+      rested.slice().forEach(function (s) { var r = s.getBoundingClientRect(); if (r.bottom > -vh && r.top < 2 * vh) wakeLoops(s); });
+    }, { passive: true });
+  }
+  var rested = [];
+  var REST_KEY = { "": "e", "::before": "b", "::after": "a" };
+  function restSection(sec) {
+    var boxes = [];
+    if (rested.indexOf(sec) < 0) rested.push(sec);
+    sec.getAnimations({ subtree: true }).forEach(function (a) {
+      var ef = a.effect, t = ef && ef.target, k = ef && REST_KEY[ef.pseudoElement || ""];
+      if (!t || !k || a.playState !== "running") return;
+      var b = null;
+      for (var i = 0; i < boxes.length; i++) if (boxes[i].t === t && boxes[i].k === k) { b = boxes[i]; break; }
+      if (!b) boxes.push((b = { t: t, k: k, loop: false, once: false }));
+      if (ef.getTiming().iterations === Infinity) b.loop = true; else b.once = true;
+    });
+    boxes.forEach(function (b) {
+      if (!b.loop || b.once) return;
+      var v = (b.t.getAttribute("data-sk-rest") || "").split(" ");
+      if (v.indexOf(b.k) < 0) b.t.setAttribute("data-sk-rest", (v.join(" ") + " " + b.k).trim());
+    });
+  }
+  function wakeLoops(sec) {
+    var i = rested.indexOf(sec);
+    if (i < 0) return;
+    rested.splice(i, 1);
+    sec.querySelectorAll("[data-sk-rest]").forEach(function (el) { el.removeAttribute("data-sk-rest"); });
+  }
 
   /* ---------- scroll focus (as on the Custom Esignature site): a section is dim and soft at the edge of the screen and comes to
      full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
@@ -849,7 +893,7 @@ function watch(el, enter, leave, share) {
     el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
   }
   if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
+  var y = 0, raf = 0, on = false, lastT = NaN;
   function step() {
     raf = 0;
     if (!on) return;
@@ -859,9 +903,14 @@ function watch(el, enter, leave, share) {
     y += (t - y) * 0.12;
     if (Math.abs(t - y) < 0.05) y = t;
     el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
+    if (y !== t || t !== lastT) raf = requestAnimationFrame(step); /* settled two frames running: it rests until the page scrolls, resizes or moves (wake) */
+    lastT = t;
   }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+  function wake() { if (on && !raf) raf = requestAnimationFrame(step); }
+  window.addEventListener("scroll", wake, { passive: true });
+  window.addEventListener("resize", wake);
+  if ("ResizeObserver" in window) { var ro = new ResizeObserver(wake); ro.observe(document.body); ro.observe(root); }
+  SK.onView(root, function () { on = true; wake(); }, function () { on = false; });
 })(root.querySelector("video.bg"));
 
 /* three batches of footage, each becomes its own film: the takes are frames of that film's own shots */
@@ -1100,7 +1149,7 @@ if (!root) return;
     el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
   }
   if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
+  var y = 0, raf = 0, on = false, lastT = NaN;
   function step() {
     raf = 0;
     if (!on) return;
@@ -1110,9 +1159,14 @@ if (!root) return;
     y += (t - y) * 0.12;
     if (Math.abs(t - y) < 0.05) y = t;
     el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
+    if (y !== t || t !== lastT) raf = requestAnimationFrame(step); /* settled two frames running: it rests until the page scrolls, resizes or moves (wake) */
+    lastT = t;
   }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+  function wake() { if (on && !raf) raf = requestAnimationFrame(step); }
+  window.addEventListener("scroll", wake, { passive: true });
+  window.addEventListener("resize", wake);
+  if ("ResizeObserver" in window) { var ro = new ResizeObserver(wake); ro.observe(document.body); ro.observe(root); }
+  SK.onView(root, function () { on = true; wake(); }, function () { on = false; });
 })(root.querySelector("video.bg"));
 
 /* one conversation, drawn on both screens so they stay in step */
@@ -1531,7 +1585,7 @@ if (!root) return;
     el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
   }
   if (!el || SK.reduced) return;
-  var y = 0, raf = 0, on = false;
+  var y = 0, raf = 0, on = false, lastT = NaN;
   function step() {
     raf = 0;
     if (!on) return;
@@ -1541,9 +1595,14 @@ if (!root) return;
     y += (t - y) * 0.12;
     if (Math.abs(t - y) < 0.05) y = t;
     el.style.transform = "translate3d(0," + y.toFixed(2) + "px,0)";
-    raf = requestAnimationFrame(step);
+    if (y !== t || t !== lastT) raf = requestAnimationFrame(step); /* settled two frames running: it rests until the page scrolls, resizes or moves (wake) */
+    lastT = t;
   }
-  SK.onView(root, function () { on = true; if (!raf) raf = requestAnimationFrame(step); }, function () { on = false; });
+  function wake() { if (on && !raf) raf = requestAnimationFrame(step); }
+  window.addEventListener("scroll", wake, { passive: true });
+  window.addEventListener("resize", wake);
+  if ("ResizeObserver" in window) { var ro = new ResizeObserver(wake); ro.observe(document.body); ro.observe(root); }
+  SK.onView(root, function () { on = true; wake(); }, function () { on = false; });
 })(root.querySelector("video.bg"));
 
 /* what he asks for, in order. Each one is answered by the result card with the same index. */
