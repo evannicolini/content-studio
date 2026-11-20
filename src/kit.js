@@ -11,6 +11,7 @@
      <video data-play data-src="…" [data-src-m="…"] poster="…" muted playsinline loop>   loads near the viewport, plays only in view
      [data-reveal] (+ style="--i:2")                                                    fades up once in view
      [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
+     [data-gx] (+ data-gx="hot" / "paper")                                               the glass button with the composer's border beam (SK.gx)
      [data-download]                                                                    scrolls to pricing and focuses the invite code (phones: Send to my Mac)
      [data-vo-play="kayla-pricing"]                                                     on click, plays that section's Kayla clip from the top
      [data-film="slug"]                                                                 opens that film from the manifest on click */
@@ -63,6 +64,21 @@
     if (!el.querySelector(":scope > [data-beam-bloom]")) { var b = document.createElement("span"); b.setAttribute("data-beam-bloom", ""); el.appendChild(b); }
     el.style.setProperty("--beam-strength", String(o.strength));
     SK.onView(el, function () { el.setAttribute("data-active", ""); }, function () { el.removeAttribute("data-active"); }, { margin: "80px" });
+    return el;
+  };
+
+  /* ---------- .gx: the glass button with the composer's border beam (base.css). The beam runs only while the button is on screen. ---------- */
+  SK.gx = function (el, o) {
+    if (!el) return el;
+    o = o || {};
+    el.classList.add("gx");
+    if (o.hot) el.classList.add("hot");
+    if (o.paper) el.classList.add("paper");
+    if (el.querySelector(":scope > .gx-beam")) return el;
+    var s = document.createElement("span");
+    s.className = "gx-beam"; s.setAttribute("data-beam", "cx"); s.setAttribute("aria-hidden", "true"); s.innerHTML = "<span data-beam-bloom></span>";
+    el.insertBefore(s, el.firstChild);
+    SK.onView(el, function () { s.setAttribute("data-active", ""); }, function () { s.removeAttribute("data-active"); }, { margin: "60px" });
     return el;
   };
 
@@ -394,8 +410,18 @@
       };
       var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
       a.addEventListener("play", function () { started = true; off(); });
-      EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
-      if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
+      /* she can be closed (the x on her pill), and stays closed on later visits until someone asks for her sound again (Enter site) */
+      var OFFK = "studio-kayla-off", root = document.documentElement, isOff = false;
+      try { isOff = localStorage.getItem(OFFK) === "1"; } catch (e) {}
+      SK.kaylaOff = function () { audios.forEach(function (o) { o.pause(); }); root.classList.add("kp-off"); started = true; off(); try { localStorage.setItem(OFFK, "1"); } catch (e) {} };
+      SK.kaylaOn = function () { root.classList.remove("kp-off"); try { localStorage.removeItem(OFFK); } catch (e) {} };
+      var kx = kp.querySelector("[data-kp-x]");
+      if (kx) kx.addEventListener("click", function (e) { e.stopPropagation(); SK.kaylaOff(); });
+      if (isOff) { root.classList.add("kp-off"); started = true; }
+      else {
+        EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
+        if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
+      }
     }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
@@ -490,6 +516,7 @@
       SK.onView(el, function () { el.classList.add("in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
     });
     SK.videos();
+    document.querySelectorAll("[data-gx]").forEach(function (el) { var v = el.getAttribute("data-gx"); SK.gx(el, { hot: /hot/.test(v), paper: /paper/.test(v) }); });
     document.querySelectorAll("[data-beam-auto]").forEach(function (el) {
       var r = el.getAttribute("data-beam-radius");
       SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });

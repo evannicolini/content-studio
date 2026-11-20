@@ -1,0 +1,24 @@
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  "name": "studio-waitlist",
+  "account_id": "b34634768e1e87471419d91cc45a67b6",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "studio-waitlist",
+      "database_id": "PASTE_THE_ID_FROM_wrangler_d1_create_studio-waitlist",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    "ORIGINS": "https://evannicolini.github.io,http://127.0.0.1:*,http://localhost:*",
+    "BOOST": "10",
+    "BREVO_LIST_ID": ""
+  }
+}

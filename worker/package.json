@@ -1,0 +1,6 @@
+{
+  "name": "studio-waitlist",
+  "private": true,
+  "type": "module",
+  "description": "Studio's early-access waitlist: a Cloudflare Worker. Tests: node worker/tests/run.mjs. Local server: node worker/dev.mjs"
+}

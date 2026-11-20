@@ -136,6 +136,7 @@ function showGate(next) {
     b.addEventListener("click", function () {
       if (done) return; done = true;
       if (b.getAttribute("data-enter") === "sound") {
+        if (SK.kaylaOn) SK.kaylaOn(); /* asked for sound: she comes back even if closed on an earlier visit */
         var a = SK.kayla && SK.kayla.audio;
         if (a && a.paused) { try { a.currentTime = 0; } catch (e) {} var q = a.play(); q && q.catch(function () {}); }
       }

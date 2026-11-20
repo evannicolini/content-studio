@@ -1,6 +1,6 @@
 window.SK_MEDIA = {"generated":"2026-11-17","note":"All paths are relative to the site root. Every item is Evan's own work (finished edits, his AI generations, his AI wallpapers, his brand logos). Nothing from References, Viral Lab, Creators or raw music/SFX is included.","films":[{"slug":"mirra-multivitamin","title":"MIRRA Multivitamin commercial","brand":"MIRRA","kind":"Launch commercial","made_with":"AI live action (Cinema Studio text-to-video) + MIRRA UI motion graphics + VO","version":"v07","board_edit_id":"edit_multivitamin","board_status":"Finished (FINAL v07 in 06_Final)","duration":64.92,"aspect":"9:16","loop":"assets/media/films/mirra-multivitamin/loop.mp4","full":"assets/media/films/mirra-multivitamin/full.mp4","poster":"assets/media/films/mirra-multivitamin/poster.jpg","loop_bytes":733003,"full_bytes":8921941,"poster_bytes":41324,"loop_size":[540,960],"full_size":[720,1280],"loop_start":9.5,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[720,1280],"has_audio":true},{"slug":"founders-retreat","title":"Your place for ambitious young founders","brand":"MIRRA","kind":"AI film","made_with":"Full AI cinematic montage, no VO","version":"v04","board_edit_id":"edit_founders_retreat","board_status":"Latest version v04","duration":44.59,"aspect":"9:16","loop":"assets/media/films/founders-retreat/loop.mp4","full":"assets/media/films/founders-retreat/full.mp4","poster":"assets/media/films/founders-retreat/poster.jpg","loop_bytes":688563,"full_bytes":6061847,"poster_bytes":48032,"loop_size":[540,960],"full_size":[720,1280],"loop_start":15.0,"loop_duration":9.5,"loop_fps":30,"full_fps":30,"source_size":[720,1280],"has_audio":true},{"slug":"lobby-hero-window","title":"The Lobby \u00b7 Hero window, bigger","brand":"MIRRA","kind":"AI + motion graphics","made_with":"AI people + MIRRA profile motion graphics, no VO","version":"v06","board_edit_id":"edit_lobby_hero_big","board_status":"Ready \u00b7 posted","duration":18.3,"aspect":"9:16","loop":"assets/media/films/lobby-hero-window/loop.mp4","full":null,"poster":"assets/media/films/lobby-hero-window/poster.jpg","loop_bytes":486978,"full_bytes":1685391,"poster_bytes":53087,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.0,"loop_duration":9.5,"loop_fps":30,"full_fps":30,"source_size":[1080,1920],"has_audio":true,"full_note":"not published: the full cut carries commercial music"},{"slug":"ces-replied-booked","title":"Replied \u00d7 MIRRA \u00b7 Deleted, then booked","brand":"Custom Esignature","kind":"Commercial (AI + motion graphics)","made_with":"AI live action + signature / MIRRA app motion graphics + VO","version":"v06","board_edit_id":"edit_ces_replied_booked","board_status":"FINAL v06 (approved)","duration":47.52,"aspect":"9:16","loop":"assets/media/films/ces-replied-booked/loop.mp4","full":"assets/media/films/ces-replied-booked/full.mp4","poster":"assets/media/films/ces-replied-booked/poster.jpg","loop_bytes":540014,"full_bytes":4976178,"poster_bytes":47621,"loop_size":[540,960],"full_size":[720,1280],"loop_start":12.0,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-forest","title":"Forest \u00b7 compose to inbox","brand":"Custom Esignature","kind":"AI + motion graphics","made_with":"AI forest plate + glass composer motion graphics, no VO","version":"v02","board_edit_id":"edit_ces_compose_forest","board_status":"Ready \u00b7 posted \u00b7 ran as ad","duration":18.73,"aspect":"9:16","loop":"assets/media/films/ces-forest/loop.mp4","full":"assets/media/films/ces-forest/full.mp4","poster":"assets/media/films/ces-forest/poster.jpg","loop_bytes":435459,"full_bytes":1660562,"poster_bytes":86390,"loop_size":[540,960],"full_size":[720,1280],"loop_start":2.7,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-agent-kitchen","title":"Agent \u00b7 kitchen, real estate","brand":"Custom Esignature","kind":"Industry ad (AI + motion graphics)","made_with":"AI kitchen plate + signature motion graphics + VO","version":"v02","board_edit_id":"edit_ces_re_agent_kitchen","board_status":"Latest version v02","duration":20.43,"aspect":"9:16","loop":"assets/media/films/ces-agent-kitchen/loop.mp4","full":"assets/media/films/ces-agent-kitchen/full.mp4","poster":"assets/media/films/ces-agent-kitchen/poster.jpg","loop_bytes":285432,"full_bytes":1391629,"poster_bytes":50425,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.8,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-company-becoming","title":"Look like the company you're becoming","brand":"Custom Esignature","kind":"Launch commercial","made_with":"AI live action + signature motion graphics + VO","version":"v10","board_edit_id":"edit_ces_launch_company_becoming","board_status":"Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite","duration":48.28,"aspect":"9:16","loop":"assets/media/films/ces-company-becoming/loop.mp4","full":"assets/media/films/ces-company-becoming/full.mp4","poster":"assets/media/films/ces-company-becoming/poster.jpg","loop_bytes":577971,"full_bytes":5646124,"poster_bytes":47089,"loop_size":[540,960],"full_size":[720,1280],"loop_start":9.3,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-sea-cliffs","title":"Signature anatomy \u00b7 sea cliffs","brand":"Custom Esignature","kind":"AI + motion graphics","made_with":"AI sea-cliffs plate + signature motion graphics, no VO","version":"v02","board_edit_id":"edit_ces_sig_anatomy","board_status":"Ready \u00b7 posted \u00b7 ran as ad","duration":16.18,"aspect":"9:16","loop":"assets/media/films/ces-sea-cliffs/loop.mp4","full":"assets/media/films/ces-sea-cliffs/full.mp4","poster":"assets/media/films/ces-sea-cliffs/poster.jpg","loop_bytes":358942,"full_bytes":1348064,"poster_bytes":72693,"loop_size":[540,960],"full_size":[720,1280],"loop_start":1.5,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true},{"slug":"ces-email-signature","title":"This is an email signature?","brand":"Custom Esignature","kind":"Viral remake","made_with":"Evan on camera + phone screen demo, viral-format remake","version":"v03","board_edit_id":"edit_ces_is_this_a_signature","board_status":"Ready \u00b7 posted \u00b7 ran as ad \u00b7 favourite","duration":23.18,"aspect":"9:16","loop":"assets/media/films/ces-email-signature/loop.mp4","full":null,"poster":"assets/media/films/ces-email-signature/poster.jpg","loop_bytes":740950,"full_bytes":4522270,"poster_bytes":45590,"loop_size":[540,960],"full_size":[720,1280],"loop_start":0.2,"loop_duration":9.5,"loop_fps":30,"full_fps":60,"source_size":[1080,1920],"has_audio":true,"full_note":"not published: the full cut carries commercial music"}],"carousels":[{"slug":"founder-sundays","title":"Stop figuring it out alone on Sundays \u00b7 Founder carousel","brand":"MIRRA","kind":"Carousel","version":"v04","aspect":"4:5","width":1080,"height":1350,"count":4,"slides":["assets/media/carousels/founder-sundays/01.jpg","assets/media/carousels/founder-sundays/02.jpg","assets/media/carousels/founder-sundays/03.jpg","assets/media/carousels/founder-sundays/04.jpg"],"bytes":404800,"note":"Stills of each slide (slides after the first are short animated scenes in the original; the still is the settled frame the project already exported)."},{"slug":"founders-new-network","title":"A new network for young founders \u00b7 9:16 carousel","brand":"MIRRA","kind":"Carousel","version":"v02","aspect":"9:16","width":1080,"height":1920,"count":7,"slides":["assets/media/carousels/founders-new-network/01.jpg","assets/media/carousels/founders-new-network/02.jpg","assets/media/carousels/founders-new-network/03.jpg","assets/media/carousels/founders-new-network/04.jpg","assets/media/carousels/founders-new-network/05.jpg","assets/media/carousels/founders-new-network/06.jpg","assets/media/carousels/founders-new-network/07.jpg"],"bytes":1799848,"note":"Stills of each slide (slides after the first are short animated scenes in the original; the still is the settled frame the project already exported)."}],"selects":[{"slug":"coastal-highway","title":"Coastal highway with friends","library_title":"Coastal Highway friends 05 (AI Library)","select_id":"ve4ae44581345e8","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/coastal-highway.mp4","poster":"assets/media/selects/coastal-highway.jpg","bytes":292398,"poster_bytes":22305,"crf":28,"excerpt":{"start":1.25,"duration":6.0,"source_duration":15.04},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026","prompt_scene_teaser":null,"note":"The prompt recorded for this clip in SELECTS.md describes the private-airstrip scene, not the coastal drive: only the generic opening lines are safe to tease."},{"slug":"private-jet","title":"Private jet with friends, California","library_title":"Private jet with friends, California (AI Library)","select_id":"vd8bc574dc94c7b","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/private-jet.mp4","poster":"assets/media/selects/private-jet.jpg","bytes":283796,"poster_bytes":29948,"crf":28,"excerpt":{"start":4.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares and soft light leaks drifting across frame throughout. Make these effects visibly present and recurring\u2026","prompt_scene_teaser":"Create a 15-second documentary-style cinematic sequence of four friends arriving together at a private airstrip in two cars, walking across the sunlit apron\u2026"},{"slug":"surfing","title":"Surfing with a friend","library_title":"Friend surfing 09 (AI Library)","select_id":"vce3ac4f7d14c36","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/surfing.mp4","poster":"assets/media/selects/surfing.jpg","bytes":414888,"poster_bytes":17790,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":null},{"slug":"mountain-biking","title":"Mountain biking with friends","library_title":"Mountain biking with friends (AI Library)","select_id":"vdbd74dc237e3fd","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/mountain-biking.mp4","poster":"assets/media/selects/mountain-biking.jpg","bytes":516433,"poster_bytes":34503,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session through a magnificent coastal redwood\u2026"},{"slug":"mountain-biking-fpv","title":"Mountain biking, FPV single shot","library_title":"Mountain biking, FPV drone single shot (AI Library)","select_id":"v11e6e4e977cc87","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/mountain-biking-fpv.mp4","poster":"assets/media/selects/mountain-biking-fpv.jpg","bytes":650514,"poster_bytes":37264,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a legitimate downhill mountain-biking session at a beautiful coastal mountain bike park\u2026"},{"slug":"run-club","title":"Sydney run club","library_title":"Sydney run club (best) (AI Library)","select_id":"va3340f57cafb5c","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/run-club.mp4","poster":"assets/media/selects/run-club.jpg","bytes":434337,"poster_bytes":38302,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026","prompt_scene_teaser":"Create a 12-second cinematic documentary film of a friendly run club in SYDNEY, AUSTRALIA, along the harbor waterfront around Mrs Macquarie\u2019s Point."},{"slug":"cofounder-whiteboard","title":"Co-founder whiteboard","library_title":"Cofounder whiteboard, tennis, investor intro (MIRRA Multivitamin)","select_id":"v6b0bb3da6a570b","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":6.04,"file":"assets/media/selects/cofounder-whiteboard.mp4","poster":"assets/media/selects/cofounder-whiteboard.jpg","bytes":284539,"poster_bytes":29693,"crf":28,"excerpt":{"start":0,"duration":6.04,"source_duration":6.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":"Create a 6-second documentary-style film about the people you need showing up in real life: a cofounder who can build, a tennis partner for Saturday, an intro\u2026"},{"slug":"real-connections","title":"Real connections","library_title":"Real connections (Multivitamin) (MIRRA Multivitamin)","select_id":"v4126c6b03929b7","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/real-connections.mp4","poster":"assets/media/selects/real-connections.jpg","bytes":201540,"poster_bytes":23720,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, handheld camera with pronounced natural micro-shake and organic movement throughout, shot on ARRI Alexa LF with cinematic depth and\u2026","prompt_scene_teaser":"Create a 4-second documentary-style film about the real people behind every opportunity: friends, mentors and the people you meet, in bright daytime and golden\u2026"},{"slug":"house-party","title":"House party, Beverly Hills","library_title":"House party, Beverly Hills (AI Library)","select_id":"v362823dae44782","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/house-party.mp4","poster":"assets/media/selects/house-party.jpg","bytes":383873,"poster_bytes":29373,"crf":28,"excerpt":{"start":2.5,"duration":6.0,"source_duration":15.05},"used_in":null,"prompt_teaser":"PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026","prompt_scene_teaser":"Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"},{"slug":"get-together","title":"Upscale get-together, Hollywood Hills","library_title":"Upscale get-together with friends (AI Library)","select_id":"vf80d45513e3e04","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/get-together.mp4","poster":"assets/media/selects/get-together.jpg","bytes":447453,"poster_bytes":34756,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"PRIORITY OPTICAL DIRECTION: Subtle, clearly visible HORIZONTAL ANAMORPHIC LENS FLARES\u2014thin elongated streaks traveling horizontally across the image. No round\u2026","prompt_scene_teaser":"Create an original 15-second documentary-style cinematic film comprising THREE DISTINCT FIVE-SECOND SCENES at three beautiful Los Angeles house parties. Each\u2026"},{"slug":"yacht","title":"Friends on a yacht","library_title":"Friends hanging out on a yacht (AI Library)","select_id":"ve880cb3722b009","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/yacht.mp4","poster":"assets/media/selects/yacht.jpg","bytes":358274,"poster_bytes":22303,"crf":28,"excerpt":{"start":0.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make the flares naturally integrated but clearly visible: thin elongated\u2026","prompt_scene_teaser":"Create a 12-second documentary-style film of a lively social gathering aboard a large contemporary yacht in a California marina. Friends approach along the\u2026"},{"slug":"golf","title":"Golfing with friends","library_title":"Golfing with friends (AI Library)","select_id":"ve93f75bb820e22","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/golf.mp4","poster":"assets/media/selects/golf.jpg","bytes":329744,"poster_bytes":31576,"crf":28,"excerpt":{"start":1.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four established friends enjoying a round of golf on a beautiful California coastal course. Oceanfront fairways, healthy\u2026"},{"slug":"beach-volleyball","title":"Beach volleyball with friends","library_title":"Volleyball with friends (AI Library)","select_id":"v0de158a014d7b8","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/beach-volleyball.mp4","poster":"assets/media/selects/beach-volleyball.jpg","bytes":357349,"poster_bytes":25344,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Clearly visible thin HORIZONTAL sunlight streaks, naturally integrated. No\u2026","prompt_scene_teaser":"Create a 12-second film of six established friends playing beach volleyball beside sparkling blue water, pale sand, healthy coastal greenery, and a clear sky."},{"slug":"tropical-vacation","title":"Friends on a tropical vacation","library_title":"Friends tropical vacation (AI Library)","select_id":"vfe5aec81b52397","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/tropical-vacation.mp4","poster":"assets/media/selects/tropical-vacation.jpg","bytes":496935,"poster_bytes":52337,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.06},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible: thin\u2026","prompt_scene_teaser":"Create a 12-second cinematic film of four friends enjoying a tropical vacation together: biking along a beautiful coast, surfing, riding an ATV trail through\u2026"},{"slug":"race-track","title":"Friends at a race track","library_title":"Friends at a race track (AI Library)","select_id":"vbc73bf6b810022","model":"Seedance 2.5","aspect":"9:16","width":404,"height":720,"duration":6.0,"file":"assets/media/selects/race-track.mp4","poster":"assets/media/selects/race-track.jpg","bytes":212731,"poster_bytes":23354,"crf":28,"excerpt":{"start":2.0,"duration":6.0,"source_duration":12.05},"used_in":null,"prompt_teaser":"Anamorphic lens with subtle horizontal lens flares drifting across frame throughout. Make these effects naturally integrated but clearly visible across almost\u2026","prompt_scene_teaser":"Create a 12-second cinematic documentary film of four established friends enjoying a BMW track day at a closed desert circuit near Palm Springs, California.\u2026"},{"slug":"tennis-forehand","title":"Tennis forehand","library_title":"Tennis forehand, golden hour (MIRRA Multivitamin)","select_id":"va951c7d4c71b37","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/tennis-forehand.mp4","poster":"assets/media/selects/tennis-forehand.jpg","bytes":183349,"poster_bytes":27906,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026","prompt_scene_teaser":null},{"slug":"investor-intro","title":"Investor intro, caf\u00e9 terrace","library_title":"Investor intro, cafe terrace (MIRRA Multivitamin)","select_id":"vcf2ff8d516c980","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":4.04,"file":"assets/media/selects/investor-intro.mp4","poster":"assets/media/selects/investor-intro.jpg","bytes":206019,"poster_bytes":33990,"crf":28,"excerpt":{"start":0,"duration":4.04,"source_duration":4.04},"used_in":"MIRRA Multivitamin","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares. Thin elongated HORIZONTAL\u2026","prompt_scene_teaser":null},{"slug":"dinner-toast","title":"Dinner toast","library_title":"Dinner (A day in people) (A Day In People)","select_id":"v04b19313944dc4","model":"Cinema Studio 4.0","aspect":"9:16","width":404,"height":720,"duration":6.04,"file":"assets/media/selects/dinner-toast.mp4","poster":"assets/media/selects/dinner-toast.jpg","bytes":182184,"poster_bytes":27523,"crf":28,"excerpt":{"start":0,"duration":6.05,"source_duration":6.05},"used_in":"A day in people","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026","prompt_scene_teaser":null},{"slug":"coffee-friend-arrives","title":"A friend arrives for coffee","library_title":"Coffee friend arrives (A Day In People)","select_id":"vd0515e93ce5faf","model":"Cinema Studio 4.0","aspect":"9:16","width":414,"height":720,"duration":5.04,"file":"assets/media/selects/coffee-friend-arrives.mp4","poster":"assets/media/selects/coffee-friend-arrives.jpg","bytes":278948,"poster_bytes":38827,"crf":28,"excerpt":{"start":0,"duration":5.05,"source_duration":5.05},"used_in":"A day in people","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity, anamorphic lens with subtle horizontal lens flares from the bright sun behind\u2026","prompt_scene_teaser":null},{"slug":"court-dap","title":"Basketball court dap","library_title":"basketball court dap (The Network Effect)","select_id":"va5be8970de962b","model":"Cinema Studio 4.0","aspect":"9:16","width":414,"height":720,"duration":5.04,"file":"assets/media/selects/court-dap.mp4","poster":"assets/media/selects/court-dap.jpg","bytes":189805,"poster_bytes":28218,"crf":28,"excerpt":{"start":0,"duration":5.05,"source_duration":5.05},"used_in":"The Network Effect","prompt_teaser":"Documentary-style film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear blue sky, crisp white light, hard\u2026","prompt_scene_teaser":null},{"slug":"above-the-clouds","title":"Above the clouds (16:9)","library_title":"Above clouds 16x9 (CES Website Sections)","select_id":"vfefbd4dad7aa3c","model":"Cinema Studio 4.0","aspect":"16:9","width":720,"height":404,"duration":8.0,"file":"assets/media/selects/above-the-clouds.mp4","poster":"assets/media/selects/above-the-clouds.jpg","bytes":70769,"poster_bytes":27107,"crf":28,"excerpt":{"start":0.0,"duration":8.0,"source_duration":10.05},"used_in":"Custom Esignature website","prompt_teaser":"Documentary-style nature film, shot on ARRI Alexa LF with cinematic depth and clarity. Bright sunny midday daylight: high sun, clear deep-blue sky, crisp white\u2026","prompt_scene_teaser":null}],"wallpapers":[{"slug":"cumulus-sky","name":"Cumulus sky","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 70%","tint_rgb":"15,22,31","file":"assets/media/wallpapers/cumulus-sky.jpg","thumb":"assets/media/wallpapers/cumulus-sky-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":590971,"thumb_bytes":32040,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 2752x1536), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 2381963c-265e-42d9-b7d1-e3c544e18d4c are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"volcano-above-clouds","name":"Peak above the clouds","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 80%","tint_rgb":"15,20,29","file":"assets/media/wallpapers/volcano-above-clouds.jpg","thumb":"assets/media/wallpapers/volcano-above-clouds-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":557913,"thumb_bytes":30358,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 2768bd76-28a7-4a63-a2da-295a6a43c000 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"peaks-in-cloud-sea","name":"Peaks in a sea of cloud","name_source":"Studio featured.json","scene":"sky","studio_group":"sky","focus":"50% 66%","tint_rgb":"17,20,27","file":"assets/media/wallpapers/peaks-in-cloud-sea.jpg","thumb":"assets/media/wallpapers/peaks-in-cloud-sea-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":569610,"thumb_bytes":34238,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id af43bfe6-3240-441b-b28a-d045415c553a are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"above-the-clouds","name":"Above the clouds","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"sky","studio_group":"sky","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/above-the-clouds.jpg","thumb":"assets/media/wallpapers/above-the-clouds-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":585218,"thumb_bytes":37775,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id acc39dd6-1faa-4923-8162-141a415548d3 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"orange-clouds-blue-sky","name":"Orange clouds, blue sky","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"sky","studio_group":"sky","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/orange-clouds-blue-sky.jpg","thumb":"assets/media/wallpapers/orange-clouds-blue-sky-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":560916,"thumb_bytes":33186,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 8e3e7c83-2798-48ce-b969-255da783d93e are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"half-dome-long-exposure","name":"Half Dome, flowing sky","name_source":"Studio featured.json","scene":"sky / mountains","studio_group":"double","focus":"50% 42%","tint_rgb":"20,19,18","file":"assets/media/wallpapers/half-dome-long-exposure.jpg","thumb":"assets/media/wallpapers/half-dome-long-exposure-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":589684,"thumb_bytes":38888,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 82a015e1-e118-4163-bdcc-bd264f4ceb2b are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"big-sur-coast","name":"Big Sur coast","name_source":"Studio featured.json","scene":"coast","studio_group":"ocean","focus":"50% 50%","tint_rgb":"20,20,14","file":"assets/media/wallpapers/big-sur-coast.jpg","thumb":"assets/media/wallpapers/big-sur-coast-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":596037,"thumb_bytes":50001,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id e96d6b4f-279a-4c26-b451-65ef2091e006 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"pebble-beach-cypress","name":"Pebble Beach, lone cypress","name_source":"Studio featured.json","scene":"coast","studio_group":"ocean","focus":"55% 55%","tint_rgb":"12,20,28","file":"assets/media/wallpapers/pebble-beach-cypress.jpg","thumb":"assets/media/wallpapers/pebble-beach-cypress-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":588635,"thumb_bytes":49710,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 809a6a6b-2e8a-4686-a2b0-9955c822ec0d are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"alpine-lake-mirror","name":"Alpine lake mirror","name_source":"Studio featured.json","scene":"mountains / lake","studio_group":"mountains","focus":"50% 42%","tint_rgb":"12,19,25","file":"assets/media/wallpapers/alpine-lake-mirror.jpg","thumb":"assets/media/wallpapers/alpine-lake-mirror-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":561958,"thumb_bytes":38401,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 70e5ddc2-151d-430d-9b10-7a4e45237a56 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"rockies-ember-peaks","name":"Rockies, ember peaks","name_source":"Studio featured.json","scene":"mountains","studio_group":"mountains","focus":"50% 20%","tint_rgb":"18,18,20","file":"assets/media/wallpapers/rockies-ember-peaks.jpg","thumb":"assets/media/wallpapers/rockies-ember-peaks-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":575118,"thumb_bytes":53915,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 0bf33963-1ea2-40a1-adfc-b0fdbd5c2a2f are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"lake-tahoe-blue-hour","name":"Lake Tahoe, blue hour","name_source":"Studio featured.json","scene":"lake","studio_group":"ocean","focus":"50% 50%","tint_rgb":"12,18,27","file":"assets/media/wallpapers/lake-tahoe-blue-hour.jpg","thumb":"assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":74,"bytes":591081,"thumb_bytes":30732,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 21b38f77-fec7-48fe-ad69-fe7209aeb41a are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"misty-fir-forest","name":"Misty fir forest","name_source":"library wallpapers.json title (not in the featured set the app ships)","scene":"forest","studio_group":"land","focus":null,"tint_rgb":null,"file":"assets/media/wallpapers/misty-fir-forest.jpg","thumb":"assets/media/wallpapers/misty-fir-forest-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":62,"bytes":574082,"thumb_bytes":50719,"provenance":"AI-generated by Evan in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-16 (text-to-image, 4K 5504x3072), then finished in his Studio (grain/bloom/halation). Prompt, model and Higgsfield job id 45fea6a6-7fb4-4e15-b266-8530fd7414b5 are recorded in 00_Library/01_AI_Library/Wallpapers/wallpapers.json. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"na-pali-coast","name":"N\u0101 Pali coast","name_source":"made for the site 2026-11-17","scene":"coast","studio_group":"ocean","focus":"40% 50%","tint_rgb":"12,20,28","file":"assets/media/wallpapers/na-pali-coast.jpg","thumb":"assets/media/wallpapers/na-pali-coast-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":398412,"thumb_bytes":34496,"provenance":"AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e10830ea-027c-42a5-bc9b-d67cb6c37ecf. Not stock, no third-party photo.","provenance_note":"grain-free original"},{"slug":"maui-palm-bay","name":"Maui, palm bay","name_source":"made for the site 2026-11-17","scene":"coast","studio_group":"ocean","focus":"70% 55%","tint_rgb":"14,22,30","file":"assets/media/wallpapers/maui-palm-bay.jpg","thumb":"assets/media/wallpapers/maui-palm-bay-thumb.jpg","video":null,"video_mobile":null,"width":2560,"height":1429,"quality":70,"bytes":427959,"thumb_bytes":31460,"provenance":"AI-generated in Higgsfield with Nano Banana 2.1 (nano_banana_2_1) on 2026-11-17 (text-to-image, 4K 5504x3072) for the Studio site. Higgsfield job id e446ba67-8370-4d7c-975f-0c2a5b01110b. Not stock, no third-party photo.","provenance_note":"grain-free original"}],"wallpaper_video_note":"No video wallpapers exist: the Studio wallpaper set is 48 still images. The only moving cloud footage Evan generated is selects/above-the-clouds.mp4 (16:9, source 854x480).","logos":[{"file":"assets/media/logos/mirra-icon.svg","brand":"MIRRA","what":"MIRRA app icon (rounded, blue glow, white M). SVG uses blur filters.","bytes":10640},{"file":"assets/media/logos/mirra-icon.png","brand":"MIRRA","what":"MIRRA app icon, PNG 512","bytes":361648,"width":512,"height":512},{"file":"assets/media/logos/mirra-wordmark.svg","brand":"MIRRA","what":"MIRRA lockup: M mark + MIRRA wordmark, white on transparent (for dark backgrounds)","bytes":2248},{"file":"assets/media/logos/mirra-wordmark-text.svg","brand":"MIRRA","what":"MIRRA wordmark only (no M mark), white on transparent","bytes":1805},{"file":"assets/media/logos/mirra-m-black.svg","brand":"MIRRA","what":"MIRRA M mark only, black (recolour with CSS/fill for dark backgrounds)","bytes":400},{"file":"assets/media/logos/ces-logo-white.svg","brand":"Custom Esignature","what":"Custom Esignature main logo: teal E mark + white wordmark (for dark backgrounds)","bytes":4855},{"file":"assets/media/logos/ces-logo-black.svg","brand":"Custom Esignature","what":"Custom Esignature main logo, black wordmark (for light backgrounds)","bytes":5634},{"file":"assets/media/logos/ces-logo-white.png","brand":"Custom Esignature","what":"Custom Esignature main logo white, PNG 512 wide","bytes":16401,"width":512,"height":127},{"file":"assets/media/logos/ces-icon.png","brand":"Custom Esignature","what":"Custom Esignature icon (teal E mark with glow, web clip), PNG 256","bytes":18758,"width":256,"height":256},{"file":"assets/media/logos/studio-app-mark.png","brand":"Studio","what":"Studio app logo art from \"App Logo\" (smoky silver clip mark on near-black), PNG 512","bytes":184581,"width":512,"height":512}],"thumbs":[{"file":"assets/media/thumbs/t01.jpg","from_kind":"film","from_slug":"mirra-multivitamin","at":9.7,"bytes":7676},{"file":"assets/media/thumbs/t02.jpg","from_kind":"select","from_slug":"coastal-highway","at":2.5,"bytes":8774},{"file":"assets/media/thumbs/t03.jpg","from_kind":"film","from_slug":"ces-forest","at":3.2,"bytes":13608},{"file":"assets/media/thumbs/t04.jpg","from_kind":"select","from_slug":"run-club","at":5.0,"bytes":7440},{"file":"assets/media/thumbs/t05.jpg","from_kind":"film","from_slug":"lobby-hero-window","at":2.0,"bytes":9630},{"file":"assets/media/thumbs/t06.jpg","from_kind":"select","from_slug":"surfing","at":6.0,"bytes":5092},{"file":"assets/media/thumbs/t07.jpg","from_kind":"film","from_slug":"ces-email-signature","at":0.5,"bytes":8041},{"file":"assets/media/thumbs/t08.jpg","from_kind":"select","from_slug":"private-jet","at":4.2,"bytes":9360},{"file":"assets/media/thumbs/t09.jpg","from_kind":"film","from_slug":"founders-retreat","at":16.3,"bytes":6422},{"file":"assets/media/thumbs/t10.jpg","from_kind":"film","from_slug":"ces-replied-booked","at":13.3,"bytes":7786},{"file":"assets/media/thumbs/t11.jpg","from_kind":"select","from_slug":"mountain-biking","at":2.0,"bytes":8194},{"file":"assets/media/thumbs/t12.jpg","from_kind":"film","from_slug":"ces-company-becoming","at":9.45,"bytes":9321},{"file":"assets/media/thumbs/t13.jpg","from_kind":"select","from_slug":"cofounder-whiteboard","at":2.0,"bytes":7478},{"file":"assets/media/thumbs/t14.jpg","from_kind":"film","from_slug":"ces-sea-cliffs","at":2.0,"bytes":10735},{"file":"assets/media/thumbs/t15.jpg","from_kind":"select","from_slug":"house-party","at":3.7,"bytes":6293},{"file":"assets/media/thumbs/t16.jpg","from_kind":"film","from_slug":"mirra-multivitamin","at":31.5,"bytes":7205},{"file":"assets/media/thumbs/t17.jpg","from_kind":"select","from_slug":"golf","at":1.2,"bytes":9749},{"file":"assets/media/thumbs/t18.jpg","from_kind":"film","from_slug":"ces-agent-kitchen","at":2.3,"bytes":9559},{"file":"assets/media/thumbs/t19.jpg","from_kind":"select","from_slug":"yacht","at":1.0,"bytes":10042},{"file":"assets/media/thumbs/t20.jpg","from_kind":"film","from_slug":"lobby-hero-window","at":6.0,"bytes":11341},{"file":"assets/media/thumbs/t21.jpg","from_kind":"select","from_slug":"beach-volleyball","at":2.2,"bytes":7336},{"file":"assets/media/thumbs/t22.jpg","from_kind":"film","from_slug":"ces-email-signature","at":7.2,"bytes":10410},{"file":"assets/media/thumbs/t23.jpg","from_kind":"select","from_slug":"tropical-vacation","at":4.2,"bytes":7873},{"file":"assets/media/thumbs/t24.jpg","from_kind":"film","from_slug":"founders-retreat","at":31.3,"bytes":7101},{"file":"assets/media/thumbs/t25.jpg","from_kind":"select","from_slug":"tennis-forehand","at":1.5,"bytes":9618},{"file":"assets/media/thumbs/t26.jpg","from_kind":"film","from_slug":"ces-replied-booked","at":30.6,"bytes":4817},{"file":"assets/media/thumbs/t27.jpg","from_kind":"select","from_slug":"court-dap","at":1.5,"bytes":8021},{"file":"assets/media/thumbs/t28.jpg","from_kind":"film","from_slug":"ces-company-becoming","at":21.6,"bytes":8718}],"file_count":143,"total_bytes":59489044,"app":{"generated":"2026-11-17","note":"Recorded from the real Studio app on a demo Studio folder (two brands, 24 edits). Clips play in this order: hero-open, hero-launch, hero-note, hero-viral, hero-post. No audio. Stills are 2880x1800 with a 1440 copy.","order":["hero-open","hero-launch","hero-note","hero-viral","hero-post"],"files":[{"file":"assets/media/app/hero-launch-1280.mp4","kind":"video","width":1280,"height":800,"bytes":750158,"duration":9.867,"fps":30,"frames":296,"audio":false,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-launch.jpg","kind":"image","width":1920,"height":1200,"bytes":210229,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-launch.mp4","kind":"video","width":1920,"height":1200,"bytes":1321620,"duration":9.867,"fps":30,"frames":296,"audio":false,"clip":"hero-launch","shows":"Prompt: Build me a launch commercial for my company. Home, the film lands in To review, Full edits, Launch commercial, the editor, Play."},{"file":"assets/media/app/hero-note-1280.mp4","kind":"video","width":1280,"height":800,"bytes":483157,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-note.jpg","kind":"image","width":1920,"height":1200,"bytes":171285,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-note.mp4","kind":"video","width":1920,"height":1200,"bytes":840877,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-note","shows":"Prompt: Make the ending hit harder. The editor: the film stops on its end card, the comment is typed, Submit, v02 arrives (one dissolve covers the page refresh)."},{"file":"assets/media/app/hero-open-1280.mp4","kind":"video","width":1280,"height":800,"bytes":1261654,"duration":13.0,"fps":30,"frames":390,"audio":false,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-open.jpg","kind":"image","width":1920,"height":1200,"bytes":42712,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-open.mp4","kind":"video","width":1920,"height":1200,"bytes":2291734,"duration":13.0,"fps":30,"frames":390,"audio":false,"clip":"hero-open","shows":"The app's own opening (mark, Welcome, Evan.), Home, Full edits, a film, the editor, Play."},{"file":"assets/media/app/hero-post-1280.mp4","kind":"video","width":1280,"height":800,"bytes":565799,"duration":9.633,"fps":30,"frames":289,"audio":false,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-post.jpg","kind":"image","width":1920,"height":1200,"bytes":159950,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-post.mp4","kind":"video","width":1920,"height":1200,"bytes":1005016,"duration":9.633,"fps":30,"frames":289,"audio":false,"clip":"hero-post","shows":"Prompt: Post all my content across all my channels. Social, Calendar: the coming weeks fill up, 26 to 45 posts."},{"file":"assets/media/app/hero-viral-1280.mp4","kind":"video","width":1280,"height":800,"bytes":912818,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/hero-viral.jpg","kind":"image","width":1920,"height":1200,"bytes":220310,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/hero-viral.mp4","kind":"video","width":1920,"height":1200,"bytes":1579684,"duration":10.0,"fps":30,"frames":300,"audio":false,"clip":"hero-viral","shows":"Prompt: Recreate this viral video for my company. Viral Lab, a studied video with why it worked, the remake notice, the editor, Play."},{"file":"assets/media/app/still-ads-1440.jpg","kind":"image","width":1440,"height":900,"bytes":180426},{"file":"assets/media/app/still-ads.jpg","kind":"image","width":2880,"height":1800,"bytes":275618},{"file":"assets/media/app/still-aesthetic-1440.jpg","kind":"image","width":1440,"height":900,"bytes":260299},{"file":"assets/media/app/still-aesthetic.jpg","kind":"image","width":2880,"height":1800,"bytes":417363},{"file":"assets/media/app/still-ailib-1440.jpg","kind":"image","width":1440,"height":900,"bytes":307364},{"file":"assets/media/app/still-ailib.jpg","kind":"image","width":2880,"height":1800,"bytes":503646},{"file":"assets/media/app/still-brandkit-1440.jpg","kind":"image","width":1440,"height":900,"bytes":175613},{"file":"assets/media/app/still-brandkit.jpg","kind":"image","width":2880,"height":1800,"bytes":261794},{"file":"assets/media/app/still-editor-1440.jpg","kind":"image","width":1440,"height":900,"bytes":184508},{"file":"assets/media/app/still-editor.jpg","kind":"image","width":2880,"height":1800,"bytes":283767},{"file":"assets/media/app/still-edits-1440.jpg","kind":"image","width":1440,"height":900,"bytes":257939},{"file":"assets/media/app/still-edits.jpg","kind":"image","width":2880,"height":1800,"bytes":410319},{"file":"assets/media/app/still-home-1440.jpg","kind":"image","width":1440,"height":900,"bytes":244041},{"file":"assets/media/app/still-home.jpg","kind":"image","width":2880,"height":1800,"bytes":403491},{"file":"assets/media/app/still-social-calendar-1440.jpg","kind":"image","width":1440,"height":900,"bytes":207301},{"file":"assets/media/app/still-social-calendar.jpg","kind":"image","width":2880,"height":1800,"bytes":330609},{"file":"assets/media/app/still-viral-1440.jpg","kind":"image","width":1440,"height":900,"bytes":249017},{"file":"assets/media/app/still-viral-open-1440.jpg","kind":"image","width":1440,"height":900,"bytes":191595},{"file":"assets/media/app/still-viral-open.jpg","kind":"image","width":2880,"height":1800,"bytes":307508},{"file":"assets/media/app/still-viral.jpg","kind":"image","width":2880,"height":1800,"bytes":395088}]}};
 
-window.SK_WAITLIST = {"brevo_form":"","webhook":""};
+window.SK_WAITLIST = {"api":"","brevo_form":"","webhook":""};
 
 window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""}};
 
@@ -17,6 +17,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
      <video data-play data-src="…" [data-src-m="…"] poster="…" muted playsinline loop>   loads near the viewport, plays only in view
      [data-reveal] (+ style="--i:2")                                                    fades up once in view
      [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
+     [data-gx] (+ data-gx="hot" / "paper")                                               the glass button with the composer's border beam (SK.gx)
      [data-download]                                                                    scrolls to pricing and focuses the invite code (phones: Send to my Mac)
      [data-vo-play="kayla-pricing"]                                                     on click, plays that section's Kayla clip from the top
      [data-film="slug"]                                                                 opens that film from the manifest on click */
@@ -69,6 +70,21 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     if (!el.querySelector(":scope > [data-beam-bloom]")) { var b = document.createElement("span"); b.setAttribute("data-beam-bloom", ""); el.appendChild(b); }
     el.style.setProperty("--beam-strength", String(o.strength));
     SK.onView(el, function () { el.setAttribute("data-active", ""); }, function () { el.removeAttribute("data-active"); }, { margin: "80px" });
+    return el;
+  };
+
+  /* ---------- .gx: the glass button with the composer's border beam (base.css). The beam runs only while the button is on screen. ---------- */
+  SK.gx = function (el, o) {
+    if (!el) return el;
+    o = o || {};
+    el.classList.add("gx");
+    if (o.hot) el.classList.add("hot");
+    if (o.paper) el.classList.add("paper");
+    if (el.querySelector(":scope > .gx-beam")) return el;
+    var s = document.createElement("span");
+    s.className = "gx-beam"; s.setAttribute("data-beam", "cx"); s.setAttribute("aria-hidden", "true"); s.innerHTML = "<span data-beam-bloom></span>";
+    el.insertBefore(s, el.firstChild);
+    SK.onView(el, function () { s.setAttribute("data-active", ""); }, function () { s.removeAttribute("data-active"); }, { margin: "60px" });
     return el;
   };
 
@@ -400,8 +416,18 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       };
       var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
       a.addEventListener("play", function () { started = true; off(); });
-      EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
-      if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
+      /* she can be closed (the x on her pill), and stays closed on later visits until someone asks for her sound again (Enter site) */
+      var OFFK = "studio-kayla-off", root = document.documentElement, isOff = false;
+      try { isOff = localStorage.getItem(OFFK) === "1"; } catch (e) {}
+      SK.kaylaOff = function () { audios.forEach(function (o) { o.pause(); }); root.classList.add("kp-off"); started = true; off(); try { localStorage.setItem(OFFK, "1"); } catch (e) {} };
+      SK.kaylaOn = function () { root.classList.remove("kp-off"); try { localStorage.removeItem(OFFK); } catch (e) {} };
+      var kx = kp.querySelector("[data-kp-x]");
+      if (kx) kx.addEventListener("click", function (e) { e.stopPropagation(); SK.kaylaOff(); });
+      if (isOff) { root.classList.add("kp-off"); started = true; }
+      else {
+        EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
+        if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
+      }
     }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
       if (box._vo) return; box._vo = true;
@@ -496,6 +522,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       SK.onView(el, function () { el.classList.add("in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
     });
     SK.videos();
+    document.querySelectorAll("[data-gx]").forEach(function (el) { var v = el.getAttribute("data-gx"); SK.gx(el, { hot: /hot/.test(v), paper: /paper/.test(v) }); });
     document.querySelectorAll("[data-beam-auto]").forEach(function (el) {
       var r = el.getAttribute("data-beam-radius");
       SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });
@@ -759,6 +786,7 @@ function showGate(next) {
     b.addEventListener("click", function () {
       if (done) return; done = true;
       if (b.getAttribute("data-enter") === "sound") {
+        if (SK.kaylaOn) SK.kaylaOn(); /* asked for sound: she comes back even if closed on an earlier visit */
         var a = SK.kayla && SK.kayla.audio;
         if (a && a.paused) { try { a.currentTime = 0; } catch (e) {} var q = a.play(); q && q.catch(function () {}); }
       }
@@ -4373,31 +4401,46 @@ SK.onView(root, function () { document.documentElement.classList.add("kp-away");
 /* ===== 900-early ===== */
 ;(function () {
 try {
-/* 900 early: early access sign-ups. While they are on, every Download button (nav, hero, steps) says "Get early access", the plans'
-   "Coming soon" says it too, a card above the plans offers it, and all of them open the full-screen sign-up (section.html), as does any
-   link ending in #early-access (the Instagram DM link; it skips the Enter site gate).
-   On when src/waitlist.json names where sign-ups go (a Brevo form, or a webhook), and always on localhost or with ?early to look at it.
-   With nothing named, the live site stays exactly as it was. On localhost with nothing named, a sign-up is only logged to the console.
-   Sent: FIRSTNAME, LASTNAME, EMAIL, SMS (+ SMS__COUNTRY_CODE), ROLE, BRANDS, CLAUDE, SOURCE (utm_source / ref, then the button). */
-var cfg = window.SK_WAITLIST || {};
+/* 900 early: early access sign-ups, built like the app's onboarding (section.html, section.css).
+   While sign-ups are on: every Download button (nav, hero, steps) says "Get early access", the plans' "Coming soon" too, a card above the
+   plans offers it, a floating button follows you down the page, and all of them open the sign-up. So does any link ending in #early-access
+   (the Instagram DM link, and every friend's ?ref= link; both skip the Enter site gate).
+   The sign-up: who you are (pick all that fit), how many brands, Claude yet, then the invite details. Beside each question a piece of
+   Studio answers it, live. Then "You're on the list": your place, your pass, and your own link: each friend who joins moves you up.
+   Where sign-ups go (src/waitlist.json, inlined by build.py): "api" (the waitlist worker in worker/: places and referrals), else
+   "brevo_form" (a Brevo form: no places), else "webhook" (JSON). With none, the live site stays on Download; localhost and ?early show
+   the flow, and on localhost a sign-up is answered with a made-up place. ?api=<url> on localhost points it at a local worker. */
+var cfg = Object.assign({}, window.SK_WAITLIST || {});
+var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
-var wired = !!(cfg.brevo_form || cfg.webhook);
+if (local && Q.get("api")) cfg.api = Q.get("api");
+var API = (cfg.api || "").replace(/\/+$/, "");
+var wired = !!(API || cfg.brevo_form || cfg.webhook);
 var sheet = document.getElementById("early-access");
 if (!sheet) return;
 if (!(wired || local || /[?&]early(=|&|$)/.test(location.search))) { sheet.remove(); return; }
 SK.early = true;
 var html = document.documentElement, KEY = "studio-early", HASH = "#early-access", DEEP = /^#early(-access)?(&|$)/;
 var STAR = '<svg class="ea-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .9c.5 4.1 2.9 6.6 7.1 7.1-4.2.5-6.6 2.9-7.1 7.1C7.5 10.9 5 8.5.9 8 5 7.5 7.5 5 8 .9Z"/></svg>';
+var ARROW = '<span class="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span>';
+var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+var M = "assets/media/";
+
+/* ---------- a friend's link: ?ref=CODE (kept for this visit) ---------- */
+var REF = (Q.get("ref") || H.get("ref") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 16);
+try { if (REF) sessionStorage.setItem("studio-ref", REF); else REF = sessionStorage.getItem("studio-ref") || ""; } catch (e) {}
 
 /* ---------- the buttons ---------- */
 document.querySelectorAll("[data-download]").forEach(function (b) {
   b.removeAttribute("data-download");
-  b.setAttribute("data-early", b.closest(".nav") ? "nav" : b.closest("#hero") ? "hero" : "steps");
+  var where = b.closest(".nav") ? "nav" : b.closest("#hero") ? "hero" : "steps";
+  b.setAttribute("data-early", where);
   b.setAttribute("href", HASH);
   var svg = b.querySelector(":scope > svg");
   if (svg) svg.outerHTML = STAR; else b.insertAdjacentHTML("afterbegin", STAR);
   var sp = b.querySelector(":scope > span:not([data-beam-bloom])");
   if (sp) sp.textContent = "Get early access";
+  if (where === "steps") { b.className = ""; SK.gx(b, { hot: true, paper: !!b.closest(".on-paper") }); b.insertAdjacentHTML("beforeend", ARROW); }
   var help = b.parentNode && b.parentNode.querySelector("[data-send-help]");
   if (help && !help.closest(".pr-open")) { help.removeAttribute("data-send-help"); help.textContent = "14 days of everything, free. Studio is for Mac."; }
 });
@@ -4409,62 +4452,203 @@ document.querySelectorAll(".pd-btn.soon").forEach(function (s) {
   b.innerHTML = "Get early access " + STAR;
   s.replaceWith(b);
 });
-document.querySelectorAll("[data-early-band]").forEach(function (el) { el.hidden = false; });
+document.querySelectorAll("[data-early-band]").forEach(function (el) {
+  el.hidden = false;
+  var b = el.querySelector(".pd-ebtn");
+  if (b) { var ic = b.querySelector("svg"); if (ic) ic.remove(); b.className = "pd-ebtn"; SK.gx(b, { hot: true }); b.insertAdjacentHTML("beforeend", ARROW); }
+});
+
+/* ---------- the floating Get early access: once the hero's button is gone, until Pricing or the footer ---------- */
+(function () {
+  var f = document.createElement("a");
+  f.className = "ea-float away"; f.href = HASH; f.setAttribute("data-early", "float");
+  f.innerHTML = STAR + "<span>Get early access</span>" + ARROW;
+  document.body.appendChild(f);
+  SK.gx(f, { hot: true });
+  var seen = { hero: true, pricing: false, foot: false };
+  function set() { var on = !seen.hero && !seen.pricing && !seen.foot; f.classList.toggle("away", !on); html.classList.toggle("ea-on", on); }
+  [["hero", document.getElementById("hero")], ["pricing", document.getElementById("pricing")], ["foot", document.querySelector(".foot")]].forEach(function (x) {
+    if (!x[1]) { seen[x[0]] = false; return; }
+    SK.onView(x[1], function () { seen[x[0]] = true; set(); }, function () { seen[x[0]] = false; set(); }, { margin: x[0] === "hero" ? "-30% 0px 0px 0px" : "0px 0px -18% 0px" });
+  });
+  set();
+})();
 
 /* ---------- the sheet ---------- */
 var form = sheet.querySelector(".wl-form"), box = sheet.querySelector(".wl-steps"), steps = [].slice.call(sheet.querySelectorAll(".wl-q"));
-var nEl = sheet.querySelector("[data-wl-n]"), bar = sheet.querySelector("[data-wl-bar]"), back = sheet.querySelector("[data-wl-back]");
-var sky = sheet.querySelector(".wl-sky"), err = sheet.querySelector(".wl-err"), go = sheet.querySelector(".wl-go"), doneH = sheet.querySelector("[data-wl-done-h]");
-var sel = sheet.querySelector(".wl-cc select"), ccv = sheet.querySelector(".wl-ccv");
-var at = 0, busy = false, pushed = false, lastFocus = null, ans = {}, from = "link";
+var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
+var dots = [].slice.call(sheet.querySelectorAll(".wl-dots li")), scenes = {};
+sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
+var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go"), fine = sheet.querySelector("[data-wl-fine]");
+var sky = sheet.querySelector(".wl-sky"), err = sheet.querySelector(".wl-err"), fit = sheet.querySelector(".wl-fit"), stage = sheet.querySelector(".wl-stage");
+var sel = sheet.querySelector(".wl-cc select"), ccv = sheet.querySelector(".wl-ccv"), toastEl = sheet.querySelector("[data-wl-toast]");
+var at = 0, busy = false, pushed = false, lastFocus = null, from = "link", ans = { roles: [], brands: "", claude: "" };
+
+function toast(t) { toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toastEl._t); toastEl._t = setTimeout(function () { toastEl.classList.remove("on"); }, 2400); }
 
 /* country codes for the phone: the visitor's own region first */
 var CC = [["US", "1"], ["CA", "1"], ["GB", "44"], ["AU", "61"], ["NZ", "64"], ["IE", "353"], ["DE", "49"], ["FR", "33"], ["ES", "34"], ["IT", "39"], ["NL", "31"], ["BE", "32"], ["CH", "41"], ["AT", "43"], ["SE", "46"], ["NO", "47"], ["DK", "45"], ["FI", "358"], ["PT", "351"], ["PL", "48"], ["AE", "971"], ["SA", "966"], ["IL", "972"], ["TR", "90"], ["ZA", "27"], ["NG", "234"], ["KE", "254"], ["EG", "20"], ["IN", "91"], ["PK", "92"], ["SG", "65"], ["MY", "60"], ["ID", "62"], ["PH", "63"], ["TH", "66"], ["VN", "84"], ["JP", "81"], ["KR", "82"], ["HK", "852"], ["CN", "86"], ["BR", "55"], ["MX", "52"], ["AR", "54"], ["CO", "57"], ["CL", "56"], ["PE", "51"]];
 var flag = function (c) { return String.fromCodePoint.apply(null, c.split("").map(function (x) { return 127397 + x.charCodeAt(0); })); };
 var names = null; try { names = new Intl.DisplayNames(["en"], { type: "region" }); } catch (e) {}
-var region = ((navigator.languages && navigator.languages[0]) || navigator.language || "").split("-")[1];
-region = region && region.toUpperCase();
+var region = (((navigator.languages && navigator.languages[0]) || navigator.language || "").split("-")[1] || "").toUpperCase();
 sel.innerHTML = CC.map(function (c) { return '<option value="' + c[0] + '">' + flag(c[0]) + "  " + (names ? names.of(c[0]) : c[0]) + " (+" + c[1] + ")</option>"; }).join("");
 sel.value = CC.some(function (c) { return c[0] === region; }) ? region : "US";
-function cc() { var c = CC.filter(function (x) { return x[0] === sel.value; })[0] || CC[0]; return c; }
+function cc() { return CC.filter(function (x) { return x[0] === sel.value; })[0] || CC[0]; }
 function showCC() { var c = cc(); ccv.textContent = flag(c[0]) + " +" + c[1]; }
 sel.addEventListener("change", showCC); showCC();
 
-function setStep(n) {
-  var cur = steps[at], nxt = steps[n];
-  if (cur !== nxt) {
+/* ---------- the stage: what Studio makes for who you are, your brands, Claude at work, your pass ---------- */
+var MADE = {
+  "Business owner": ["coffee-friend-arrives", "Ads", "This week's offer"], "Founder": ["cofounder-whiteboard", "Film", "Your launch film"],
+  "Creator": ["surfing", "Reels", "A reel a day"], "Video editor": ["race-track", "Full edits", "First cut, ready"],
+  "Social media manager": ["get-together", "Social", "The month, planned"], "Marketer": ["tennis-forehand", "Ads", "Five to test"],
+  "Agency": ["private-jet", "Brands", "Every client, on brand"], "Something else": ["above-the-clouds", "Ask", "Whatever you dream up"]
+};
+var PROMPT = {
+  "Business owner": "Make an ad for this week's offer", "Founder": "Make me a launch film for my company", "Creator": "Turn yesterday's shoot into three reels",
+  "Video editor": "Cut my footage into a first edit", "Social media manager": "Plan and post this month on every channel", "Marketer": "Make five ad versions and test them",
+  "Agency": "Make this week's posts for all my clients", "Something else": "Make me a launch commercial for my company"
+};
+var BRANDS = [
+  { n: "Your brand", s: "Brand kit ready", m: "Y", bg: "linear-gradient(135deg,#f2efe8,#c9c3b8)", ink: "#111", sw: ["#111", "#f2efe8", "#e8613c", "#2b3a55"] },
+  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#0b0d12", "#e9edf5", "#5b7cff", "#9fb4ff"] },
+  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#06111f", "#ffffff", "#1f7aff", "#7fb4ff"] },
+  { n: "Halden", s: "Running gear", m: "h", bg: "#151515", sw: ["#151515", "#f3f0ea", "#e8613c", "#d8c9b0"] },
+  { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(135deg,#3a5a40,#1f3324)", sw: ["#1f3324", "#efe6d6", "#c98b4b", "#6d8a70"] }
+];
+function list(a) { return a.length < 2 ? (a[0] || "") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+function article(w) { return /^[AEIOU]/i.test(w) ? "an" : "a"; }
+function drawRoles() {
+  var r = ans.roles, made = sheet.querySelector("[data-wl-made]"), forEl = sheet.querySelector("[data-wl-for]");
+  forEl.innerHTML = r.length ? "Made for " + article(r[0]) + " " + list(r.map(function (x) { return "<b>" + esc(x.toLowerCase().replace(/^(\w)/, function (c) { return c; })) + "</b>"; })) + "." : "Tell Studio who you are.";
+  var have = [].slice.call(made.querySelectorAll(".wl-mc")).map(function (c) { return c.getAttribute("data-r"); });
+  var want = r.slice(0, 4);
+  if (have.join("|") === want.join("|")) return;
+  var out = want.map(function (k, i) {
+    var m = MADE[k], fresh = have.indexOf(k) < 0;
+    return '<span class="wl-mc' + (fresh ? " wl-in-a" : "") + '" data-r="' + esc(k) + '" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(m[2]) + "</b></span></span>";
+  });
+  for (var i = want.length; i < 4; i++) out.push('<span class="wl-ph"></span>');
+  made.innerHTML = out.join("");
+}
+function drawBrands() {
+  var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, ul = sheet.querySelector("[data-wl-bl]");
+  sheet.querySelector("[data-wl-bn]").textContent = ans.brands || "1";
+  var have = ul.children.length;
+  ul.innerHTML = BRANDS.slice(0, n).map(function (b, i) {
+    var mono = b.img ? '<img src="' + b.img + '" alt="">' : '<span style="background:' + b.bg + ";color:" + (b.ink || "#fff") + '">' + b.m + "</span>";
+    return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + (i - have) + '"><span class="wl-bm">' + mono.replace("<span", '<span class="x"') + '</span><span class="wl-bt"><b>' + esc(b.n) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
+  }).join("") + (n === 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
+  ul.querySelectorAll(".wl-bm .x").forEach(function (x) { x.style.cssText += ";display:grid;place-items:center;width:100%;height:100%"; });
+}
+function drawClaude() {
+  var chip = sheet.querySelector("[data-wl-chip]"), t = chip.querySelector("span");
+  var c = ans.claude;
+  chip.classList.toggle("wait", c === "Free plan" || c === "Not yet");
+  t.textContent = c === "Pro or Max" ? "Claude connected. You're ready." : c === "Free plan" ? "Claude Pro unlocks Studio. One click." : c === "Not yet" ? "We'll set Claude up with you." : "Claude, connected in one click";
+}
+/* the composer types a request that fits who you are, works, and the cuts land */
+var typeTok = 0;
+function typeLoop() {
+  var my = ++typeTok, comp = sheet.querySelector(".wl-comp"), t = sheet.querySelector("[data-wl-type]"), res = sheet.querySelector("[data-wl-res]");
+  var w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== typeTok) throw 0; }); };
+  var picks = ans.roles.length ? ans.roles : ["Founder"];
+  (async function () {
+    try {
+      for (var round = 0; ; round++) {
+        var k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
+        comp.classList.remove("has", "work"); t.textContent = ""; res.innerHTML = "";
+        await w(500);
+        for (var i = 1; i <= text.length; i++) { t.textContent = text.slice(0, i); comp.classList.toggle("has", i > 0); await w(38 + Math.random() * 30); }
+        await w(450); comp.classList.add("work");
+        await w(1300); comp.classList.remove("work");
+        var shots = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"];
+        res.innerHTML = shots.map(function (s, j) { return '<span class="wl-rc wl-in-a" style="--i:' + j + '"><span class="wl-mc"><img src="' + M + "selects/" + s + '.jpg" alt=""><i>v0' + (j + 1) + "</i><span><em>" + esc(film[1]) + "</em><b>" + (j ? "Version " + (j + 1) : esc(film[2])) + "</b></span></span></span>"; }).join("");
+        await w(3600);
+      }
+    } catch (e) {}
+  })();
+}
+function bars(svg, seed) {
+  var s = 0, out = [], x = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0;
+  s = s || 7;
+  while (x < 300) { s = (s * 16807) % 2147483647; var w = 1 + (s % 4), gap = 1 + ((s >> 3) % 3); out.push('<rect x="' + x + '" y="0" width="' + w + '" height="34"/>'); x += w + gap; }
+  svg.innerHTML = out.join("");
+}
+function drawPass() {
+  var f = val("first"), l = val("last"), e = val("email");
+  var nm = sheet.querySelector("[data-wl-pname]");
+  nm.innerHTML = f || l ? esc((f + " " + l).trim()) : '<span class="ph">Your name</span>';
+  sheet.querySelector("[data-wl-pmail]").textContent = e || "you@email.com";
+  sheet.querySelector("[data-wl-pfor]").textContent = ans.roles[0] || "Mac";
+  bars(sheet.querySelector("[data-wl-bars]"), (f + l + e) || "studio");
+}
+function sizeStage() {
+  var r = stage.getBoundingClientRect();
+  if (!r.width) return;
+  var s = Math.min(r.width / 640, (r.height || 520) / 520, 1.12);
+  fit.style.setProperty("--s", Math.max(.3, s).toFixed(3));
+}
+window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
+
+/* ---------- moving between questions ---------- */
+function stepEl(n) { return steps[n]; }
+function ready(n) { var q = ORDER[n]; return q === "roles" ? ans.roles.length > 0 : q === "you" ? true : !!ans[q]; }
+function setStep(n, quiet) {
+  var cur = stepEl(at), nx = stepEl(n), q = ORDER[n];
+  if (cur !== nx) {
     var h0 = box.offsetHeight;
     cur.classList.remove("on"); cur.classList.toggle("past", n > at);
-    nxt.classList.remove("past"); nxt.classList.add("on");
-    var h1 = nxt.offsetHeight;
+    nx.classList.remove("past"); nx.classList.add("on");
+    var h1 = nx.offsetHeight;
     box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
-    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 520);
+    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    var a = scenes[ORDER[at]], b = scenes[q];
+    if (a) { a.classList.remove("on"); a.classList.toggle("past", n > at); }
+    if (b) { b.classList.remove("past"); b.classList.add("on"); }
   }
   at = n;
-  var last = nxt.getAttribute("data-q") === "done";
-  sheet.classList.toggle("done", last);
-  if (!last) { nEl.textContent = "0" + (n + 1); bar.style.width = (n + 1) * 25 + "%"; }
-  back.hidden = !(n > 0 && !last);
+  sheet.setAttribute("data-step", q);
+  dots.forEach(function (d, i) { d.classList.toggle("on", i === n); d.classList.toggle("ok", i < n); });
+  back.hidden = n === 0;
+  var last = q === "you";
+  next.hidden = last; go.hidden = !last; fine.hidden = !last;
+  next.disabled = !ready(n);
+  if (q === "claude") typeLoop(); else typeTok++;
+  if (q === "you") drawPass();
+  if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
   setTimeout(function () {
-    var s = steps[at], t = s.querySelector(".wl-opt.sel") || s.querySelector(".wl-opt, input");
-    if (s.getAttribute("data-q") === "done") t = s;
-    if (t && sheet.classList.contains("open")) t.focus({ preventScroll: true });
+    if (!sheet.classList.contains("open")) return;
+    if (sheet.classList.contains("done")) { sheet.querySelector("[data-wl-done]").focus({ preventScroll: true }); return; }
+    var s = stepEl(at), t = s.querySelector(".wl-opt.sel") || s.querySelector(".wl-opt, input");
+    if (t && !(SK.mobile() && t.tagName === "INPUT")) t.focus({ preventScroll: true }); /* phones: no keyboard until they tap */
   }, delay);
 }
+function advance() { if (busy || !ready(at) || at >= ORDER.length - 1) return; busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450); }
 steps.forEach(function (s, n) {
+  var multi = s.hasAttribute("data-multi"), q = s.getAttribute("data-q");
   s.querySelectorAll(".wl-opt").forEach(function (o) {
     o.addEventListener("click", function () {
       if (busy) return;
-      s.querySelectorAll(".wl-opt").forEach(function (x) { x.classList.toggle("sel", x === o); x.setAttribute("aria-pressed", x === o ? "true" : "false"); });
-      ans[s.getAttribute("data-q")] = o.getAttribute("data-v");
-      busy = true;
-      setTimeout(function () { busy = false; setStep(n + 1); focusStep(380); }, SK.reduced ? 60 : 300);
+      var v = o.getAttribute("data-v");
+      if (multi) {
+        var on = !o.classList.contains("sel");
+        o.classList.toggle("sel", on); o.setAttribute("aria-pressed", on ? "true" : "false");
+        ans[q] = [].slice.call(s.querySelectorAll(".wl-opt.sel")).map(function (x) { return x.getAttribute("data-v"); });
+      } else {
+        s.querySelectorAll(".wl-opt").forEach(function (x) { x.classList.toggle("sel", x === o); x.setAttribute("aria-pressed", x === o ? "true" : "false"); });
+        ans[q] = v;
+      }
+      next.disabled = !ready(at);
+      if (q === "roles") drawRoles(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
+      if (!multi) setTimeout(advance, SK.reduced ? 60 : 480); /* one answer: on to the next, after it has landed on the right */
     });
   });
 });
-back.addEventListener("click", function () { if (at > 0) { setStep(at - 1); focusStep(380); } });
+next.addEventListener("click", advance);
+back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
 
 /* ---------- open / close ---------- */
 function joined() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
@@ -4474,26 +4658,25 @@ function open(src) {
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) sky.src = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg";
   var j = joined();
-  if (j) { doneH.textContent = j.first ? "You're on the list, " + j.first + "." : "You're on the list."; setStep(steps.length - 1); }
-  sheet.hidden = false;
-  sheet.scrollTop = 0;
+  if (j && j.first) showDone(j, true);
+  sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
-  requestAnimationFrame(function () { requestAnimationFrame(function () { sheet.classList.add("open"); }); });
-  focusStep(SK.reduced ? 0 : 520);
+  requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  if (ORDER[at] === "claude") typeLoop();
+  focusStep(SK.reduced ? 0 : 560);
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open");
-  html.classList.remove("wl-open");
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); typeTok++;
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
   if (pushed) { pushed = false; history.back(); return; } /* popstate hides it */
   hide();
-  if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search.replace(/[?&]ref=[^&]*/, "").replace(/^&/, "?")); } catch (e) {}
 }
 window.addEventListener("popstate", function () { if (DEEP.test(location.hash)) open("link"); else { pushed = false; hide(); } });
 window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)) open("link"); });
@@ -4506,56 +4689,82 @@ document.addEventListener("click", function (e) {
 sheet.querySelectorAll("[data-wl-close]").forEach(function (b) { b.addEventListener("click", close); });
 sheet.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { e.preventDefault(); close(); return; }
+  if (e.key === "Enter" && !sheet.classList.contains("done") && ORDER[at] !== "you" && !e.target.closest(".wl-opt, .wl-back")) { e.preventDefault(); advance(); return; }
   if (e.key !== "Tab") return;
-  var f = [].slice.call(sheet.querySelectorAll("button, input, select, [tabindex='0']")).filter(function (x) { return !x.disabled && !x.closest("[hidden]") && x.offsetParent !== null && getComputedStyle(x).visibility !== "hidden"; });
+  var f = [].slice.call(sheet.querySelectorAll("button, input:not(.wl-hp), select, a[href], [tabindex='0']")).filter(function (x) { return !x.disabled && x.offsetParent !== null && getComputedStyle(x).visibility !== "hidden"; });
   if (!f.length) return;
   var i = f.indexOf(document.activeElement);
   if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
   else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
 });
-if (DEEP.test(location.hash)) setTimeout(function () { open("link"); }, SK.reduced ? 0 : 250);
+if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "link"); }, SK.reduced ? 0 : 250);
+
+/* a friend's invite: say whose */
+if (REF && !joined()) {
+  var refP = sheet.querySelector("[data-wl-ref]");
+  var say = function (first) {
+    var face = refP.querySelector("[data-wl-ref-face]");
+    if (face) face.outerHTML = '<span class="wl-ri">' + esc((first || "S").charAt(0).toUpperCase()) + "</span>";
+    refP.querySelector("[data-wl-ref-t]").textContent = first ? first + " saved you a spot." : "A friend saved you a spot.";
+    refP.hidden = false;
+  };
+  if (API) fetch(API + "/status?code=" + encodeURIComponent(REF)).then(function (r) { return r.json(); }).then(function (j) { say(j && j.ok ? j.first : ""); }, function () { say(""); });
+  else say("");
+}
 
 /* ---------- the details, checked and sent ---------- */
-var inputs = [].slice.call(form.querySelectorAll(".wl-fields input"));
+var inputs = [].slice.call(form.querySelectorAll(".wl-fields input:not(.wl-hp)"));
 inputs.forEach(function (inp, k) {
-  inp.addEventListener("input", function () { var f = inp.closest(".wl-f"); if (f.classList.contains("bad")) { f.classList.remove("bad"); if (!form.querySelector(".wl-f.bad")) err.textContent = ""; } });
+  inp.addEventListener("input", function () { var f = inp.closest(".wl-f"); if (f.classList.contains("bad")) { f.classList.remove("bad"); if (!form.querySelector(".wl-f.bad")) err.textContent = ""; } drawPass(); });
   inp.addEventListener("keydown", function (e) { if (e.key === "Enter" && k < inputs.length - 1) { e.preventDefault(); inputs[k + 1].focus(); } });
+});
+/* the composer's beam runs round the field you are typing in */
+sheet.querySelectorAll(".wl-box").forEach(function (b) {
+  var fb = b.querySelector(".wl-fb");
+  b.addEventListener("focusin", function () { fb.setAttribute("data-active", ""); });
+  b.addEventListener("focusout", function () { fb.removeAttribute("data-active"); });
 });
 function val(n) { return (form.elements[n].value || "").trim(); }
 var SRC = (function () {
-  var q = new URLSearchParams(location.search), h = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
-  var s = q.get("utm_source") || h.get("src") || h.get("ref") || q.get("ref") || "";
+  var s = Q.get("utm_source") || H.get("src") || Q.get("src") || "";
   if (!s && document.referrer) { try { var r = new URL(document.referrer).hostname.replace(/^www\.|^l\.|^m\./, ""); if (r !== location.hostname) s = r.split(".")[0]; } catch (e) {} }
-  return [s || "direct", q.get("utm_medium"), q.get("utm_campaign")].filter(Boolean).join(" · ");
+  if (!s && REF) s = "friend";
+  return [s || "direct", Q.get("utm_medium"), Q.get("utm_campaign")].filter(Boolean).join(" · ");
 })(); /* read once, on arrival: closing the sheet takes the hash off */
-function send(d, c) {
-  var ctl = window.AbortController ? new AbortController() : null, t = ctl && setTimeout(function () { ctl.abort(); }, 15000);
-  var opt = function (o) { if (ctl) o.signal = ctl.signal; return o; };
-  var done = function (x) { clearTimeout(t); return x; };
+function code6() { var a = "23456789abcdefghjkmnpqrstuvwxyz", s = ""; for (var i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+function timed(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, ms); })]); }
+
+function send(d) {
+  if (API) {
+    return timed(fetch(API + "/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }), 15000)
+      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (j) { if (!j || !j.ok) { var e = new Error((j && j.error) || "That didn't go through."); e.human = !!(j && j.error); throw e; } return j; });
+  }
+  var mine = code6(), sms = d.cc ? d.phone : d.phone, base = { code: mine, first: d.first, position: null, total: null, referrals: 0, boost: 0 };
   if (cfg.brevo_form) {
     var post = function (withSms) {
-      var fd = new FormData();
-      Object.keys(d).forEach(function (k) { if (withSms || k !== "SMS") fd.append(k, d[k]); });
-      if (withSms && c) fd.append("SMS__COUNTRY_CODE", "+" + c);
+      var fd = new FormData(), f = { EMAIL: d.email, FIRSTNAME: d.first, LASTNAME: d.last, ROLE: d.roles.join(", "), BRANDS: d.brands, CLAUDE: d.claude, SOURCE: d.source, REF_CODE: mine, REFERRED_BY: d.ref || "" };
+      if (withSms) { f.SMS = sms; if (d.cc) f.SMS__COUNTRY_CODE = "+" + d.cc; }
+      Object.keys(f).forEach(function (k) { fd.append(k, f[k]); });
       fd.append("email_address_check", ""); fd.append("locale", "en");
       var url = cfg.brevo_form + (cfg.brevo_form.indexOf("?") < 0 ? "?" : "&") + "isAjax=1";
-      return fetch(url, opt({ method: "POST", body: fd })).then(function (r) { return r.json().catch(function () { return {}; }); }, function () {
-        return fetch(url, opt({ method: "POST", body: fd, mode: "no-cors" })).then(function () { return { success: true }; }); /* no CORS: it still lands */
+      return timed(fetch(url, { method: "POST", body: fd }), 15000).then(function (r) { return r.json().catch(function () { return {}; }); }, function () {
+        return fetch(url, { method: "POST", body: fd, mode: "no-cors" }).then(function () { return { success: true }; }); /* no CORS: it still lands */
       });
     };
     /* Brevo refuses the whole sign-up when it doesn't like a phone number: then the name and email still go in, without the phone */
-    return post(true).then(function (j) { return j && j.success === false ? post(false) : j; }).then(function (j) { if (j && j.success === false) throw new Error("brevo"); return done(j); });
+    return post(true).then(function (j) { return j && j.success === false ? post(false) : j; }).then(function (j) { if (j && j.success === false) throw new Error("brevo"); return base; });
   }
   if (cfg.webhook) {
-    return fetch(cfg.webhook, opt({ method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(d) })).then(function (r) { if (!r.ok && r.type !== "opaque") throw new Error("hook " + r.status); return done(r); }, function () {
-      return fetch(cfg.webhook, opt({ method: "POST", mode: "no-cors", body: JSON.stringify(d) })).then(done);
-    });
+    return timed(fetch(cfg.webhook, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(Object.assign({ code: mine }, d)) }), 15000)
+      .then(function () { return base; }, function () { return fetch(cfg.webhook, { method: "POST", mode: "no-cors", body: JSON.stringify(Object.assign({ code: mine }, d)) }).then(function () { return base; }); });
   }
-  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900); }
+  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, code: mine, first: d.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; }); }
   return Promise.reject(new Error("not connected"));
 }
 form.addEventListener("submit", function (e) {
   e.preventDefault();
+  if (ORDER[at] !== "you") { advance(); return; }
   if (go.classList.contains("busy")) return;
   var first = val("first"), last = val("last"), email = val("email"), phone = val("phone"), digits = phone.replace(/\D/g, ""), c = cc();
   var bad = [];
@@ -4571,27 +4780,107 @@ form.addEventListener("submit", function (e) {
     return;
   }
   err.textContent = "";
-  var intl = /^\s*\+/.test(phone), sms = intl ? "+" + digits : digits.replace(/^0+/, "");
-  var d = { FIRSTNAME: first, LASTNAME: last, EMAIL: email, SMS: sms, ROLE: ans.role || "", BRANDS: ans.brands || "", CLAUDE: ans.claude || "", SOURCE: SRC + " · " + from };
+  var intl = /^\s*\+/.test(phone);
+  var d = { first: first, last: last, email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: ans.roles, brands: ans.brands, claude: ans.claude, source: SRC + " · " + from, ref: REF, hp: val("company") };
   go.classList.add("busy");
-  send(d, intl ? "" : c[1]).then(function () {
-    try { localStorage.setItem(KEY, JSON.stringify({ first: first, at: Date.now() })); } catch (x) {}
-    doneH.textContent = "You're on the list, " + first + ".";
-    setStep(steps.length - 1);
-    focusStep(400);
-  }, function () {
-    err.textContent = "That didn't go through. Check your connection and try again.";
+  send(d).then(function (j) {
+    var rec = { first: first, last: last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, at: Date.now() };
+    try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
+    showDone(rec);
+  }, function (x) {
+    err.textContent = x && x.human ? x.message : "That didn't go through. Check your connection and try again.";
   }).then(function () { go.classList.remove("busy"); });
 });
 
-/* ---------- share, from the done screen ---------- */
-var share = sheet.querySelector("[data-wl-share]");
-share.addEventListener("click", function () {
-  var url = location.origin + location.pathname + HASH, sp = share.querySelector("span");
-  var copied = function () { sp.textContent = "Link copied"; setTimeout(function () { sp.textContent = "Share Studio"; }, 2200); };
-  if (navigator.share) { navigator.share({ title: "Studio", text: "Studio: if you can dream it, you can post it. Get early access:", url: url }).catch(function () {}); return; }
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(copied, function () {}); else copied();
+/* ---------- You're on the list ---------- */
+var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
+function link(r) { return location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH; }
+var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Get on the list:";
+function showDone(r, quiet) {
+  rec = r;
+  var ranked = typeof r.position === "number" && r.position > 0;
+  sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
+  var pos = sheet.querySelector("[data-wl-dpos]");
+  pos.innerHTML = ranked ? "<b>#" + r.position.toLocaleString("en-US") + "</b> on the list." : "";
+  pos.hidden = !ranked;
+  sheet.querySelector("[data-wl-rboost]").textContent = ranked && r.boost ? "Every friend who joins with your link moves you up " + r.boost + " spots." : "Send them your link. They get early access too.";
+  sheet.querySelector(".wl-rtop b").textContent = ranked ? "Share with 3 friends to move up the list" : "Know someone who'd want this?";
+  sheet.querySelector("[data-wl-slots]").hidden = !ranked;
+  sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) { li.classList.toggle("got", i < (r.referrals || 0)); li.querySelector("span").textContent = i < (r.referrals || 0) ? "Joined" : "Friend " + (i + 1); });
+  var url = link(r);
+  sheet.querySelector("[data-wl-url]").textContent = url.replace(/^https?:\/\//, "");
+  sheet.querySelector("[data-wl-pname2]").textContent = r.first + (r.last ? " " + r.last : "");
+  sheet.querySelector("[data-wl-pmail2]").textContent = ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list";
+  sheet.querySelector("[data-wl-pno2]").textContent = ranked ? "#" + r.position.toLocaleString("en-US") : "In";
+  sheet.querySelector("[data-wl-pref]").textContent = Math.min(3, r.referrals || 0) + " of 3";
+  bars(sheet.querySelector("[data-wl-bars2]"), r.code || r.first);
+  var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
+  var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), wa: "https://wa.me/?text=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
+  sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
+  sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
+  sheet.classList.add("done");
+  sheet.scrollTop = 0; doneEl.scrollTop = 0;
+  typeTok++;
+  if (!quiet) focusStep(500);
+  if (API && r.code) fetch(API + "/status?code=" + encodeURIComponent(r.code)).then(function (x) { return x.json(); }).then(function (j) {
+    if (!j || !j.ok || !rec || rec.code !== r.code) return;
+    if (j.position === r.position && j.referrals === r.referrals) return;
+    var n = Object.assign({}, r, { position: j.position, total: j.total, referrals: j.referrals, boost: j.boost });
+    try { localStorage.setItem(KEY, JSON.stringify(n)); } catch (x) {}
+    showDone(n, true);
+  }).catch(function () {});
+}
+sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
+  if (!rec) return;
+  var url = link(rec), b = this, sp = b.querySelector("span:not(.gx-beam):not([data-beam-bloom])");
+  var ok = function () { sp.textContent = "Copied"; toast("Link copied. Send it to three friends."); setTimeout(function () { sp.textContent = "Copy link"; }, 2200); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { old(url); ok(); }); else { old(url); ok(); }
 });
+function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
+sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
+sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec) story(rec); });
+
+/* an Instagram story: a 1080 x 1920 picture of the pass. Phones share it straight to Instagram; elsewhere it saves, and the link is copied */
+function img(src) { return new Promise(function (res) { var i = new Image(); i.onload = function () { res(i); }; i.onerror = function () { res(null); }; i.src = src; }); }
+function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
+async function story(r) {
+  var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
+  var g = cv.getContext("2d"), bg = await img("assets/hero/sky-m.jpg"), mark = await img("assets/studio-mark.png");
+  try { await document.fonts.ready; } catch (e) {}
+  g.fillStyle = "#0b1220"; g.fillRect(0, 0, W, Hh);
+  if (bg) { var s = Math.max(W / bg.width, Hh / bg.height); g.drawImage(bg, (W - bg.width * s) / 2, (Hh - bg.height * s) * .4, bg.width * s, bg.height * s); }
+  var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,8,12,.35)"); gr.addColorStop(.5, "rgba(5,8,12,.15)"); gr.addColorStop(1, "rgba(5,8,12,.7)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
+  var F = "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", MO = "'IBM Plex Mono', Menlo, monospace";
+  g.fillStyle = "#fff"; g.textAlign = "center";
+  if (mark) g.drawImage(mark, W / 2 - 150, 250, 64, 64);
+  g.font = "600 56px " + F; g.textAlign = "left"; g.fillText("Studio", W / 2 - 66, 298); g.textAlign = "center";
+  g.font = "300 118px " + F; g.fillText("I'm on the list.", W / 2, 560);
+  g.fillStyle = "rgba(245,243,238,.8)"; g.font = "400 46px " + F; g.fillText("One prompt. A finished video.", W / 2, 650);
+  // the pass
+  g.save(); g.translate(W / 2, 1060); g.rotate(-.035);
+  rr(g, -400, -250, 800, 500, 60); g.fillStyle = "rgba(10,14,22,.62)"; g.fill();
+  var rim = g.createLinearGradient(-400, -250, 400, 250); rim.addColorStop(0, "rgba(120,170,255,.95)"); rim.addColorStop(.5, "rgba(255,255,255,.35)"); rim.addColorStop(1, "rgba(0,204,255,.9)"); g.strokeStyle = rim; g.lineWidth = 4; g.stroke();
+  g.textAlign = "left"; g.fillStyle = "rgba(245,243,238,.7)"; g.font = "500 26px " + MO; g.fillText("EARLY ACCESS · INVITE", -340, -160);
+  g.fillStyle = "#fff"; g.font = "300 92px " + F; g.fillText(r.first, -340, -40);
+  g.fillStyle = "rgba(245,243,238,.6)"; g.font = "500 24px " + MO; g.fillText("PLACE", -340, 70); g.fillText("TRIAL", -80, 70);
+  g.fillStyle = "#fff"; g.font = "500 52px " + MO; g.fillText(typeof r.position === "number" ? "#" + r.position : "IN", -340, 140);
+  g.font = "500 42px " + F; g.fillText("14 days, free", -80, 136);
+  g.restore();
+  g.textAlign = "center"; g.fillStyle = "#fff"; g.font = "500 44px " + F; g.fillText("Get early access", W / 2, 1520);
+  g.fillStyle = "rgba(245,243,238,.75)"; g.font = "400 34px " + MO; g.fillText(url.replace(/^https?:\/\//, "").replace(/#.*$/, ""), W / 2, 1580);
+  var blob = await new Promise(function (res) { cv.toBlob(res, "image/png"); });
+  if (!blob) return;
+  var file = new File([blob], "studio-early-access.png", { type: "image/png" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], text: SAY + " " + url }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+  }
+  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(function () {});
+  toast("Story saved. Post it, and add your link with the link sticker (copied).");
+}
+
+/* first paint of the stage */
+drawRoles(); drawBrands(); drawClaude(); drawPass(); setStep(0, true);
 
 } catch (e) { console.error("section 900-early", e); }
 })();
