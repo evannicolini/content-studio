@@ -143,6 +143,7 @@ input { font: inherit; color: inherit; }
   .nav .btn-sm .apple { width: calc(14 * var(--nav-u)); height: calc(14 * var(--nav-u)); margin-top: calc(-2 * var(--nav-u)); }
 }
 html.hx-intro .nav { transition: opacity .7s var(--ease) .2s, transform .8s var(--ease) .2s; }
+html.hx-intro.hx-quick .nav { transition: opacity .45s var(--ease) .05s, transform .5s var(--ease) .05s; }
 html.hx-pre .nav { opacity: 0; transform: translate3d(-50%, -18px, 0); pointer-events: none; }
 html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
 

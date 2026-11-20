@@ -720,6 +720,7 @@ function showGate(next) {
       setTimeout(function () { gate.hidden = true; }, SK.reduced ? 0 : 600);
       if (window.__hxRelease) window.__hxRelease(); else html.classList.remove("hx-hold"); /* scrolling works again, from the top */
       hero.classList.remove("hold");
+      hero.classList.add("quick"); html.classList.add("hx-quick"); /* after Enter the reveal runs quicker: the visitor has already waited on the gate */
       next();
     });
   });
@@ -752,7 +753,7 @@ function intro() {
 }
 function rise(d) {
   setTimeout(function () { hero.classList.remove("pre"); hero.classList.add("go"); html.classList.remove("hx-pre"); }, d);
-  setTimeout(begin, d + 1800);
+  setTimeout(begin, d + (hero.classList.contains("quick") ? 1000 : 1800));
 }
 /* the opening state was put on before the first paint (shell.html, section.html). If it is not there (the 7 s safety net already
    showed the hero because this script was slow to arrive), there is no intro to play: just start the prompts. */
