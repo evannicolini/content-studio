@@ -4853,3 +4853,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 @media (max-width: 960px) { .st-plan > * { min-width: 0; } .st-why { max-width: 100%; } .st-why .wv { width: 56px; } }
 /* phones: the app sits at the top left of its box, as on the waitlist (the desktop centring above pushed it out of view) */
 @media (max-width: 960px) { .st .wl-fit { top: 0; margin-top: 0; transform-origin: 0 0; } }
+/* phones: "Look around first" under the plans, a full-width quiet glass button */
+.st-look.inline { display: flex; align-items: center; justify-content: center; width: 100%; margin: 14px 0 4px; }
+.st-look.inline[hidden] { display: none; }

@@ -7051,6 +7051,12 @@ window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)
 document.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-start], a[href='" + HASH + "']"); if (!t || sheet.contains(t)) return; e.preventDefault(); open(); });
 $("[data-st-close]").addEventListener("click", function () { if (EMBED && PAYWALL) { tell({ type: "studio-paywall:close" }); return; } close(); });
 $("[data-st-look]").addEventListener("click", function () { tell({ type: "studio-paywall:look" }); try { window.webkit.messageHandlers.studio.postMessage({ look: true }); } catch (e) {} });
+/* phones: "Look around first" sits right under the plans, not in the bottom row (the bar needs the whole row; nothing floats over the list) */
+(function () {
+  var lk = $("[data-st-look]"), dock = lk.parentNode, mq = matchMedia("(max-width: 960px)");
+  var place = function () { var plan = stepEl("plan"); if (mq.matches) { if (lk.parentNode !== plan) { plan.appendChild(lk); lk.classList.add("inline"); } } else if (lk.parentNode !== dock) { dock.insertBefore(lk, dock.firstChild); lk.classList.remove("inline"); } };
+  place(); if (mq.addEventListener) mq.addEventListener("change", place);
+})();
 sheet.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { e.preventDefault(); close(); return; }
   if (e.key !== "Tab") return;
