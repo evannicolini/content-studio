@@ -718,10 +718,12 @@ test("You're in: Evan's plain note goes out only when switched on, with the plac
   assert.deepEqual(m.body.sender, { name: "Evan from Studio", email: "hello@askstudio.ai" });
   assert.deepEqual(m.body.replyTo, { name: "Evan from Studio", email: "hello@askstudio.ai" });
   assert.ok(m.text.startsWith("Hey First1, it's Evan from Studio."));
-  assert.ok(m.text.includes("You're #1,225 on the list. Quick favour: reply 'yes' so I know this landed (it also keeps us out of your spam)."), m.text);
-  assert.ok(m.text.includes("Your link to move up: https://askstudio.ai/?ref=" + t.row("person1@example.com").code + "#early-access"));
-  assert.ok(m.text.includes("Your pass, to see friends join (just for you): https://askstudio.ai/?pass=" + t.row("person1@example.com").pass_token));
-  assert.ok(!/<img|<style|style=|<table/i.test(m.html), "no images, no styling, no layout");
+  assert.ok(m.text.includes("You're #1,225 on the list. Quick favour: reply \"yes\" so I know this landed (it also keeps us out of your spam)."), m.text);
+  assert.ok(m.text.includes("Want to move up? Send a friend your link: https://askstudio.ai/?ref=" + t.row("person1@example.com").code + "#early-access"));
+  assert.ok(m.text.includes("You can watch them join on your pass: https://askstudio.ai/?pass=" + t.row("person1@example.com").pass_token));
+  assert.ok(!/<img|<style|<table/i.test(m.html), "no images, no stylesheet, no layout");
+  assert.equal((m.html.match(/style=/g) || []).length, 1, "only Gmail's own font line, like a note typed in Gmail");
+  assert.ok(m.html.includes(">askstudio.ai/?ref=" + t.row("person1@example.com").code + "</a>"), "the link written the way a person types it");
   assert.equal(t.brevo.emails.length, 2, "the code, then You're in, once");
   await t.join(person(1));
   assert.equal(t.brevo.emails.length, 2, "signing up again sends nothing more");
