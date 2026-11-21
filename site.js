@@ -5636,7 +5636,7 @@ var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.h
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 var sheet = document.getElementById("signup");
 if (!sheet) return;
-if (!(local || Q.has("review"))) { sheet.remove(); return; }   /* sales are off: never on the live site */
+if (!(local || Q.has("review") || Q.has("app"))) { sheet.remove(); return; }   /* not a live CTA yet: this Mac, ?review, or Studio's own window (?app#paywall) */
 var LIVE = !local || Q.has("live"), MOCK = !LIVE;
 var CFG = {
   worker: "https://studio-licence.studio-licence.workers.dev",
@@ -5688,7 +5688,9 @@ sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SF
 var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null };
 var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
-var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = INV ? ["in", "code"] : ORDER_ALL.slice();
+/* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
+   (#paywall), which Studio opens at the first export ("Keep your Studio: 14 days for $1"). */
+var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code"];
 /* the in-app paywall ("Unlock it: 14 days for $1"): only the plan and the pay steps, for someone already signed in to Studio.
    Studio opens #paywall in its own window and calls window.StudioPaywall.open({ token, first, email, handoff }) with the session it
    has; on this Mac #paywall alone opens it on the stand-in. When it's paid, it calls window.webkit.messageHandlers.studio (if there)
@@ -5859,6 +5861,7 @@ var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { onL
 function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
+    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
     : { kind: pl.name + " · Trial", name: nm, mail: me.email || "", no: pl.name, trial: "14 days · $1", k3: "Renews", v3: renew, sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
 
@@ -5934,7 +5937,7 @@ function setStep(n, quiet) {
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
-  $$("[data-st-k]").forEach(function (k) { var i = ORDER.indexOf(k.closest(".wl-q").getAttribute("data-q")); k.textContent = (PAYWALL ? "Unlock · " : me.invite ? "Invite · " : "Start · ") + (i + 1) + " of " + ORDER.length; });
+  $$("[data-st-k]").forEach(function (k) { var i = ORDER.indexOf(k.closest(".wl-q").getAttribute("data-q")); k.textContent = (PAYWALL ? "Keep · " : me.invite ? "Invite · " : "Start · ") + (i + 1) + " of " + ORDER.length; });
   back.disabled = n === 0;
   var last = q === "pay";
   next.hidden = last; go.hidden = !last;
@@ -6002,13 +6005,13 @@ function startEmail() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) bad.push("email");
   if (bad.length) { markBad(bad, bad.length === 2 ? "Add your first name and email." : bad[0] === "first" ? "Add your first name." : e ? "That email doesn't look quite right." : "Add your email."); form.elements[bad[0]].focus(); return; }
   markBad([], "");
-  busy = true; next.classList.add("busy"); SFX.play("send");
+  busy = true; next.classList.add("busy"); $("[data-st-next-t]").textContent = "Sending"; SFX.play("send");
   me.first = f; me.email = e.toLowerCase();
   sendCode().then(function () {
     $("[data-st-to]").textContent = me.email;
     clearOtp(); resendIn(30);
     setStep(at + 1);
-  }, function (x) { err(say(x)); }).then(function () { busy = false; next.classList.remove("busy"); });
+  }, function (x) { err(say(x)); }).then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = ORDER[at] === "code" ? "Verify" : "Send my code"; });
 }
 
 /* ---------- step 2: six boxes; typing, paste and the phone's autofill all fill them ---------- */
@@ -6041,10 +6044,12 @@ otp.forEach(function (inp, i) {
     else if (e.key === "Enter") { e.preventDefault(); verify(); }
   });
   inp.addEventListener("paste", function (e) { var t = (e.clipboardData || window.clipboardData).getData("text") || ""; if (/\d/.test(t)) { e.preventDefault(); fill(0, t); } });
-  inp.addEventListener("focus", function () { setTimeout(function () { try { inp.select(); } catch (x) {} }, 0); });
+  inp.addEventListener("focus", function () { setTimeout(function () { if (document.activeElement === inp) try { inp.select(); } catch (x) {} }, 0); });   /* only if still here: a fast typist has moved on */
 });
 var resendB = $("[data-st-resend]"), waitEl = $("[data-st-wait]"), resendT = 0;
+var hintT = 0;
 function resendIn(s) {
+  var hint = $("[data-st-hint]"); hint.hidden = true; clearTimeout(hintT); hintT = setTimeout(function () { if (ORDER[at] === "code" && code().length < 6) hint.hidden = false; }, 20000);
   clearInterval(resendT); resendB.disabled = true; waitEl.textContent = "in " + s + "s";
   resendT = setInterval(function () { s--; if (s <= 0) { clearInterval(resendT); resendB.disabled = false; waitEl.textContent = ""; } else waitEl.textContent = "in " + s + "s"; }, 1000);
 }
@@ -6052,7 +6057,7 @@ resendB.addEventListener("click", function () { if (resendB.disabled) return; er
 $("[data-st-other]").addEventListener("click", function () { clearOtp(); setStep(0); setTimeout(function () { form.elements.email.focus(); form.elements.email.select(); }, 450); });
 function verify() {
   if (busy || code().length !== 6) return;
-  busy = true; otpBox.classList.add("busy"); next.classList.add("busy");
+  busy = true; otpBox.classList.add("busy"); next.classList.add("busy"); $("[data-st-next-t]").textContent = "Checking";
   checkCode(code()).then(function (session) {
     otpBox.classList.remove("busy"); otpBox.classList.add("ok"); SFX.play("land");
     me.session = session;
@@ -6060,7 +6065,7 @@ function verify() {
   }).catch(function (x) {
     otpBox.classList.remove("busy"); badOtp(true); err(say(x)); SFX.play("tick");
     setTimeout(function () { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otp[0].focus(); next.disabled = true; }, 650);
-  }).then(function () { busy = false; next.classList.remove("busy"); });
+  }).then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Verify"; });
 }
 
 /* signed in: hand the session to the server for the Mac app at once, then the plan (or, for an invite, redeem it) */
@@ -6069,7 +6074,7 @@ function signedIn() {
   if (me.invite) return redeem().then(function (r) { me.hand = r; me.invite.done = true; showDone(); });
   return handoff().then(function (h) {
     me.hand = h;
-    if (ORDER[at] !== "plan") setTimeout(function () { setStep(ORDER.indexOf("plan")); }, 420);
+    setTimeout(showDone, 520);   /* free: straight to You're in, and the download */
   }, function (x) {
     if (x && x.state === "has_plan") { me.hand = x; showDone("has"); return; }
     if (x && /sales_off|test_mode_only/.test(x.code || "")) { err("Studio is not on sale yet. Join the waitlist and we'll tell you first."); return; }
@@ -6216,25 +6221,33 @@ function api(path, body) {
   }, function () { throw E("net"); });
 }
 var wait = function (ms) { return SK.sleep(SK.reduced ? 0 : ms); };
+var SLOW = Q.has("slow") ? 9000 : 0;   /* ?slow: the stand-in answers slowly, to see the slow-network states */
+function slowly(promise, what) {
+  if (navigator.onLine === false) return Promise.reject(E("net"));
+  var el = stepEl(ORDER[at]).querySelector(".wl-err"), t1 = setTimeout(function () { el.classList.add("slow"); el.textContent = (what || "Still working") + "… your connection is slow. Hang on."; }, 6000);
+  var t2, gave = new Promise(function (_, rej) { t2 = setTimeout(function () { rej(E("slow", "That's taking too long. Check your connection, then try again.")); }, 25000); });
+  return Promise.race([promise, gave]).then(function (v) { clearTimeout(t1); clearTimeout(t2); el.classList.remove("slow"); if (el.textContent.indexOf("Hang on") > -1) el.textContent = ""; return v; },
+    function (x) { clearTimeout(t1); clearTimeout(t2); el.classList.remove("slow"); throw x; });
+}
 function sendCode() {
-  if (MOCK) return wait(700);
-  return supa().then(function (c) { return c.auth.signInWithOtp({ email: me.email, options: { shouldCreateUser: true, data: { first_name: me.first } } }); }).then(function (r) { if (r.error) throw E(r.error.status === 429 ? "wait" : "send", r.error.status === 429 ? null : r.error.message); });
+  if (MOCK) return slowly(wait(700 + SLOW), "Sending your code");
+  return slowly(supa().then(function (c) { return c.auth.signInWithOtp({ email: me.email, options: { shouldCreateUser: true, data: { first_name: me.first } } }); }).then(function (r) { if (r.error) throw E(r.error.status === 429 ? "wait" : "send", r.error.status === 429 ? null : r.error.message); }), "Sending your code");
 }
 function checkCode(token) {
-  if (MOCK) return wait(800).then(function () { if (token === "000000") throw E("bad_code"); return { access_token: "mock", refresh_token: "mock" }; });
-  return supa().then(function (c) { return c.auth.verifyOtp({ email: me.email, token: token, type: "email" }); }).then(function (r) { if (r.error || !r.data || !r.data.session) throw E(/expired/i.test(r.error && r.error.message || "") ? "expired_code" : "bad_code"); return r.data.session; });
+  if (MOCK) return slowly(wait(800 + SLOW), "Checking").then(function () { if (token === "000000") throw E("bad_code"); return { access_token: "mock", refresh_token: "mock" }; });
+  return slowly(supa().then(function (c) { return c.auth.verifyOtp({ email: me.email, token: token, type: "email" }); }), "Checking").then(function (r) { if (r.error || !r.data || !r.data.session) throw E(/expired/i.test(r.error && r.error.message || "") ? "expired_code" : "bad_code"); return r.data.session; });
 }
 function oauth(way, b) {
   if (MOCK) {
-    b.classList.add("busy"); SFX.play("send");
-    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
+    b.classList.add("busy"); b.querySelector(".t").textContent = "Opening " + (way === "apple" ? "Apple" : "Google") + "…"; SFX.play("send");
+    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
   }
   return supa().then(function (c) { return c.auth.signInWithOAuth({ provider: way, options: { redirectTo: location.origin + location.pathname + location.search + HASH } }); });
 }
 function handoff() {
-  if (MOCK) return wait(400).then(function () { return { code: "STANDIN", download: "#download", open: "studio://handoff?code=STANDIN", expires_in: 3600 }; });
+  if (MOCK) return slowly(wait(400), "Getting Studio ready").then(function () { return { code: "STANDIN", download: "#download", open: "studio://handoff?code=STANDIN", expires_in: 3600 }; });
   var s = me.session; me.session = { access_token: s.access_token };   /* the refresh token is the app's now: never used here again */
-  return api("/web/handoff", { access_token: s.access_token, refresh_token: s.refresh_token });
+  return slowly(api("/web/handoff", { access_token: s.access_token, refresh_token: s.refresh_token }), "Getting Studio ready");
 }
 function checkout() {
   if (MOCK) return wait(1200).then(function () { return { mock: true }; });
@@ -6293,13 +6306,14 @@ var doneEl = $("[data-st-done]");
 function showDone(has) {
   var f = first() || "there", pl = planOf(me.plan), h = me.hand || {};
   wall("done");
-  $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : me.invite ? "You're in" : "Trial started";
+  $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : "You're in";
   $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
   $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : "Studio is downloading.";
   if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = "Back to your export"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
-    : "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before.";
+    : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
+    : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
   open.href = h.open || "studio://"; dl.href = h.download || "#";
   drawPass(pass2);
@@ -6395,10 +6409,10 @@ if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) {
 function paywall(o) {
   o = o || {};
   me.first = (o.first || "").split(/\s+/)[0]; me.email = o.email || ""; me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
-  $("[data-st-badge]").textContent = "Unlock";
+  $("[data-st-badge]").textContent = "Keep your Studio";
   var pq = stepEl("plan");
-  pq.querySelector(".wl-qh").innerHTML = "Unlock it.<span>14 days for $1.</span>";
-  pq.querySelector(".wl-qs").textContent = "Keep exporting with Studio. Pick a plan, and cancel anytime before day 14.";
+  pq.querySelector(".wl-qh").innerHTML = "Keep your Studio.<span>14 days for $1.</span>";
+  pq.querySelector(".wl-qs").textContent = "Your video's ready to export. Pick a plan, and cancel anytime before day 14.";
   if (MOCK && !me.first) { me.first = "Evan"; me.email = "evan@studio.com"; }
   steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
   at = 0; setStep(0, true); drawPlanStage();

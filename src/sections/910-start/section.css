@@ -215,3 +215,16 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 
 /* the in-app paywall: the same plan and pay, opened from Studio when someone exports */
 .wl.st.paywall .st-how, .wl.st.paywall .st-dl { display: none; }
+
+
+/* working states: the button says what it's doing and spins; a slow network gets a calm line, not an error */
+.st .wl-next { position: relative; }
+.st .wl-next.busy .arw { opacity: 0; }
+.st .wl-next.busy::after, .st-way.busy::after { content: ""; position: absolute; top: 50%; width: 15px; height: 15px; margin-top: -7.5px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .22); border-top-color: #fff; animation: wl-spin .8s linear infinite; }
+.st .wl-next.busy::after { right: 18px; }
+.st-way.busy::after { right: 20px; z-index: 2; }
+.st-way.busy { pointer-events: none; }
+.st .wl-err.slow { color: var(--wl-l2); }
+.st .wl-err.slow::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; background: #E1FF4F; box-shadow: 0 0 8px rgba(225, 255, 79, .6); animation: st-wait 1s ease-in-out infinite; vertical-align: 1px; }
+.st-hint { margin-top: 12px; max-width: 30em; font-size: 13.5px; line-height: 1.5; color: var(--wl-l2); }
+.st-hint:not([hidden]) { animation: wl-rise .5s var(--ease) both; }
