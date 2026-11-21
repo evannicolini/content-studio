@@ -1006,3 +1006,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .wl-sh .ic { width: 48px; height: 48px; border-radius: 16px; }
 .wl-sh .ic svg { width: 20px; height: 20px; }
 @media (max-width: 960px) { .wl-share { gap: 7px; justify-content: space-between; } .wl-sh, .wl-sh .ic { width: 46px; height: 46px; border-radius: 15px; } }
+/* the dream interview: the app behind it steps back while they talk */
+.wl .wl-stage { transition: opacity .6s var(--ease), filter .6s var(--ease); }
+.wl[data-step="dream"] .wl-stage { opacity: .32; filter: blur(4px) saturate(.8); }

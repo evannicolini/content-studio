@@ -23,5 +23,8 @@
     "GOAL": "3",
     "CONFIRM_EMAIL": "1",
     "COUNT_OFFSET": "1224"
+  },
+  "ai": {
+    "binding": "AI"
   }
 }

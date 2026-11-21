@@ -348,3 +348,7 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
 .st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */
 .st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }   /* five chips: Something else takes the last row */
+/* the dream interview: the app behind it steps back while they talk */
+.st .wl-stage { transition: opacity .6s var(--ease), filter .6s var(--ease); }
+.st[data-step="dream"] .wl-stage { opacity: .32; filter: blur(4px) saturate(.8); }
+.st[data-step="dream"] .wl-sky { filter: brightness(.82); transition: filter .8s var(--ease); }

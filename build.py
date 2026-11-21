@@ -99,7 +99,7 @@ def pages(secdir, head_js):
     tpl = read(SRC, "page.html")
     for slug, title, desc, css_from, sec, hash_, sky, og, ogalt in PAGES:
         css = [read(SRC, "base.css")] + ["/* ===== %s ===== */\n%s" % (n, read(secdir, n, "section.css")) for n in css_from]
-        js = list(head_js) + [read(SRC, "kit.js")]
+        js = list(head_js) + [read(SRC, "kit.js"), read(SRC, "interview.js")]   # interview.js: SK.interview (the dream interview), on the pages only
         j = read(secdir, sec, "section.js")
         js.append("/* ===== %s ===== */\n;(function () {\ntry {\n%s\n} catch (e) { console.error(%s, e); }\n})();" % (sec, j, json.dumps("section " + sec)))
         js.append("window.SK && SK.start && SK.start();")

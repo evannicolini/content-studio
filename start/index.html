@@ -5,27 +5,27 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <!-- A page of its own (build.py PAGES): one sheet, the shared look, nothing of the main site. Every path is from the site's root. -->
 <base href="../">
-<title>Start free · Studio</title>
+<title>Start free · Studio, on your Mac</title>
 <meta name="description" content="Sign in and Studio downloads. Make your first video before you pay a thing.">
 <meta name="color-scheme" content="dark">
 <link rel="canonical" href="https://askstudio.ai/start/">
-<meta property="og:title" content="Start free · Studio">
+<meta property="og:title" content="Start free · Studio, on your Mac">
 <meta property="og:description" content="Sign in and Studio downloads. Make your first video before you pay a thing.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://askstudio.ai/start/">
 <meta property="og:site_name" content="Studio">
-<meta property="og:image" content="https://askstudio.ai/assets/{{OG}}.jpg">
+<meta property="og:image" content="https://askstudio.ai/assets/og-start.jpg">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
-<meta property="og:image:alt" content="{{OGALT}}">
-<meta property="og:image" content="https://askstudio.ai/assets/{{OG}}-sq.jpg">
+<meta property="og:image:alt" content="The Studio app on the orange dune: Good evening, and a launch commercial being asked for. Start free.">
+<meta property="og:image" content="https://askstudio.ai/assets/og-start-sq.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="1200">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Start free · Studio">
+<meta name="twitter:title" content="Start free · Studio, on your Mac">
 <meta name="twitter:description" content="Sign in and Studio downloads. Make your first video before you pay a thing.">
-<meta name="twitter:image" content="https://askstudio.ai/assets/{{OG}}.jpg">
-<meta name="twitter:image:alt" content="{{OGALT}}">
+<meta name="twitter:image" content="https://askstudio.ai/assets/og-start.jpg">
+<meta name="twitter:image:alt" content="The Studio app on the orange dune: Good evening, and a launch commercial being asked for. Start free.">
 <link rel="icon" href="assets/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -48,7 +48,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="start/page.css?v=b3f4d57e">
+<link rel="stylesheet" href="start/page.css?v=8ec63974">
 <style>html.sk-page { background: #1b1a19; } html.sk-page body { background: transparent; }</style>
 </head>
 <body>
@@ -178,7 +178,7 @@
           </div>
           <div class="wl-q" data-q="make" data-multi role="group" aria-labelledby="st-q-make">
             <p class="wl-k" data-st-k>Start · 6 of 6</p>
-            <h3 class="wl-qh" id="st-q-make"><b>Last one.</b><span>What do you want to make first?</span></h3>
+            <h3 class="wl-qh" id="st-q-make"><b>What do you want</b><span>to make first?</span></h3>
             <p class="wl-qs">Pick as many as you like. They'll be waiting for you when you open Studio.</p>
             <div class="wl-opts two">
               <button type="button" class="wl-opt" data-v="Ads" aria-pressed="false"><b>Ads</b></button>
@@ -187,6 +187,13 @@
               <button type="button" class="wl-opt" data-v="Carousels" aria-pressed="false"><b>Carousels</b></button>
               <button type="button" class="wl-opt" data-v="Something else" aria-pressed="false"><b>Something else</b></button>
             </div>
+          </div>
+          <!-- the dream interview: Kayla asks, they talk, the words appear live (SK.interview draws the card) -->
+          <div class="wl-q" data-q="dream" role="group" aria-labelledby="st-q-dream">
+            <p class="wl-k" data-st-k>Start · 7 of 7</p>
+            <h3 class="wl-qh" id="st-q-dream"><b>One more, my favorite.</b><span>What's your dream outcome?</span></h3>
+            <p class="wl-qs">Picture Studio working perfectly for you. What does it look like, and how should your content make people feel?</p>
+            <div class="st-dream" data-st-dream></div>
           </div>
 
           <!-- 3: the plan -->
@@ -231,7 +238,7 @@
           <button type="button" class="st-look" data-st-look hidden>Look around first</button>
           <div class="wl-bar">
             <button type="button" class="wl-back" data-st-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
-            <span class="wl-seg" aria-hidden="true" data-st-seg><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
+            <span class="wl-seg" aria-hidden="true" data-st-seg><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
             <button type="button" class="wl-next" data-st-next data-gx disabled><span data-st-next-t>Continue</span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
             <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Start 14 days for $1</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
           </div>
@@ -293,6 +300,6 @@
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="start/page.js?v=b3f4d57e"></script>
+<script src="start/page.js?v=8ec63974"></script>
 </body>
 </html>

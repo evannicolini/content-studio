@@ -1,7 +1,7 @@
 # Studio Privacy Policy
 
 **Effective date:** November 20, 2026
-**Last updated:** November 20, 2026
+**Last updated:** November 21, 2026
 
 ## The short version
 
@@ -26,6 +26,7 @@ This Privacy Policy explains how Nicolini Productions LLC, a California company 
 | --- | --- | --- |
 | Account | Name, email address, sign-in method (Google, Apple or email code), the account identifier from Google or Apple | Creating an account |
 | Waitlist | First and last name, email, phone number, role, number of brands, how you use Claude, referral code | Joining the waitlist |
+| Your dream outcome | Your answer to "What's your dream outcome?", as text (spoken or typed), and how long you spoke. **When you answer by voice, your audio is turned into text as you speak and is never stored: we keep only the words.** | Answering it on the waitlist or when you sign up |
 | Billing | Plan, seat count, billing status and history, billing country and postal code, the last four digits and brand of your card (shown to us by Stripe) | Starting a trial or subscription |
 | Communications | Messages and attachments you send us, survey answers, feedback | Contacting us |
 | SMS | Mobile number, your SMS consent record, opt-out status | Opting in to texts |
@@ -94,6 +95,7 @@ We share personal information only as described here.
 | --- | --- | --- |
 | Supabase | Authentication and database | Account, licence, waitlist and referral data |
 | Cloudflare (Workers, D1) | Backend services, data storage, security | Licence, usage, diagnostics, website request data |
+| Cloudflare Workers AI | Speech to text for the dream-outcome answer | Your voice while you answer (processed to text, not stored) |
 | Stripe | Payment processing and billing | Billing data; Stripe collects your card details directly |
 | Brevo | Email, SMS and contact management | Name, email, phone, waitlist fields, consent and engagement data |
 | Google Workspace | Our company email | Messages you send us |

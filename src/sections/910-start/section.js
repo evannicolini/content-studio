@@ -33,7 +33,8 @@ try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
 /* Kayla's sign-up lines that are recorded (assets/audio/<key>.mp3 + .json). Add a key here when its file lands; the rest stay silent.
    su-in su-code su-ok su-done pw-plan pw-ok pw-pay pw-promo pw-notrial pw-done */
 var VO = ["su-in", "su-code", "su-ok", "su-done", "pw-plan", "pw-ok", "pw-pay", "pw-promo", "pw-notrial", "pw-done",
-  "wl-roles", "wl-brands", "wl-claude", "wl-b1", "wl-b2", "wl-b4", "wl-cpro", "wl-cfree", "wl-cno", "su-make", "su-dl", "su-mac"];   /* v3: the waitlist's own takes for the shared questions */
+  "wl-roles", "wl-brands", "wl-claude", "wl-b1", "wl-b2", "wl-b4", "wl-cpro", "wl-cfree", "wl-cno", "su-make", "su-dl", "su-mac",
+  "wl-dream-ask", "wl-dream-nudge", "wl-dream-thanks", "wl-dream-back", "wl-dream-time", "wl-dream-prior"];   /* the dream interview (SK.interview) */   /* v3: the waitlist's own takes for the shared questions */
 var SFX = (function () {
   /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
      are fetched and decoded right away, so the first click can play her at once */
@@ -113,9 +114,15 @@ var KAY = (function () {
     "wl-claude": "Studio runs on Claude. Do you use it yet? If not, that's totally fine. We'll set it up together.",
     "wl-b1": "One brand. All in. Love that.", "wl-b2": "Two or three. Studio keeps every one of them looking like itself.", "wl-b4": "Four or more? You're exactly who we built this for.",
     "wl-cpro": "Perfect. You're already set.", "wl-cfree": "The free plan is a great place to start.", "wl-cno": "No problem. We'll walk you through it.",
-    "su-make": "Last one. What do you want to make first? Pick as many as you like, and it'll be waiting for you when you open Studio.",
+    "su-make": "And what do you want to make first? Pick as many as you like, and it'll be waiting for you when you open Studio.",
     "su-dl": "You're in. Download Studio, open it... and you're already signed in.",
-    "su-mac": "Studio is for Mac, so I just emailed you a link. Open it on your Mac, and you're in."
+    "su-mac": "Studio is for Mac, so I just emailed you a link. Open it on your Mac, and you're in.",
+    "wl-dream-ask": "Okay, one more, and it's my favorite. Picture Studio working perfectly for you. What does that look like? And what do you want people to feel when they see your content? Just talk... I'm listening.",
+    "wl-dream-nudge": "Give me a little more. What would make you say... that's exactly it?",
+    "wl-dream-thanks": "Love that. We'll keep that in mind.",
+    "wl-dream-back": "Welcome back. Everything you said is still here. Keep going whenever you're ready.",
+    "wl-dream-time": "That's time... and every word is saved.",
+    "wl-dream-prior": "Here's what you told me before. Anything you'd add?"
   };
   var UNRECORDED = {}, waits = {};   /* a line with no voice file yet: she shows the words and stays quiet */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1, "wl-b1": 1, "wl-b2": 1, "wl-b4": 1, "wl-cpro": 1, "wl-cfree": 1, "wl-cno": 1 }, reacting = false;
@@ -140,7 +147,7 @@ var KAY = (function () {
     if (vo) { vo.stop(); vo = null; }
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
-    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); idle(); return; }
     if (!SFX.has(cur) && VO.indexOf(cur) > -1 && (waits[cur] = (waits[cur] || 0) + 1) < 50) { var k0 = cur; queue.unshift(k0); setTimeout(function () { if (my === tok) next(); }, 100); return; }   /* recorded but still loading (a fresh page): wait for it, up to 5 s */
     if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }   /* not recorded yet: skip it, quietly */
     words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
@@ -165,7 +172,9 @@ var KAY = (function () {
   function block(my) { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); }
   a.addEventListener("ended", function () { ended(tok); });
   function say(keys) { queue = [].concat(keys); a.pause(); next(); }
-  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); }
+  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); idle(); }
+  var afters = [];   /* the dream interview waits for her to finish before the mic opens */
+  function idle() { var f = afters; afters = []; f.forEach(function (cb) { cb(); }); }
   pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
   /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
   function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
@@ -174,7 +183,9 @@ var KAY = (function () {
   /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
   function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
   function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
-  return { say: say, stop: stop, react: react, line: line, text: function (k) { return LINES[k]; } };
+  /* say a line and resolve when she's done (with no sound: after a moment to read it) */
+  function sayThen(k) { return new Promise(function (res) { var done = false, fin = function () { if (!done) { done = true; res(); } }; say([k]); afters.push(fin); setTimeout(fin, !SOUND || !SFX.has(k) ? 2200 : ((dur[k] || 9) + 3) * 1000); }); }
+  return { say: say, stop: stop, react: react, line: line, sayThen: sayThen, talking: function () { return pill.classList.contains("talk"); }, text: function (k) { return LINES[k]; } };
 })();
 var sndB = $("[data-st-snd]");
 function setSound(on) {
@@ -194,14 +205,14 @@ var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
 /* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
    (#paywall), which Studio opens at the first export ("Keep your Studio: 14 days for $1"). */
-var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code", "roles", "brands", "claude", "make"];   /* v3: who they are, after the code */
+var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code", "roles", "brands", "claude", "make", "dream"];   /* v3: who they are, after the code; then the dream interview */
 /* the in-app paywall ("Unlock it: 14 days for $1"): only the plan and the pay steps, for someone already signed in to Studio.
    Studio opens #paywall in its own window and calls window.StudioPaywall.open({ token, first, email, handoff }) with the session it
    has; on this Mac #paywall alone opens it on the stand-in. When it's paid, it calls window.webkit.messageHandlers.studio (if there)
    with { unlocked: true, plan, period }, and its button goes back to Studio. */
 var PAYWALL = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
 if (PAYWALL) { ORDER = ["plan", "pay"]; sheet.classList.add("paywall"); }
-var SCENE = { "in": "home", code: "home", roles: "home", brands: "home", claude: "home", make: "home", plan: "home", pay: "pass" };
+var SCENE = { "in": "home", code: "home", roles: "home", brands: "home", claude: "home", make: "home", dream: "home", plan: "home", pay: "pass" };
 var segs = $$("[data-st-seg] i"), scenes = {};
 $$(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
 var back = $("[data-st-back]"), next = $("[data-st-next]"), go = $(".wl-go"), sky = $(".wl-sky"), fit = $(".wl-fit"), stage = $(".wl-stage"), toastEl = $("[data-st-toast]");
@@ -284,7 +295,7 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
 /* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
-var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
+var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", dream: "su/code", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
 function setWalls(src) { Object.keys(WALLSET).forEach(function (k) { var u = src || "assets/" + WALLSET[k] + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
 var wallCache = {}, wallTok = 0, wallNow = "";
@@ -443,6 +454,7 @@ function ready() {
   if (q === "plan") return !!me.plan;
   if (q === "roles" || q === "make") return ans[q].length > 0;
   if (q === "brands" || q === "claude") return !!ans[q];
+  if (q === "dream") return !!IV && IV.ready();
   return true;
 }
 var LINE = { "in": "su-in", code: "su-code", roles: "wl-roles", brands: "wl-brands", claude: "wl-claude", make: "su-make", plan: "pw-plan", pay: "pw-pay" };
@@ -486,7 +498,9 @@ function setStep(n, quiet, ack) {
   story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
-  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
+  if (IV && q !== "dream") IV.leave();
+  if (!quiet && sheet.classList.contains("open") && q === "dream") { IV.open(); }   /* the interview plays its own lines */
+  else if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
@@ -510,6 +524,7 @@ function advance() {
   if (q === "code") return verify();
   if (!ready()) return;
   if (q === "make") return finish();
+  if (q === "dream") return dreamNext();
   setStep(at + 1, false, q === "plan" ? "pw-ok" : null);   /* "Good choice." */
 }
 
@@ -632,7 +647,8 @@ function signedIn() {
 var ans = { roles: [], brands: "", claude: "", make: [] };
 var WAITLIST = "https://studio-waitlist.studio-licence.workers.dev";
 function answered() { var md = me.session && me.session.user && me.session.user.user_metadata; return md && md.onboarding && md.onboarding.answered_at; }
-function askOrDone() { if (PAYWALL || answered()) { showDone(); return; } setStep(ORDER.indexOf("roles"), false); }
+function dreamt() { var md = me.session && me.session.user && me.session.user.user_metadata; return md && md.onboarding && md.onboarding.dream; }
+function askOrDone() { if (PAYWALL || answered() && dreamt()) { showDone(); return; } setStep(ORDER.indexOf(answered() ? "dream" : "roles"), false); }
 [].forEach.call(sheet.querySelectorAll('.wl-q[data-q="roles"], .wl-q[data-q="brands"], .wl-q[data-q="claude"], .wl-q[data-q="make"]'), function (stepQ) {
   var q = stepQ.getAttribute("data-q"), multi = stepQ.hasAttribute("data-multi");
   stepQ.querySelectorAll(".wl-opt").forEach(function (o) {
@@ -655,7 +671,34 @@ function finish() {
     supa().then(function (c) { return c.auth.updateUser({ data: { onboarding: o } }); }).catch(function () {}),
     fetch(WAITLIST + "/signup/profile", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ access_token: me.session.access_token, roles: o.roles, brands: o.brands, claude: o.claude, first_make: o.first_make }) }).catch(function () {})
   ]);
-  save.then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Finish"; showDone(); });   /* never blocks You're in */
+  me.onb = o;
+  save.then(function () { busy = false; next.classList.remove("busy"); setStep(ORDER.indexOf("dream")); });   /* never blocks: on to the dream interview */
+}
+
+/* ---------- the dream interview: Kayla asks, they talk (SK.interview, src/interview.js; the server is the waitlist Worker) ----------
+   Supabase user_metadata.onboarding.dream = { text, words, seconds, nudged, at }; Brevo DREAM / DREAM_AT through the Worker. */
+var DREAM_API = local ? (Q.get("wl") || "http://127.0.0.1:8818") : WAITLIST;   /* this Mac: the Worker on this Mac (node or wrangler dev) */
+var IV = SK.interview({
+  host: $("[data-st-dream]"), api: DREAM_API, kind: MOCK ? "waitlist" : "signup",
+  token: function () { return MOCK || !me.session ? null : me.session.access_token; },
+  storeKey: "studio-dream-signup" + (MOCK ? "-mock" : ""),
+  say: function (k) { return KAY.sayThen("wl-dream-" + k); }, talking: KAY.talking,
+  sfx: function (n) { SFX.play(n === "tick" ? "tick" : n, { gain: n === "ask" ? .8 : 1 }); }, duck: function (on) { SFX.bed.duck(on); },
+  onChange: function () { if (ORDER[at] === "dream" && !busy) next.disabled = !ready(); }
+});
+function dreamNext() {
+  if (busy) return;
+  var was = IV.state(); if (was === "review" || was === "typing") { busy = true; next.classList.add("busy"); $("[data-st-next-t]").textContent = "Sending"; }
+  IV.next().then(function (r) {
+    busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Continue";
+    if (!r) { next.disabled = !ready(); return; }
+    var dream = { text: r.text, words: r.words, seconds: r.seconds, nudged: !!r.nudged, at: r.at };
+    if (!MOCK && me.session) {
+      var md = me.session.user && me.session.user.user_metadata || {};
+      supa().then(function (c) { return c.auth.updateUser({ data: { onboarding: Object.assign({}, md.onboarding || {}, me.onb || {}, { dream: dream }) } }); }).catch(function () {});
+    }
+    me.thanks = true; showDone();
+  });
 }
 
 /* ---------- step 3: the plan ---------- */
@@ -1037,7 +1080,7 @@ function showDone(has) {
     pass2.enter(2100);
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
-    SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"]);
+    SFX.bed.swell(); KAY.say((me.thanks ? ["wl-dream-thanks"] : []).concat([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"])); me.thanks = false;
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
     if (PAYWALL) { tell({ type: "studio-paywall:unlocked", plan: me.plan, period: me.period }); try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
     else if (mode === "mac") sendMacLink();   /* v3: no surprise download; on a phone the link goes to their email */
@@ -1181,7 +1224,7 @@ restartB.addEventListener("click", function () { location.href = location.pathna
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
 if (local && !EMBED && window.SK_PAGE) {
-  var CH = [["in", "Sign in"], ["code", "Email code"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["make", "Make first"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
+  var CH = [["in", "Sign in"], ["code", "Email code"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["make", "Make first"], ["dream", "Dream outcome"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
   var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
   var chGo = function (id) {
     var wantPay = /^(plan|pay|unlocked)$/.test(id);

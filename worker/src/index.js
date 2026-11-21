@@ -20,6 +20,7 @@
 // Brevo is told after the answer has gone (ctx.waitUntil), so a slow or failing Brevo never fails a sign-up.
 
 import { confirmEmail, youreInEmail, macEmail } from "./emails.js";
+import { dreamApi } from "./dream.js";
 export { confirmEmail, youreInEmail, inviteEmail, welcomeEmail } from "./emails.js";
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-alikes
@@ -210,6 +211,7 @@ async function join(request, env, ctx) {
         if (!/UNIQUE.*signups\.code/i.test(String((e && e.message) || e))) throw e;   // a code already taken: draw again
       }
     }
+    if (added) await bindDream(env, b, f.email, added.seq).catch((e) => console.error("dream bind", String(e)));
     if (added && !confirmOn(env)) return await confirmRow(env, ctx, added, "unverified", true);   // confirmation off: it counts now
     if (added) return json(await pending(env, added, await sendCode(env, added)));   // the referrer's count goes up on confirm
     if (!raced) throw new Error("six referral codes in a row were taken");
@@ -229,6 +231,7 @@ async function join(request, env, ctx) {
   if (f.notify) await env.DB.prepare("UPDATE signups SET sms_notify = 1, sms_notify_at = ?, sms_notify_text = ? WHERE seq = ?").bind(t, f.notifyText, row.seq).run();
   if (f.marketing) await env.DB.prepare("UPDATE signups SET sms_marketing = 1, sms_marketing_at = ?, sms_marketing_text = ? WHERE seq = ?").bind(t, f.marketingText, row.seq).run();
   if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
+  await bindDream(env, b, f.email, row.seq).catch((e) => console.error("dream bind", String(e)));
   row = await bySeq(env, row.seq);
   if (!row.confirmed_at && !confirmOn(env)) return await confirmRow(env, ctx, row, "unverified", false);
   if (!row.confirmed_at) {
@@ -237,6 +240,12 @@ async function join(request, env, ctx) {
   }
   later(ctx, afterJoin(env, row.seq, null));
   return json(await answer(env, row, true));
+}
+// the waitlist's dream answer came before the email: tie it to the row (and Brevo, once the fields exist)
+async function bindDream(env, b, email, seq) {
+  const id = typeof b.dream === "string" ? b.dream : ""; if (!id) return;
+  const got = await dream().bind(env, id, email);
+  if (got) await env.DB.prepare("UPDATE signups SET dream_id = ? WHERE seq = ?").bind(got, seq).run();
 }
 
 // ------------------------------------------------------------------------------------------------ confirmation
@@ -577,7 +586,7 @@ async function supaUser(env, token) {
     if (!r.ok) return null;
     const u = await r.json(); if (!u || !u.email) return null;
     const md = u.user_metadata || {};
-    return { email: String(u.email).toLowerCase(), first: text(md.first_name || md.given_name || md.name || "", 80).split(/\s+/)[0] };
+    return { id: String(u.id || ""), email: String(u.email).toLowerCase(), first: text(md.first_name || md.given_name || md.name || "", 80).split(/\s+/)[0] };
   } catch { return null; }
 }
 const PICK = { roles: ["Founder", "Business owner", "Creator", "Video editor", "Agency", "Social media manager", "Marketer", "Something else"], brands: ["1", "2-3", "4+"], claude: ["Pro or Max", "Free plan", "Not yet"], make: ["Ads", "Reels", "Launch films", "Carousels", "Something else"] };
@@ -605,8 +614,15 @@ async function macLink(request, env) {
   return json({ ok: true, sent: r.ok, link });
 }
 
+let DREAM = null;   // made on first use, with this file's helpers
+const dream = () => DREAM || (DREAM = dreamApi({ json, fail, text, now, rateOk, ipKey, brevo, supaUser, corsFor }));
+
 async function route(request, url, env, ctx) {
   const path = url.pathname, m = request.method;
+  if (path === "/dream/start") return m === "POST" ? await dream().start(request, env) : fail("Use POST.", 405);
+  if (path === "/dream/chunk") return m === "POST" ? await dream().chunk(request, env, url) : fail("Use POST.", 405);
+  if (path === "/dream/save") return m === "POST" ? await dream().save(request, env) : fail("Use POST.", 405);
+  if (path === "/dream/finish") return m === "POST" ? await dream().finish(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/join") return m === "POST" ? await join(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/confirm") return m === "POST" ? await confirm(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/signup/profile") return m === "POST" ? await signupProfile(request, env) : fail("Use POST.", 405);
@@ -628,6 +644,7 @@ async function route(request, url, env, ctx) {
     if (path === "/admin/brevo-check" && m === "GET") return await brevoCheck(env);
     if (path === "/admin/brevo-contact" && m === "GET") return await brevoContact(url, env);
     if (path === "/admin/mail-events" && m === "GET") return await mailEvents(url, env);
+    if (path === "/admin/dreams.csv" && m === "GET") return await dream().csv(env);
   }
   return fail("Not found.", 404);
 }
@@ -635,6 +652,9 @@ async function route(request, url, env, ctx) {
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === "/dream/listen") {   // the live interview: a WebSocket answer can't take extra headers, so it skips the loop below
+      try { return await dream().listen(request, env, url); } catch (e) { console.error("listen", String((e && e.message) || e).slice(0, 300)); return fail("Listening is busy. Try again.", 503); }
+    }
     const cors = corsFor(request, env);
     if (cors === null) return fail("This site is not allowed to use the waitlist.", 403);
     if (request.method === "OPTIONS") {

@@ -4,6 +4,7 @@
 // (tests/fakes.mjs) for each test.
 import assert from "node:assert/strict";
 import worker, { e164, confirmEmail } from "../src/index.js";
+import { stitch, gaps, wordsOf } from "../src/dream.js";
 import { d1 } from "./d1.mjs";
 import { fakeBrevo } from "./fakes.mjs";
 
@@ -810,6 +811,97 @@ test("sign-up on a phone: one Get Studio on your Mac email, at most 3 an hour", 
   const capped = await t.call("POST", "/signup/mac-link", { body: { access_token: "good" } });
   assert.equal(capped.status, 429);
   assert.equal((await t.call("POST", "/signup/mac-link", { body: { access_token: "x" } })).status, 401);
+});
+
+// ------------------------------------------------------------------ the dream interview (no audio kept; every phrase saved)
+const tone = (sec, amp = 8000) => { const n = Math.round(sec * 16000), a = new Int16Array(n); for (let i = 0; i < n; i++) a[i] = Math.round(amp * Math.sin(i / 8)); return new Uint8Array(a.buffer); };
+function withAI(t, said = () => "and that is the dream") {
+  const calls = [];
+  t.env.AI = { run: async (model, input) => { calls.push({ model, input }); return { text: said(calls.length), segments: [{ text: said(calls.length), no_speech_prob: 0.05 }] }; } };
+  return calls;
+}
+test("dream: phrases stitch in clock order; a repair of a stretch already covered is left out", async () => {
+  const parts = [{ id: 1, t0: 0, t1: 4, text: "I want", src: "nova" }, { id: 3, t0: 8, t1: 12, text: "people to feel it.", src: "nova" }, { id: 2, t0: 4, t1: 8, text: "my brand to look", src: "whisper" }, { id: 4, t0: 0.2, t1: 3.9, text: "I want (again)", src: "whisper" }];
+  assert.equal(stitch(parts), "I want my brand to look people to feel it.");
+  assert.equal(stitch(parts, "Edited start.", [1, 2]), "Edited start. people to feel it.", "an edit keeps the phrases it hadn't seen");
+  assert.deepEqual(gaps(parts.slice(0, 2), 0, 14), [[12, 14], [4, 8]].sort((a, b) => a[0] - b[0]));
+  assert.equal(wordsOf("It’s a well-made, 2-minute film."), 5);
+});
+test("dream: start makes an answer once and restores it by id; the waitlist and the sign-up stay apart", async () => {
+  const t = setup(); withSupabase(t, { good: { email: "Dee@Example.com", first: "Dee" } });
+  const a = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  assert.equal(a.status, 200); assert.match(a.json.id, /^[A-Za-z0-9]{24}$/); assert.equal(a.json.limit, 180); assert.equal(a.json.text, "");
+  const b = await t.call("POST", "/dream/start", { body: { kind: "waitlist", id: a.json.id } });
+  assert.equal(b.json.id, a.json.id, "the same answer comes back after a reload");
+  assert.equal((await t.call("POST", "/dream/start", { body: { kind: "signup" } })).status, 401, "a sign-up answer needs the session");
+  const s1 = await t.call("POST", "/dream/start", { body: { kind: "signup", access_token: "good", id: a.json.id } });
+  assert.notEqual(s1.json.id, a.json.id, "a waitlist id can't open a sign-up answer");
+  const s2 = await t.call("POST", "/dream/start", { body: { kind: "signup", access_token: "good" } });
+  assert.equal(s2.json.id, s1.json.id, "the same person on another device gets their answer back");
+});
+test("dream: a dropped stretch is transcribed once, only where nothing covers it, and silence makes no words", async () => {
+  const t = setup(); const ai = withAI(t, (n) => ["the part the network dropped", "and the end"][n - 1] || "x");
+  const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  // the live stream saved 0..5 s before the network dropped
+  await t.env.DB.prepare("INSERT INTO dream_parts (dream, t0, t1, text, src, at) VALUES (?, 0, 5, 'My dream is', 'nova', 1)").bind(d.id).run();
+  const r = await t.call("POST", `/dream/chunk?id=${d.id}&t0=3&t1=10`, { raw: tone(7), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(r.status, 200, r.text); assert.equal(r.json.parts.length, 1); assert.deepEqual([r.json.parts[0].t0, r.json.parts[0].t1], [5, 10], "only 5..10 was missing");
+  assert.equal(r.json.text, "My dream is the part the network dropped");
+  assert.equal(ai.length, 1); assert.equal(ai[0].model, "@cf/openai/whisper-large-v3-turbo");
+  const again = await t.call("POST", `/dream/chunk?id=${d.id}&t0=3&t1=10`, { raw: tone(7), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(again.json.parts.length, 0, "the same stretch twice is not transcribed twice"); assert.equal(ai.length, 1);
+  const quiet = await t.call("POST", `/dream/chunk?id=${d.id}&t0=10&t1=14`, { raw: tone(4, 20), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(quiet.json.parts.length, 1); assert.equal(quiet.json.parts[0].text, "", "silence is covered, with no words made up"); assert.equal(ai.length, 1);
+  assert.equal((await t.call("POST", `/dream/chunk?id=${d.id}&t0=0&t1=40`, { raw: tone(1) })).status, 400, "30 seconds at most");
+});
+test("dream: edits and typing are saved; a late phrase is appended, never lost; finish locks it", async () => {
+  const t = setup(); withAI(t);
+  const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  const ins = (t0, t1, tx) => t.env.DB.prepare("INSERT INTO dream_parts (dream, t0, t1, text, src, at) VALUES (?, ?, ?, ?, 'nova', 1)").bind(d.id, t0, t1, tx).run();
+  await ins(0, 4, "I want videos"); await ins(4, 8, "that feel like us.");
+  const first = (await t.call("POST", "/dream/start", { body: { kind: "waitlist", id: d.id } })).json;
+  const ids = first.parts.map((p) => p.id);
+  const sv = await t.call("POST", "/dream/save", { body: { id: d.id, edited: "I want films that feel like us.", seen: ids } });
+  assert.equal(sv.json.text, "I want films that feel like us.");
+  await ins(8, 11, "Every single week.");   // it was still on its way when they edited
+  const fin = await t.call("POST", "/dream/finish", { body: { id: d.id, text: "I want films that feel like us.", seen: ids, nudged: true } });
+  assert.equal(fin.json.text, "I want films that feel like us. Every single week."); assert.equal(fin.json.words, 10); assert.equal(fin.json.nudged, true);
+  assert.equal((await t.call("POST", "/dream/save", { body: { id: d.id, edited: "changed" } })).status, 409, "a finished answer stays as it is");
+  assert.equal((await t.call("POST", `/dream/chunk?id=${d.id}&t0=11&t1=13`, { raw: tone(2) })).status, 409);
+});
+test("dream: the waitlist answer joins the sign-up by email, reaches Brevo only once DREAM exists, and is in the CSV", async () => {
+  const t = setup({ BREVO_DREAM: "1" }); withAI(t);
+  const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  await t.call("POST", "/dream/save", { body: { id: d.id, edited: "Launch films, every week, that feel like us." } });
+  await t.call("POST", "/dream/finish", { body: { id: d.id, text: "Launch films, every week, that feel like us." } });
+  await t.join({ first: "Jo", last: "Lee", email: "jo@example.com", dream: d.id });
+  const row = await t.env.DB.prepare("SELECT dream_id FROM signups WHERE email = 'jo@example.com'").first();
+  assert.equal(row.dream_id, d.id);
+  const sent = t.brevo.calls.find((c) => c.body && c.body.attributes && c.body.attributes.DREAM);
+  assert.ok(sent, "DREAM went to Brevo"); assert.equal(sent.body.email, "jo@example.com"); assert.match(sent.body.attributes.DREAM_AT, /^\d{4}-\d\d-\d\dT/);
+  withSupabase(t, { good: { email: "jo@example.com", first: "Jo" } });
+  const s = await t.call("POST", "/dream/start", { body: { kind: "signup", access_token: "good" } });
+  assert.equal(s.json.prior, "Launch films, every week, that feel like us.", "the sign-up can start from what they said on the waitlist");
+  const csv = await t.call("GET", "/admin/dreams.csv", { headers: { Authorization: "Bearer " + ADMIN } });
+  assert.equal(csv.status, 200); assert.ok(csv.text.includes("jo@example.com") && csv.text.includes('"Launch films, every week, that feel like us."'));
+  const off = setup(); withAI(off);
+  const { json: d2 } = await off.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  await off.call("POST", "/dream/finish", { body: { id: d2.id, text: "x y z" } }); await off.join({ first: "Al", last: "B", email: "al@example.com", dream: d2.id });
+  assert.ok(!off.brevo.calls.some((c) => c.body && c.body.attributes && "DREAM" in c.body.attributes), "no DREAM before the field exists");
+});
+test("dream: a repair keeps only the words centred in its stretch, and a broken model answer is retried, never saved", async () => {
+  const t = setup();
+  const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  await t.env.DB.prepare("INSERT INTO dream_parts (dream, t0, t1, text, src, at) VALUES (?, 0, 10, 'and then it just sits', 'nova', 1)").bind(d.id).run();
+  // the audio sent runs 9.2..14.8; the stretch is 10..14. Whisper's word times are from the start of what it heard (9.2 s).
+  t.env.AI = { run: async () => ({ text: "sits in my camera roll for", segments: [{ text: "x", no_speech_prob: .05, words: [{ word: " sits", start: .2, end: .7 }, { word: " in", start: .75, end: 1.0 }, { word: " my", start: 1.0, end: 1.3 }, { word: " camera", start: 1.3, end: 2.0 }, { word: " roll", start: 2.0, end: 4.6 }, { word: " for", start: 4.9, end: 5.3 }] }] }) };
+  const r = await t.call("POST", `/dream/chunk?id=${d.id}&t0=9.2&t1=14.8&from=10&to=14`, { raw: tone(5.6), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(r.status, 200, r.text); assert.equal(r.json.parts[0].text, "in my camera roll", "the half-heard 'in' is caught; 'sits' (the live phrase's) and 'for' (the next one's) are not");
+  assert.equal(r.json.text, "and then it just sits in my camera roll");
+  t.env.AI = { run: async () => new Response("{}") };   // the model hands back a raw response, not words
+  const bad = await t.call("POST", `/dream/chunk?id=${d.id}&t0=14&t1=18`, { raw: tone(4), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(bad.status, 502); const after = (await t.call("POST", "/dream/start", { body: { kind: "waitlist", id: d.id } })).json;
+  assert.ok(!after.text.includes("native code") && after.parts.length === 2, "nothing was saved for it; the page tries again");
 });
 for (const { name, fn } of tests) {
   console.error = () => {};                     // the Worker logs Brevo failures; the tests cause them on purpose

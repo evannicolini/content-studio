@@ -94,7 +94,7 @@ var SFX = (function () {
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
+  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm", "dream-ask", "dream-nudge", "dream-thanks", "dream-back", "dream-time", "dream-prior"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
   ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
@@ -155,7 +155,14 @@ var KAY = (function () {
     /* her answers to a pick (single-choice steps): they cut in, and the last pick wins */
     b1: "One brand. All in. Love that.", b2: "Two or three. Studio keeps every one of them looking like itself.", b4: "Four or more? You're exactly who we built this for.",
     cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it.",
-    confirm: "Check your email. I just sent you a code... pop it in here to lock in your spot."
+    confirm: "Check your email. I just sent you a code... pop it in here to lock in your spot.",
+    /* the dream interview (SK.interview) */
+    "dream-ask": "Okay, one more, and it's my favorite. Picture Studio working perfectly for you. What does that look like? And what do you want people to feel when they see your content? Just talk... I'm listening.",
+    "dream-nudge": "Give me a little more. What would make you say... that's exactly it?",
+    "dream-thanks": "Love that. We'll keep that in mind.",
+    "dream-back": "Welcome back. Everything you said is still here. Keep going whenever you're ready.",
+    "dream-time": "That's time... and every word is saved.",
+    "dream-prior": "Here's what you told me before. Anything you'd add?"
   };
   var UNRECORDED = {};   /* a line with no voice file yet: she shows the words and stays quiet */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
@@ -180,7 +187,7 @@ var KAY = (function () {
     if (vo) { vo.stop(); vo = null; }
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
-    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); idle(); return; }
     words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
     if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
     a.pause();
@@ -203,7 +210,9 @@ var KAY = (function () {
   function block(my) { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); }
   a.addEventListener("ended", function () { ended(tok); });
   function say(keys) { queue = [].concat(keys); a.pause(); next(); }
-  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); }
+  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); idle(); }
+  var afters = [];   /* the dream interview waits for her to finish before the mic opens */
+  function idle() { var f = afters; afters = []; f.forEach(function (cb) { cb(); }); }
   pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
   /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
   function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
@@ -212,7 +221,9 @@ var KAY = (function () {
   /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
   function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
   function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
-  return { say: say, stop: stop, react: react, line: line, text: function (k) { return LINES[k]; } };
+  /* say a line and resolve when she's done (with no sound: after a moment to read it) */
+  function sayThen(k) { return new Promise(function (res) { var done = false, fin = function () { if (!done) { done = true; res(); } }; say([k]); afters.push(fin); setTimeout(fin, !SOUND || !SFX.has(k) ? 2200 : ((dur[k] || 9) + 3) * 1000); }); }
+  return { say: say, stop: stop, react: react, line: line, sayThen: sayThen, talking: function () { return pill.classList.contains("talk"); }, text: function (k) { return LINES[k]; } };
 })();
 var sndB = sheet.querySelector("[data-wl-snd]");
 function setSound(on) {
@@ -236,7 +247,7 @@ var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 /* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
 var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
 var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, dune grass and ocean (Evan), the dune, the coast pine path (Evan), Pebble Beach, peach dawn */
-function setWalls(src) { ["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { var u = src || "assets/wl/" + k + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
+function setWalls(src) { ["name", "roles", "brands", "claude", "dream", "you", "in"].forEach(function (k) { var u = src || (k === "dream" ? "assets/su/code.jpg" : "assets/wl/" + k + ".jpg"); WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");   /* each step its own; the Chapters pill can try one for all (SK.wallPick) */
 var wallCache = {}, wallTok = 0, wallNow = "";
 /* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
@@ -285,7 +296,7 @@ function wall(k) {
   });
 }
 var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite", check: "confirm" };
-var SCENE = { name: "home", roles: "home", brands: "home", claude: "home", you: "you", check: "you" };   /* step 4 plays on the real Home (askLoop) */
+var SCENE = { name: "home", roles: "home", brands: "home", claude: "home", dream: "home", you: "you", check: "you" };   /* step 4 plays on the real Home (askLoop) */
 WALL.check = WALL.you; /* question 3 opens Home's All brands menu */
 var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
 sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
@@ -561,6 +572,7 @@ function ready(n) {
   if (q === "roles") return ans.roles.length > 0 && (ans.roles.indexOf("Something else") < 0 || !!val("other"));
   if (q === "you") return true;
   if (q === "check") return otpCode().length === 6;
+  if (q === "dream") return !!IV && IV.ready();
   return !!ans[q];
 }
 function personal() {
@@ -606,7 +618,8 @@ function setStep(n, quiet, fromHist) {
   sizeStage(); setTimeout(sizeStage, 400);
   if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
-  if (!quiet && sheet.classList.contains("open")) KAY.line(LINE[q]);
+  if (IV && q !== "dream") IV.leave();
+  if (!quiet && sheet.classList.contains("open")) { if (q === "dream") IV.open(); else KAY.line(LINE[q]); }   /* the interview plays its own lines */
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
   setTimeout(function () { typeStep(); }, quiet ? 0 : 520);
   if (!fromHist && n !== was && sheet.classList.contains("open") && DEEP.test(location.hash)) {
@@ -700,8 +713,26 @@ function focusStep(delay) {
 }
 function advance() {
   if (busy || at >= ORDER.length - 1 || ORDER[at] === "you" || ORDER[at] === "check") return;   /* those two move on only by sending */
+  if (ORDER[at] === "dream") return dreamNext();
   if (!ready(at)) { if (ORDER[at] === "name") checkName(); return; }
   busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450);
+}
+/* ---------- the dream interview: Kayla asks, they talk (SK.interview, src/interview.js; the server is the waitlist Worker) ----------
+   The answer is saved as they talk (D1), tied to their email on /join, and goes to Brevo as DREAM / DREAM_AT. */
+var DREAM_API = local ? (Q.get("wl") || "http://127.0.0.1:8818") : "https://studio-waitlist.studio-licence.workers.dev";
+var IV = SK.interview({
+  host: sheet.querySelector("[data-wl-dream]"), api: DREAM_API, kind: "waitlist", storeKey: "studio-dream-waitlist",
+  say: function (k) { return KAY.sayThen("dream-" + k); }, talking: KAY.talking,
+  sfx: function (n) { SFX.play(n, { gain: n === "ask" ? .8 : 1 }); }, duck: function (on) { SFX.bed.duck(on); },
+  onChange: function () { if (ORDER[at] === "dream") next.disabled = !ready(at); }
+});
+function dreamNext() {
+  if (busy) return; busy = true;
+  IV.next().then(function (r) {
+    busy = false;
+    if (!r) { next.disabled = !ready(at); return; }
+    setStep(at + 1, true); KAY.say(["dream-thanks", "invite"]); focusStep(SK.reduced ? 0 : 420);
+  });
 }
 function checkName() {
   var bad = [];
@@ -824,6 +855,7 @@ form.addEventListener("submit", function (e) {
   var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
     sms_notify: nOk, sms_notify_text: nOk ? smsWords("[data-wl-smsn]") : "", sms_marketing: mOk, sms_marketing_text: mOk ? smsWords("[data-wl-smsm]") : "",
     sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v2" };
+  if (IV && IV.id()) d.dream = IV.id();   /* the dream interview's answer joins this email */
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
     if (j.needs_confirm) { checkEmail(j, d); return; }
@@ -1171,7 +1203,7 @@ restartB.addEventListener("click", startOver);
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code) ---------- */
 if (local && window.SK_PAGE) {
-  var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
+  var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["dream", "Dream outcome"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
   var chGo = function (id) {
     if (sheet.classList.contains("done")) startOver();
     if (!val("first")) form.elements.first.value = "Sam";
@@ -1188,6 +1220,7 @@ if (local && window.SK_PAGE) {
   };
   var chUI = SK.chapters({ list: CH, now: function () { return sheet.classList.contains("done") ? "done" : ORDER[at]; }, go: chGo, walls: true, wallDefault: "Each step its own",
     wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "in" : ORDER[at]); } });
+  var CHQ = Q.get("ch") || H.get("ch"); if (CHQ) setTimeout(function () { chGo(CHQ); chUI.paint(); }, 900);   /* ?ch=<step> opens that chapter (this Mac only) */
 }
 
 /* the story image (Story and Save image): 1080 x 1920, drawn here on a canvas. Their pass floating on the You're in sky, the Studio app
