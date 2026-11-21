@@ -3925,6 +3925,11 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 /* ---------- You're in: the words and the share on the left, the pass big on the right ---------- */
 .wl-done { position: absolute; inset: 0; z-index: 5; display: none; overflow-y: auto; padding: 96px var(--pad) 120px; outline: 0; }
 .wl.done .wl-done { display: block; }
+/* on You're in, Kayla and her caption sit bottom right, under the pass: clear of Back to Studio and Start over */
+@media (min-width: 961px) {
+  .wl.done .wl-dock { left: auto; right: var(--pad); transform: none !important; }
+  .wl.done .wl-kt { left: auto; right: 0; transform: none; max-width: min(460px, 36vw); text-align: right; }
+}
 .wl-dwrap { display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); align-items: center; gap: clamp(30px, 4vw, 80px); min-height: 100%; }
 .wl-dstage { display: grid; place-items: center; gap: 22px; min-height: 520px; }
 .wl-dstage .pass { --w: min(640px, 44vw); }
