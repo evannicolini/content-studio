@@ -1,26 +1,40 @@
-<!-- Early access: the full-screen sign-up, built like the app's own onboarding. Opened by every "Get early access" button and by links
-     ending in #early-access (a ?ref= link is a friend's invite). Left: the question, always the main thing. Right: a piece of Studio
-     that answers it, live. Then "You're on the list": the place, the pass, and a link to share. section.js; off until src/waitlist.json says where sign-ups go. -->
+<!-- Early access: the full-screen sign-up, built like the app's first launch. Opened by every "Get early access" button and by links
+     ending in #early-access (a ?ref= link is a friend's invite). Kayla walks you through it. Left: the question, always the main thing.
+     Right: a piece of Studio that answers it, live. Then "You're in": the pass and the link to share. section.js; off until src/waitlist.json says where sign-ups go. -->
 <div class="wl" id="early-access" role="dialog" aria-modal="true" aria-labelledby="wl-h" hidden>
   <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
   <div class="wl-top">
     <span class="wl-brand"><svg aria-hidden="true"><use href="#studio-mark"/></svg>Studio<em>Early access</em></span>
-    <ol class="wl-dots" aria-hidden="true"><li class="on"><i></i><span>You</span></li><li><i></i><span>Brands</span></li><li><i></i><span>Claude</span></li><li><i></i><span>Invite</span></li></ol>
-    <div class="wl-tr"><button type="button" class="wl-restart" data-wl-restart hidden>Restart</button>
-    <button type="button" class="wl-x" data-wl-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button></div>
+    <!-- Kayla: her face, her voice moving, what she's saying. Tap to hear her again. -->
+    <button type="button" class="wl-kay" data-wl-kay aria-label="Kayla. Tap to hear her again."><img src="assets/kayla.jpg" alt="" width="80" height="80"><span class="wl-kw" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="wl-kt" data-wl-kt>Hi, I'm Kayla.</span></button>
+    <div class="wl-tr">
+      <button type="button" class="wl-snd" data-wl-snd aria-label="Sound on" aria-pressed="true"><svg class="on" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 7h2.6L9.4 4v10L5.6 11H3z"/><path class="w" d="M12.2 6.6a3.4 3.4 0 0 1 0 4.8M14.4 4.6a6.3 6.3 0 0 1 0 8.8"/></svg><svg class="off" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 7h2.6L9.4 4v10L5.6 11H3z"/><path class="w" d="M12.5 7l4 4M16.5 7l-4 4"/></svg></button>
+      <button type="button" class="wl-restart" data-wl-restart hidden>Restart</button>
+      <button type="button" class="wl-x" data-wl-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    </div>
   </div>
 
   <!-- ===== the questions ===== -->
   <div class="wl-in">
     <div class="wl-card">
-      <p class="wl-ref" data-wl-ref hidden><img src="assets/kayla.jpg" alt="" width="40" height="40" data-wl-ref-face><span data-wl-ref-t>A friend saved you a spot.</span></p>
+      <div class="wl-prog" aria-hidden="true"><span class="wl-k" data-wl-k>Step 1 of 5</span><span class="wl-seg"><i></i><i></i><i></i><i></i><i></i></span></div>
+      <p class="wl-ref" data-wl-ref hidden><span class="wl-ri" data-wl-ri>S</span><span data-wl-ref-t>A friend saved you a spot.</span></p>
       <h2 id="wl-h" class="sr">Get early access to Studio</h2>
       <form class="wl-form" novalidate>
         <div class="wl-steps">
-          <div class="wl-q on" data-q="roles" data-multi role="group" aria-labelledby="wl-q-roles">
-            <p class="wl-k">Step 1 of 4</p>
-            <h3 class="wl-qh" id="wl-q-roles">What best describes you?</h3>
-            <p class="wl-qs">Pick all that fit.</p>
+          <div class="wl-q on" data-q="name" role="group" aria-labelledby="wl-q-name">
+            <h3 class="wl-qh" id="wl-q-name">First things first. What should I call you?</h3>
+            <p class="wl-qs">Studio greets you by name, every morning.</p>
+            <div class="wl-fields">
+              <label class="wl-f"><span>First name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
+              <label class="wl-f"><span>Last name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="last" type="text" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+          </div>
+
+          <div class="wl-q" data-q="roles" data-multi role="group" aria-labelledby="wl-q-roles">
+            <h3 class="wl-qh" id="wl-q-roles" data-wl-hi="Nice to meet you, {first}. What do you do?">What do you do?</h3>
+            <p class="wl-qs">Pick everything that fits.</p>
             <div class="wl-opts two">
               <button type="button" class="wl-opt" data-v="Business owner" aria-pressed="false"><b>Business owner</b></button>
               <button type="button" class="wl-opt" data-v="Founder" aria-pressed="false"><b>Founder</b></button>
@@ -31,12 +45,12 @@
               <button type="button" class="wl-opt" data-v="Agency" aria-pressed="false"><b>Agency</b></button>
               <button type="button" class="wl-opt" data-v="Something else" aria-pressed="false"><b>Something else</b></button>
             </div>
+            <label class="wl-f wl-other" data-wl-other hidden><span>What do you do?</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="other" type="text" autocapitalize="sentences" enterkeyhint="next" maxlength="80" placeholder="Photographer, coach, musician…"></span></label>
           </div>
 
           <div class="wl-q" data-q="brands" role="group" aria-labelledby="wl-q-brands">
-            <p class="wl-k">Step 2 of 4</p>
-            <h3 class="wl-qh" id="wl-q-brands">How many brands do you make content for?</h3>
-            <p class="wl-qs">Each brand gets its own look, voice and library in Studio.</p>
+            <h3 class="wl-qh" id="wl-q-brands">How many brands are you making content for?</h3>
+            <p class="wl-qs">Each brand gets its own look, voice and library.</p>
             <div class="wl-opts three">
               <button type="button" class="wl-opt big" data-v="1" aria-pressed="false"><b>1</b><small>brand</small></button>
               <button type="button" class="wl-opt big" data-v="2-3" aria-pressed="false"><b>2–3</b><small>brands</small></button>
@@ -45,23 +59,19 @@
           </div>
 
           <div class="wl-q" data-q="claude" role="group" aria-labelledby="wl-q-claude">
-            <p class="wl-k">Step 3 of 4</p>
             <h3 class="wl-qh" id="wl-q-claude">Do you use Claude yet?</h3>
-            <p class="wl-qs">Studio runs on Claude. This helps us set you up.</p>
+            <p class="wl-qs">Studio runs on Claude. If you don't use it yet, that's totally fine. We'll help you set it up.</p>
             <div class="wl-opts">
               <button type="button" class="wl-opt row" data-v="Pro or Max" aria-pressed="false"><b>Yes, on Pro or Max</b></button>
               <button type="button" class="wl-opt row" data-v="Free plan" aria-pressed="false"><b>Yes, on the free plan</b></button>
-              <button type="button" class="wl-opt row" data-v="Not yet" aria-pressed="false"><b>Not yet</b></button>
+              <button type="button" class="wl-opt row" data-v="Not yet" aria-pressed="false"><b>Not yet</b><small>We'll help you set it up</small></button>
             </div>
           </div>
 
           <div class="wl-q" data-q="you" role="group" aria-labelledby="wl-q-you">
-            <p class="wl-k">Step 4 of 4</p>
-            <h3 class="wl-qh" id="wl-q-you">Where should we send your invite?</h3>
+            <h3 class="wl-qh" id="wl-q-you" data-wl-hi="Last thing, {first}. Where should we send your invite?">Where should we send your invite?</h3>
             <p class="wl-qs">Your pass is ready the moment you finish.</p>
             <div class="wl-fields">
-              <label class="wl-f"><span>First name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
-              <label class="wl-f"><span>Last name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="last" type="text" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
               <label class="wl-f wide"><span>Email</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" required maxlength="120"></span></label>
               <div class="wl-f wide wl-tel">
                 <label for="wl-phone">Phone</label>
@@ -88,85 +98,71 @@
     <!-- ===== the stage: a piece of Studio that answers each question, live ===== -->
     <div class="wl-stage" aria-hidden="true">
       <div class="wl-fit">
-        <!-- 1: Home, making things for who you are -->
-        <div class="wl-sc on" data-sc="roles">
+        <!-- 1 and 2: Home, greeting you by name, then making things for who you are -->
+        <div class="wl-sc on" data-sc="home">
           <div class="wl-win">
             <div class="wl-side"><i class="mk"><svg><use href="#studio-mark"/></svg></i><i></i><i class="on"></i><i></i><i></i><i></i></div>
             <div class="wl-main">
               <p class="wl-mono">Welcome</p>
-              <p class="wl-hi">Good morning.</p>
+              <p class="wl-hi" data-wl-hi-home>Good morning.</p>
               <p class="wl-for" data-wl-for>Tell Studio who you are.</p>
               <div class="wl-made" data-wl-made><span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span></div>
             </div>
           </div>
         </div>
-        <!-- 2: All brands -->
+        <!-- 3: All brands, each with its own kit -->
         <div class="wl-sc" data-sc="brands">
           <div class="wl-win wl-brands">
             <div class="wl-bh"><p class="wl-mono">All brands</p><span class="wl-n" data-wl-bn>1</span></div>
             <ul class="wl-bl" data-wl-bl></ul>
           </div>
         </div>
-        <!-- 3: Studio × Claude, the composer at work -->
+        <!-- 4: Studio × Claude: your footage dragged into the composer, a request, the cuts come back -->
         <div class="wl-sc" data-sc="claude">
           <div class="wl-cl">
             <p class="wl-lock"><i class="mk"><svg><use href="#studio-mark"/></svg></i><b>Studio</b><em>×</em><svg class="cl"><use href="#claude"/></svg><b>Claude</b></p>
             <p class="wl-chip" data-wl-chip><i></i><span>Claude, connected in one click</span></p>
-            <div class="wl-comp"><span class="wl-cbeam" data-beam="cx" data-active><span data-beam-bloom></span></span><p class="wl-cq"><span data-wl-type></span><i></i></p><div class="wl-crow"><span class="wl-lockmini"><i class="mk"><svg><use href="#studio-mark"/></svg></i>Studio <em>×</em> <svg class="cl"><use href="#claude"/></svg>Claude</span><span class="wl-cst">Working</span><span class="wl-cgo"><svg viewBox="0 0 16 16"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg></span></div></div>
+            <div class="wl-comp" data-wl-comp><span class="wl-cbeam" data-beam="cx" data-active><span data-beam-bloom></span></span>
+              <div class="wl-att" data-wl-att></div>
+              <p class="wl-cq"><span data-wl-type></span><i></i></p>
+              <div class="wl-crow"><span class="wl-lockmini"><i class="mk"><svg><use href="#studio-mark"/></svg></i>Studio <em>×</em> <svg class="cl"><use href="#claude"/></svg>Claude</span><span class="wl-cst">Working</span><span class="wl-cgo"><svg viewBox="0 0 16 16"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg></span></div>
+              <span class="wl-drop" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16h12"/></svg>Drop to add</span>
+            </div>
             <div class="wl-res" data-wl-res></div>
+            <div class="wl-fly" data-wl-fly></div>
           </div>
         </div>
-        <!-- 4: the pass, written as you type -->
+        <!-- 5: the pass, written as you type -->
         <div class="wl-sc" data-sc="you">
-          <div class="wl-pass" data-wl-pass>
-            <span class="wl-pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span>
-            <div class="wl-ptop"><span class="wl-pmark"><svg><use href="#studio-mark"/></svg>Studio</span><span class="wl-mono">Early access · Invite</span></div>
-            <p class="wl-mono dim">Invite for</p>
-            <p class="wl-pname" data-wl-pname><span class="ph">Your name</span></p>
-            <p class="wl-pmail" data-wl-pmail>you@email.com</p>
-            <div class="wl-prow"><div><p class="wl-mono dim">No.</p><p class="wl-pno" data-wl-pno>····</p></div><div><p class="wl-mono dim">Trial</p><p class="wl-pv">14 days, free</p></div><div><p class="wl-mono dim">For</p><p class="wl-pv" data-wl-pfor>Mac</p></div></div>
-            <div class="wl-pcut"></div>
-            <svg class="wl-bars" data-wl-bars viewBox="0 0 300 34" preserveAspectRatio="none"></svg>
-          </div>
+          <div class="p3"><div class="pass" data-wl-pass1></div></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== You're on the list: the place, the pass, and the link to share ===== -->
+  <!-- ===== You're in: the pass, your place, and the link to share ===== -->
   <div class="wl-done" data-wl-done tabindex="-1">
     <div class="wl-dwrap">
+      <div class="wl-dstage p3"><div class="pass big" data-wl-pass2></div></div>
       <div class="wl-dl">
         <p class="wl-k">You're on the list</p>
         <h3 class="wl-dh"><span data-wl-dhi>You're in, Evan.</span><span class="wl-dpos" data-wl-dpos></span></h3>
-        <p class="wl-dsub" data-wl-dsub>We'll email and text you the moment your invite is ready. When it lands, you get 14 days of everything, free.</p>
+        <p class="wl-hint" data-wl-hint><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg><span>Tap the pass to flip it</span></p>
         <div class="wl-refbox">
-          <div class="wl-rtop"><b>Share with 3 friends to move up the list</b><span data-wl-rboost>Every friend who joins moves you up 10 spots.</span></div>
+          <div class="wl-rtop"><b>Share with 3 friends to move up the list</b><span data-wl-rboost>Every friend who joins with your link moves you up 10 spots.</span></div>
           <ol class="wl-slots" data-wl-slots><li><i></i><span>Friend 1</span></li><li><i></i><span>Friend 2</span></li><li><i></i><span>Friend 3</span></li></ol>
           <div class="wl-link"><span class="wl-url" data-wl-url>studio</span><button type="button" class="wl-copy" data-wl-copy data-gx><span>Copy link</span></button></div>
           <div class="wl-share" data-wl-share>
             <a class="wl-sh" data-sh="sms" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3.5c-5 0-9 3.3-9 7.4 0 2.3 1.3 4.4 3.3 5.8-.1 1.2-.6 2.4-1.5 3.4 1.9-.1 3.6-.8 4.8-1.8.8.2 1.6.3 2.4.3 5 0 9-3.3 9-7.4S17 3.5 12 3.5Z"/></svg></span><span>Messages</span></a>
             <a class="wl-sh" data-sh="wa" href="#" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12.04 2.5a9.4 9.4 0 0 0-8.1 14.2L2.5 21.5l4.9-1.3a9.4 9.4 0 1 0 4.64-17.7Zm5.5 13.3c-.23.65-1.35 1.25-1.86 1.3-.48.06-1.08.08-1.74-.11-.4-.13-.92-.3-1.58-.58-2.78-1.2-4.6-4-4.74-4.18-.14-.19-1.13-1.5-1.13-2.87 0-1.36.71-2.03.97-2.31.25-.28.55-.35.74-.35l.53.01c.17.01.4-.06.62.48.23.55.78 1.9.85 2.04.07.14.12.3.02.48-.09.19-.14.3-.28.47l-.42.49c-.14.14-.29.29-.12.57.16.28.73 1.2 1.57 1.95 1.08.96 1.99 1.26 2.27 1.4.28.14.45.12.61-.07.17-.19.7-.82.89-1.1.19-.28.37-.23.63-.14.26.1 1.64.77 1.92.91.28.14.47.21.54.33.07.11.07.66-.16 1.3Z"/></svg></span><span>WhatsApp</span></a>
             <a class="wl-sh" data-sh="x" href="#" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24"><path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.42 4.74H5.6l11.07 14.43Z"/></svg></span><span>X</span></a>
-            <a class="wl-sh" data-sh="ig" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 7.4a4.6 4.6 0 1 0 0 9.2 4.6 4.6 0 0 0 0-9.2Zm0 7.6a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm4.8-8.85a1.07 1.07 0 1 0 0 2.14 1.07 1.07 0 0 0 0-2.14ZM21.95 7.9c-.07-1.48-.4-2.8-1.49-3.88-1.08-1.08-2.4-1.42-3.88-1.5-1.53-.08-6.12-.08-7.65 0-1.48.07-2.79.41-3.88 1.49S3.63 6.4 3.55 7.89c-.09 1.53-.09 6.12 0 7.65.07 1.48.4 2.8 1.5 3.88 1.09 1.08 2.4 1.42 3.88 1.5 1.53.08 6.12.08 7.65 0 1.48-.07 2.8-.41 3.88-1.5 1.08-1.08 1.42-2.4 1.49-3.88.09-1.53.09-6.11 0-7.64Zm-1.98 9.28a3.13 3.13 0 0 1-1.76 1.77c-1.22.48-4.12.37-5.47.37s-4.25.1-5.47-.37a3.13 3.13 0 0 1-1.76-1.77c-.49-1.22-.37-4.12-.37-5.46s-.11-4.25.37-5.47a3.13 3.13 0 0 1 1.76-1.76c1.22-.49 4.12-.38 5.47-.38s4.25-.1 5.47.38c.82.32 1.44.95 1.76 1.76.49 1.22.38 4.12.38 5.47s.11 4.24-.38 5.46Z"/></svg></span><span>Story</span></a>
+            <a class="wl-sh" data-sh="ig" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 7.4a4.6 4.6 0 1 0 0 9.2 4.6 4.6 0 0 0 0-9.2Zm0 7.6a3 3 0 1 1 0-6 3 3 0 0 1 0 6Zm4.8-8.85a1.07 1.07 0 1 0 0 2.14 1.07 1.07 0 0 0 0-2.14ZM21.95 7.9c-.07-1.48-.4-2.8-1.49-3.88-1.08-1.08-2.4-1.42-3.88-1.5-1.53-.08-6.12-.08-7.65 0-1.48.07-2.79.41-3.88 1.49S3.63 6.4 3.55 7.89c-.09 1.53-.09 6.12 0 7.65.07 1.48.4 2.8 1.5 3.88 1.09 1.08 2.4 1.42 3.88 1.5 1.53.08 6.12.08 7.650 0 1.48-.07 2.8-.41 3.88-1.5 1.08-1.08 1.42-2.4 1.49-3.88.09-1.53.09-6.11 0-7.64Zm-1.98 9.28a3.13 3.13 0 0 1-1.76 1.77c-1.22.48-4.12.37-5.47.37s-4.25.1-5.470-.37a3.13 3.13 0 0 1-1.76-1.77c-.49-1.22-.37-4.12-.37-5.46s-.11-4.25.37-5.47a3.13 3.13 0 0 1 1.76-1.76c1.22-.49 4.12-.38 5.47-.38s4.25-.1 5.47.38c.82.32 1.44.95 1.76 1.76.49 1.22.38 4.12.38 5.47s.11 4.24-.38 5.46Z"/></svg></span><span>Story</span></a>
             <a class="wl-sh" data-sh="mail" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 17V7A1.5 1.5 0 0 1 4 5.5Zm.4 1.8 7.6 5.6 7.6-5.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span>Email</span></a>
             <a class="wl-sh" data-sh="more" href="#"><span class="ic"><svg viewBox="0 0 24 24"><path d="M8.2 9.9H6.8a2 2 0 0 0-2 2v6.8a2 2 0 0 0 2 2h10.4a2 2 0 0 0 2-2v-6.8a2 2 0 0 0-2-2h-1.4M12 14.2V3.4M8.4 7 12 3.4 15.6 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>More</span></a>
           </div>
         </div>
-        <button type="button" class="wl-home" data-wl-close data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg><span>Back to Studio</span></button>
-        <button type="button" class="wl-over" data-wl-over>Not you? Start over</button>
-      </div>
-      <div class="wl-dr" aria-hidden="true">
-        <div class="wl-pass big" data-wl-pass2>
-          <span class="wl-pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span>
-          <div class="wl-ptop"><span class="wl-pmark"><svg><use href="#studio-mark"/></svg>Studio</span><span class="wl-mono">Early access · Invite</span></div>
-          <p class="wl-mono dim">Invite for</p>
-          <p class="wl-pname" data-wl-pname2>Evan Nicolini</p>
-          <p class="wl-pmail" data-wl-pmail2>On the list</p>
-          <div class="wl-prow"><div><p class="wl-mono dim">Place</p><p class="wl-pno" data-wl-pno2>#—</p></div><div><p class="wl-mono dim">Trial</p><p class="wl-pv">14 days, free</p></div><div><p class="wl-mono dim">Friends</p><p class="wl-pv" data-wl-pref>0 of 3</p></div></div>
-          <div class="wl-pcut"></div>
-          <svg class="wl-bars" data-wl-bars2 viewBox="0 0 300 34" preserveAspectRatio="none"></svg>
-        </div>
+        <div class="wl-dfoot"><button type="button" class="wl-home" data-wl-close data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg><span>Back to Studio</span></button>
+        <button type="button" class="wl-over" data-wl-over>Not you? Start over</button></div>
       </div>
     </div>
   </div>

@@ -1,12 +1,14 @@
-/* 900 early: early access sign-ups, built like the app's onboarding (section.html, section.css).
+/* 900 early: early access sign-ups, built like the app's first launch (section.html, section.css).
    While sign-ups are on: every Download button (nav, hero, steps) says "Get early access", the plans' "Coming soon" too, a card above the
    plans offers it, a floating button follows you down the page, and all of them open the sign-up. So does any link ending in #early-access
    (the Instagram DM link, and every friend's ?ref= link; both skip the Enter site gate).
-   The sign-up: who you are (pick all that fit), how many brands, Claude yet, then the invite details. Beside each question a piece of
-   Studio answers it, live. Then "You're on the list": your place, your pass, and your own link: each friend who joins moves you up.
+   The sign-up: your name (so the rest is yours), what you do (pick all that fit; "Something else" asks what), how many brands, Claude yet,
+   then where to send the invite. Kayla says each step (assets/audio/wl-*.mp3); the app's own sounds answer the pointer (assets/sfx);
+   both follow the speaker button. Beside each question a piece of Studio answers it, live. Then "You're in": the 3D pass, your place,
+   your own link (each friend who joins moves you up).
    Where sign-ups go (src/waitlist.json, inlined by build.py): "api" (the waitlist worker in worker/: places and referrals), else
-   "brevo_form" (a Brevo form: no places), else "webhook" (JSON). With none, the live site stays on Download; localhost and ?early show
-   the flow, and on localhost a sign-up is answered with a made-up place. ?api=<url> on localhost points it at a local worker. */
+   "brevo_form" (no places), else "webhook" (JSON). With none, the live site stays on Download; localhost and ?early show the flow, and on
+   localhost a sign-up is answered with a made-up place. ?api=<url> on localhost points it at a local worker. */
 var cfg = Object.assign({}, window.SK_WAITLIST || {});
 var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
@@ -21,7 +23,7 @@ var html = document.documentElement, KEY = "studio-early", HASH = "#early-access
 var STAR = '<svg class="ea-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .9c.5 4.1 2.9 6.6 7.1 7.1-4.2.5-6.6 2.9-7.1 7.1C7.5 10.9 5 8.5.9 8 5 7.5 7.5 5 8 .9Z"/></svg>';
 var ARROW = '<span class="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span>';
 var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-var M = "assets/media/";
+var M = "assets/media/", fine = matchMedia("(pointer: fine)").matches;
 
 /* ---------- a friend's link: ?ref=CODE (kept for this visit) ---------- */
 var REF = (Q.get("ref") || H.get("ref") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 16);
@@ -44,7 +46,7 @@ document.querySelectorAll("[data-download]").forEach(function (b) {
 document.querySelectorAll(".pd-btn.soon").forEach(function (s) {
   var head = s.parentNode, nm = head.querySelector(".nmx"), plan = s.getAttribute("data-plan") || (nm ? nm.textContent.trim().toLowerCase() : "");
   var b = document.createElement("button");
-  b.type = "button"; b.className = "pd-btn" + (s.classList.contains("best") || head.querySelector(".pd-tag") ? " go" : ""); /* the plan with the tag (Most popular) is the pearl one */
+  b.type = "button"; b.className = "pd-btn" + (s.classList.contains("best") || head.querySelector(".pd-tag") ? " go" : "");
   b.setAttribute("data-early", "plan " + plan);
   b.innerHTML = "Get early access " + STAR;
   s.replaceWith(b);
@@ -71,17 +73,105 @@ document.querySelectorAll("[data-early-band]").forEach(function (el) {
   set();
 })();
 
+/* ---------- sound: the app's own takes (Studio_App first/sfx), quiet, one per thing that happens; and Kayla. The speaker button covers both. ---------- */
+var SOUND = true;
+try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
+var SFX = (function () {
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
+  var GAIN = { click: .5, tick: .16, key: .26, move: .38, send: .6, land: .45, done: .5 };
+  function wake() {
+    if (!AC || ctx) { if (ctx && ctx.state === "suspended") ctx.resume(); return; }
+    try { ctx = new AC(); } catch (e) { return; }
+    Object.keys(GAIN).forEach(function (n) {
+      fetch("assets/sfx/" + n + ".wav").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) {
+        if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {});
+      }).catch(function () {});
+    });
+  }
+  function play(n, o) {
+    o = o || {};
+    if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
+    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0;
+    if (gap && last[n] && now - last[n] < gap) return;
+    last[n] = now;
+    var s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
+    g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
+    var out = g;
+    if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
+    s.connect(g); s.start();
+  }
+  return { wake: wake, play: play };
+})();
+
+/* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
+var KAY = (function () {
+  var LINES = {
+    hello: "Hi, I'm Kayla. Let's get you into Studio. It only takes a minute.", name: "First things first. What should I call you?",
+    roles: "Nice to meet you. So, what do you do? Pick everything that fits.", brands: "And how many brands are you making content for?",
+    claude: "Studio runs on Claude. If you don't use it yet, that's totally fine. We'll help you set it up later.",
+    invite: "Last thing. Where should we send your invite?", in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free.",
+    share: "Want to move up the list? Share your link with three friends."
+  };
+  var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {};
+  a.preload = "auto";
+  Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; }).catch(function () {}); });
+  function words(k, all) {
+    cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" ");
+  }
+  function reveal(k, my) {
+    var spans = cap.querySelectorAll("span"), d = Math.max(1.2, (dur[k] || 6) - 3) * 1000, step = d / Math.max(1, spans.length);
+    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, 600 + i * step); });
+  }
+  function next() {
+    var my = ++tok;
+    cur = queue.shift();
+    if (!cur) { pill.classList.remove("talk"); return; }
+    words(cur, !SOUND);
+    if (!SOUND) { pill.classList.remove("talk"); return; }
+    a.src = "assets/audio/wl-" + cur + ".mp3";
+    var p = a.play();
+    pill.classList.add("talk"); pill.classList.remove("ask");
+    reveal(cur, my);
+    if (p && p.catch) p.catch(function () { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); });
+  }
+  a.addEventListener("ended", function () { setTimeout(next, 250); });
+  function say(keys) { queue = [].concat(keys); a.pause(); next(); }
+  function stop() { tok++; queue = []; a.pause(); pill.classList.remove("talk"); }
+  pill.addEventListener("click", function () { if (cur) { blocked = false; say([cur].concat(queue)); } });
+  /* a sign-up opened by a link has had no click yet, so the first line may be refused: the first tap anywhere in it plays her */
+  sheet.addEventListener("pointerdown", function () { if (blocked && cur) { blocked = false; say([cur].concat(queue)); } }, true);
+  return { say: say, stop: stop, text: function (k) { return LINES[k]; } };
+})();
+var sndB = sheet.querySelector("[data-wl-snd]");
+function setSound(on) {
+  SOUND = on; sndB.setAttribute("aria-pressed", on ? "true" : "false"); sndB.setAttribute("aria-label", on ? "Sound on" : "Sound off");
+  try { localStorage.setItem("studio-wl-sound", on ? "on" : "off"); } catch (e) {}
+  if (!on) KAY.stop();
+}
+setSound(SOUND);
+sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
+/* the pointer: a soft tick on hover (mouse only), a click on press; a key for every few letters typed */
+sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".wl-opt, button, .wl-sh, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.closest && e.target.closest(".wl-opt, button, .wl-sh, a")) SFX.play("click"); });
+sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
+
 /* ---------- the sheet ---------- */
 var form = sheet.querySelector(".wl-form"), box = sheet.querySelector(".wl-steps"), steps = [].slice.call(sheet.querySelectorAll(".wl-q"));
 var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
-var dots = [].slice.call(sheet.querySelectorAll(".wl-dots li")), scenes = {};
+var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite" };
+var SCENE = { name: "home", roles: "home", brands: "brands", claude: "claude", you: "you" };
+var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), kLabel = sheet.querySelector("[data-wl-k]"), scenes = {};
 sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
-var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go"), fine = sheet.querySelector("[data-wl-fine]");
-var sky = sheet.querySelector(".wl-sky"), err = sheet.querySelector(".wl-err"), fit = sheet.querySelector(".wl-fit"), stage = sheet.querySelector(".wl-stage");
+var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go"), fineP = sheet.querySelector("[data-wl-fine]");
+var sky = sheet.querySelector(".wl-sky"), fit = sheet.querySelector(".wl-fit"), stage = sheet.querySelector(".wl-stage");
 var sel = sheet.querySelector(".wl-cc select"), ccv = sheet.querySelector(".wl-ccv"), toastEl = sheet.querySelector("[data-wl-toast]");
+var other = sheet.querySelector("[data-wl-other]"), otherIn = form.elements.other;
 var at = 0, busy = false, pushed = false, lastFocus = null, from = "link", ans = { roles: [], brands: "", claude: "" };
 
 function toast(t) { toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toastEl._t); toastEl._t = setTimeout(function () { toastEl.classList.remove("on"); }, 2400); }
+function val(n) { return (form.elements[n].value || "").trim(); }
+function first() { return val("first").split(/\s+/)[0] || ""; }
 
 /* country codes for the phone: the visitor's own region first */
 var CC = [["US", "1"], ["CA", "1"], ["GB", "44"], ["AU", "61"], ["NZ", "64"], ["IE", "353"], ["DE", "49"], ["FR", "33"], ["ES", "34"], ["IT", "39"], ["NL", "31"], ["BE", "32"], ["CH", "41"], ["AT", "43"], ["SE", "46"], ["NO", "47"], ["DK", "45"], ["FI", "358"], ["PT", "351"], ["PL", "48"], ["AE", "971"], ["SA", "966"], ["IL", "972"], ["TR", "90"], ["ZA", "27"], ["NG", "234"], ["KE", "254"], ["EG", "20"], ["IN", "91"], ["PK", "92"], ["SG", "65"], ["MY", "60"], ["ID", "62"], ["PH", "63"], ["TH", "66"], ["VN", "84"], ["JP", "81"], ["KR", "82"], ["HK", "852"], ["CN", "86"], ["BR", "55"], ["MX", "52"], ["AR", "54"], ["CO", "57"], ["CL", "56"], ["PE", "51"]];
@@ -94,7 +184,7 @@ function cc() { return CC.filter(function (x) { return x[0] === sel.value; })[0]
 function showCC() { var c = cc(); ccv.textContent = flag(c[0]) + " +" + c[1]; }
 sel.addEventListener("change", showCC); showCC();
 
-/* ---------- the stage: what Studio makes for who you are, your brands, Claude at work, your pass ---------- */
+/* ---------- the stage ---------- */
 var MADE = {
   "Business owner": ["coffee-friend-arrives", "Ads", "This week's offer"], "Founder": ["cofounder-whiteboard", "Film", "Your launch film"],
   "Creator": ["surfing", "Reels", "A reel a day"], "Video editor": ["race-track", "Full edits", "First cut, ready"],
@@ -102,83 +192,88 @@ var MADE = {
   "Agency": ["private-jet", "Brands", "Every client, on brand"], "Something else": ["above-the-clouds", "Ask", "Whatever you dream up"]
 };
 var PROMPT = {
-  "Business owner": "Make an ad for this week's offer", "Founder": "Make me a launch film for my company", "Creator": "Turn yesterday's shoot into three reels",
-  "Video editor": "Cut my footage into a first edit", "Social media manager": "Plan and post this month on every channel", "Marketer": "Make five ad versions and test them",
-  "Agency": "Make this week's posts for all my clients", "Something else": "Make me a launch commercial for my company"
+  "Business owner": "Turn these into an ad for this week's offer", "Founder": "Cut these into a launch film for my company", "Creator": "Make three reels from yesterday's shoot",
+  "Video editor": "Find the best takes and cut a first edit", "Social media manager": "Make this month's posts from these", "Marketer": "Make five ad versions and test them",
+  "Agency": "Make this week's posts for every client", "Something else": "Make something people will remember"
 };
+/* brand kits in the brand palette: vampire black, chinese black, jet stream, platinum, celadon, blue slate, obsidian chrome */
 var BRANDS = [
-  { n: "Your brand", s: "Brand kit ready", m: "Y", bg: "linear-gradient(135deg,#f2efe8,#c9c3b8)", ink: "#111", sw: ["#111", "#f2efe8", "#e8613c", "#2b3a55"] },
-  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#0b0d12", "#e9edf5", "#5b7cff", "#9fb4ff"] },
-  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#06111f", "#ffffff", "#1f7aff", "#7fb4ff"] },
-  { n: "Halden", s: "Running gear", m: "h", bg: "#151515", sw: ["#151515", "#f3f0ea", "#e8613c", "#d8c9b0"] },
-  { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(135deg,#3a5a40,#1f3324)", sw: ["#1f3324", "#efe6d6", "#c98b4b", "#6d8a70"] }
+  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
+  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#05090A", "#536878", "#B4B9BA", "#E5E4E2"] },
+  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#0E191E", "#536878", "#BACCD0", "#DFEAE8"] },
+  { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
+  { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] }
 ];
 function list(a) { return a.length < 2 ? (a[0] || "") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
 function article(w) { return /^[AEIOU]/i.test(w) ? "an" : "a"; }
-function drawRoles() {
-  var r = ans.roles, made = sheet.querySelector("[data-wl-made]"), forEl = sheet.querySelector("[data-wl-for]");
-  forEl.innerHTML = r.length ? "Made for " + article(r[0]) + " " + list(r.map(function (x) { return "<b>" + esc(x.toLowerCase().replace(/^(\w)/, function (c) { return c; })) + "</b>"; })) + "." : "Tell Studio who you are.";
-  var have = [].slice.call(made.querySelectorAll(".wl-mc")).map(function (c) { return c.getAttribute("data-r"); });
-  var want = r.slice(0, 4);
+function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
+function drawHome(typing) {
+  var f = first(), hi = sheet.querySelector("[data-wl-hi-home]");
+  hi.innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + "." + (typing ? "<i></i>" : "");
+  var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; }), forEl = sheet.querySelector("[data-wl-for]");
+  forEl.innerHTML = r.length ? "Made for " + article(r[0]) + " " + list(r.map(function (x) { return "<b>" + esc(x.toLowerCase()) + "</b>"; })) + "." : f ? "Studio's ready when you are." : "Tell Studio who you are.";
+  var made = sheet.querySelector("[data-wl-made]"), have = [].slice.call(made.querySelectorAll(".wl-mc")).map(function (c) { return c.getAttribute("data-r"); });
+  var want = ans.roles.slice(0, 4);
   if (have.join("|") === want.join("|")) return;
   var out = want.map(function (k, i) {
-    var m = MADE[k], fresh = have.indexOf(k) < 0;
-    return '<span class="wl-mc' + (fresh ? " wl-in-a" : "") + '" data-r="' + esc(k) + '" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(m[2]) + "</b></span></span>";
+    var m = MADE[k], fresh = have.indexOf(k) < 0, t = k === "Something else" && val("other") ? val("other") : m[2];
+    return '<span class="wl-mc' + (fresh ? " wl-in-a" : "") + '" data-r="' + esc(k) + '" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(t) + "</b></span></span>";
   });
   for (var i = want.length; i < 4; i++) out.push('<span class="wl-ph"></span>');
   made.innerHTML = out.join("");
 }
 function drawBrands() {
-  var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, ul = sheet.querySelector("[data-wl-bl]");
+  var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, ul = sheet.querySelector("[data-wl-bl]"), f = first();
   sheet.querySelector("[data-wl-bn]").textContent = ans.brands || "1";
-  var have = ul.children.length;
+  var have = ul.querySelectorAll(".wl-br").length;
   ul.innerHTML = BRANDS.slice(0, n).map(function (b, i) {
-    var mono = b.img ? '<img src="' + b.img + '" alt="">' : '<span style="background:' + b.bg + ";color:" + (b.ink || "#fff") + '">' + b.m + "</span>";
-    return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + (i - have) + '"><span class="wl-bm">' + mono.replace("<span", '<span class="x"') + '</span><span class="wl-bt"><b>' + esc(b.n) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
+    var name = i === 0 && f ? f + "'s brand" : b.n, mono = i === 0 ? (f ? f.charAt(0).toUpperCase() : "Y") : b.m;
+    var mark = b.img ? '<img src="' + b.img + '" alt="">' : esc(mono);
+    return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + Math.max(0, i - have) + '"><span class="wl-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + mark + '</span><span class="wl-bt"><b>' + esc(name) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
   }).join("") + (n === 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
-  ul.querySelectorAll(".wl-bm .x").forEach(function (x) { x.style.cssText += ";display:grid;place-items:center;width:100%;height:100%"; });
 }
 function drawClaude() {
-  var chip = sheet.querySelector("[data-wl-chip]"), t = chip.querySelector("span");
-  var c = ans.claude;
+  var chip = sheet.querySelector("[data-wl-chip]"), t = chip.querySelector("span"), c = ans.claude;
   chip.classList.toggle("wait", c === "Free plan" || c === "Not yet");
-  t.textContent = c === "Pro or Max" ? "Claude connected. You're ready." : c === "Free plan" ? "Claude Pro unlocks Studio. One click." : c === "Not yet" ? "We'll set Claude up with you." : "Claude, connected in one click";
+  t.textContent = c === "Pro or Max" ? "Claude connected. You're ready." : c === "Free plan" ? "Claude Pro unlocks Studio. One click." : c === "Not yet" ? "No problem. We'll set Claude up with you." : "Claude, connected in one click";
 }
-/* the composer types a request that fits who you are, works, and the cuts land */
-var typeTok = 0;
-function typeLoop() {
-  var my = ++typeTok, comp = sheet.querySelector(".wl-comp"), t = sheet.querySelector("[data-wl-type]"), res = sheet.querySelector("[data-wl-res]");
-  var w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== typeTok) throw 0; }); };
-  var picks = ans.roles.length ? ans.roles : ["Founder"];
+/* the Claude scene, on a loop while it's showing: three clips are dragged in from your Mac, the composer lights up to take them,
+   a request is typed and sent, and three cuts come back. Then they clear and it starts again. */
+var loopTok = 0;
+function claudeLoop() {
+  var my = ++loopTok, cl = sheet.querySelector(".wl-cl"), comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]");
+  var t = sheet.querySelector("[data-wl-type]"), res = sheet.querySelector("[data-wl-res]"), fly = sheet.querySelector("[data-wl-fly]");
+  var w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== loopTok) throw 0; }); };
   (async function () {
     try {
       for (var round = 0; ; round++) {
-        var k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
-        comp.classList.remove("has", "work"); t.textContent = ""; res.innerHTML = "";
+        var picks = ans.roles.length ? ans.roles : ["Founder"], k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
+        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"];
+        comp.classList.remove("has", "work", "over", "tap"); t.textContent = ""; att.innerHTML = "";
+        /* the files, dragged in from the bottom left by a pointer */
+        fly.innerHTML = '<div class="stack">' + clips.map(function (s) { return '<span><img src="' + M + "selects/" + s + '.jpg" alt=""></span>'; }).join("") +
+          '<b class="n">3</b><span class="ptr"><svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg></span></div>';
+        var st = fly.firstChild, cb = comp.getBoundingClientRect(), wb = cl.getBoundingClientRect(), k2 = wb.width / cl.offsetWidth || 1;
+        var tx = (cb.left - wb.left) / k2 + 70, ty = (cb.top - wb.top) / k2 + 10;
+        st.style.transition = "none"; st.style.transform = "translate(-160px, 420px) rotate(-8deg)"; st.style.opacity = "0";
         await w(500);
-        for (var i = 1; i <= text.length; i++) { t.textContent = text.slice(0, i); comp.classList.toggle("has", i > 0); await w(38 + Math.random() * 30); }
-        await w(450); comp.classList.add("work");
-        await w(1300); comp.classList.remove("work");
-        var shots = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"];
-        res.innerHTML = shots.map(function (s, j) { return '<span class="wl-rc wl-in-a" style="--i:' + j + '"><span class="wl-mc"><img src="' + M + "selects/" + s + '.jpg" alt=""><i>v0' + (j + 1) + "</i><span><em>" + esc(film[1]) + "</em><b>" + (j ? "Version " + (j + 1) : esc(film[2])) + "</b></span></span></span>"; }).join("");
-        await w(3600);
+        void st.offsetWidth; st.style.transition = ""; st.style.opacity = "1"; st.style.transform = "translate(" + (tx - 20) + "px, " + (ty + 6) + "px) rotate(-3deg)";
+        await w(800); comp.classList.add("over");
+        await w(450); st.style.opacity = "0"; st.style.transform = "translate(" + tx + "px, " + ty + "px) scale(.6)";
+        comp.classList.remove("over");
+        att.innerHTML = clips.map(function (s, i) { return '<span style="--i:' + i + '"><img src="' + M + "selects/" + s + '.jpg" alt=""></span>'; }).join("") + "<b>3 clips</b>";
+        await w(700); fly.innerHTML = "";
+        for (var i = 1; i <= text.length; i++) { t.textContent = text.slice(0, i); comp.classList.add("has"); await w(34 + Math.random() * 30); }
+        await w(450); comp.classList.add("tap"); await w(160); comp.classList.remove("tap"); comp.classList.add("work");
+        await w(1400); comp.classList.remove("work");
+        res.innerHTML = clips.map(function (s, j) { return '<span class="wl-rc wl-in-a" style="--i:' + j + '"><span class="wl-mc"><img src="' + M + "selects/" + s + '.jpg" alt=""><i>v0' + (j + 1) + "</i><span><em>" + esc(film[1]) + "</em><b>" + (j ? "Version " + (j + 1) : esc(film[2])) + "</b></span></span></span>"; }).join("");
+        await w(3800);
+        res.querySelectorAll(".wl-rc").forEach(function (r, j) { r.classList.remove("wl-in-a"); r.style.setProperty("--i", j); r.classList.add("wl-out-a"); });
+        att.querySelectorAll("span").forEach(function (s) { s.classList.add("wl-out-a"); });
+        await w(650); res.innerHTML = "";
       }
     } catch (e) {}
   })();
-}
-function bars(svg, seed) {
-  var s = 0, out = [], x = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0;
-  s = s || 7;
-  while (x < 300) { s = (s * 16807) % 2147483647; var w = 1 + (s % 4), gap = 1 + ((s >> 3) % 3); out.push('<rect x="' + x + '" y="0" width="' + w + '" height="34"/>'); x += w + gap; }
-  svg.innerHTML = out.join("");
-}
-function drawPass() {
-  var f = val("first"), l = val("last"), e = val("email");
-  var nm = sheet.querySelector("[data-wl-pname]");
-  nm.innerHTML = f || l ? esc((f + " " + l).trim()) : '<span class="ph">Your name</span>';
-  sheet.querySelector("[data-wl-pmail]").textContent = e || "you@email.com";
-  sheet.querySelector("[data-wl-pfor]").textContent = ans.roles[0] || "Mac";
-  bars(sheet.querySelector("[data-wl-bars]"), (f + l + e) || "studio");
 }
 function sizeStage() {
   var r = stage.getBoundingClientRect();
@@ -188,11 +283,104 @@ function sizeStage() {
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
 
+/* ---------- the pass: a 3D object (see the CSS). Spins in once, follows the mouse or a finger, flips on a tap. ---------- */
+function passHTML(o) {
+  var frost = '<img class="frost" src="' + (sky.getAttribute("src") || "assets/hero/sky.jpg") + '" alt="">';
+  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="tint"></div><div class="foil"></div><div class="sweep"></div></div>' +
+    '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono">Early access · Invite</span></div>' +
+    '<div class="lift who"><span class="mono dim">Invite for</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
+    '<div class="lift row"><div><span class="mono dim" data-p="k1">No.</span><b data-p="no">····</b></div><div><span class="mono dim">Trial</span><b class="s">14 days, free</b></div><div><span class="mono dim" data-p="k3">For</span><b class="s" data-p="v3">Mac</b></div></div>' +
+    '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
+    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="tint"></div><div class="foil"></div></div>' +
+    '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
+    '<div class="lift what"><span class="mono dim">What\'s waiting for you</span><h4>Your whole content team, on your Mac.</h4><ul><li><i></i>14 days of everything, free</li><li><i></i>Every feature, every brand</li><li><i></i>Claude does the work</li></ul></div>' +
+    '<div class="lift sig"><span class="mono dim">See you inside</span><span class="mono" data-p="sig">Studio</span></div></div>';
+}
+function bars(box, seed) {
+  var s = 0, out = "", x = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0; s = s || 7;
+  while (x < 96) { s = (s * 16807) % 2147483647; var w = .35 + (s % 4) * .3; out += '<i style="width:' + w.toFixed(2) + '%"></i>'; x += w + .7; }
+  box.innerHTML = out;
+}
+function Pass(el, opts) {
+  opts = opts || {};
+  el.innerHTML = passHTML();
+  var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
+  var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function frame(now) {
+    if (!st.live) return;
+    if (el.offsetParent) {
+      if (st.intro) {
+        var t = Math.min(1, (now - st.intro.t0) / st.intro.ms), e = easeOut(t);
+        st.ry = lerp(st.intro.ry0, 0, easeIO(t)) + st.flip; st.z = lerp(-900, 0, e); st.s = lerp(.62, 1, e); st.rx = lerp(26, 0, e);
+        if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
+      } else {
+        var k = st.drag ? .35 : .09;
+        if (!fine && !st.drag) { st.try_ = Math.sin(now / 1600) * 9; st.trx = Math.cos(now / 2100) * 5; }
+        st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
+      }
+      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
+      var ny = ((st.ry % 360) + 540) % 360 - 180;
+      el.style.setProperty("--mx", (.5 + ny / 90 * .5).toFixed(3)); el.style.setProperty("--my", (.35 - st.rx / 40).toFixed(3));
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("pointermove", function (e) {
+    if (!st.live) return;
+    if (st.drag) { st.try_ = st.drag.ry0 + (e.clientX - st.drag.x) * .45; st.trx = Math.max(-25, Math.min(25, st.drag.rx0 - (e.clientY - st.drag.y) * .3)); if (Math.abs(e.clientX - st.drag.x) > 6) st.drag.moved = true; return; }
+    if (!fine || st.intro) return;
+    var r = el.getBoundingClientRect(), x = (e.clientX - (r.left + r.width / 2)) / innerWidth, y = (e.clientY - (r.top + r.height / 2)) / innerHeight;
+    st.try_ = Math.max(-22, Math.min(22, x * 40)); st.trx = Math.max(-16, Math.min(16, -y * 30));
+  });
+  el.addEventListener("pointerdown", function (e) { st.drag = { x: e.clientX, y: e.clientY, ry0: st.try_, rx0: st.trx, moved: false }; });
+  function up() {
+    if (!st.drag) return;
+    var d = st.drag; st.drag = null;
+    if (!d.moved) { st.flip += 180; SFX.play("move", { gain: .8 }); opts.onFlip && opts.onFlip(); }
+    else st.flip += Math.round(st.try_ / 180) * 180;
+    st.try_ = 0; st.trx = 0;
+  }
+  window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+  el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
+  el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
+  var q = function (k) { return el.querySelector('[data-p="' + k + '"]'); };
+  return {
+    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } },
+    stop: function () { st.live = false; },
+    enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
+    set: function (d) {
+      if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
+      if ("mail" in d) q("mail").textContent = d.mail;
+      if ("k1" in d) q("k1").textContent = d.k1;
+      if ("no" in d) q("no").textContent = d.no;
+      if ("k3" in d) q("k3").textContent = d.k3;
+      if ("v3" in d) q("v3").textContent = d.v3;
+      if ("sig" in d) q("sig").textContent = d.sig;
+      if ("seed" in d) bars(q("bars"), d.seed || "studio");
+    }
+  };
+}
+var pass1 = Pass(sheet.querySelector("[data-wl-pass1]"));
+var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { onLanded: function () { SFX.play("land"); } });
+function drawPass() {
+  var f = val("first"), l = val("last"), e = val("email");
+  pass1.set({ name: (f + " " + l).trim(), mail: e || "you@email.com", v3: (ans.roles[0] === "Something else" && val("other")) || ans.roles[0] || "Mac", seed: (f + l + e) || "studio" });
+}
+
 /* ---------- moving between questions ---------- */
-function stepEl(n) { return steps[n]; }
-function ready(n) { var q = ORDER[n]; return q === "roles" ? ans.roles.length > 0 : q === "you" ? true : !!ans[q]; }
+function ready(n) {
+  var q = ORDER[n];
+  if (q === "name") return !!val("first") && !!val("last");
+  if (q === "roles") return ans.roles.length > 0 && (ans.roles.indexOf("Something else") < 0 || !!val("other"));
+  if (q === "you") return true;
+  return !!ans[q];
+}
+function personal() {
+  var f = first();
+  sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(/^[^.]*\.\s*/, "").replace(/, \{first\}/, ""); });
+}
 function setStep(n, quiet) {
-  var cur = stepEl(at), nx = stepEl(n), q = ORDER[n];
+  var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1;
+  personal();
   if (cur !== nx) {
     var h0 = box.offsetHeight;
     cur.classList.remove("on"); cur.classList.toggle("past", n > at);
@@ -200,30 +388,44 @@ function setStep(n, quiet) {
     var h1 = nx.offsetHeight;
     box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
     clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
-    var a = scenes[ORDER[at]], b = scenes[q];
-    if (a) { a.classList.remove("on"); a.classList.toggle("past", n > at); }
-    if (b) { b.classList.remove("past"); b.classList.add("on"); }
+    var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
+    if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
+    if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
   at = n;
   sheet.setAttribute("data-step", q);
-  dots.forEach(function (d, i) { d.classList.toggle("on", i === n); d.classList.toggle("ok", i < n); });
+  kLabel.textContent = "Step " + (n + 1) + " of " + ORDER.length;
+  segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
   back.hidden = n === 0;
   var last = q === "you";
-  next.hidden = last; go.hidden = !last; fine.hidden = !last;
+  next.hidden = last; go.hidden = !last; fineP.hidden = !last;
   next.disabled = !ready(n);
-  if (q === "claude") typeLoop(); else typeTok++;
-  if (q === "you") drawPass();
+  if (SCENE[q] === "claude") claudeLoop(); else loopTok++;
+  if (SCENE[q] === "you") { drawPass(); pass1.start(); } else pass1.stop();
+  if (SCENE[q] === "home") drawHome();
+  if (!quiet && sheet.classList.contains("open")) KAY.say([LINE[q]]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
   setTimeout(function () {
     if (!sheet.classList.contains("open")) return;
     if (sheet.classList.contains("done")) { sheet.querySelector("[data-wl-done]").focus({ preventScroll: true }); return; }
-    var s = stepEl(at), t = s.querySelector(".wl-opt.sel") || s.querySelector(".wl-opt, input");
+    var s = steps[at], t = s.querySelector(".wl-opt.sel") || s.querySelector(".wl-opt, input");
     if (t && !(SK.mobile() && t.tagName === "INPUT")) t.focus({ preventScroll: true }); /* phones: no keyboard until they tap */
   }, delay);
 }
-function advance() { if (busy || !ready(at) || at >= ORDER.length - 1) return; busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450); }
+function advance() {
+  if (busy || at >= ORDER.length - 1) return;
+  if (!ready(at)) { if (ORDER[at] === "name") checkName(); return; }
+  busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450);
+}
+function checkName() {
+  var bad = [];
+  if (!val("first")) bad.push("first");
+  if (!val("last")) bad.push("last");
+  mark(bad, bad.length ? (bad.length === 2 ? "Add your first and last name." : bad[0] === "first" ? "Add your first name." : "Add your last name.") : "");
+  if (bad.length) form.elements[bad[0]].focus();
+}
 steps.forEach(function (s, n) {
   var multi = s.hasAttribute("data-multi"), q = s.getAttribute("data-q");
   s.querySelectorAll(".wl-opt").forEach(function (o) {
@@ -234,18 +436,105 @@ steps.forEach(function (s, n) {
         var on = !o.classList.contains("sel");
         o.classList.toggle("sel", on); o.setAttribute("aria-pressed", on ? "true" : "false");
         ans[q] = [].slice.call(s.querySelectorAll(".wl-opt.sel")).map(function (x) { return x.getAttribute("data-v"); });
+        if (v === "Something else") { other.hidden = !on; if (on) setTimeout(function () { otherIn.focus(); }, 60); box.style.height = ""; }
       } else {
         s.querySelectorAll(".wl-opt").forEach(function (x) { x.classList.toggle("sel", x === o); x.setAttribute("aria-pressed", x === o ? "true" : "false"); });
         ans[q] = v;
       }
       next.disabled = !ready(at);
-      if (q === "roles") drawRoles(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
-      if (!multi) setTimeout(advance, SK.reduced ? 60 : 480); /* one answer: on to the next, after it has landed on the right */
+      if (q === "roles") drawHome(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
+      if (!multi) setTimeout(advance, SK.reduced ? 60 : 520); /* one answer: on to the next, once it has landed on the right */
     });
   });
 });
 next.addEventListener("click", advance);
 back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
+
+/* ---------- the details: the beam runs round the field you're in; a field that needs you turns it auburn ---------- */
+var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp)"));
+function mark(names, msg) {
+  form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); var fb = f.querySelector(".wl-fb"); if (fb && !f.contains(document.activeElement)) fb.removeAttribute("data-active"); });
+  names.forEach(function (n) { var f = form.elements[n].closest(".wl-f"); void f.offsetWidth; f.classList.add("bad"); f.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); });
+  var errEl = steps[at].querySelector(".wl-err"); if (errEl) errEl.textContent = msg || "";
+}
+inputs.forEach(function (inp) {
+  inp.addEventListener("input", function () {
+    var f = inp.closest(".wl-f");
+    if (f.classList.contains("bad")) { f.classList.remove("bad"); if (!form.querySelector(".wl-q.on .wl-f.bad")) { var e = steps[at].querySelector(".wl-err"); if (e) e.textContent = ""; } }
+    if (inp.name === "first" || inp.name === "last") { drawHome(true); clearTimeout(inp._t); inp._t = setTimeout(function () { drawHome(); }, 900); personal(); }
+    if (inp.name === "other") drawHome();
+    next.disabled = !ready(at);
+    if (ORDER[at] === "you") drawPass();
+  });
+  inp.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    var here = [].slice.call(steps[at].querySelectorAll("input:not(.wl-hp)")).filter(function (x) { return x.offsetParent; }), i = here.indexOf(inp);
+    if (i > -1 && i < here.length - 1) here[i + 1].focus();
+    else if (ORDER[at] === "you") form.requestSubmit ? form.requestSubmit() : go.click();
+    else advance();
+  });
+});
+sheet.querySelectorAll(".wl-box").forEach(function (b) {
+  var fb = b.querySelector(".wl-fb");
+  b.addEventListener("focusin", function () { fb.setAttribute("data-active", ""); });
+  b.addEventListener("focusout", function () { if (!b.closest(".wl-f.bad")) fb.removeAttribute("data-active"); });
+});
+var SRC = (function () {
+  var s = Q.get("utm_source") || H.get("src") || Q.get("src") || "";
+  if (!s && document.referrer) { try { var r = new URL(document.referrer).hostname.replace(/^www\.|^l\.|^m\./, ""); if (r !== location.hostname) s = r.split(".")[0]; } catch (e) {} }
+  if (!s && REF) s = "friend";
+  return [s || "direct", Q.get("utm_medium"), Q.get("utm_campaign")].filter(Boolean).join(" · ");
+})(); /* read once, on arrival: closing the sheet takes the hash off */
+function code6() { var a = "23456789abcdefghjkmnpqrstuvwxyz", s = ""; for (var i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
+function timed(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, ms); })]); }
+function send(d) {
+  if (API) {
+    return timed(fetch(API + "/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }), 15000)
+      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (j) { if (!j || !j.ok) { var e = new Error((j && j.error) || "That didn't go through."); e.human = !!(j && j.error); throw e; } return j; });
+  }
+  var mine = code6(), base = { code: mine, first: d.first, position: null, total: null, referrals: 0, boost: 0 };
+  if (cfg.brevo_form) {
+    var post = function (withSms) {
+      var fd = new FormData(), f = { EMAIL: d.email, FIRSTNAME: d.first, LASTNAME: d.last, ROLE: d.roles.join(", "), BRANDS: d.brands, CLAUDE: d.claude, SOURCE: d.source, REF_CODE: mine, REFERRED_BY: d.ref || "" };
+      if (withSms) { f.SMS = d.phone; if (d.cc) f.SMS__COUNTRY_CODE = "+" + d.cc; }
+      Object.keys(f).forEach(function (k) { fd.append(k, f[k]); });
+      fd.append("email_address_check", ""); fd.append("locale", "en");
+      var url = cfg.brevo_form + (cfg.brevo_form.indexOf("?") < 0 ? "?" : "&") + "isAjax=1";
+      return timed(fetch(url, { method: "POST", body: fd }), 15000).then(function (r) { return r.json().catch(function () { return {}; }); }, function () {
+        return fetch(url, { method: "POST", body: fd, mode: "no-cors" }).then(function () { return { success: true }; }); /* no CORS: it still lands */
+      });
+    };
+    return post(true).then(function (j) { return j && j.success === false ? post(false) : j; }).then(function (j) { if (j && j.success === false) throw new Error("brevo"); return base; });
+  }
+  if (cfg.webhook) {
+    return timed(fetch(cfg.webhook, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(Object.assign({ code: mine }, d)) }), 15000)
+      .then(function () { return base; }, function () { return fetch(cfg.webhook, { method: "POST", mode: "no-cors", body: JSON.stringify(Object.assign({ code: mine }, d)) }).then(function () { return base; }); });
+  }
+  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, code: mine, first: d.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; }); }
+  return Promise.reject(new Error("not connected"));
+}
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (ORDER[at] !== "you") { advance(); return; }
+  if (go.classList.contains("busy")) return;
+  var email = val("email"), phone = val("phone"), digits = phone.replace(/\D/g, ""), c = cc(), bad = [], msg = "";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { bad.push("email"); msg = email ? "That email doesn't look quite right." : "Add your email."; }
+  if (digits.length < 6 || digits.length > 15) { bad.push("phone"); msg = bad.length > 1 ? "Add your email and phone number." : phone ? "That phone number looks too short." : "Add your phone number."; }
+  mark(bad, msg);
+  if (bad.length) { form.elements[bad[0]].focus(); return; }
+  var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
+  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: SRC + " · " + from, ref: REF, hp: val("company") };
+  go.classList.add("busy"); SFX.play("send");
+  send(d).then(function (j) {
+    var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, at: Date.now() };
+    try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
+    showDone(rec);
+  }, function (x) {
+    mark([], x && x.human ? x.message : "That didn't go through. Check your connection and try again.");
+  }).then(function () { go.classList.remove("busy"); });
+});
 
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
@@ -253,20 +542,26 @@ function open(src) {
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
-  if (!sky.getAttribute("src")) sky.src = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg";
+  if (!sky.getAttribute("src")) { sky.src = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg"; sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  SFX.wake();
   var j = joined();
-  if (j && j.first) showDone(j, true);
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  if (ORDER[at] === "claude") typeLoop();
-  focusStep(SK.reduced ? 0 : 560);
+  if (j) showDone(j, true);
+  else {
+    if (SCENE[ORDER[at]] === "claude") claudeLoop();
+    if (SCENE[ORDER[at]] === "you") pass1.start();
+    drawHome();
+    KAY.say(at === 0 ? ["hello", "name"] : [LINE[ORDER[at]]]);
+    focusStep(SK.reduced ? 0 : 560);
+  }
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); typeTok++;
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); pass1.stop(); pass2.stop();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -286,7 +581,7 @@ document.addEventListener("click", function (e) {
 sheet.querySelectorAll("[data-wl-close]").forEach(function (b) { b.addEventListener("click", close); });
 sheet.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { e.preventDefault(); close(); return; }
-  if (e.key === "Enter" && !sheet.classList.contains("done") && ORDER[at] !== "you" && !e.target.closest(".wl-opt, .wl-back")) { e.preventDefault(); advance(); return; }
+  if (e.key === "Enter" && !sheet.classList.contains("done") && !/^(name|you)$/.test(ORDER[at]) && !e.target.closest(".wl-opt, .wl-back, input, .pass")) { e.preventDefault(); advance(); return; }
   if (e.key !== "Tab") return;
   var f = [].slice.call(sheet.querySelectorAll("button, input:not(.wl-hp), select, a[href], [tabindex='0']")).filter(function (x) { return !x.disabled && x.offsetParent !== null && getComputedStyle(x).visibility !== "hidden"; });
   if (!f.length) return;
@@ -299,108 +594,26 @@ if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "li
 /* a friend's invite: say whose */
 if (REF && !joined()) {
   var refP = sheet.querySelector("[data-wl-ref]");
-  var say = function (first) {
-    var face = refP.querySelector("[data-wl-ref-face]");
-    if (face) face.outerHTML = '<span class="wl-ri">' + esc((first || "S").charAt(0).toUpperCase()) + "</span>";
-    refP.querySelector("[data-wl-ref-t]").textContent = first ? first + " saved you a spot." : "A friend saved you a spot.";
+  var sayRef = function (f) {
+    sheet.querySelector("[data-wl-ri]").textContent = (f || "S").charAt(0).toUpperCase();
+    sheet.querySelector("[data-wl-ref-t]").textContent = f ? f + " saved you a spot." : "A friend saved you a spot.";
     refP.hidden = false;
   };
-  if (API) fetch(API + "/status?code=" + encodeURIComponent(REF)).then(function (r) { return r.json(); }).then(function (j) { say(j && j.ok ? j.first : ""); }, function () { say(""); });
-  else say("");
+  if (API) fetch(API + "/status?code=" + encodeURIComponent(REF)).then(function (r) { return r.json(); }).then(function (j) { sayRef(j && j.ok ? j.first : ""); }, function () { sayRef(""); });
+  else sayRef("");
 }
 
-/* ---------- the details, checked and sent ---------- */
-var inputs = [].slice.call(form.querySelectorAll(".wl-fields input:not(.wl-hp)"));
-inputs.forEach(function (inp, k) {
-  inp.addEventListener("input", function () { var f = inp.closest(".wl-f"); if (f.classList.contains("bad")) { f.classList.remove("bad"); if (!form.querySelector(".wl-f.bad")) err.textContent = ""; } drawPass(); });
-  inp.addEventListener("keydown", function (e) { if (e.key === "Enter" && k < inputs.length - 1) { e.preventDefault(); inputs[k + 1].focus(); } });
-});
-/* the composer's beam runs round the field you are typing in */
-sheet.querySelectorAll(".wl-box").forEach(function (b) {
-  var fb = b.querySelector(".wl-fb");
-  b.addEventListener("focusin", function () { fb.setAttribute("data-active", ""); });
-  b.addEventListener("focusout", function () { fb.removeAttribute("data-active"); });
-});
-function val(n) { return (form.elements[n].value || "").trim(); }
-var SRC = (function () {
-  var s = Q.get("utm_source") || H.get("src") || Q.get("src") || "";
-  if (!s && document.referrer) { try { var r = new URL(document.referrer).hostname.replace(/^www\.|^l\.|^m\./, ""); if (r !== location.hostname) s = r.split(".")[0]; } catch (e) {} }
-  if (!s && REF) s = "friend";
-  return [s || "direct", Q.get("utm_medium"), Q.get("utm_campaign")].filter(Boolean).join(" · ");
-})(); /* read once, on arrival: closing the sheet takes the hash off */
-function code6() { var a = "23456789abcdefghjkmnpqrstuvwxyz", s = ""; for (var i = 0; i < 6; i++) s += a[Math.floor(Math.random() * a.length)]; return s; }
-function timed(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(function () { rej(new Error("timeout")); }, ms); })]); }
-
-function send(d) {
-  if (API) {
-    return timed(fetch(API + "/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(d) }), 15000)
-      .then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
-      .then(function (j) { if (!j || !j.ok) { var e = new Error((j && j.error) || "That didn't go through."); e.human = !!(j && j.error); throw e; } return j; });
-  }
-  var mine = code6(), sms = d.cc ? d.phone : d.phone, base = { code: mine, first: d.first, position: null, total: null, referrals: 0, boost: 0 };
-  if (cfg.brevo_form) {
-    var post = function (withSms) {
-      var fd = new FormData(), f = { EMAIL: d.email, FIRSTNAME: d.first, LASTNAME: d.last, ROLE: d.roles.join(", "), BRANDS: d.brands, CLAUDE: d.claude, SOURCE: d.source, REF_CODE: mine, REFERRED_BY: d.ref || "" };
-      if (withSms) { f.SMS = sms; if (d.cc) f.SMS__COUNTRY_CODE = "+" + d.cc; }
-      Object.keys(f).forEach(function (k) { fd.append(k, f[k]); });
-      fd.append("email_address_check", ""); fd.append("locale", "en");
-      var url = cfg.brevo_form + (cfg.brevo_form.indexOf("?") < 0 ? "?" : "&") + "isAjax=1";
-      return timed(fetch(url, { method: "POST", body: fd }), 15000).then(function (r) { return r.json().catch(function () { return {}; }); }, function () {
-        return fetch(url, { method: "POST", body: fd, mode: "no-cors" }).then(function () { return { success: true }; }); /* no CORS: it still lands */
-      });
-    };
-    /* Brevo refuses the whole sign-up when it doesn't like a phone number: then the name and email still go in, without the phone */
-    return post(true).then(function (j) { return j && j.success === false ? post(false) : j; }).then(function (j) { if (j && j.success === false) throw new Error("brevo"); return base; });
-  }
-  if (cfg.webhook) {
-    return timed(fetch(cfg.webhook, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(Object.assign({ code: mine }, d)) }), 15000)
-      .then(function () { return base; }, function () { return fetch(cfg.webhook, { method: "POST", mode: "no-cors", body: JSON.stringify(Object.assign({ code: mine }, d)) }).then(function () { return base; }); });
-  }
-  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, code: mine, first: d.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; }); }
-  return Promise.reject(new Error("not connected"));
-}
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
-  if (ORDER[at] !== "you") { advance(); return; }
-  if (go.classList.contains("busy")) return;
-  var first = val("first"), last = val("last"), email = val("email"), phone = val("phone"), digits = phone.replace(/\D/g, ""), c = cc();
-  var bad = [];
-  if (!first) bad.push(["first", "Add your first name."]);
-  if (!last) bad.push(["last", "Add your last name."]);
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) bad.push(["email", email ? "That email doesn't look right." : "Add your email."]);
-  if (digits.length < 6 || digits.length > 15) bad.push(["phone", phone ? "That phone number looks too short." : "Add your phone number."]);
-  form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); });
-  if (bad.length) {
-    bad.forEach(function (b) { var f = form.elements[b[0]].closest(".wl-f"); void f.offsetWidth; f.classList.add("bad"); });
-    err.textContent = bad.length === 1 ? bad[0][1] : "Fill in the highlighted fields.";
-    form.elements[bad[0][0]].focus();
-    return;
-  }
-  err.textContent = "";
-  var intl = /^\s*\+/.test(phone);
-  var d = { first: first, last: last, email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: ans.roles, brands: ans.brands, claude: ans.claude, source: SRC + " · " + from, ref: REF, hp: val("company") };
-  go.classList.add("busy");
-  send(d).then(function (j) {
-    var rec = { first: first, last: last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, at: Date.now() };
-    try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
-    showDone(rec);
-  }, function (x) {
-    err.textContent = x && x.human ? x.message : "That didn't go through. Check your connection and try again.";
-  }).then(function () { go.classList.remove("busy"); });
-});
-
-/* ---------- You're on the list ---------- */
+/* ---------- You're in ---------- */
 var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
 function link(r) { return r && r.code ? location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }
 var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Get on the list:";
 function showDone(r, quiet) {
+  var again = sheet.classList.contains("done");
   rec = r;
-  if (!sheet.classList.contains("done")) sheet.querySelectorAll(".wl-settled").forEach(function (x) { x.classList.remove("wl-settled"); }); /* play the entrance again */
   var ranked = typeof r.position === "number" && r.position > 0;
   sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
   var pos = sheet.querySelector("[data-wl-dpos]");
-  pos.innerHTML = ranked ? "<b>#" + r.position.toLocaleString("en-US") + "</b> on the list." : "";
-  pos.hidden = !ranked;
+  pos.innerHTML = ranked ? "<b>#" + r.position.toLocaleString("en-US") + "</b> on the list." : "Welcome to Studio.";
   sheet.querySelector("[data-wl-rboost]").textContent = ranked && r.boost ? "Every friend who joins with your link moves you up " + r.boost + " spots." : "Send them your link. They get early access too.";
   sheet.querySelector(".wl-rtop b").textContent = ranked ? "Share with 3 friends to move up the list" : "Know someone who'd want this?";
   sheet.querySelector("[data-wl-slots]").hidden = !ranked;
@@ -408,19 +621,21 @@ function showDone(r, quiet) {
   var url = link(r), urlEl = sheet.querySelector("[data-wl-url]"), shareBox = sheet.querySelector("[data-wl-share]"), copyB = sheet.querySelector("[data-wl-copy]");
   urlEl.textContent = url ? url.replace(/^https?:\/\//, "") : "Making your link…"; /* never "undefined": no code yet, no link yet */
   urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
-  sheet.querySelector("[data-wl-pname2]").textContent = r.first + (r.last ? " " + r.last : "");
-  sheet.querySelector("[data-wl-pmail2]").textContent = ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list";
-  sheet.querySelector("[data-wl-pno2]").textContent = ranked ? "#" + r.position.toLocaleString("en-US") : "In";
-  sheet.querySelector("[data-wl-pref]").textContent = Math.min(3, r.referrals || 0) + " of 3";
-  bars(sheet.querySelector("[data-wl-bars2]"), r.code || r.first);
+  pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + r.position.toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + r.position).slice(-4) : "Studio", seed: r.code || r.first });
   var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
   var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), wa: "https://wa.me/?text=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
   sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
-  sheet.classList.add("done");
-  sheet.scrollTop = 0; doneEl.scrollTop = 0;
-  typeTok++;
-  if (!quiet) focusStep(500);
+  loopTok++; pass1.stop();
+  if (!again) {
+    sheet.classList.add("done"); sheet.classList.remove("shown");
+    sheet.scrollTop = 0; doneEl.scrollTop = 0;
+    pass2.enter(2100);
+    setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
+    SFX.play("done");
+    KAY.say(["in", "share"]);
+  }
+  if (!quiet) setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
   if (API && r.code) fetch(API + "/status?code=" + encodeURIComponent(r.code)).then(function (x) { return x.json(); }).then(function (j) {
     if (!j || !j.ok || !rec || rec.code !== r.code) return;
     if (j.position === r.position && j.referrals === r.referrals) return;
@@ -436,25 +651,25 @@ sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { old(url); ok(); }); else { old(url); ok(); }
 });
 function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
-sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
+sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
 sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec); });
 
 /* ---------- start over: "Not you?" on the done screen, and Restart on localhost or with ?early. Clears the saved sign-up. ---------- */
 function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
-  rec = null; ans = { roles: [], brands: "", claude: "" }; typeTok++;
+  rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
-  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = "";
-  form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); }); err.textContent = "";
+  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; other.hidden = true;
+  mark([], ""); sheet.querySelectorAll(".wl-err").forEach(function (e) { e.textContent = ""; });
   steps.forEach(function (s, i) { s.classList.remove("past"); s.classList.toggle("on", i === 0); });
-  Object.keys(scenes).forEach(function (k) { scenes[k].classList.remove("past"); scenes[k].classList.toggle("on", k === ORDER[0]); });
+  Object.keys(scenes).forEach(function (k) { scenes[k].classList.remove("past"); scenes[k].classList.toggle("on", k === SCENE[ORDER[0]]); });
   box.style.height = "";
-  at = 0; sheet.classList.remove("done");
-  drawRoles(); drawBrands(); drawClaude(); drawPass(); setStep(0);
+  at = 0; sheet.classList.remove("done", "shown");
+  drawHome(); drawBrands(); drawClaude(); setStep(0, true);
   sheet.scrollTop = 0;
+  KAY.say(["name"]); focusStep(300);
 }
 sheet.querySelector("[data-wl-over]").addEventListener("click", startOver);
-doneEl.addEventListener("animationend", function (e) { if (e.target.matches(".wl-dl > *, .wl-dr")) e.target.classList.add("wl-settled"); });
 var restartB = sheet.querySelector("[data-wl-restart]");
 restartB.hidden = !(local || /[?&]early(=|&|$)/.test(location.search));
 restartB.addEventListener("click", startOver);
@@ -466,19 +681,18 @@ async function story(r) {
   var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
   var g = cv.getContext("2d"), bg = await img("assets/hero/sky-m.jpg"), mark = await img("assets/studio-mark.png");
   try { await document.fonts.ready; } catch (e) {}
-  g.fillStyle = "#0b1220"; g.fillRect(0, 0, W, Hh);
+  g.fillStyle = "#05090A"; g.fillRect(0, 0, W, Hh);
   if (bg) { var s = Math.max(W / bg.width, Hh / bg.height); g.drawImage(bg, (W - bg.width * s) / 2, (Hh - bg.height * s) * .4, bg.width * s, bg.height * s); }
-  var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,8,12,.35)"); gr.addColorStop(.5, "rgba(5,8,12,.15)"); gr.addColorStop(1, "rgba(5,8,12,.7)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
+  var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,9,10,.35)"); gr.addColorStop(.5, "rgba(5,9,10,.15)"); gr.addColorStop(1, "rgba(5,9,10,.72)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
   var F = "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", MO = "'IBM Plex Mono', Menlo, monospace";
   g.fillStyle = "#fff"; g.textAlign = "center";
   if (mark) g.drawImage(mark, W / 2 - 150, 250, 64, 64);
   g.font = "600 56px " + F; g.textAlign = "left"; g.fillText("Studio", W / 2 - 66, 298); g.textAlign = "center";
   g.font = "300 118px " + F; g.fillText("I'm on the list.", W / 2, 560);
   g.fillStyle = "rgba(245,243,238,.8)"; g.font = "400 46px " + F; g.fillText("One prompt. A finished video.", W / 2, 650);
-  // the pass
   g.save(); g.translate(W / 2, 1060); g.rotate(-.035);
-  rr(g, -400, -250, 800, 500, 60); g.fillStyle = "rgba(10,14,22,.62)"; g.fill();
-  var rim = g.createLinearGradient(-400, -250, 400, 250); rim.addColorStop(0, "rgba(120,170,255,.95)"); rim.addColorStop(.5, "rgba(255,255,255,.35)"); rim.addColorStop(1, "rgba(0,204,255,.9)"); g.strokeStyle = rim; g.lineWidth = 4; g.stroke();
+  rr(g, -400, -250, 800, 500, 60); var pg = g.createLinearGradient(-400, -250, 400, 250); pg.addColorStop(0, "rgba(223,234,232,.3)"); pg.addColorStop(.45, "rgba(14,25,30,.72)"); pg.addColorStop(1, "rgba(5,9,10,.86)"); g.fillStyle = pg; g.fill();
+  g.strokeStyle = "rgba(255,255,255,.4)"; g.lineWidth = 2; g.stroke();
   g.textAlign = "left"; g.fillStyle = "rgba(245,243,238,.7)"; g.font = "500 26px " + MO; g.fillText("EARLY ACCESS · INVITE", -340, -160);
   g.fillStyle = "#fff"; g.font = "300 92px " + F; g.fillText(r.first, -340, -40);
   g.fillStyle = "rgba(245,243,238,.6)"; g.font = "500 24px " + MO; g.fillText("PLACE", -340, 70); g.fillText("TRIAL", -80, 70);
@@ -498,5 +712,5 @@ async function story(r) {
   toast("Story saved. Post it, and add your link with the link sticker (copied).");
 }
 
-/* first paint of the stage */
-drawRoles(); drawBrands(); drawClaude(); drawPass(); setStep(0, true);
+/* first paint */
+drawHome(); drawBrands(); drawClaude(); drawPass(); setStep(0, true);
