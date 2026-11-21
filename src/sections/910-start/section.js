@@ -518,7 +518,7 @@ var APPEARANCE = {
     ".Input--invalid": { boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(255, 150, 110, 0.6)" },
     ".Tab": { backgroundColor: "rgba(255, 255, 255, 0.06)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5)" },
     ".Tab--selected": { backgroundColor: "rgba(255, 255, 255, 0.13)", color: "#ffffff", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.95), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.75), inset 2px 2px 5px -2px rgba(196, 214, 238, 0.62), inset -2px -2px 5px -2px rgba(242, 226, 220, 0.62)" },
-    ".Tab--selected .TabIcon": { fill: "#ffffff" }, ".Tab--selected .TabLabel": { color: "#ffffff" }, ".Tab:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+    ".TabIcon--selected": { fill: "#ffffff" }, ".TabLabel--selected": { color: "#ffffff" }, ".Tab:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
     ".CheckboxInput": { backgroundColor: "rgba(255, 255, 255, 0.07)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5)" },
     ".PickerItem": { backgroundColor: "rgba(255, 255, 255, 0.06)", border: "none" },
     ".Block": { backgroundColor: "rgba(255, 255, 255, 0.05)", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.5)", border: "none" },
@@ -572,7 +572,7 @@ function mountCard() {
     var opts = { mode: mode, currency: "usd", paymentMethodTypes: ["card"], appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] };
     if (mode === "subscription") opts.amount = 100;
     elements = stripe.elements(opts);
-    pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto" } });
+    pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto", link: "never" } });
     var host = $("[data-st-pe]");
     pe.on("ready", function () { var l = host.querySelector(".st-load"); if (l) l.remove(); });
     pe.on("focus", function () { host.closest(".st-card").classList.add("focus"); }); pe.on("blur", function () { host.closest(".st-card").classList.remove("focus"); });
