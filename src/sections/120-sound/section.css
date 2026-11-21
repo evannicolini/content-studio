@@ -61,19 +61,19 @@
 .snd-lane > * { position: absolute; top: 0; bottom: 0; }
 /* caption chips: one per word typed on screen, and the logo */
 .snd-text { background: none; }
-.snd-word { display: flex; align-items: center; justify-content: center; gap: 4px; border-radius: 6px; padding: 0 4px; overflow: hidden; font: 500 11.5px/1 var(--sans); letter-spacing: -.005em; color: var(--sand); background: rgba(255, 255, 255, .08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); opacity: .5; transition: opacity .25s var(--ease), background-color .25s var(--ease); white-space: nowrap; }
+.snd-word { display: flex; align-items: center; justify-content: center; gap: 4px; border-radius: 6px; padding: 0 4px; overflow: hidden; font: 500 11.5px/1 var(--sans); letter-spacing: -.005em; color: var(--sand); background: rgba(255, 255, 255, .08); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); opacity: .5; transition: opacity .25s var(--ease), background-color .25s var(--ease); white-space: nowrap; }
 .snd-word svg { width: 15px; height: 15px; flex: none; overflow: visible; }
 .snd-word.on { opacity: 1; background: rgba(255, 255, 255, .2); }
 /* shots: a filmstrip per shot, a seam at every cut */
-.snd-shot { border-radius: 6px; overflow: hidden; background: #0f141b left center / auto 100% repeat-x; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); }
+.snd-shot { border-radius: 6px; overflow: hidden; background: #0f141b left center / auto 100% repeat-x; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.63), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.45); }
 .snd-shot.end { background: linear-gradient(120deg, #10161f, #1b2430); display: grid; place-items: center; }
 .snd-shot.end svg { position: static; width: 26px; height: 26px; overflow: visible; opacity: .2; transform: scale(.8); transition: opacity .35s var(--ease), transform .5s cubic-bezier(.3, 1.5, .5, 1); }
 .snd-shot.end.on svg { opacity: 1; transform: none; }
 /* sound clips, coloured like the editor's SFX track */
-.snd-clip { display: flex; align-items: center; gap: 1px; padding: 0 3px; border-radius: 6px; background: rgba(191, 227, 255, .14); box-shadow: inset 0 0 0 1px rgba(191, 227, 255, .32); transition: background-color .5s var(--ease), box-shadow .5s var(--ease), transform .5s var(--ease); }
+.snd-clip { display: flex; align-items: center; gap: 1px; padding: 0 3px; border-radius: 6px; background: rgba(191, 227, 255, .14); box-shadow: inset 1px 1px 1px -1px rgba(191, 227, 255, 1), inset -1px -1px 1px -1px rgba(191, 227, 255, 1); transition: background-color .5s var(--ease), box-shadow .5s var(--ease), transform .5s var(--ease); }
 .snd-clip i { flex: 1 1 0; min-width: 1px; border-radius: 1px; background: var(--wv); opacity: .8; }
 .snd-clip.tick { padding: 0 2px; min-width: 7px; }
-.snd-clip.hit { background: rgba(191, 227, 255, .5); box-shadow: inset 0 0 0 1px #fff, 0 0 0 4px rgba(191, 227, 255, .16); transform: scaleY(1.16); transition-duration: .08s; }
+.snd-clip.hit { background: rgba(191, 227, 255, .5); box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .85), 0 0 12px rgba(191, 227, 255, .35), 0 0 0 4px rgba(191, 227, 255, .16); transform: scaleY(1.16); transition-duration: .08s; }
 .snd-names { position: relative; }
 .snd-names span { position: absolute; top: 2px; transform: translateX(-50%); font: 500 9.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--sand-3); white-space: nowrap; transition: color .3s; }
 .snd-names span.hit { color: #fff; }

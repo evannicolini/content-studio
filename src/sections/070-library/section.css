@@ -14,7 +14,7 @@
 .lb-tile > img, .lb-tile > video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .lb-tile > video { opacity: 0; transition: opacity .5s var(--ease); }
 .lb-tile.has > video { opacity: 1; }
-.lb-tile::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); pointer-events: none; }
+.lb-tile::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); pointer-events: none; }
 .lb-tile::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 36%; background: linear-gradient(180deg, rgba(6, 9, 13, 0), rgba(6, 9, 13, .62)); pointer-events: none; transition: opacity .4s var(--ease); }
 .lb-name { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: 11px; font: 500 12.5px/1.25 var(--sans); letter-spacing: -.01em; color: #fff; transition: opacity .3s var(--ease), transform .45s var(--ease); }
 /* the prompt, on glass */
@@ -66,7 +66,7 @@
 .lb-match { display: inline-flex; align-items: center; gap: 12px; height: 54px; margin-top: clamp(20px, 2.2vw, 28px); padding: 0 14px 0 8px; border-radius: 16px; background: rgba(8, 11, 16, .46); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: var(--rim); opacity: 0; transform: translate3d(0, -8px, 0) scale(.97); transition: opacity .35s var(--ease), transform .5s var(--ease); }
 .lb-match.on { opacity: 1; transform: none; }
 .lb-match-th { display: flex; gap: 4px; }
-.lb-match-th i { width: 22px; height: 38px; border-radius: 6px; background: #1a1f27 center / cover no-repeat; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); transition: opacity .3s var(--ease), transform .45s var(--ease); }
+.lb-match-th i { width: 22px; height: 38px; border-radius: 6px; background: #1a1f27 center / cover no-repeat; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.63), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.45); transition: opacity .3s var(--ease), transform .45s var(--ease); }
 .lb-match.done .lb-match-th i:not(:first-child) { opacity: .28; transform: scale(.9); }
 .lb-match-t { display: grid; font: 500 10.5px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: #fff; white-space: nowrap; }
 .lb-match-t span { grid-area: 1 / 1; transition: opacity .3s var(--ease), transform .45s var(--ease); }

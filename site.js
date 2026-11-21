@@ -4651,7 +4651,7 @@ next.addEventListener("click", advance);
 back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
 
 /* ---------- open / close ---------- */
-function joined() { try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; } }
+function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
 function open(src) {
   from = src || from;
   if (sheet.classList.contains("open")) return;
@@ -4794,10 +4794,11 @@ form.addEventListener("submit", function (e) {
 
 /* ---------- You're on the list ---------- */
 var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
-function link(r) { return location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH; }
+function link(r) { return r && r.code ? location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }
 var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Get on the list:";
 function showDone(r, quiet) {
   rec = r;
+  if (!sheet.classList.contains("done")) sheet.querySelectorAll(".wl-settled").forEach(function (x) { x.classList.remove("wl-settled"); }); /* play the entrance again */
   var ranked = typeof r.position === "number" && r.position > 0;
   sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
   var pos = sheet.querySelector("[data-wl-dpos]");
@@ -4807,8 +4808,9 @@ function showDone(r, quiet) {
   sheet.querySelector(".wl-rtop b").textContent = ranked ? "Share with 3 friends to move up the list" : "Know someone who'd want this?";
   sheet.querySelector("[data-wl-slots]").hidden = !ranked;
   sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) { li.classList.toggle("got", i < (r.referrals || 0)); li.querySelector("span").textContent = i < (r.referrals || 0) ? "Joined" : "Friend " + (i + 1); });
-  var url = link(r);
-  sheet.querySelector("[data-wl-url]").textContent = url.replace(/^https?:\/\//, "");
+  var url = link(r), urlEl = sheet.querySelector("[data-wl-url]"), shareBox = sheet.querySelector("[data-wl-share]"), copyB = sheet.querySelector("[data-wl-copy]");
+  urlEl.textContent = url ? url.replace(/^https?:\/\//, "") : "Making your link…"; /* never "undefined": no code yet, no link yet */
+  urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
   sheet.querySelector("[data-wl-pname2]").textContent = r.first + (r.last ? " " + r.last : "");
   sheet.querySelector("[data-wl-pmail2]").textContent = ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list";
   sheet.querySelector("[data-wl-pno2]").textContent = ranked ? "#" + r.position.toLocaleString("en-US") : "In";
@@ -4831,14 +4833,34 @@ function showDone(r, quiet) {
   }).catch(function () {});
 }
 sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
-  if (!rec) return;
+  if (!rec || !rec.code) return;
   var url = link(rec), b = this, sp = b.querySelector("span:not(.gx-beam):not([data-beam-bloom])");
   var ok = function () { sp.textContent = "Copied"; toast("Link copied. Send it to three friends."); setTimeout(function () { sp.textContent = "Copy link"; }, 2200); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { old(url); ok(); }); else { old(url); ok(); }
 });
 function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
 sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
-sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec) story(rec); });
+sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec); });
+
+/* ---------- start over: "Not you?" on the done screen, and Restart on localhost or with ?early. Clears the saved sign-up. ---------- */
+function startOver() {
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  rec = null; ans = { roles: [], brands: "", claude: "" }; typeTok++;
+  sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
+  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = "";
+  form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); }); err.textContent = "";
+  steps.forEach(function (s, i) { s.classList.remove("past"); s.classList.toggle("on", i === 0); });
+  Object.keys(scenes).forEach(function (k) { scenes[k].classList.remove("past"); scenes[k].classList.toggle("on", k === ORDER[0]); });
+  box.style.height = "";
+  at = 0; sheet.classList.remove("done");
+  drawRoles(); drawBrands(); drawClaude(); drawPass(); setStep(0);
+  sheet.scrollTop = 0;
+}
+sheet.querySelector("[data-wl-over]").addEventListener("click", startOver);
+doneEl.addEventListener("animationend", function (e) { if (e.target.matches(".wl-dl > *, .wl-dr")) e.target.classList.add("wl-settled"); });
+var restartB = sheet.querySelector("[data-wl-restart]");
+restartB.hidden = !(local || /[?&]early(=|&|$)/.test(location.search));
+restartB.addEventListener("click", startOver);
 
 /* an Instagram story: a 1080 x 1920 picture of the pass. Phones share it straight to Instagram; elsewhere it saves, and the link is copied */
 function img(src) { return new Promise(function (res) { var i = new Image(); i.onload = function () { res(i); }; i.onerror = function () { res(null); }; i.src = src; }); }

@@ -37,7 +37,7 @@
 .ae-tile.ae-s { aspect-ratio: 4 / 5; }
 .ae-tile video, .ae-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s var(--ease); }
 .ae-tile video.on, .ae-tile img.on { opacity: 1; }
-.ae-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); pointer-events: none; }
+.ae-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); pointer-events: none; }
 .ae-show { display: flex; flex-direction: column; min-width: 0; }
 .ae-caps { display: flex; gap: clamp(8px, 1vw, 14px); margin-top: 12px; font: 500 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--sand-3); }
 .ae-caps span { flex: .5625 1 0; min-width: 0; padding-left: 4px; white-space: nowrap; }

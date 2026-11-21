@@ -43,7 +43,7 @@
 .ch-panel::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
   background: rgba(13, 17, 24, .3);
   -webkit-backdrop-filter: blur(30px) saturate(165%) brightness(.74); backdrop-filter: blur(30px) saturate(165%) brightness(.74);
-  box-shadow: var(--rim), inset 0 0 0 1px rgba(255, 255, 255, .09); }
+  box-shadow: var(--rim), inset 1px 1px 1px -1px rgba(255, 255, 255, 0.4), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.29); }
 .ch-panel > * { position: relative; }
 .ch-panel::before, .ch-panel > * { transition: opacity .9s var(--ease); }
 /* entrance (armed by section.js): the panel slides, its glass and contents fade. The panel itself never fades. */
@@ -91,7 +91,7 @@
 /* a result card, same finish as the carry-on results */
 .ch-card { margin-top: 10px; padding: 8px 8px 10px; border-radius: 18px; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
 .ch-thumbs { display: flex; gap: 8px; }
-.ch-thumbs figure { position: relative; height: var(--th, 118px); border-radius: 12px; overflow: hidden; background: #0d1117; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.ch-thumbs figure { position: relative; height: var(--th, 118px); border-radius: 12px; overflow: hidden; background: #0d1117; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.54), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.38); }
 .ch-thumbs figure.v { aspect-ratio: 9 / 16; } .ch-thumbs figure.s { aspect-ratio: 1; }
 .ch-thumbs img { width: 100%; height: 100%; object-fit: cover; }
 .ch-chip { position: absolute; left: 6px; top: 6px; padding: 4px 6px 3px; border-radius: 6px; font: 500 8.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); }
@@ -149,7 +149,7 @@
 .ch-comp.talk .ch-wave i { animation-play-state: running; }
 .ch-comp.talk .ch-send { background: var(--pearl); transform: scale(1.1); }
 .ch-comp.talk .ch-send svg { stroke: #10151c; }
-.ch-send::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .6); opacity: 0; }
+.ch-send::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); opacity: 0; }
 .ch-comp.talk .ch-send::after { animation: ch-ring 1.3s var(--ease) infinite; }
 @keyframes ch-ring { 0% { opacity: .9; transform: scale(.9); } 100% { opacity: 0; transform: scale(1.45); } }
 

@@ -20,7 +20,7 @@
   --glass-2: rgba(var(--tint), .62);
   --blur: blur(28px) saturate(150%) contrast(1.05);
   --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .55), inset -1px -1px 1px -1px rgba(255, 255, 255, .42);
-  --rim-soft: inset 0 0 0 1px rgba(255, 255, 255, .09);
+  --rim-soft: inset 1px 1px 1px -1px rgba(255, 255, 255, .42), inset -1px -1px 1px -1px rgba(255, 255, 255, .3); /* a highlight on the edge, never a stroke */
   --sans: "Hanken Grotesk", "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -83,7 +83,7 @@ input { font: inherit; color: inherit; }
 /* ---------- glass ---------- */
 .glass { background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); border-radius: 22px; }
 .glass.deep { background: var(--glass-2); }
-.on-paper .card { background: #fff; border-radius: 24px; box-shadow: 0 0 0 1px rgba(21, 23, 27, .06); }
+.on-paper .card { background: #fff; border-radius: 24px; box-shadow: 0 1px 2px rgba(21, 23, 27, 0.06), 0 10px 28px -16px rgba(21, 23, 27, .28); }
 /* corner brackets around a thing: <div class="brk"><i></i><i></i><i></i><i></i> … </div> */
 .brk { position: relative; }
 .brk > i { position: absolute; width: 14px; height: 14px; border: 1.5px solid currentColor; opacity: .75; pointer-events: none; }
@@ -99,7 +99,7 @@ input { font: inherit; color: inherit; }
 /* see-through glass, for on top of footage */
 .btn-glass { color: #fff; background: rgba(255, 255, 255, .07); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); box-shadow: var(--rim); }
 .btn-glass:hover { background: rgba(255, 255, 255, .14); }
-.btn-dark { color: #fff; background: #14171c; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.btn-dark { color: #fff; background: #14171c; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); }
 .btn-dark:hover { background: #1d2128; }
 .btn-light { color: #111; background: var(--pearl); }
 .btn-light:hover { background: #fff; }
@@ -204,7 +204,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 /* ---------- film modal ---------- */
 .fm { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; background: rgba(4, 6, 9, .82); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); opacity: 0; pointer-events: none; transition: opacity .35s var(--ease); }
 .fm.open { opacity: 1; pointer-events: auto; }
-.fm video { max-width: min(100%, 1200px); max-height: calc(100svh - 110px); border-radius: 20px; background: #000; box-shadow: 0 0 0 1px rgba(255, 255, 255, .1); }
+.fm video { max-width: min(100%, 1200px); max-height: calc(100svh - 110px); border-radius: 20px; background: #000; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); }
 .fm-x { position: absolute; top: 18px; right: 18px; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .1); box-shadow: var(--rim-soft); }
 .fm-x svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 1.8; fill: none; stroke-linecap: round; }
 .fm-cap { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; color: var(--sand-2); }
@@ -213,13 +213,13 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .kp { --kp-ink: 255, 255, 255; position: fixed; z-index: 70; left: 50%; bottom: clamp(12px, 1.8vw, 24px); transform: translate3d(-50%, 0, 0); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgb(var(--kp-ink)); transition: transform .6s var(--ease), opacity .5s; }
 .kp.light { --kp-ink: 21, 23, 27; }
 .kp.hide { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
-.kp-tag { padding: 6px 10px; border-radius: 999px; font: 500 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--kp-ink)); background: rgba(var(--kp-ink), .1); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); box-shadow: inset 0 0 0 1px rgba(var(--kp-ink), .14); transition: opacity .4s; }
+.kp-tag { padding: 6px 10px; border-radius: 999px; font: 500 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--kp-ink)); background: rgba(var(--kp-ink), .1); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(var(--kp-ink), 0.63), inset -1px -1px 1px -1px rgba(var(--kp-ink), 0.45); transition: opacity .4s; }
 .kp.playing .kp-tag, .kp.used .kp-tag { opacity: 0; }
 .kp-pill { display: flex; align-items: center; gap: 12px; height: 62px; padding: 0 9px; border-radius: 22px; background: rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%);
   box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 6px -2px rgba(196, 214, 238, .6), inset -2px -2px 6px -2px rgba(242, 226, 220, .6); transition: background-color .4s var(--ease), box-shadow .4s var(--ease); }
 .kp.light .kp-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .34) 46%, rgba(255, 255, 255, .5));
-  box-shadow: inset 0 1.5px 0 #fff, inset 0 0 0 1px rgba(255, 255, 255, .7), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5), 0 0 0 1px rgba(21, 23, 27, .07), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
-.kp.light .kp-play { background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 0 0 1px rgba(21, 23, 27, .08), 0 3px 8px -3px rgba(21, 23, 27, .3); }
+  box-shadow: inset 0 1.5px 0 #fff, inset 1px 1px 1px -1px rgba(255, 255, 255, 1), inset -1px -1px 1px -1px rgba(255, 255, 255, 1), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5), 0 1px 2px rgba(21, 23, 27, 0.07), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
+.kp.light .kp-play { background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 3px 8px -3px rgba(21, 23, 27, .3); }
 .kp-face { position: relative; width: 44px; height: 44px; border-radius: 14px; overflow: hidden; flex: none; background: #2a313b; }
 .kp-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
 .kp-face::after { content: ""; position: absolute; right: 3px; bottom: 3px; width: 8px; height: 8px; border-radius: 50%; background: var(--pearl); box-shadow: 0 0 0 2px rgba(12, 18, 26, .9); }
@@ -238,7 +238,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .kp.mini:not(.playing):not(:hover) .kp-wave, .kp.mini:not(.playing):not(:hover) .kp-time, .kp.mini:not(.playing):not(:hover) .kp-rate { max-width: 0; min-width: 0; opacity: 0; margin: 0 -6px; padding: 0; }
 .kp.mini .kp-tag { opacity: 0; }
 /* close: a small x on the pill's corner (on hover with a mouse, always on touch screens); closed stays closed (kit.js, html.kp-off) */
-.kp-x { position: absolute; right: -9px; bottom: 44px; z-index: 3; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; background: rgba(12, 16, 22, .82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22), 0 4px 12px -4px rgba(0, 0, 0, .5); opacity: 0; transform: scale(.8); transition: opacity .2s, transform .25s var(--ease), background-color .2s; }
+.kp-x { position: absolute; right: -9px; bottom: 44px; z-index: 3; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; background: rgba(12, 16, 22, .82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.99), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.7), 0 4px 12px -4px rgba(0, 0, 0, .5); opacity: 0; transform: scale(.8); transition: opacity .2s, transform .25s var(--ease), background-color .2s; }
 .kp-x::before { content: ""; position: absolute; inset: -9px; } /* a bigger target than it looks */
 .kp-x svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .kp:hover .kp-x, .kp:focus-within .kp-x { opacity: 1; transform: none; }
@@ -258,12 +258,12 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
   box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 6px -2px rgba(196, 214, 238, .62), inset -2px -2px 6px -2px rgba(242, 226, 220, .62);
   transition: background-color .3s var(--ease); }
 .vo:hover .vo-pill, .vo.playing .vo-pill { background: rgba(255, 255, 255, .16); }
-.vo-face { position: relative; width: 42px; height: 42px; border-radius: 50%; flex: none; background: #2a313b; box-shadow: 0 0 0 1px rgba(255, 255, 255, .3); }
+.vo-face { position: relative; width: 42px; height: 42px; border-radius: 50%; flex: none; background: #2a313b; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); }
 .vo-face img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
 .vo-play { position: relative; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; color: #fff; background: rgba(255, 255, 255, .2); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .6); transition: transform .2s var(--ease), background-color .3s var(--ease); }
 .vo-play:hover { background: rgba(255, 255, 255, .3); }
 /* until someone has played a clip: a soft ring breathes out of the play button and a small glass tag points at it */
-.vo-play::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .7); opacity: 0; animation: vo-ring 2.4s var(--ease) infinite; pointer-events: none; }
+.vo-play::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); opacity: 0; animation: vo-ring 2.4s var(--ease) infinite; pointer-events: none; }
 @keyframes vo-ring { 0% { transform: scale(1); opacity: .7; } 70%, 100% { transform: scale(1.42); opacity: 0; } }
 .vo-nudge { position: absolute; z-index: 2; right: 18px; top: -14px; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px 0 8px; border-radius: 999px; font: 500 11px/1 var(--sans); letter-spacing: -.005em; color: #fff; white-space: nowrap; background: rgba(255, 255, 255, .2); -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .6); pointer-events: none; animation: vo-bob 2.4s ease-in-out infinite; transition: opacity .4s var(--ease); }
 .vo-nudge svg { width: 10px; height: 10px; fill: currentColor; }
@@ -283,17 +283,17 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
 /* glass on a light page: there is nothing behind it to blur, so the glass is drawn: a clear body that is brighter at the top, a hard white
    highlight along the upper edge, a darker lower lip, a faint cool and warm tint inside the rim (as in the app), and a soft contact shadow so it lifts off the paper */
 .on-paper .vo-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .34) 46%, rgba(255, 255, 255, .5)); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 1), inset 0 0 0 1px rgba(255, 255, 255, .7), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5),
-    0 0 0 1px rgba(21, 23, 27, .07), 0 1px 2px rgba(21, 23, 27, .06), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 1), inset 1px 1px 1px -1px rgba(255, 255, 255, 1), inset -1px -1px 1px -1px rgba(255, 255, 255, 1), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5),
+    0 1px 2px rgba(21, 23, 27, 0.07), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 1px 2px rgba(21, 23, 27, .06), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
 .on-paper .vo:hover .vo-pill, .on-paper .vo.playing .vo-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5) 46%, rgba(255, 255, 255, .64)); }
 .on-paper .vo-time { color: rgba(21, 23, 27, .66); }
 .on-paper .vo-wave i { background: rgba(21, 23, 27, .26); }
 .on-paper .vo-wave i.on { background: #15171b; }
-.on-paper .vo-play { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 0 0 1px rgba(21, 23, 27, .08), 0 3px 8px -3px rgba(21, 23, 27, .3); }
+.on-paper .vo-play { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .5)); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(21, 23, 27, .08), 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 3px 8px -3px rgba(21, 23, 27, .3); }
 .on-paper .vo-play:hover { background: #fff; }
-.on-paper .vo-play::after { box-shadow: 0 0 0 1.5px rgba(21, 23, 27, .4); }
-.on-paper .vo-nudge { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .7)); box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgba(21, 23, 27, .08), 0 4px 10px -4px rgba(21, 23, 27, .25); }
-.on-paper .vo-face { box-shadow: 0 0 0 1px rgba(21, 23, 27, .12); }
+.on-paper .vo-play::after { box-shadow: 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28); }
+.on-paper .vo-nudge { color: #15171b; background: linear-gradient(180deg, rgba(255, 255, 255, .95), rgba(255, 255, 255, .7)); box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 4px 10px -4px rgba(21, 23, 27, .25); }
+.on-paper .vo-face { box-shadow: 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28); }
 .vo-play .pa { display: none; } .vo.playing .vo-play .pl { display: none; } .vo.playing .vo-play .pa { display: block; }
 
 /* ---------- footer ---------- */
@@ -355,7 +355,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .gx.hot > .gx-beam { --beam-strength: 1.9; }
 .gx.hot { background: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06) 50%, rgba(190, 220, 255, .14)), rgba(12, 18, 28, .46); box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .75), inset 0 0 26px rgba(150, 200, 255, .22), 0 10px 40px -12px rgba(60, 140, 255, .45); }
 /* the round pearl end, like the composer's send button */
-.gx .go { display: grid; place-items: center; width: 40px; height: 40px; margin-right: -18px; margin-left: 4px; border-radius: 50%; color: #10151c; background: var(--pearl); box-shadow: 0 0 0 1px rgba(255, 255, 255, .4); transition: transform .3s var(--ease); }
+.gx .go { display: grid; place-items: center; width: 40px; height: 40px; margin-right: -18px; margin-left: 4px; border-radius: 50%; color: #10151c; background: var(--pearl); box-shadow: inset 1px 1px 1px -1px #fff; transition: transform .3s var(--ease); }
 .gx:hover .go { transform: translateX(2px); }
 .gx .go svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .gx.sm { height: 44px; padding: 0 18px; font-size: 15px; gap: 8px; }

@@ -40,7 +40,7 @@
 /* ---------- the wallpapers ---------- */
 .vw-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
 .vw-chip { display: inline-flex; align-items: center; gap: 9px; height: 42px; padding: 0 15px 0 5px; border-radius: 21px; background: rgba(var(--tint), .36); -webkit-backdrop-filter: blur(20px) saturate(150%); backdrop-filter: blur(20px) saturate(150%); box-shadow: var(--rim-soft); color: rgba(255, 255, 255, .92); font: 500 14px/1 var(--sans); letter-spacing: -.01em; white-space: nowrap; transition: background-color .3s var(--ease), color .3s, transform .2s var(--ease); }
-.vw-chip img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .2); }
+.vw-chip img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); }
 .vw-chip:hover { background: rgba(255, 255, 255, .2); }
 .vw-chip:active { transform: scale(.96); }
 .vw-chip.on { background: var(--pearl); color: #10151c; box-shadow: none; }

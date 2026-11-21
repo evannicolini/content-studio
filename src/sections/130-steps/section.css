@@ -13,7 +13,7 @@
 .gs-wall { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; transform: scale(1.06); }
 .gs-stage::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(8, 12, 20, .2), rgba(8, 12, 20, .36)); }
 .gs-g, .gs-dmg, .gs-app, .gs-dock, .gs-kit, .gs-lib, .gs-b.claude { background: rgba(var(--tint), .5); -webkit-backdrop-filter: blur(22px) saturate(150%); backdrop-filter: blur(22px) saturate(150%); box-shadow: var(--rim); }
-.gs-icon { position: relative; flex: none; width: 62px; height: 62px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(160deg, #1c222b, #07090d); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); }
+.gs-icon { position: relative; flex: none; width: 62px; height: 62px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(160deg, #1c222b, #07090d); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.63), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.45); }
 .gs-icon svg { width: 42px; height: 42px; overflow: visible; }
 .gs-icon.sm { width: 40px; height: 40px; border-radius: 11px; }
 .gs-icon.sm svg { width: 28px; height: 28px; }
@@ -86,13 +86,13 @@
 .gs-kit { position: absolute; left: 14px; right: 14px; bottom: 14px; padding: 12px; border-radius: 18px; opacity: 0; transform: translateY(14px) scale(.97); transition: opacity .5s var(--ease), transform .7s var(--ease); }
 .gs-kit.on { opacity: 1; transform: none; }
 .gs-kit-top { display: flex; align-items: center; gap: 11px; }
-.gs-logo { flex: none; width: 50px; height: 50px; border-radius: 13px; display: grid; place-items: center; padding-bottom: 5px; background: #15130f; color: #f1ede6; font: italic 400 36px/1 "New York", "Iowan Old Style", "Palatino Linotype", Georgia, serif; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.gs-logo { flex: none; width: 50px; height: 50px; border-radius: 13px; display: grid; place-items: center; padding-bottom: 5px; background: #15130f; color: #f1ede6; font: italic 400 36px/1 "New York", "Iowan Old Style", "Palatino Linotype", Georgia, serif; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.54), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.38); }
 .gs-kit-name { flex: 1; min-width: 0; font: 500 17px/1.1 var(--sans); letter-spacing: -.02em; }
 .gs-kit-name .mono { font-size: 9px; color: var(--sand-3); margin-bottom: 6px; white-space: nowrap; }
 .gs-font { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); font: 400 20px/1 var(--sans); letter-spacing: -.03em; }
 .gs-f1 { font: italic 400 22px/1 "New York", "Iowan Old Style", "Palatino Linotype", Georgia, serif; }
 .gs-sw { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 11px; }
-.gs-sw i { height: 34px; border-radius: 9px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
+.gs-sw i { height: 34px; border-radius: 9px; background: var(--c); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.54), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.38); }
 .gs-kit .gs-logo, .gs-kit .gs-kit-name, .gs-kit .gs-font, .gs-kit .gs-sw i { opacity: 0; transform: scale(.8); transition: opacity .4s var(--ease), transform .55s cubic-bezier(.3, 1.5, .5, 1); transition-delay: calc(var(--n, 0) * 140ms + 300ms); }
 .gs-kit.on .gs-logo, .gs-kit.on .gs-kit-name, .gs-kit.on .gs-font, .gs-kit.on .gs-sw i { opacity: 1; transform: none; }
 .gs-kit:not(.on) .gs-logo, .gs-kit:not(.on) .gs-kit-name, .gs-kit:not(.on) .gs-font, .gs-kit:not(.on) .gs-sw i { transition-delay: 0s; transition-duration: .25s; }
@@ -107,12 +107,12 @@
 .gs-new::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--pearl); }
 .gs-s3.on .gs-new { opacity: 1; }
 .gs-lib-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.gs-film { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); transition: box-shadow .4s var(--ease); }
+.gs-film { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.36), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.26); transition: box-shadow .4s var(--ease); }
 .gs-film video, .gs-film img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.12); transition: opacity .3s var(--ease), transform .3s var(--ease); }
 .gs-chip { position: absolute; left: 7px; top: 7px; padding: 4px 6px 3px; border-radius: 6px; font: 500 9px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #10151c; background: var(--pearl); opacity: 0; transition: opacity .3s; }
 /* Claude is making this one: a light sweeps the empty slot */
 .gs-film::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, 0) 70%); transform: translateX(-100%); opacity: 0; }
-.gs-film.mk { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+.gs-film.mk { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 1), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.9); }
 .gs-film.mk::after { opacity: 1; animation: gs-sweep .9s var(--ease-io) infinite; }
 @keyframes gs-sweep { to { transform: translateX(100%); } }
 /* it lands */
@@ -120,7 +120,7 @@
 .gs-film.on video, .gs-film.on img { opacity: 1; transform: none; transition: opacity .6s var(--ease), transform 1s var(--ease); }
 .gs-film.on .gs-chip { opacity: 1; }
 /* the newest one keeps its ring; the earlier ones settle */
-.gs-film.on.old { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .14); }
+.gs-film.on.old { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.63), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.45); }
 
 @media (max-width: 1020px) {
   .gs-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }

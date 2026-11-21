@@ -23,8 +23,8 @@
 .vl-arrow svg { width: 100%; height: 16px; fill: none; stroke: #fff; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 
 /* cards (9:16, like the app's Viral Lab cards) */
-.vl-card { position: relative; height: var(--ch); aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); }
-.vl-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12); pointer-events: none; }
+.vl-card { position: relative; height: var(--ch); aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: rgba(255, 255, 255, .05); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.54), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.38); }
+.vl-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.54), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.38); pointer-events: none; }
 /* a stand-in for someone else's video: a blurred figure, never a real frame */
 .vl-ab { --a1: var(--a, #8490a2); --b1: var(--b, #262c36); position: absolute; inset: 0; overflow: hidden; background: linear-gradient(172deg, var(--a1), var(--b1)); background: linear-gradient(172deg, var(--a1) 0%, color-mix(in srgb, var(--a1) 45%, var(--b1)) 44%, var(--b1) 100%); }
 .vl-ab::before { content: ""; position: absolute; left: 50%; top: 34%; width: 40%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); background: var(--c, #dccbb9); opacity: .82; filter: blur(15px); }
@@ -144,7 +144,7 @@
 .vlb-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(6px, .8vw, 11px); margin: 0; align-content: start; }
 .vlb-tile { position: relative; aspect-ratio: 9 / 16; border-radius: clamp(11px, 1.15vw, 16px); overflow: hidden; background: #0d1117; box-shadow: var(--rim); }
 .vlb-pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.vlb-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .3), transparent 28%, transparent 58%, rgba(0, 0, 0, .52)); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.vlb-tile::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(180deg, rgba(0, 0, 0, .3), transparent 28%, transparent 58%, rgba(0, 0, 0, .52)); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); }
 .vlb-top { position: absolute; z-index: 2; left: 7px; top: 7px; right: 7px; display: flex; align-items: center; gap: 5px; }
 .vlb-plat { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .14); -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%); box-shadow: var(--rim); }
 .vlb-plat img { width: 13px; height: 13px; }

@@ -109,11 +109,11 @@
 .nt-mu-new { --hc: #e9c9a0; opacity: 0; transform: scale(.92); }
 .nt-ed.v2a .nt-mu-old { opacity: 0; transform: scale(.95); }
 .nt-ed.v2a .nt-mu-new { opacity: 1; transform: none; box-shadow: inset 0 0 0 1.5px #fff, 0 0 0 2px rgba(255, 255, 255, .22); }
-.nt-ed.v2c .nt-mu-new { box-shadow: inset 0 0 0 1px #fff; }
+.nt-ed.v2c .nt-mu-new { box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .85), 0 0 12px rgba(191, 227, 255, .35); }
 .nt-mv { transition: transform .9s var(--ease-io), box-shadow .6s var(--ease); }
 .nt-ed.v2b .nt-mv { transform: translateX(3.5cqw); }
 .nt-ed.v2b .nt-logo { box-shadow: inset 0 0 0 1.5px #fff, 0 0 0 2px rgba(255, 255, 255, .22); z-index: 2; }
-.nt-ed.v2c .nt-logo { box-shadow: inset 0 0 0 1px #fff; }
+.nt-ed.v2c .nt-logo { box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .85), 0 0 12px rgba(191, 227, 255, .35); }
 
 .nt-vol { display: flex; align-items: center; justify-content: space-between; min-height: 30px; margin-top: 5px !important; padding: 5px var(--pr) 0 0; border-top: 1px solid rgba(255, 255, 255, .08); }
 .nt-vol b { font: 600 14px/1 var(--sans); }
