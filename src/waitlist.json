@@ -2,5 +2,7 @@
   "_read_me": "Early access sign-ups (src/sections/900-early). Fill ONE and rebuild; the site switches to early access on its own. api: the waitlist worker's URL (worker/, https://studio-waitlist.<you>.workers.dev): places, referrals, Brevo. brevo_form: a Brevo form's action URL (no places). webhook: any URL that takes a JSON POST. All empty: the live site stays on Download for Mac; localhost and ?early still show the flow.",
   "api": "https://studio-waitlist.studio-licence.workers.dev",
   "brevo_form": "",
-  "webhook": ""
+  "webhook": "",
+  "count_offset": 1224,
+  "_count_offset": "People who already asked for Studio but are not in the Worker yet (Custom Esignature users). Added to the live count and to every place shown. Set to 0 once they are imported."
 }

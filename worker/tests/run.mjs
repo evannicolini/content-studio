@@ -60,7 +60,7 @@ test("join: a new sign-up gets a code, its place and the whole shape", async () 
   const t = setup();
   const a = await t.join(person(1, { roles: ["Creator", "Agency"], brands: "3", claude: "Pro" }));
   assert.equal(a.status, 200);
-  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "ok", "position", "referrals", "total"]);
+  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "front", "goal", "ok", "position", "referrals", "total"]);
   assert.equal(a.json.ok, true);
   assert.match(a.json.code, CODE);
   assert.equal(a.json.first, "First1");
@@ -264,11 +264,38 @@ test("status: the same shape for a code, 404 for an unknown one", async () => {
   await t.join(person(2));
   const s = await t.call("GET", "/status?code=" + a.code.toLowerCase());
   assert.equal(s.status, 200);
-  assert.deepEqual(s.json, { ok: true, code: a.code, first: "First1", position: 1, total: 2, referrals: 0, boost: 10, already: true });
+  assert.deepEqual(s.json, { ok: true, code: a.code, first: "First1", position: 1, total: 2, referrals: 0, boost: 10, goal: 3, front: false, already: true });
   const unknown = await t.call("GET", "/status?code=ABCDEFG");
   assert.equal(unknown.status, 404);
   assert.equal(unknown.json.ok, false);
   assert.equal((await t.call("GET", "/status")).status, 404);
+});
+
+test("3 friends: you and every friend from your link go to the front", async () => {
+  const t = setup();
+  const codes = [];
+  for (let n = 1; n <= 20; n++) codes.push((await t.join(person(n))).json.code);
+  const host = codes[17];                                     // seq 18
+  const f1 = (await t.join(person(21, { ref: host }))).json;
+  const f2 = (await t.join(person(22, { ref: host }))).json;
+  let s = (await t.call("GET", "/status?code=" + host)).json;
+  assert.equal(s.front, false, "two friends: not yet");
+  assert.equal(s.position, 1, "two friends already move seq 18 to score 18 − 20 = −2, the best");
+  const f3 = (await t.join(person(23, { ref: host }))).json;
+  s = (await t.call("GET", "/status?code=" + host)).json;
+  assert.equal(s.front, true); assert.equal(s.referrals, 3); assert.equal(s.goal, 3);
+  const pos = {};
+  for (const c of [host, f1.code, f2.code, f3.code, codes[0]]) pos[c] = (await t.call("GET", "/status?code=" + c)).json;
+  assert.equal(pos[host].position, 1, "the host first (best score)");
+  assert.deepEqual([pos[f1.code].position, pos[f2.code].position, pos[f3.code].position], [2, 3, 4], "then the three friends, in the order they joined");
+  assert.ok(pos[f1.code].front && pos[f3.code].front);
+  assert.equal(pos[codes[0]].position, 5, "everyone else after them");
+  assert.equal(pos[codes[0]].front, false);
+  const f4 = (await t.join(person(24, { ref: host }))).json;
+  assert.equal(f4.front, true, "a friend joining after the third goes to the front at once");
+  assert.equal(f4.position, 5);
+  const c = await t.call("GET", "/count");
+  assert.equal(c.json.total, 24);
 });
 
 test("BOOST is a var", async () => {
@@ -427,7 +454,7 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.match(r.headers.get("Content-Type"), /^text\/csv/);
   const lines = r.text.trim().split("\r\n");
   assert.equal(lines.length, 14);
-  assert.equal(lines[0], "seq,position,joined,email,first,last,phone,cc,sms,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
+  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
   const twelve = lines.find((l) => l.startsWith("12,"));
   assert.match(twelve, /^12,3,/, "seq 12 with one referral (score 2) is third");
   const thirteen = lines.find((l) => l.startsWith("13,"));

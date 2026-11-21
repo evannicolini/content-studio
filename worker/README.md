@@ -33,6 +33,8 @@ Every answer is JSON. An error looks like `{ "ok": false, "error": "A short sent
 - **`GET /admin/export.csv`** (same token) downloads everyone with their current place.
 
 Place in line: score = seq − referrals × BOOST. The lowest score is first, and on a tie whoever joined first goes ahead.
+The front of the line: once someone has `GOAL` (3) friends on the list, they and every friend who joined with their link go
+ahead of everyone else, in the same order among themselves. The answer says `front: true` for them. `GET /count` gives `{ ok, total }`.
 `position` = 1 + the number of people with a better score.
 
 CORS allows `https://evannicolini.github.io`, `http://127.0.0.1:*` and `http://localhost:*` (the `ORIGINS` var).

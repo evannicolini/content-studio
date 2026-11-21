@@ -2,11 +2,14 @@
 //
 //   POST /join               a sign-up from the website: kept once per email, a referral code back, the place in line
 //   GET  /status?code=…      the place in line for a referral code
+//   GET  /count              { ok, total }: how many are on the list (the site's live count)
 //   GET  /health             { ok: true }
 //   POST /admin/resync       send Brevo the sign-ups it has not got yet (Authorization: Bearer ADMIN_TOKEN)
 //   GET  /admin/export.csv   everyone, as a spreadsheet (the same token)
 //
 // The place in line: score = seq − referrals × BOOST, lower is better, ties go to whoever joined first.
+// The front of the line: get GOAL (3) friends on the list and you, and every friend who joined with your link, go ahead of everyone
+// else (in the same order among yourselves).
 // Brevo is told after the answer has gone (ctx.waitUntil), so a slow or failing Brevo never fails a sign-up.
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-alikes
@@ -20,6 +23,7 @@ const te = new TextEncoder();
 const now = () => Math.floor(Date.now() / 1000);
 const int = (v, fallback) => { const n = parseInt(v, 10); return Number.isFinite(n) && n >= 0 ? n : fallback; };
 const boostOf = (env) => int(env.BOOST, 10);
+const goalOf = (env) => Math.max(1, int(env.GOAL, 3));
 const EMAIL = /^[^\s@]{1,64}@(?:[^\s@.]+\.)+[^\s@.]{2,}$/;
 
 // A one-line string from whatever the form sent: control characters and runs of spaces collapsed, cut to max.
@@ -88,17 +92,20 @@ function corsFor(request, env) {
 }
 
 // ------------------------------------------------------------------------------------------------ the line
+// Every row with its score and whether it is at the front (?1 = BOOST, ?2 = GOAL).
+const LINE = `WITH l AS (SELECT *, seq - referrals * ?1 AS score,
+  CASE WHEN referrals >= ?2 OR referred_by IN (SELECT code FROM signups WHERE referrals >= ?2) THEN 1 ELSE 0 END AS front FROM signups)`;
 async function standing(env, row) {
-  const boost = boostOf(env);
-  const score = row.seq - row.referrals * boost;
-  const r = await env.DB.prepare(
-    "SELECT (SELECT COUNT(*) FROM signups) AS total, (SELECT COUNT(*) FROM signups WHERE (seq - referrals * ?1) < ?2 OR ((seq - referrals * ?1) = ?2 AND seq < ?3)) AS ahead"
-  ).bind(boost, score, row.seq).first();
-  return { position: r.ahead + 1, total: r.total, boost };
+  const boost = boostOf(env), goal = goalOf(env);
+  const r = await env.DB.prepare(LINE + `, me AS (SELECT * FROM l WHERE seq = ?3)
+    SELECT (SELECT COUNT(*) FROM l) AS total, me.front AS front,
+      (SELECT COUNT(*) FROM l WHERE l.front > me.front OR (l.front = me.front AND (l.score < me.score OR (l.score = me.score AND l.seq < me.seq)))) AS ahead
+    FROM me`).bind(boost, goal, row.seq).first();
+  return { position: r.ahead + 1, total: r.total, boost, goal, front: !!r.front };
 }
 async function answer(env, row, already) {
   const s = await standing(env, row);
-  return { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, already };
+  return { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front, already };
 }
 const bySeq = (env, seq) => env.DB.prepare("SELECT * FROM signups WHERE seq = ?").bind(seq).first();
 
@@ -246,8 +253,18 @@ async function pushContact(env, seq) {
 }
 
 // A referrer's count went up: tell Brevo the new REFERRALS (and POSITION). If that fails, the row is sent again on resync.
+// Reaching GOAL moves their friends to the front too, so each of them gets the new POSITION as well.
 async function pushReferrals(env, seq) {
   if (!env.BREVO_API_KEY) return;
+  const row = await bySeq(env, seq);
+  if (!row) return;
+  if (row.referrals >= goalOf(env)) {
+    const { results } = await env.DB.prepare("SELECT seq FROM signups WHERE referred_by = ?").bind(row.code).all();
+    await Promise.all(results.map((f) => pushPosition(env, f.seq)));
+  }
+  await pushPosition(env, seq);
+}
+async function pushPosition(env, seq) {
   const row = await bySeq(env, seq);
   if (!row) return;
   const { position } = await standing(env, row);
@@ -292,12 +309,12 @@ function csvCell(v) {
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
-const COLUMNS = ["seq", "position", "joined", "email", "first", "last", "phone", "cc", "sms", "roles", "brands", "claude", "source",
+const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "roles", "brands", "claude", "source",
   "code", "referred_by", "referrals", "ip", "brevo_synced", "brevo_error"];
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(
-    "SELECT *, ROW_NUMBER() OVER (ORDER BY seq - referrals * ?1, seq) AS position FROM signups ORDER BY seq"
-  ).bind(boostOf(env)).all();
+    LINE + " SELECT *, ROW_NUMBER() OVER (ORDER BY front DESC, score, seq) AS position FROM l ORDER BY seq"
+  ).bind(boostOf(env), goalOf(env)).all();
   const lines = [COLUMNS.join(",")];
   for (const r of results) {
     r.joined = new Date(r.created_at * 1000).toISOString().slice(0, 19) + "Z";
@@ -313,6 +330,11 @@ async function route(request, url, env, ctx) {
   const path = url.pathname, m = request.method;
   if (path === "/join") return m === "POST" ? await join(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/status") return m === "GET" ? await status(url, env) : fail("Use GET.", 405);
+  if (path === "/count") {
+    if (m !== "GET") return fail("Use GET.", 405);
+    const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups").first();
+    return json({ ok: true, total: r.n }, 200, { "Cache-Control": "public, max-age=15" });
+  }
   if (path === "/health") return json({ ok: true });
   if (path.startsWith("/admin/")) {
     if (!isAdmin(request, env)) return fail("Not allowed.", 401);

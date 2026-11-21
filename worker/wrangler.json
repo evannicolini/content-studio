@@ -19,6 +19,7 @@
   "vars": {
     "ORIGINS": "https://evannicolini.github.io,https://askstudio.ai,https://www.askstudio.ai,http://127.0.0.1:*,http://localhost:*",
     "BOOST": "10",
-    "BREVO_LIST_ID": "4"
+    "BREVO_LIST_ID": "4",
+    "GOAL": "3"
   }
 }

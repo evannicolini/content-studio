@@ -14,6 +14,8 @@ var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.h
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 if (local) cfg.api = Q.get("api") || "";   /* review builds on this Mac never reach the real list: a made-up place, nothing sent */
 var API = (cfg.api || "").replace(/\/+$/, "");
+var OFFSET = Math.max(0, parseInt(cfg.count_offset, 10) || 0);   /* people already waiting who are not in the Worker yet (waitlist.json) */
+function place(r) { return r.front ? r.position : r.position + OFFSET; }   /* the front of the line is ahead of them too */
 var wired = !!(API || cfg.brevo_form || cfg.webhook);
 var sheet = document.getElementById("early-access");
 if (!sheet) return;
@@ -108,11 +110,11 @@ var SFX = (function () {
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
-    hello: "Hi, I'm Kayla. Let's get you into Studio. It only takes a minute.", name: "First things first. What should I call you?",
+    hello: "Let's get you into Studio. It only takes a minute.", name: "First things first. What should I call you?",
     roles: "Nice to meet you. So, what do you do? Pick everything that fits.", brands: "And how many brands are you making content for?",
     claude: "Studio runs on Claude. If you don't use it yet, that's totally fine. We'll help you set it up later.",
     invite: "Last thing. Where should we send your invite?", in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free.",
-    share: "Want to move up the list? Share your link with three friends."
+    share: "Want to skip the line? Get three friends on the list, and you all move up to the front."
   };
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {};
   a.preload = "auto";
@@ -172,6 +174,14 @@ var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches
 var WALL = { name: PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
 ["roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
 var wallCache = {}, wallTok = 0, wallNow = "";
+/* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
+var GOAL = 3, countEl = sheet.querySelector("[data-wl-count]"), countN = sheet.querySelector("[data-wl-n]"), countT = 0, countLast = -1;
+function showCount(n) { if (n === countLast) return; countLast = n; countN.textContent = n.toLocaleString("en-US"); countEl.hidden = false; }
+function count() {
+  if (OFFSET) showCount(Math.max(countLast, OFFSET));
+  if (!API) return;
+  fetch(API + "/count", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) { if (j && j.ok && typeof j.total === "number") showCount(OFFSET + j.total); }).catch(function () {});
+}
 function want(k) {
   var u = WALL[k]; if (!u) return Promise.resolve("");
   if (!wallCache[u]) { var i = new Image(); i.decoding = "async"; i.src = u; wallCache[u] = (i.decode ? i.decode() : new Promise(function (r) { i.onload = r; })).then(function () { return u; }, function () { return u; }); }
@@ -633,7 +643,7 @@ form.addEventListener("submit", function (e) {
   var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company") };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
-    var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, at: Date.now() };
+    var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
     try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
     showDone(rec);
   }, function (x) {
@@ -656,6 +666,7 @@ function open(src) {
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
   wallNow = sky.getAttribute("src");
+  count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (j) showDone(j, true);
   else {
     wall(ORDER[at]); want(ORDER[at + 1]); personal(); reveal(steps[at]);
@@ -669,7 +680,7 @@ function open(src) {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); pass1.stop(); pass2.stop();
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -714,7 +725,7 @@ if (REF && !joined()) {
 /* ---------- You're in ---------- */
 var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
 function link(r) { return r && r.code ? location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }
-var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Get on the list:";
+var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Join with my link and we both move up the list:";
 function showDone(r, quiet) {
   var again = sheet.classList.contains("done");
   wall("in");
@@ -722,15 +733,19 @@ function showDone(r, quiet) {
   var ranked = typeof r.position === "number" && r.position > 0;
   sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
   var pos = sheet.querySelector("[data-wl-dpos]");
-  pos.innerHTML = ranked ? "<b>#" + r.position.toLocaleString("en-US") + "</b> on the list." : "Welcome to Studio.";
-  sheet.querySelector("[data-wl-rboost]").textContent = ranked && r.boost ? "Every friend who joins with your link moves you up " + r.boost + " spots." : "Send them your link. They get early access too.";
-  sheet.querySelector(".wl-rtop b").textContent = ranked ? "Share with 3 friends to move up the list" : "Know someone who'd want this?";
+  pos.innerHTML = ranked ? "<b>#" + place(r).toLocaleString("en-US") + "</b> " + (r.front ? "at the front." : "on the list.") : "Welcome to Studio.";
+  var got = Math.min(GOAL, r.referrals || 0), front = !!r.front;
+  sheet.querySelector("[data-wl-rhead]").textContent = !ranked ? "Know someone who'd want this?" : front ? "You're at the front of the line." : "Get 3 friends on the list. You all skip to the front.";
+  sheet.querySelector("[data-wl-rboost]").textContent = !ranked ? "Send them your link. They get early access too."
+    : front ? (got >= GOAL ? "3 friends joined with your link, so you and every friend from it are at the front for early access." : "A friend of yours got 3 friends on the list, so you're at the front with them.")
+    : "When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.";
+  var gp = sheet.querySelector("[data-wl-goal]"); gp.hidden = !ranked; gp.style.setProperty("--p", front ? 1 : got / GOAL); gp.querySelector("em").textContent = (front ? GOAL : got) + "/" + GOAL; gp.classList.toggle("full", front);
   sheet.querySelector("[data-wl-slots]").hidden = !ranked;
   sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) { li.classList.toggle("got", i < (r.referrals || 0)); li.querySelector("span").textContent = i < (r.referrals || 0) ? "Joined" : "Friend " + (i + 1); });
   var url = link(r), urlEl = sheet.querySelector("[data-wl-url]"), shareBox = sheet.querySelector("[data-wl-share]"), copyB = sheet.querySelector("[data-wl-copy]");
   urlEl.textContent = url ? url.replace(/^https?:\/\//, "") : "Making your link…"; /* never "undefined": no code yet, no link yet */
   urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
-  pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + r.position.toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + r.position).slice(-4) : "Studio", seed: r.code || r.first });
+  pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
   var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
   var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), wa: "https://wa.me/?text=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
@@ -747,8 +762,8 @@ function showDone(r, quiet) {
   if (!quiet) setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
   if (API && r.code) fetch(API + "/status?code=" + encodeURIComponent(r.code)).then(function (x) { return x.json(); }).then(function (j) {
     if (!j || !j.ok || !rec || rec.code !== r.code) return;
-    if (j.position === r.position && j.referrals === r.referrals) return;
-    var n = Object.assign({}, r, { position: j.position, total: j.total, referrals: j.referrals, boost: j.boost });
+    if (j.position === r.position && j.referrals === r.referrals && !!j.front === !!r.front) return;
+    var n = Object.assign({}, r, { position: j.position, total: j.total, referrals: j.referrals, boost: j.boost, front: !!j.front });
     try { localStorage.setItem(KEY, JSON.stringify(n)); } catch (x) {}
     showDone(n, true);
   }).catch(function () {});
@@ -805,7 +820,7 @@ async function story(r) {
   g.textAlign = "left"; g.fillStyle = "rgba(245,243,238,.7)"; g.font = "500 26px " + MO; g.fillText("EARLY ACCESS · INVITE", -340, -160);
   g.fillStyle = "#fff"; g.font = "300 92px " + F; g.fillText(r.first, -340, -40);
   g.fillStyle = "rgba(245,243,238,.6)"; g.font = "500 24px " + MO; g.fillText("PLACE", -340, 70); g.fillText("TRIAL", -80, 70);
-  g.fillStyle = "#fff"; g.font = "500 52px " + MO; g.fillText(typeof r.position === "number" ? "#" + r.position : "IN", -340, 140);
+  g.fillStyle = "#fff"; g.font = "500 52px " + MO; g.fillText(typeof r.position === "number" ? "#" + place(r) : "IN", -340, 140);
   g.font = "500 42px " + F; g.fillText("14 days, free", -80, 136);
   g.restore();
   g.textAlign = "center"; g.fillStyle = "#fff"; g.font = "500 44px " + F; g.fillText("Get early access", W / 2, 1520);
