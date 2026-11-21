@@ -88,8 +88,8 @@ def build():
 # The main page sends #early-access and #signup / #paywall links here (src/shell.html), keeping ?ref=, ?confirm= and the rest.
 PAGES = [
     # slug, title, description, the sections whose CSS it needs, the section it shows
-    ("early-access", "Get early access · Studio", "Join the Studio waitlist: 14 days of everything, free, when your invite comes.", ["900-early"], "900-early", "#early-access", "assets/wl/name"),
-    ("start", "Start free · Studio", "Sign in and Studio downloads. Make your first video before you pay a thing.", ["900-early", "910-start"], "910-start", "#signup", "assets/su/done"),
+    ("early-access", "Get early access to Studio", "One prompt, and the idea in your head becomes a finished video. Join the list: 14 days of everything, free, the moment your invite lands.", ["900-early"], "900-early", "#early-access", "assets/wl/name", "og-early-access", "Studio early access: your pass, on a lone tree at sunrise. Get early access to Studio."),
+    ("start", "Start free · Studio, on your Mac", "Sign in and Studio downloads. Make your first video before you pay a thing.", ["900-early", "910-start"], "910-start", "#signup", "assets/su/done", "og-start", "The Studio app on the orange dune: Good evening, and a launch commercial being asked for. Start free."),
 ]
 
 
@@ -97,7 +97,7 @@ def pages(secdir, head_js):
     shell = read(SRC, "shell.html")
     defs = shell[shell.index("<!-- the Studio mark"):shell.index("</svg>", shell.index("<!-- the Studio mark")) + 6]
     tpl = read(SRC, "page.html")
-    for slug, title, desc, css_from, sec, hash_, sky in PAGES:
+    for slug, title, desc, css_from, sec, hash_, sky, og, ogalt in PAGES:
         css = [read(SRC, "base.css")] + ["/* ===== %s ===== */\n%s" % (n, read(secdir, n, "section.css")) for n in css_from]
         js = list(head_js) + [read(SRC, "kit.js")]
         j = read(secdir, sec, "section.js")
@@ -108,7 +108,7 @@ def pages(secdir, head_js):
         out = os.path.join(ROOT, slug)
         os.makedirs(out, exist_ok=True)
         page = (tpl.replace("{{TITLE}}", title).replace("{{DESC}}", desc).replace("{{SLUG}}", slug).replace("{{HASH}}", hash_)
-                .replace("{{DEFS}}", defs).replace("{{SKY}}", sky).replace("<!--SECTION-->", read(secdir, sec, "section.html").strip()).replace("{{V}}", ver))
+                .replace("{{DEFS}}", defs).replace("{{SKY}}", sky).replace("{{OGALT}}", ogalt).replace("{{OG}}", og).replace("<!--SECTION-->", read(secdir, sec, "section.html").strip()).replace("{{V}}", ver))
         open(os.path.join(out, "page.css"), "w", encoding="utf-8").write(css_s)
         open(os.path.join(out, "page.js"), "w", encoding="utf-8").write(js_s)
         open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)
