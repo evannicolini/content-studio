@@ -2290,7 +2290,7 @@ function finish() {
 /* ---------- the dream interview: Kayla asks, they talk (SK.interview, src/interview.js; the server is the waitlist Worker) ----------
    Supabase user_metadata.onboarding.dream = { text, words, seconds, nudged, at }; Brevo DREAM / DREAM_AT through the Worker. */
 var DREAM_API = local ? (Q.get("wl") || "http://127.0.0.1:8818") : WAITLIST;   /* this Mac: the Worker on this Mac (node or wrangler dev) */
-var IV = SK.interview({
+var IV = !SK.interview ? null : SK.interview({   /* the pages of their own carry interview.js; the main page doesn't (it only links to them) */
   host: $("[data-st-dream]"), api: DREAM_API, kind: MOCK ? "waitlist" : "signup",
   token: function () { return MOCK || !me.session ? null : me.session.access_token; },
   storeKey: "studio-dream-signup" + (MOCK ? "-mock" : ""),
@@ -2300,6 +2300,7 @@ var IV = SK.interview({
 });
 /* a big screen: the card is the centrepiece, centred over the stage; a phone: under the question. The same card moves (nothing resets) */
 (function () {
+  if (!IV) return;
   var card = sheet.querySelector("[data-st-dream]").firstChild, big = sheet.querySelector("[data-dream-stage]"), step = sheet.querySelector("[data-st-dream]"), mq = matchMedia("(min-width: 961px)");
   function place() { var to = mq.matches ? big : step; if (card.parentNode !== to) to.appendChild(card); }
   place(); if (mq.addEventListener) mq.addEventListener("change", place); else mq.addListener(place);

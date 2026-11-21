@@ -2342,7 +2342,7 @@ function advance() {
 /* ---------- the dream interview: Kayla asks, they talk (SK.interview, src/interview.js; the server is the waitlist Worker) ----------
    The answer is saved as they talk (D1), tied to their email on /join, and goes to Brevo as DREAM / DREAM_AT. */
 var DREAM_API = local ? (Q.get("wl") || "http://127.0.0.1:8818") : "https://studio-waitlist.studio-licence.workers.dev";
-var IV = SK.interview({
+var IV = !SK.interview ? null : SK.interview({   /* the pages of their own carry interview.js; the main page doesn't (it only links to them) */
   host: sheet.querySelector("[data-wl-dream]"), api: DREAM_API, kind: "waitlist", storeKey: "studio-dream-waitlist",
   say: function (k) { return KAY.sayThen("dream-" + k); }, talking: KAY.talking,
   sfx: function (n) { SFX.play(n, { gain: n === "ask" ? .8 : 1 }); }, duck: function (on) { SFX.bed.duck(on); },
@@ -2350,6 +2350,7 @@ var IV = SK.interview({
 });
 /* a big screen: the card is the centrepiece, centred over the stage; a phone: under the question. The same card moves (nothing resets) */
 (function () {
+  if (!IV) return;
   var card = sheet.querySelector("[data-wl-dream]").firstChild, big = sheet.querySelector("[data-dream-stage]"), step = sheet.querySelector("[data-wl-dream]"), mq = matchMedia("(min-width: 961px)");
   function place() { var to = mq.matches ? big : step; if (card.parentNode !== to) to.appendChild(card); }
   place(); if (mq.addEventListener) mq.addEventListener("change", place); else mq.addListener(place);
