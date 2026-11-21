@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Privacy Policy · Studio</title>
+<meta name="description" content="How Studio handles personal information. Your workspace stays on your Mac; we don&#x27;t sell your data.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#090c11">
+<link rel="canonical" href="https://askstudio.ai/privacy/">
+<meta property="og:title" content="Studio Privacy Policy">
+<meta property="og:description" content="How Studio handles personal information. Your workspace stays on your Mac; we don&#x27;t sell your data.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/privacy/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+/* Studio legal pages (terms/, privacy/). Built by build.py into each page. Same look as the site: dark page,
+   Hanken Grotesk light and tight, IBM Plex Mono labels, glass with a highlight on the edge, never a stroke. */
+:root {
+  --ink: #090c11;
+  --sand: #f5f3ee;
+  --sand-2: rgba(245, 243, 238, .74);
+  --sand-3: rgba(245, 243, 238, .46);
+  --sand-4: rgba(245, 243, 238, .24);
+  --glass: rgba(12, 19, 28, .46);
+  --blur: blur(30px) saturate(145%);
+  --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
+  --rim-soft: inset 1px 1px 1px -1px rgba(255, 255, 255, .42), inset -1px -1px 1px -1px rgba(255, 255, 255, .3);
+  --sans: "Hanken Grotesk", "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --gut: clamp(16px, 4vw, 56px);
+  --top: 104px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--ink); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: var(--top); overflow-x: clip; }
+body { margin: 0; background: var(--ink); color: var(--sand-2); font: 400 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+::selection { background: rgba(255, 255, 255, .24); }
+svg { display: block; }
+h1, h2, h3, p, ol, ul, dl, dd, blockquote { margin: 0; padding: 0; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 6px; }
+.defs { position: absolute; width: 0; height: 0; }
+.label { display: inline-flex; align-items: center; gap: .7em; font: 500 11px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--sand-2); white-space: nowrap; }
+.label::before { content: "["; opacity: .55; }
+.label::after { content: "]"; opacity: .55; }
+
+/* ---------- header ---------- */
+.lg-nav { position: fixed; z-index: 60; top: 14px; left: 50%; transform: translateX(-50%); width: min(1180px, calc(100% - 28px)); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
+.brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; color: var(--sand); }
+.brand .mark { width: 28px; height: 28px; overflow: visible; }
+.lg-links { display: flex; align-items: center; gap: 4px; font: 500 14.5px/1 var(--sans); color: var(--sand-2); }
+.lg-links a { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 999px; transition: color .2s, background-color .2s; }
+.lg-links a:hover { color: #fff; }
+.lg-links a[aria-current] { color: #fff; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); }
+.lg-links .home svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- the sky, faint, fading into the page ---------- */
+.sky { position: absolute; z-index: 0; inset: 0 0 auto; height: min(720px, 92vh); background: url(../assets/hero/sky.jpg) center 30% / cover no-repeat; opacity: .42; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); }
+.sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 12, 17, 0), rgba(9, 12, 17, .5) 62%, var(--ink)); }
+
+/* ---------- page ---------- */
+.lg { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin-inline: auto; padding: 0 var(--gut); }
+.lg-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 7vw, 96px); }
+.lg-head h1 { font: 300 clamp(46px, 7vw, 104px)/.98 var(--sans); letter-spacing: -.045em; color: var(--sand); text-wrap: balance; }
+.dates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.dates div { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 14px; border-radius: 999px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: rgba(255, 255, 255, .05); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim-soft); }
+.dates dt { color: var(--sand-3); }
+.dates dd { color: var(--sand); }
+
+.lg-grid { display: grid; grid-template-columns: 250px minmax(0, 68ch); justify-content: space-between; gap: 72px; align-items: start; padding-bottom: clamp(80px, 10vw, 140px); }
+@media (min-width: 1100px) { .lg-grid { grid-template-columns: 270px minmax(0, 68ch); justify-content: start; gap: clamp(72px, 9vw, 150px); } }
+
+/* ---------- contents ---------- */
+.toc { position: sticky; top: var(--top); max-height: calc(100vh - var(--top) - 24px); overflow: auto; overscroll-behavior: contain; scrollbar-width: none; margin-left: -12px; }
+.toc::-webkit-scrollbar { display: none; }
+.toc-pill { display: none; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 1px; padding-bottom: 8px; }
+.toc-list a { position: relative; display: grid; grid-template-columns: 26px 1fr; align-items: baseline; gap: 6px; padding: 7px 12px; border-radius: 12px; font: 400 14px/1.35 var(--sans); letter-spacing: -.005em; color: var(--sand-3); transition: color .25s var(--ease), background-color .25s var(--ease); }
+.toc-list a b { font: 500 10.5px/1 var(--mono); letter-spacing: .08em; color: var(--sand-4); transition: color .25s; }
+.toc-list a:hover { color: var(--sand); }
+.toc-list a.on { color: #fff; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
+.toc-list a.on b { color: var(--sand-2); }
+
+/* ---------- the document ---------- */
+.doc { min-width: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
+.doc > * + * { margin-top: 1.05em; }
+.doc strong { font-weight: 500; color: var(--sand); }
+.doc em { font-style: italic; }
+.doc a { color: var(--sand); text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .28); text-decoration-thickness: 1px; text-underline-offset: .22em; transition: text-decoration-color .2s; }
+.doc a:hover { text-decoration-color: rgba(255, 255, 255, .8); }
+.doc a.xref { color: inherit; }
+.doc h2 { position: relative; display: flex; flex-direction: column; gap: 16px; margin-top: clamp(68px, 7vw, 104px); margin-bottom: 26px; font: 300 clamp(30px, 2.9vw, 42px)/1.06 var(--sans); letter-spacing: -.035em; color: var(--sand); text-wrap: balance; }
+.doc > h2:first-child, .doc hr + h2 { margin-top: 0; }
+.doc h2 .n { font: 500 11px/1 var(--mono); letter-spacing: .22em; color: var(--sand-3); }
+.doc h2 .n::before { content: "[\2009"; opacity: .6; }
+.doc h2 .n::after { content: "\2009]"; opacity: .6; }
+.doc h2 .alias { position: absolute; top: 0; }
+.doc h3 { display: flex; align-items: baseline; gap: 12px; margin-top: 2.2em; margin-bottom: .2em; font: 500 19px/1.3 var(--sans); letter-spacing: -.015em; color: var(--sand); }
+.doc h3 .n, .doc p.clause > strong:first-child { font-feature-settings: "tnum"; }
+.doc h3 .n { font: 500 12px/1 var(--mono); letter-spacing: .06em; color: var(--sand-3); }
+.doc p.clause { }
+.doc p.caps { font-size: 14.5px; line-height: 1.72; letter-spacing: .012em; }
+.doc p.caps strong { font-weight: 500; }
+.doc hr { height: 0; border: 0; margin: 48px 0; }
+
+.doc ul, .doc ol { list-style: none; display: flex; flex-direction: column; gap: .55em; }
+.doc ul > li { position: relative; padding-left: 1.5em; }
+.doc ul > li::before { content: ""; position: absolute; left: .3em; top: .74em; width: 5px; height: 5px; border-radius: 50%; background: rgba(245, 243, 238, .42); }
+.doc ol { counter-reset: li; }
+.doc ol > li { position: relative; padding-left: 2.4em; counter-increment: li; }
+.doc ol > li::before { content: counter(li, decimal-leading-zero); position: absolute; left: 0; top: .5em; font: 500 11px/1 var(--mono); letter-spacing: .08em; color: var(--sand-3); }
+
+.doc .callout { position: relative; padding: 22px 26px; border-radius: 20px; font-size: 16px; line-height: 1.62; color: var(--sand); background: linear-gradient(135deg, rgba(191, 227, 255, .1), rgba(255, 255, 255, .025) 60%), var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
+.doc .callout > * + * { margin-top: .8em; }
+
+/* placeholders still to fill in: visible on purpose */
+mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; background: rgba(255, 184, 77, .14); padding: .22em .5em; border-radius: 6px; box-shadow: inset 1px 1px 1px -1px rgba(255, 214, 150, .7), inset -1px -1px 1px -1px rgba(255, 214, 150, .45); white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* tables: glass rows */
+.tbl { margin-top: 1.4em !important; margin-bottom: .4em; }
+.tbl table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 15px; line-height: 1.55; }
+.tbl th { padding: 0 18px 4px; font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); text-align: left; vertical-align: bottom; }
+.tbl td { padding: 15px 18px; vertical-align: top; background: rgba(255, 255, 255, .04); box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .55), inset 0 -1px 1px -1px rgba(255, 255, 255, .4); }
+.tbl td:first-child { border-radius: 14px 0 0 14px; color: var(--sand); font-weight: 500; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset 0 -1px 1px -1px rgba(255, 255, 255, .4); }
+.tbl td:last-child { border-radius: 0 14px 14px 0; box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .55), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); }
+.tbl tbody tr { transition: background-color .2s; }
+.tbl tbody tr:hover td { background: rgba(255, 255, 255, .065); }
+.tbl.cols-3 td:first-child { width: 24%; }
+.tbl.cols-2 td:first-child { width: 42%; }
+
+/* ---------- footer ---------- */
+.lg-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; width: 100%; max-width: 1180px; margin-inline: auto; padding: 40px var(--gut) 72px; font-size: 14px; color: var(--sand-3); }
+.lg-foot .brand { font-size: 17px; }
+.lg-foot .brand .mark { width: 26px; height: 26px; }
+.lg-foot .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.lg-foot .links a:hover { color: var(--sand); }
+
+/* ---------- tablet and phone ---------- */
+@media (max-width: 960px) {
+  :root { --top: 142px; } /* the header plus the sticky Contents pill */
+  .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .toc { z-index: 40; top: 82px; max-height: none; overflow: visible; margin: 0 0 40px; justify-self: start; max-width: 100%; }
+  .toc-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 14px 0 18px; border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); font: 500 14px/1 var(--sans); color: var(--sand); white-space: nowrap; }
+  .toc-pill .k { font: 500 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--sand-3); }
+  .toc-pill .cur { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .toc-pill .cur:empty { display: none; }
+  .toc-pill svg { flex: none; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .3s var(--ease); }
+  .toc.open .toc-pill svg { transform: rotate(180deg); }
+  .js .toc-list { position: absolute; left: 0; top: calc(100% + 8px); width: min(420px, calc(100vw - 2 * var(--gut))); max-height: min(62vh, 560px); overflow: auto; overscroll-behavior: contain; padding: 8px; border-radius: 20px; background: rgba(12, 19, 28, .72); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim), 0 24px 60px -20px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(-6px) scale(.985); transform-origin: top left; visibility: hidden; transition: opacity .22s var(--ease), transform .3s var(--ease), visibility 0s .3s; }
+  .js .toc.open .toc-list { opacity: 1; transform: none; visibility: visible; transition: opacity .22s var(--ease), transform .3s var(--ease); }
+  .toc-list a { padding: 10px 12px; font-size: 15px; }
+}
+@media (max-width: 640px) {
+  :root { --top: 134px; }
+  body, .doc { font-size: 17px; }
+  .lg-nav { top: 10px; width: calc(100% - 20px); height: 54px; padding: 0 6px 0 14px; border-radius: 18px; gap: 8px; }
+  .brand { font-size: 16.5px; gap: 8px; }
+  .brand .mark { width: 25px; height: 25px; }
+  .lg-links { font-size: 13.5px; gap: 0; }
+  .lg-links a { padding: 0 10px; height: 38px; gap: 4px; }
+  .lg-links .long { display: none; }
+  .toc { top: 74px; }
+  .lg-head { gap: 18px; padding: 128px 0 48px; }
+  .dates div { height: 30px; padding: 0 12px; font-size: 10px; letter-spacing: .12em; }
+  .doc h2 { gap: 12px; margin-bottom: 20px; }
+  .doc .callout { padding: 18px 20px; border-radius: 18px; font-size: 15.5px; }
+  .doc ol > li { padding-left: 2.2em; }
+  /* tables become stacked glass cards */
+  .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; width: auto !important; }
+  .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .tbl table { border-spacing: 0; }
+  .tbl tr { margin-bottom: 8px; padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, .04); box-shadow: var(--rim-soft); }
+  .tbl td, .tbl td:first-child, .tbl td:last-child { padding: 0; background: none !important; box-shadow: none; border-radius: 0; }
+  .tbl td + td { margin-top: 10px; }
+  .tbl td + td::before { content: attr(data-th); display: block; margin-bottom: 3px; font: 500 10px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); }
+  .tbl td:first-child { font-size: 16px; }
+  .lg-foot { padding-bottom: 56px; }
+}
+@media (max-width: 370px) { .brand > span { display: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+</style>
+</head>
+<body>
+<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
+    <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
+    <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+  </defs>
+  <symbol id="studio-mark" viewBox="36 36 440 440">
+    <path fill="url(#mk-l)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-r)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </symbol>
+</svg>
+
+<header class="lg-nav">
+  <a class="brand" href="../" aria-label="Studio home"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <nav class="lg-links" aria-label="Legal">
+    <a href="../terms/">Terms</a>
+    <a href="../privacy/" aria-current="page">Privacy</a>
+    <a class="home" href="../"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg><span><span class="long">Back to </span>askstudio.ai</span></a>
+  </nav>
+</header>
+
+<div class="sky" aria-hidden="true"></div>
+
+<main class="lg" id="top">
+  <header class="lg-head">
+    <span class="label">Legal</span>
+    <h1>Privacy Policy</h1>
+    <dl class="dates">
+<div><dt>Effective date</dt><dd>November 20, 2026</dd></div>
+<div><dt>Last updated</dt><dd>November 20, 2026</dd></div>
+    </dl>
+  </header>
+
+  <div class="lg-grid">
+    <aside class="toc" aria-label="Contents">
+      <button class="toc-pill" type="button" aria-expanded="false" aria-controls="toc-list"><span class="k">Contents</span><span class="cur" data-cur></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <ol class="toc-list" id="toc-list">
+<li><a href="#the-short-version"><b>&middot;</b><span>The short version</span></a></li>
+<li><a href="#1-who-we-are"><b>1</b><span>Who we are</span></a></li>
+<li><a href="#2-information-we-collect"><b>2</b><span>Information we collect</span></a></li>
+<li><a href="#3-what-stays-on-your-mac"><b>3</b><span>What stays on your Mac</span></a></li>
+<li><a href="#4-how-we-use-information"><b>4</b><span>How we use information</span></a></li>
+<li><a href="#5-emails"><b>5</b><span>Emails</span></a></li>
+<li><a href="#6-cookies-and-local-storage"><b>6</b><span>Cookies and local storage</span></a></li>
+<li><a href="#7-how-we-share-information"><b>7</b><span>How we share information</span></a></li>
+<li><a href="#8-how-long-we-keep-information"><b>8</b><span>How long we keep information</span></a></li>
+<li><a href="#9-notice-for-california-and-other-us-state-residents"><b>9</b><span>Notice for California and other US state residents</span></a></li>
+<li><a href="#10-notice-for-people-in-the-eu-uk-and-switzerland"><b>10</b><span>Notice for people in the EU, UK and Switzerland</span></a></li>
+<li><a href="#sms-terms"><b>11</b><span>SMS terms</span></a></li>
+<li><a href="#12-security"><b>12</b><span>Security</span></a></li>
+<li><a href="#13-children"><b>13</b><span>Children</span></a></li>
+<li><a href="#14-your-choices-at-a-glance"><b>14</b><span>Your choices at a glance</span></a></li>
+<li><a href="#15-changes-to-this-policy"><b>15</b><span>Changes to this policy</span></a></li>
+<li><a href="#16-contact"><b>16</b><span>Contact</span></a></li>
+      </ol>
+    </aside>
+
+    <article class="doc">
+<h2 id="the-short-version"><span class="t">The short version</span></h2>
+<ul><li>Your workspace (brands, footage, edits, library) <strong>stays on your Mac</strong>. We don't upload it to our servers.</li><li>Our servers hold only what we need to run your account: your email and name, subscription and licence status, waitlist and referral details, and minimal usage and diagnostic data.</li><li>Payments go through Stripe. <strong>We never see or store your full card number.</strong></li><li>When you use a connected provider (Claude, ElevenLabs, Meta and others), you send your content to that provider under your own account and its own privacy policy.</li><li><strong>We don't sell your personal information, and we don't share it for cross-context behavioural advertising.</strong></li><li>You can ask us to access, correct or delete your data at any time: hello@askstudio.ai.</li></ul>
+<hr>
+<h2 id="1-who-we-are"><span class="n">1</span><span class="t">Who we are</span></h2>
+<p>This Privacy Policy explains how <mark class="ph">[COMPANY LEGAL NAME]</mark>, a <mark class="ph">[STATE OF ORGANIZATION]</mark> company doing business as Studio ("<strong>Studio</strong>", "<strong>we</strong>", "<strong>us</strong>"), collects, uses and shares personal information when you use the Studio Mac app, the website at askstudio.ai, our waitlist, and related services (the "<strong>Service</strong>"). We are the "controller" (or "business") for the information described here. Our <a href="../terms/">Terms of Service</a> also apply.</p>
+<h2 id="2-information-we-collect"><span class="n">2</span><span class="t">Information we collect</span></h2>
+<h3 id="2-1-information-you-give-us"><span class="n">2.1</span>Information you give us</h3>
+<div class="tbl cols-3"><table><thead><tr><th scope="col">Category</th><th scope="col">Examples</th><th scope="col">When</th></tr></thead><tbody><tr><td data-th="Category">Account</td><td data-th="Examples">Name, email address, sign-in method (Google, Apple or email code), the account identifier from Google or Apple</td><td data-th="When">Creating an account</td></tr><tr><td data-th="Category">Waitlist</td><td data-th="Examples">First and last name, email, phone number, role, number of brands, how you use Claude, referral code</td><td data-th="When">Joining the waitlist</td></tr><tr><td data-th="Category">Billing</td><td data-th="Examples">Plan, seat count, billing status and history, billing country and postal code, the last four digits and brand of your card (shown to us by Stripe)</td><td data-th="When">Starting a trial or subscription</td></tr><tr><td data-th="Category">Communications</td><td data-th="Examples">Messages and attachments you send us, survey answers, feedback</td><td data-th="When">Contacting us</td></tr><tr><td data-th="Category">SMS</td><td data-th="Examples">Mobile number, your SMS consent record, opt-out status</td><td data-th="When">Opting in to texts</td></tr></tbody></table></div>
+<h3 id="2-2-information-collected-automatically"><span class="n">2.2</span>Information collected automatically</h3>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">Category</th><th scope="col">Examples</th></tr></thead><tbody><tr><td data-th="Category">Licence and device</td><td data-th="Examples">Licence or entitlement status, seat assignments, a device identifier generated by the app, Mac model, macOS and app version, activation dates</td></tr><tr><td data-th="Category">Usage (minimal)</td><td data-th="Examples">Feature-level events such as app launches, which integrations are connected (not their contents), errors, and session counts</td></tr><tr><td data-th="Category">Diagnostics</td><td data-th="Examples">Crash reports, error logs and performance data. We design these to exclude the contents of your workspace</td></tr><tr><td data-th="Category">Website</td><td data-th="Examples">IP address, browser type, pages visited, referring URL, and UTM and source parameters (for example, which link brought you to the waitlist)</td></tr><tr><td data-th="Category">Referral</td><td data-th="Examples">Your referral code, who referred you, how many people you referred, your waitlist position and referral rank</td></tr><tr><td data-th="Category">Email engagement</td><td data-th="Examples">Whether our emails were delivered, opened or clicked (through Brevo)</td></tr></tbody></table></div>
+<h3 id="2-3-information-from-others"><span class="n">2.3</span>Information from others</h3>
+<ul><li><strong>Google or Apple</strong>, if you sign in with them: your name, email and account identifier. With Apple, you may get a private relay email instead.</li><li><strong>Stripe</strong>: payment status, fraud-risk signals, and the card details described above.</li><li><strong>Referrers</strong>: if a friend invites you, we learn that they referred you.</li></ul>
+<h2 id="3-what-stays-on-your-mac"><span class="n">3</span><span class="t">What stays on your Mac</span></h2>
+<p>Studio is built to keep your work local. <strong>The following stays on your Mac, and we don't collect it on our servers</strong>:</p>
+<ul><li>your workspace: brands, footage, images, audio, edits, projects, scripts, prompts and library;</li><li>content you generate with your connected providers;</li><li>credentials and tokens for your connected third-party accounts.</li></ul>
+<p>When you use a feature that sends content to a provider you've connected (for example, a prompt to Claude, a script to ElevenLabs, or a video to Instagram), the App sends it <strong>directly to that provider under your account</strong>. That provider's terms and privacy policy govern it, not this policy. If you send us files or screenshots for support, we use them only to help you, and delete them when we're done.</p>
+<h2 id="4-how-we-use-information"><span class="n">4</span><span class="t">How we use information</span></h2>
+<p>We use personal information to:</p>
+<ol><li><strong>Provide the Service</strong>: create and secure your account, sign you in, verify licences and seats, enforce device limits, and deliver updates.</li><li><strong>Process payments</strong>: run trials and subscriptions, send receipts and renewal reminders, handle failed payments, and prevent fraud.</li><li><strong>Run the waitlist and referrals</strong>: hold your place, calculate your position and referral rank, give out invites and rewards, and detect fake sign-ups.</li><li><strong>Communicate with you</strong>: send sign-in codes, account and billing notices, and support replies; and, with your permission or where the law allows, product news and marketing.</li><li><strong>Keep things safe and working</strong>: diagnose crashes, fix bugs, monitor performance, and detect abuse, security incidents and violations of our Terms.</li><li><strong>Improve Studio</strong>: understand, in aggregate, which features are used, so we know what to build. <strong>We don't use your workspace content, and we don't use your personal information to train AI models.</strong></li><li><strong>Meet legal obligations</strong>: tax, accounting, responding to lawful requests, and enforcing our rights.</li></ol>
+<h2 id="5-emails"><span class="n">5</span><span class="t">Emails</span></h2>
+<ul><li><strong>Transactional emails</strong> (sign-in codes, receipts, trial and renewal reminders, cancellation confirmations, security and legal notices) are part of the Service. You can't opt out of them while you have an account.</li><li><strong>Marketing emails</strong> (launch news, tips, offers) are optional. Every marketing email has an unsubscribe link, or you can email hello@askstudio.ai. We act on opt-outs within 10 business days.</li></ul>
+<h2 id="6-cookies-and-local-storage"><span class="n">6</span><span class="t">Cookies and local storage</span></h2>
+<p>askstudio.ai uses only what it needs to work: browser local storage and essential cookies that remember your waitlist session, referral code and sign-in state, and that prevent abuse. <strong>We don't currently use third-party analytics, advertising cookies or tracking pixels on the Site.</strong></p>
+<p>If we add analytics or advertising tools in the future (for example, a Meta Pixel or a Google tag), we will update this policy first, ask for consent where the law requires it, and give you a way to opt out, including a "Do Not Sell or Share My Personal Information" link and support for Global Privacy Control (see <a class="xref" href="#9-notice-for-california-and-other-us-state-residents">Section 9</a>).</p>
+<p>You can clear local storage and cookies in your browser settings. Some Site features, such as waitlist status, may then stop working.</p>
+<h2 id="7-how-we-share-information"><span class="n">7</span><span class="t">How we share information</span></h2>
+<p>We share personal information only as described here.</p>
+<p id="7-1" class="clause"><strong>7.1 Service providers (processors).</strong> These companies process data for us, under contracts that limit their use of it to providing their services to us:</p>
+<div class="tbl cols-3"><table><thead><tr><th scope="col">Provider</th><th scope="col">What it does for us</th><th scope="col">Data involved</th></tr></thead><tbody><tr><td data-th="Provider">Supabase</td><td data-th="What it does for us">Authentication and database</td><td data-th="Data involved">Account, licence, waitlist and referral data</td></tr><tr><td data-th="Provider">Cloudflare (Workers, D1)</td><td data-th="What it does for us">Backend services, data storage, security</td><td data-th="Data involved">Licence, usage, diagnostics, website request data</td></tr><tr><td data-th="Provider">Stripe</td><td data-th="What it does for us">Payment processing and billing</td><td data-th="Data involved">Billing data; Stripe collects your card details directly</td></tr><tr><td data-th="Provider">Brevo</td><td data-th="What it does for us">Email, SMS and contact management</td><td data-th="Data involved">Name, email, phone, waitlist fields, consent and engagement data</td></tr><tr><td data-th="Provider">Google Workspace</td><td data-th="What it does for us">Our company email</td><td data-th="Data involved">Messages you send us</td></tr><tr><td data-th="Provider">GitHub Pages</td><td data-th="What it does for us">Website hosting</td><td data-th="Data involved">Website request data (such as IP address)</td></tr><tr><td data-th="Provider">Apple</td><td data-th="What it does for us">App notarization and update delivery</td><td data-th="Data involved">Technical data needed to check and deliver the app</td></tr></tbody></table></div>
+<p id="7-2" class="clause"><strong>7.2 Providers you connect.</strong> Anthropic (Claude), ElevenLabs, Higgsfield, Artlist, Meta, Instagram, TikTok, X, YouTube, Google, Dropbox and others are <strong>not</strong> our processors. You choose them, you connect them under your own accounts, and they handle your data under their own terms and privacy policies. We aren't responsible for their practices.</p>
+<p id="7-3" class="clause"><strong>7.3 Google user data.</strong> If Studio accesses Google user data through Google APIs, Studio's use and transfer of that information follows the <a href="https://developers.google.com/terms/api-services-user-data-policy" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+<p id="7-4" class="clause"><strong>7.4 Other sharing.</strong> We may share information:</p>
+<ul><li><strong>with your direction or consent</strong>, for example when you ask us to;</li><li><strong>with the person who referred you</strong>: only that you joined, never your contact details;</li><li><strong>for legal reasons</strong>: to comply with law, legal process or lawful government requests; to enforce our Terms; or to protect the rights, property or safety of Studio, our users or the public;</li><li><strong>in a business transfer</strong>: in a merger, acquisition, financing, reorganization or sale of assets, subject to this policy's protections;</li><li><strong>in aggregate or de-identified form</strong> that can't reasonably identify you. We don't try to re-identify it.</li></ul>
+<h2 id="8-how-long-we-keep-information"><span class="n">8</span><span class="t">How long we keep information</span></h2>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">Data</th><th scope="col">How long</th></tr></thead><tbody><tr><td data-th="Data">Account, licence and device data</td><td data-th="How long">While your account is open, then deleted within 30 days of account deletion</td></tr><tr><td data-th="Data">Billing and transaction records</td><td data-th="How long">As long as tax and accounting law requires (typically 7 years)</td></tr><tr><td data-th="Data">Waitlist data</td><td data-th="How long">Until you join Studio, ask to be removed, or 24 months after you sign up, whichever comes first</td></tr><tr><td data-th="Data">SMS and email consent and opt-out records</td><td data-th="How long">For as long as we message you, plus 5 years as proof of consent</td></tr><tr><td data-th="Data">Usage and diagnostic data</td><td data-th="How long">Up to 12 months, then deleted or de-identified</td></tr><tr><td data-th="Data">Support messages</td><td data-th="How long">Up to 24 months after your issue is resolved</td></tr><tr><td data-th="Data">Backups</td><td data-th="How long">Overwritten on a rolling cycle of up to 90 days</td></tr></tbody></table></div>
+<p>We may keep information longer where the law requires it, or to resolve disputes, prevent fraud or enforce our agreements.</p>
+<h2 id="9-notice-for-california-and-other-us-state-residents"><span class="n">9</span><span class="t">Notice for California and other US state residents</span></h2>
+<p>This section is for residents of California and other US states with consumer privacy laws (such as Colorado, Connecticut, Oregon, Texas and Virginia). It supplements the rest of this policy.</p>
+<p id="9-1" class="clause"><strong>9.1 Categories collected in the past 12 months.</strong> Identifiers (name, email, phone, IP address, device ID); customer records (billing details); commercial information (plan and purchase history); internet and network activity (Site and app usage, diagnostics); approximate geolocation (from IP address or billing country); professional information (role, number of brands); and inferences (waitlist rank, likely plan fit). We collect them from the sources and for the purposes in Sections 2 and 4, and disclose them for business purposes to the processors in <a class="xref" href="#7-1">Section 7.1</a>. We don't collect sensitive personal information for the purpose of inferring characteristics about you.</p>
+<p id="9-2" class="clause"><strong>9.2 No sale or sharing.</strong> <strong>We do not sell personal information, and we do not "share" it for cross-context behavioural advertising,</strong> as those terms are defined in California law. We don't knowingly sell or share the personal information of anyone under 16. If this changes (for example, if we add advertising pixels to the Site), we will update this policy beforehand, add a <strong>"Do Not Sell or Share My Personal Information"</strong> link, and honour opt-outs, including browser <strong>Global Privacy Control (GPC)</strong> signals.</p>
+<p id="9-3" class="clause"><strong>9.3 Your rights.</strong> Depending on your state, you may have the right to: know and access the personal information we hold about you; get a portable copy of it; correct it; delete it; opt out of sale, sharing, targeted advertising and profiling; and limit the use of sensitive personal information. <strong>We give these rights to all users, wherever they live.</strong></p>
+<p id="9-4" class="clause"><strong>9.4 How to exercise them.</strong> Email hello@askstudio.ai from your account email. We'll verify your identity (usually by confirming that email address) and respond within <strong>45 days</strong>, extendable once by 45 days if we tell you. You may use an authorized agent; we may ask for proof of the agent's authority, and ask you to verify your identity directly. If we deny your request, you can appeal by replying with "Appeal" in the subject line. We'll respond within 60 days, and if we still deny it, you may contact your state attorney general.</p>
+<p id="9-5" class="clause"><strong>9.5 No discrimination.</strong> We won't deny you service, charge you a different price, or give you a lower quality of service because you exercised these rights.</p>
+<p id="9-6" class="clause"><strong>9.6 Shine the Light.</strong> California residents may ask once a year whether we've disclosed personal information to third parties for their own direct marketing. We haven't.</p>
+<h2 id="10-notice-for-people-in-the-eu-uk-and-switzerland"><span class="n">10</span><span class="t">Notice for people in the EU, UK and Switzerland</span></h2>
+<p id="10-1" class="clause"><strong>10.1 Legal bases.</strong> We process your personal information on these grounds:</p>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">Purpose</th><th scope="col">Legal basis</th></tr></thead><tbody><tr><td data-th="Purpose">Providing your account, licence and subscription</td><td data-th="Legal basis">Performance of a contract</td></tr><tr><td data-th="Purpose">Billing, tax and accounting records</td><td data-th="Legal basis">Legal obligation</td></tr><tr><td data-th="Purpose">Security, fraud prevention, diagnostics, product improvement, waitlist and referral operation</td><td data-th="Legal basis">Our legitimate interests in running a secure, working, improving service. We balance these against your rights</td></tr><tr><td data-th="Purpose">Marketing emails</td><td data-th="Legal basis">Consent, or legitimate interests for existing customers where the law allows. You can opt out anytime</td></tr><tr><td data-th="Purpose">SMS messages</td><td data-th="Legal basis">Consent</td></tr><tr><td data-th="Purpose">Non-essential cookies (if we ever use them)</td><td data-th="Legal basis">Consent</td></tr></tbody></table></div>
+<p id="10-2" class="clause"><strong>10.2 Your rights.</strong> You have the right to access, correct, delete, restrict or object to our processing of your personal information, and to data portability. Where we rely on consent, you can withdraw it at any time; this doesn't affect processing already done. You can complain to your local data protection authority (in the UK, the ICO). We'd appreciate the chance to resolve your concern first: hello@askstudio.ai.</p>
+<p id="10-3" class="clause"><strong>10.3 International transfers.</strong> We're based in the United States, and our processors may handle data in the US and other countries. When we transfer personal information from the EU, UK or Switzerland, we rely on appropriate safeguards, such as the European Commission's Standard Contractual Clauses (with the UK Addendum where applicable), or a provider's certification under the EU-US Data Privacy Framework and its UK and Swiss extensions.</p>
+<p id="10-4" class="clause"><strong>10.4 Automated decisions.</strong> We don't make decisions that have legal or similarly significant effects on you based solely on automated processing. Waitlist position and referral rank are calculated automatically, but they don't have those effects.</p>
+<h2 id="sms-terms"><span class="alias" id="11-sms-terms"></span><span class="n">11</span><span class="t">SMS terms</span></h2>
+<p>These terms apply if you opt in to text messages from Studio.</p>
+<ul><li><strong>Program:</strong> Studio Updates. Texts about your waitlist status, invites, launch news and occasional offers. Messages may be sent using automated technology.</li><li><strong>Consent:</strong> we text you only if you've checked the SMS consent box. <strong>Consent is not a condition of any purchase.</strong> You confirm that you are the subscriber or customary user of the number you provide.</li><li><strong>Frequency:</strong> recurring. Up to <mark class="ph">[MAX MSGS/MONTH]</mark> messages per month.</li><li><strong>Cost:</strong> <strong>Message and data rates may apply.</strong> Check with your mobile carrier.</li><li><strong>Opt out:</strong> <strong>Reply STOP</strong> to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email hello@askstudio.ai.</li><li><strong>Help:</strong> <strong>Reply HELP</strong> for help, or email hello@askstudio.ai.</li><li><strong>Sender:</strong> <mark class="ph">[SMS SHORT CODE / NUMBER]</mark>.</li><li><strong>Carriers</strong> are not liable for delayed or undelivered messages.</li><li><strong>Privacy:</strong> we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. <strong>We do not share or sell your mobile number or SMS opt-in data to third parties or affiliates for their marketing or promotional purposes.</strong></li><li><strong>Quiet hours:</strong> we aim to send texts only between 8 a.m. and 8 p.m. in your local time.</li></ul>
+<h2 id="12-security"><span class="n">12</span><span class="t">Security</span></h2>
+<p>We protect personal information with measures appropriate to its sensitivity, including encryption in transit, access controls, least-privilege access for staff, and reputable infrastructure providers. Payment card data is handled by Stripe, which is PCI DSS certified. No system is perfectly secure, so we can't guarantee absolute security. Protecting your Mac, your sign-in email and your connected accounts is up to you. If we learn of a breach that affects your personal information, we'll notify you as the law requires.</p>
+<h2 id="13-children"><span class="n">13</span><span class="t">Children</span></h2>
+<p>The Service is for adults aged 18 and over (or the age of majority where you live). It is not directed to children, and we don't knowingly collect personal information from anyone under 18. If you believe a child has given us personal information, email hello@askstudio.ai and we'll delete it.</p>
+<h2 id="14-your-choices-at-a-glance"><span class="n">14</span><span class="t">Your choices at a glance</span></h2>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">You want to</th><th scope="col">Do this</th></tr></thead><tbody><tr><td data-th="You want to">Stop marketing emails</td><td data-th="Do this">Click "unsubscribe" in any marketing email</td></tr><tr><td data-th="You want to">Stop texts</td><td data-th="Do this">Reply STOP</td></tr><tr><td data-th="You want to">Get, correct or delete your data</td><td data-th="Do this">Email hello@askstudio.ai</td></tr><tr><td data-th="You want to">Leave the waitlist</td><td data-th="Do this">Email hello@askstudio.ai or use the unsubscribe link</td></tr><tr><td data-th="You want to">Delete your account</td><td data-th="Do this">Email hello@askstudio.ai, or use the in-app option where available</td></tr><tr><td data-th="You want to">Remove local workspace data</td><td data-th="Do this">Delete it from your Mac. We don't hold a copy</td></tr></tbody></table></div>
+<h2 id="15-changes-to-this-policy"><span class="n">15</span><span class="t">Changes to this policy</span></h2>
+<p>We may update this policy from time to time. The "Last updated" date shows the latest version. If a change is material, we'll tell you by email or in the App before it takes effect, and we'll ask for consent where the law requires it.</p>
+<h2 id="16-contact"><span class="n">16</span><span class="t">Contact</span></h2>
+<p><mark class="ph">[COMPANY LEGAL NAME]</mark> (Studio)<br>
+<mark class="ph">[MAILING ADDRESS]</mark><br>
+Email: hello@askstudio.ai</p>
+    </article>
+  </div>
+</main>
+
+<footer class="lg-foot">
+  <a class="brand" href="../"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <div class="links"><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a><a href="mailto:hello@askstudio.ai">hello@askstudio.ai</a><a href="../">askstudio.ai</a></div>
+</footer>
+
+<script>
+/* Studio legal pages: the contents list follows the reader (current section highlighted), and on phones it folds into a pill. */
+(function () {
+  var toc = document.querySelector(".toc"), pill = toc && toc.querySelector(".toc-pill"), cur = toc && toc.querySelector("[data-cur]");
+  if (!toc) return;
+  var links = [].slice.call(toc.querySelectorAll(".toc-list a")), list = toc.querySelector(".toc-list");
+  var heads = links.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+  var on = -1, ticking = false;
+
+  function setOpen(v) {
+    toc.classList.toggle("open", v);
+    pill.setAttribute("aria-expanded", v ? "true" : "false");
+    if (v && on >= 0) { var a = links[on]; list.scrollTop = a.offsetTop - list.clientHeight / 2 + a.offsetHeight / 2; }
+  }
+  pill.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!toc.classList.contains("open")); });
+  document.addEventListener("click", function (e) { if (!toc.contains(e.target)) setOpen(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && toc.classList.contains("open")) { setOpen(false); pill.focus(); } });
+  links.forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+  addEventListener("hashchange", function () { setOpen(false); });
+
+  function update() {
+    ticking = false;
+    var line = (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 100) + 40, idx = -1;
+    for (var i = 0; i < heads.length; i++) { if (heads[i] && heads[i].getBoundingClientRect().top <= line) idx = i; else break; }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) idx = heads.length - 1;
+    if (idx === on) return;
+    if (on >= 0) { links[on].classList.remove("on"); links[on].removeAttribute("aria-current"); }
+    on = idx;
+    if (cur) cur.textContent = on >= 0 ? links[on].querySelector("span").textContent : "";
+    if (on < 0) return;
+    var a = links[on];
+    a.classList.add("on");
+    a.setAttribute("aria-current", "location");
+    /* keep the highlighted entry in view inside the sticky list (desktop), without moving the page */
+    var box = getComputedStyle(toc).overflowY === "auto" ? toc : null;
+    if (box) {
+      var t = a.offsetTop, b = t + a.offsetHeight;
+      if (t < box.scrollTop + 40) box.scrollTop = t - 40;
+      else if (b > box.scrollTop + box.clientHeight - 40) box.scrollTop = b - box.clientHeight + 40;
+    }
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  update();
+})();
+
+</script>
+</body>
+</html>
