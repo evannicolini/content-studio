@@ -153,6 +153,7 @@ async function join(request, env, ctx) {
   const f = readForm(b);
   if (f.error) return fail(f.error);
   const t = now(), ua = text(request.headers.get("User-Agent") || "", 300);
+  const cip = text(request.headers.get("CF-Connecting-IP") || "", 64), ccountry = text(request.headers.get("CF-IPCountry") || "", 8);   // kept only with a consent
 
   let row = await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(f.email).first();
   let referrer = null;
@@ -164,10 +165,10 @@ async function join(request, env, ctx) {
       try {
         const r = await env.DB.prepare(
           `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at,
-             sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
+             sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent, consent_ip, consent_country)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
         ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t,
-          f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua).run();
+          f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua, f.smsOk ? cip : null, f.smsOk ? ccountry : null).run();
         if (r.meta.changes) added = await bySeq(env, r.meta.last_row_id);
         else raced = true;                                             // the same email landed a moment ago: update it below
       } catch (e) {
@@ -193,8 +194,8 @@ async function join(request, env, ctx) {
   ).bind(f.first, f.last, keepPhone ? row.phone : f.phone, keepPhone ? row.cc : f.cc, keepPhone ? row.sms : f.sms,
     f.roles || row.roles, f.brands || row.brands, f.claude || row.claude, f.source || row.source, Math.max(t, row.updated_at + 1), row.seq).run();
   // A new tick is recorded with its own time and words; an unticked box on a repeat sign-up is not an opt-out (STOP is).
-  if (f.smsOk) await env.DB.prepare("UPDATE signups SET sms_consent = 1, sms_consent_at = ?, sms_consent_text = ?, sms_consent_version = ?, user_agent = ? WHERE seq = ?")
-    .bind(t, f.smsText, f.smsVersion, ua, row.seq).run();
+  if (f.smsOk) await env.DB.prepare("UPDATE signups SET sms_consent = 1, sms_consent_at = ?, sms_consent_text = ?, sms_consent_version = ?, user_agent = ?, consent_ip = ?, consent_country = ? WHERE seq = ?")
+    .bind(t, f.smsText, f.smsVersion, ua, cip, ccountry, row.seq).run();
   if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
   row = await bySeq(env, row.seq);
   later(ctx, afterJoin(env, row.seq, null));
