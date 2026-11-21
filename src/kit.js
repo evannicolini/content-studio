@@ -273,12 +273,24 @@
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
     }, null, { margin: "500px 0px", once: true });
     SK.onView(v, function () {
-      if (SK.reduced) return;
+      if (SK.reduced || SK.hushed) return;   /* the early-access sheet is over the page: nothing behind it plays */
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
       var p = v.play(); p && p.catch(function () {});
     }, function () { v.pause(); }, { ratio: 0.2, threshold: [0, 0.2, 0.6] });
   }
   SK.videos = function (root) { (root || document).querySelectorAll("video[data-play]").forEach(armVideo); };
+  /* SK.hush(true) while a full-screen sheet covers the page: every video behind it pauses and none starts; SK.hush(false) plays the
+     ones that were playing again, if they are still on screen. (900-early: phones ran warm with the page playing behind it.) */
+  var hushedVids = [];
+  SK.hushed = false;
+  SK.hush = function (on) {
+    SK.hushed = !!on;
+    if (on) {
+      document.querySelectorAll("video").forEach(function (v) { if (v.closest("#early-access")) return; if (!v.paused) { v.pause(); hushedVids.push(v); } });
+    } else {
+      hushedVids.splice(0).forEach(function (v) { var r = v.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && r.width) { var p = v.play(); p && p.catch(function () {}); } });
+    }
+  };
 
   /* ---------- film modal ---------- */
   var fm;

@@ -284,7 +284,16 @@ var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[d
 var sky = sheet.querySelector(".wl-sky"), fit = sheet.querySelector(".wl-fit"), stage = sheet.querySelector(".wl-stage");
 var sel = sheet.querySelector(".wl-cc select"), ccv = sheet.querySelector(".wl-ccv"), toastEl = sheet.querySelector("[data-wl-toast]");
 var other = sheet.querySelector("[data-wl-other]"), otherIn = form.elements.other;
+sheet.querySelectorAll(".wl-opt").forEach(function (o) {
+  var b = document.createElement("span"); b.className = "wl-ob"; b.setAttribute("data-beam", "cx"); b.setAttribute("aria-hidden", "true"); b.innerHTML = "<span data-beam-bloom></span>"; o.insertBefore(b, o.firstChild);
+});
+if ("MutationObserver" in window) new MutationObserver(function (ms) {
+  ms.forEach(function (m) { var o = m.target, b = o.querySelector(".wl-ob"); if (b) { if (o.classList.contains("sel")) b.setAttribute("data-active", ""); else b.removeAttribute("data-active"); } });
+}).observe(sheet.querySelector(".wl-steps"), { attributes: true, attributeFilter: ["class"], subtree: true });
 var at = 0, busy = false, pushed = false, lastFocus = null, from = "link", ans = { roles: [], brands: "", claude: "" };
+var depth = 0, closing = false, stillT = 0;
+/* the sheet never scrolls itself: focusing a field near the app (which runs off the right edge) must not slide the whole page over */
+sheet.addEventListener("scroll", function () { if (sheet.scrollLeft || sheet.scrollTop) { sheet.scrollLeft = 0; sheet.scrollTop = 0; } });   /* history: one entry per step (depth = how many are ours) */
 
 function toast(t) { toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toastEl._t); toastEl._t = setTimeout(function () { toastEl.classList.remove("on"); }, 2400); }
 function val(n) { return (form.elements[n].value || "").trim(); }
@@ -416,8 +425,14 @@ function claudeLoop() {
 }
 function sizeStage() {
   var r = stage.getBoundingClientRect();
-  if (!r.width) return;
+  if (!r.width && !(SK.mobile() || innerWidth <= 960)) return;
   var mob = SK.mobile() || innerWidth <= 960;
+  if (mob) {
+    var sm = Math.max(.5, Math.min(.68, innerWidth * 1.5 / 980));
+    stage.style.setProperty("--stage-h", Math.round(Math.min(360, 540 * sm)) + "px");
+    fit.style.setProperty("--s", sm.toFixed(3));
+    return;
+  }
   var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22); /* desktop: as tall as the space allows, running off the right edge like the opening film */
   /* the Claude scene is taller than the rest (the composer, then the plan and the v01 film): it fits whole, inside the stage, clear of
      the captions and the bar, from the top down */
@@ -493,6 +508,7 @@ function Pass(el, opts) {
   return {
     start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } },
     stop: function () { st.live = false; },
+    land: function () { el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
     set: function (d) {
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
@@ -529,8 +545,8 @@ function personal() {
   var f = first();
   sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); });
 }
-function setStep(n, quiet) {
-  var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1;
+function setStep(n, quiet, fromHist) {
+  var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
   personal();
   if (cur !== nx) {
     var h0 = box.offsetHeight;
@@ -561,10 +577,38 @@ function setStep(n, quiet) {
   if (!quiet && sheet.classList.contains("open")) KAY.line(LINE[q]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
   setTimeout(function () { typeStep(); }, quiet ? 0 : 520);
+  if (!fromHist && n !== was && sheet.classList.contains("open") && DEEP.test(location.hash)) {
+    try { if (n > was) { depth++; history.pushState({ wl: 1, step: n, d: depth }, "", location.href); } else history.replaceState({ wl: 1, step: n, d: depth }, ""); } catch (e) {}
+  }
+  if (n !== was) { var sc = sheet.querySelector(".wl-in"); if (sc.scrollTop > 0) sc.scrollTo({ top: 0, behavior: SK.reduced ? "auto" : "smooth" }); }
+  saveDraft();
 }
+/* the answers so far, kept for this tab: a reload, or a swipe back to the page and forward again, picks up where it was */
+var DRAFT = "studio-early-draft";
+function saveDraft() {
+  try { sessionStorage.setItem(DRAFT, JSON.stringify({ at: at, ans: ans, f: { first: val("first"), last: val("last"), other: val("other"), email: val("email"), phone: val("phone"), cc: sel.value, n: form.elements.sms_notify.checked, m: form.elements.sms_marketing.checked } })); } catch (e) {}
+}
+function loadDraft() {
+  try {
+    var d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); if (!d || !d.f) return 0;
+    ["first", "last", "other", "email", "phone"].forEach(function (k) { form.elements[k].value = d.f[k] || ""; });
+    if (d.f.cc) { sel.value = d.f.cc; showCC(); }
+    form.elements.sms_notify.checked = !!d.f.n; form.elements.sms_marketing.checked = !!d.f.m;
+    ans = { roles: [].concat((d.ans && d.ans.roles) || []), brands: (d.ans && d.ans.brands) || "", claude: (d.ans && d.ans.claude) || "" };
+    steps.forEach(function (st) {
+      var q = st.getAttribute("data-q");
+      st.querySelectorAll(".wl-opt").forEach(function (o) { var v = o.getAttribute("data-v"), on = q === "roles" ? ans.roles.indexOf(v) > -1 : ans[q] === v; o.classList.toggle("sel", !!on); o.setAttribute("aria-pressed", on ? "true" : "false"); });
+    });
+    other.hidden = ans.roles.indexOf("Something else") < 0;
+    var n = Math.min(d.at || 0, ORDER.indexOf("you"));
+    while (n > 0 && !ready(n - 1)) n--;
+    return n;
+  } catch (e) { return 0; }
+}
+function clearDraft() { try { sessionStorage.removeItem(DRAFT); } catch (e) {} }
 /* each empty field types its own example, left to right with a caret, when its step comes up; focus stops it where a normal
    placeholder would be, and any text hides it */
-var TY = { first: "Evan", last: "Nicolini", other: "Photographer, coach, musician…", email: "you@studio.com", phone: "(555) 123-4567" };
+var TY = { first: "First name", last: "Last name", other: "Photographer, coach, musician…", email: "you@studio.com", phone: "(555) 123-4567" };
 var tyTok = 0;
 form.querySelectorAll("input").forEach(function (inp) {
   var t = TY[inp.name], box = inp.closest(".wl-box"); if (!t || !box) return;
@@ -651,14 +695,19 @@ steps.forEach(function (s, n) {
         var rk = { brands: { "1": "b1", "2-3": "b2", "4+": "b4" }, claude: { "Pro or Max": "cpro", "Free plan": "cfree", "Not yet": "cno" } }[q];
         if (rk && rk[v]) KAY.react(rk[v]);
       }
-      next.disabled = !ready(at);
+      next.disabled = !ready(at); saveDraft();
       if (q === "roles") drawHome(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
       if (!multi) setTimeout(advance, SK.reduced ? 60 : 520); /* one answer: on to the next, once it has landed on the right */
     });
   });
 });
 next.addEventListener("click", advance);
-back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
+back.addEventListener("click", function () {
+  if (at === 0 || busy) return;
+  var st = history.state || {};
+  if (st.wl && st.step === at && depth > (pushed ? 1 : 0)) history.back();   /* popstate takes it one step back */
+  else setStep(at - 1);
+});
 
 /* ---------- the details: the beam runs round the field you're in; a field that needs you turns it auburn ---------- */
 var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp):not(.wl-cbx):not(.wl-od)"));
@@ -675,6 +724,7 @@ inputs.forEach(function (inp) {
     if (inp.name === "other") drawHome();
     next.disabled = !ready(at);
     if (ORDER[at] === "you") drawPass();
+    clearTimeout(inp._sv); inp._sv = setTimeout(saveDraft, 300);
   });
   inp.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") return;
@@ -741,7 +791,7 @@ form.addEventListener("submit", function (e) {
   var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
   var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
     sms_notify: nOk, sms_notify_text: nOk ? smsWords("[data-wl-smsn]") : "", sms_marketing: mOk, sms_marketing_text: mOk ? smsWords("[data-wl-smsm]") : "",
-    sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v1" };
+    sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v2" };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
     if (j.needs_confirm) { checkEmail(j, d); return; }
@@ -812,7 +862,7 @@ function checkEmail(j, d) {
 function landed(j, d) {
   var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
   try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
-  savePend(null);
+  savePend(null); clearDraft();
   showDone(rec);
 }
 function verify() {
@@ -864,6 +914,24 @@ function confirmLink() {
   });
 }
 
+/* ---------- the keyboard on a phone: the field stays in view (visualViewport), the bar steps aside while it is up ---------- */
+var KBD = !fine;
+function kbKeep() {
+  var a = document.activeElement; if (!a || !sheet.contains(a) || !a.matches("input, select")) return;
+  var vv = window.visualViewport, vh = vv ? vv.height : innerHeight, top = vv ? vv.offsetTop : 0, r = a.getBoundingClientRect();
+  var sc = sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"), want = top + Math.min(vh * .3, 150);
+  if (r.top < top + 64 || r.bottom > top + vh - 24) sc.scrollTop += r.top - want;
+}
+sheet.addEventListener("focusin", function (e) {
+  if (!KBD || !e.target.matches("input:not([type=checkbox]), select")) return;
+  sheet.classList.add("kb"); setTimeout(kbKeep, 320); setTimeout(kbKeep, 700);
+});
+sheet.addEventListener("focusout", function () {
+  if (!KBD) return;
+  setTimeout(function () { var a = document.activeElement; if (!(a && sheet.contains(a) && a.matches("input:not([type=checkbox]), select"))) sheet.classList.remove("kb"); }, 90);
+});
+if (window.visualViewport) visualViewport.addEventListener("resize", function () { if (sheet.classList.contains("kb")) kbKeep(); });
+
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
 function open(src) {
@@ -875,8 +943,11 @@ function open(src) {
   var j = joined();
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
+  if (SK.hush) SK.hush(true);
+  clearTimeout(stillT); stillT = setTimeout(function () { if (sheet.classList.contains("open")) html.classList.add("wl-still"); }, SK.reduced ? 0 : 520);
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
-  if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
+  if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
+  else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
   wallNow = sky.getAttribute("src");
   count(); clearInterval(countT); countT = setInterval(count, 30000);
@@ -900,16 +971,27 @@ function open(src) {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
+  sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
-  if (pushed) { pushed = false; history.back(); return; } /* popstate hides it */
+  if (pushed && depth > 0) { pushed = false; closing = true; history.go(-depth); return; }   /* popstate hides it */
+  if (depth > 0) { closing = true; history.go(-depth); return; }
   hide();
   if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search.replace(/[?&]ref=[^&]*/, "").replace(/^&/, "?")); } catch (e) {}
 }
-window.addEventListener("popstate", function () { if (DEEP.test(location.hash)) open("link"); else { pushed = false; hide(); } });
+window.addEventListener("popstate", function () {
+  var st = history.state || {};
+  depth = st.d || 0;
+  if (closing) { closing = false; pushed = false; hide(); if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search.replace(/[?&]ref=[^&]*/, "").replace(/^&/, "?")); } catch (e) {} return; }
+  if (!DEEP.test(location.hash)) { pushed = false; hide(); return; }
+  if (!sheet.classList.contains("open")) { open("link"); return; }
+  if (sheet.classList.contains("done")) { if (depth > 0) { closing = true; history.go(-depth); } else { pushed = false; hide(); } return; }
+  var n = typeof st.step === "number" ? st.step : 0;
+  while (n > 0 && !ready(n - 1)) n--;   /* never past a step that isn't answered */
+  if (n !== at) setStep(n, false, true);
+});
 window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)) open("link"); });
 document.addEventListener("click", function (e) {
   var t = e.target.closest && e.target.closest("[data-early], a[href='" + HASH + "']");
@@ -968,14 +1050,26 @@ function showDone(r, quiet) {
   urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
   pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
   var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
-  var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), wa: "https://wa.me/?text=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
+  var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
   sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
   loopTok++; pass1.stop();
   if (!again) {
+    /* the pass on the invite step glides into its place on You're in (one object, not a cut); without it in view, it spins in */
+    var p1 = sheet.querySelector("[data-wl-pass1]"), r1 = p1.getBoundingClientRect();
+    var glide = !SK.reduced && innerWidth > 960 && r1.width > 80 && r1.right > 0 && r1.left < innerWidth && sheet.getAttribute("data-step") !== "name";
     sheet.classList.add("done"); sheet.classList.remove("shown");
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
-    pass2.enter(2100);
+    if (glide) {
+      var ds = sheet.querySelector(".wl-dstage"), p2 = sheet.querySelector("[data-wl-pass2]"), r2 = p2.getBoundingClientRect(), dr = ds.getBoundingClientRect();
+      var cx2 = r2.left + r2.width / 2, cy2 = r2.top + r2.height / 2, k = r1.width / r2.width;
+      ds.style.transition = "none"; ds.style.transformOrigin = (cx2 - dr.left) + "px " + (cy2 - dr.top) + "px";
+      ds.style.transform = "translate(" + (r1.left + r1.width / 2 - cx2) + "px, " + (r1.top + r1.height / 2 - cy2) + "px) scale(" + k.toFixed(4) + ")";
+      void ds.offsetWidth;
+      ds.style.transition = "transform 1.15s cubic-bezier(.65, 0, .25, 1)"; ds.style.transform = "";
+      pass2.start();
+      setTimeout(function () { ds.style.transition = ""; ds.style.transformOrigin = ""; pass2.land(); }, 1180);
+    } else pass2.enter(2100);
     var dh = sheet.querySelector(".wl-dh");
     if (!SK.reduced) { var n = 0; dh.querySelectorAll("span").forEach(function (sp) { if (!sp.closest(".wl-roll")) n = words(sp, n); }); doneEl.classList.add("w0"); void doneEl.offsetWidth; setTimeout(function () { doneEl.classList.remove("w0"); }, 500); }
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
@@ -999,12 +1093,14 @@ sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
 });
 function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
 sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
-sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec); });
+sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec, "story"); });
+sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec, "save"); });
+sheet.querySelector("[data-wl-fliph]").textContent = fine ? "Drag to turn · click to flip" : "Tap to flip";
 
 /* ---------- start over: "Not you?" on the done screen, and Restart on localhost or with ?early. Clears the saved sign-up. ---------- */
 function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
-  savePend(null); clearOtp(); cerr(""); clearInterval(resendT);
+  savePend(null); clearOtp(); cerr(""); clearInterval(resendT); clearDraft();
   rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
   inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_notify.checked = false; form.elements.sms_marketing.checked = false; other.hidden = true;
@@ -1022,43 +1118,75 @@ var restartB = sheet.querySelector("[data-wl-restart]");
 restartB.hidden = !(local || Q.has("review"));   /* review only: never on the live site */
 restartB.addEventListener("click", startOver);
 
-/* an Instagram story: a 1080 x 1920 picture of the pass. Phones share it straight to Instagram; elsewhere it saves, and the link is copied */
+/* the story image (Story and Save image): 1080 x 1920, drawn here on a canvas. Their pass floating on the You're in sky, the Studio app
+   large and running off the right edge (as on the site's phone hero), askstudio.ai. Phones share it (Instagram, Save Image); elsewhere
+   it downloads. Glass is real: each pane is the sky blurred behind it, then the pane drawn over. No video. */
 function img(src) { return new Promise(function (res) { var i = new Image(); i.onload = function () { res(i); }; i.onerror = function () { res(null); }; i.src = src; }); }
 function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
-async function story(r) {
-  var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
-  var g = cv.getContext("2d"), bg = await img("assets/hero/sky-m.jpg"), mark = await img("assets/studio-mark.png");
-  try { await document.fonts.ready; } catch (e) {}
-  g.fillStyle = "#05090A"; g.fillRect(0, 0, W, Hh);
-  if (bg) { var s = Math.max(W / bg.width, Hh / bg.height); g.drawImage(bg, (W - bg.width * s) / 2, (Hh - bg.height * s) * .4, bg.width * s, bg.height * s); }
-  var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,9,10,.35)"); gr.addColorStop(.5, "rgba(5,9,10,.15)"); gr.addColorStop(1, "rgba(5,9,10,.72)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
-  var F = "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", MO = "'IBM Plex Mono', Menlo, monospace";
-  g.fillStyle = "#fff"; g.textAlign = "center";
-  if (mark) g.drawImage(mark, W / 2 - 150, 250, 64, 64);
-  g.font = "600 56px " + F; g.textAlign = "left"; g.fillText("Studio", W / 2 - 66, 298); g.textAlign = "center";
-  g.font = "300 118px " + F; g.fillText("I'm on the list.", W / 2, 560);
-  g.fillStyle = "rgba(245,243,238,.8)"; g.font = "400 46px " + F; g.fillText("One prompt. A finished video.", W / 2, 650);
-  g.save(); g.translate(W / 2, 1060); g.rotate(-.035);
-  rr(g, -400, -250, 800, 500, 60); var pg = g.createLinearGradient(-400, -250, 400, 250); pg.addColorStop(0, "rgba(223,234,232,.3)"); pg.addColorStop(.45, "rgba(14,25,30,.72)"); pg.addColorStop(1, "rgba(5,9,10,.86)"); g.fillStyle = pg; g.fill();
-  g.strokeStyle = "rgba(255,255,255,.4)"; g.lineWidth = 2; g.stroke();
-  g.textAlign = "left"; g.fillStyle = "rgba(245,243,238,.7)"; g.font = "500 26px " + MO; g.fillText("EARLY ACCESS · INVITE", -340, -160);
-  g.fillStyle = "#fff"; g.font = "300 92px " + F; g.fillText(r.first, -340, -40);
-  g.fillStyle = "rgba(245,243,238,.6)"; g.font = "500 24px " + MO; g.fillText("PLACE", -340, 70); g.fillText("TRIAL", -80, 70);
-  g.fillStyle = "#fff"; g.font = "500 52px " + MO; g.fillText(typeof r.position === "number" ? "#" + place(r) : "IN", -340, 140);
-  g.font = "500 42px " + F; g.fillText("14 days, free", -80, 136);
-  g.restore();
-  g.textAlign = "center"; g.fillStyle = "#fff"; g.font = "500 44px " + F; g.fillText("Get early access", W / 2, 1520);
-  g.fillStyle = "rgba(245,243,238,.75)"; g.font = "400 34px " + MO; g.fillText(url.replace(/^https?:\/\//, "").replace(/#.*$/, ""), W / 2, 1580);
-  var blob = await new Promise(function (res) { cv.toBlob(res, "image/png"); });
-  if (!blob) return;
-  var file = new File([blob], "studio-early-access.png", { type: "image/png" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    try { await navigator.share({ files: [file], text: SAY + " " + url }); return; } catch (e) { if (e && e.name === "AbortError") return; }
-  }
-  var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
-  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(function () {});
-  toast("Story saved. Post it, and add your link with the link sticker (copied).");
+var storyBusy = false;
+async function story(r, mode) {
+  if (storyBusy) return; storyBusy = true;
+  try {
+    var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
+    var g = cv.getContext("2d"), sky0 = await img("assets/wl/in-m.jpg"), ui = await img("assets/wl/story-ui.webp"), mark = await img("assets/studio-mark.png");
+    try { await document.fonts.ready; } catch (e) {}
+    var F = "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", MO = "'IBM Plex Mono', Menlo, monospace";
+    /* the sky, and a blurred copy of it for the glass */
+    var sky = document.createElement("canvas"); sky.width = W; sky.height = Hh; var sg = sky.getContext("2d");
+    sg.fillStyle = "#0E191E"; sg.fillRect(0, 0, W, Hh);
+    if (sky0) { var s0 = Math.max(W / sky0.width, Hh / sky0.height); sg.drawImage(sky0, (W - sky0.width * s0) / 2, (Hh - sky0.height * s0) / 2, sky0.width * s0, sky0.height * s0); }
+    var fr = document.createElement("canvas"); fr.width = W; fr.height = Hh; var fg = fr.getContext("2d"); fg.filter = "blur(34px) saturate(1.35)"; fg.drawImage(sky, 0, 0); fg.filter = "none";
+    g.drawImage(sky, 0, 0);
+    var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,9,10,.34)"); gr.addColorStop(.38, "rgba(5,9,10,.06)"); gr.addColorStop(1, "rgba(5,9,10,.42)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
+    /* the app: large, from the left margin, off the right edge */
+    if (ui) {
+      var us = 1.32, uw = ui.width / 2 * us, uh = ui.height / 2 * us, ux = 84, uy = 1330;
+      var m = document.createElement("canvas"); m.width = W; m.height = Hh; var mg = m.getContext("2d");
+      mg.drawImage(fr, 0, 0); mg.globalCompositeOperation = "destination-in"; mg.drawImage(ui, ux, uy, uw, uh);
+      g.drawImage(m, 0, 0); g.drawImage(ui, ux, uy, uw, uh);
+      var fade = g.createLinearGradient(0, Hh - 260, 0, Hh); fade.addColorStop(0, "rgba(5,9,10,0)"); fade.addColorStop(1, "rgba(5,9,10,.55)"); g.fillStyle = fade; g.fillRect(0, Hh - 260, W, 260);
+    }
+    /* the words */
+    g.fillStyle = "#fff"; g.textAlign = "left"; g.textBaseline = "alphabetic";
+    if (mark) g.drawImage(mark, 84, 132, 60, 60);
+    g.font = "600 50px " + F; g.fillText("Studio", 160, 178);
+    g.font = "300 112px " + F; g.fillText("I'm on the list.", 80, 380);
+    g.fillStyle = "rgba(245,243,238,.82)"; g.font = "400 42px " + F; g.fillText("One prompt. A finished video.", 84, 456);
+    /* the pass: glass over the sky, tilted a little */
+    var pw = 880, ph = Math.round(pw * .62), px = (W - pw) / 2, py = 560;
+    g.save(); g.translate(W / 2, py + ph / 2); g.rotate(-.045); g.translate(-W / 2, -(py + ph / 2));
+    g.shadowColor = "rgba(0,0,0,.45)"; g.shadowBlur = 90; g.shadowOffsetY = 40; rr(g, px, py, pw, ph, 58); g.fillStyle = "rgba(14,19,28,.5)"; g.fill(); g.shadowColor = "transparent";
+    g.save(); rr(g, px, py, pw, ph, 58); g.clip(); g.drawImage(fr, 0, 0);
+    var pg = g.createLinearGradient(px, py, px + pw, py + ph); pg.addColorStop(0, "rgba(255,255,255,.2)"); pg.addColorStop(.46, "rgba(255,255,255,.05)"); pg.addColorStop(1, "rgba(160,200,255,.12)");
+    g.fillStyle = "rgba(14,19,28,.6)"; g.fillRect(px, py, pw, ph); g.fillStyle = pg; g.fillRect(px, py, pw, ph); g.restore();
+    rr(g, px + 1, py + 1, pw - 2, ph - 2, 57); g.strokeStyle = "rgba(255,255,255,.42)"; g.lineWidth = 2; g.stroke();
+    var L = px + 62;
+    if (mark) g.drawImage(mark, L, py + 50, 40, 40);
+    g.fillStyle = "#fff"; g.font = "600 34px " + F; g.fillText("Studio", L + 52, py + 82);
+    g.textAlign = "right"; g.fillStyle = "rgba(245,243,238,.78)"; g.font = "500 21px " + MO; g.fillText("EARLY ACCESS · INVITE", px + pw - 62, py + 80); g.textAlign = "left";
+    g.fillStyle = "rgba(245,243,238,.55)"; g.font = "500 20px " + MO; g.fillText("INVITE FOR", L, py + 158);
+    g.fillStyle = "#fff"; g.font = "300 84px " + F; g.fillText(((r.first || "") + " " + (r.last || "")).trim() || "You", L, py + 242);
+    var ranked = typeof r.position === "number" && r.position > 0;
+    g.fillStyle = "rgba(245,243,238,.55)"; g.font = "500 20px " + MO; g.fillText(ranked ? "PLACE" : "STATUS", L, py + 330); g.fillText("TRIAL", L + 390, py + 330);
+    g.fillStyle = "#fff"; g.font = "400 76px " + MO; g.fillText(ranked ? "#" + place(r).toLocaleString("en-US") : "IN", L, py + 408);
+    g.font = "500 38px " + F; g.fillText("14 days, free", L + 390, py + 402);
+    g.fillStyle = "rgba(245,243,238,.86)"; for (var bx = L, k = 7; bx < px + pw - 62; k = (k * 16807) % 2147483647) { var bw = 2 + (k % 4) * 2.2; g.fillRect(bx, py + 452, bw, 46); bx += bw + 6; }
+    g.restore();
+    /* the address */
+    g.textAlign = "left"; g.fillStyle = "#fff"; g.font = "500 44px " + F; g.fillText("Get early access", 84, 1222);
+    g.fillStyle = "rgba(245,243,238,.82)"; g.font = "400 36px " + MO; g.fillText("askstudio.ai", 84, 1276);
+    var blob = await new Promise(function (res) { cv.toBlob(res, "image/png"); });
+    if (!blob) return;
+    var file = new File([blob], "studio-pass.png", { type: "image/png" });
+    if (!fine && navigator.canShare && navigator.canShare({ files: [file] })) {   /* phones: the share sheet (Instagram, Save Image); computers: a download */
+      try { await navigator.share(mode === "story" ? { files: [file], text: SAY + " " + url } : { files: [file] }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+    }
+    var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name; document.body.appendChild(a); a.click(); a.remove();
+    if (mode === "story" && navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).catch(function () {});
+    toast(mode === "story" ? "Image saved. Post it, and add your link with the link sticker (copied)." : "Image saved.");
+  } finally { storyBusy = false; }
 }
 
 /* first paint */
-drawHome(); drawBrands(); drawClaude(); drawPass(); setStep(0, true);
+var draftAt = loadDraft();
+drawHome(); drawBrands(); drawClaude(); drawPass(); setStep(draftAt, true);
