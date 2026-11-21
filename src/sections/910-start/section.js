@@ -8,7 +8,8 @@ var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.h
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 var sheet = document.getElementById("signup");
 if (!sheet) return;
-if (!(local || Q.has("review") || Q.has("app"))) { sheet.remove(); return; }   /* not a live CTA yet: this Mac, ?review, or Studio's own window (?app#paywall) */
+var EMBED = window.parent !== window, PAYWALL0 = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
+if (!(local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) { sheet.remove(); return; }   /* not a live CTA yet: this Mac, ?review, or Studio's own window (?app#paywall) */
 var LIVE = !local || Q.has("live"), MOCK = !LIVE;
 var CFG = {
   worker: "https://studio-licence.studio-licence.workers.dev",
@@ -316,6 +317,7 @@ function setStep(n, quiet) {
   $("[data-st-next-t]").textContent = q === "in" ? ($("[data-st-mail]").hidden ? "Continue" : "Send my code") : q === "code" ? "Verify" : "Continue";
   next.disabled = !ready();
   scenes.home.classList.toggle("menu", q === "plan");
+  $("[data-st-look]").hidden = !(PAYWALL && q === "plan");
   if (q === "plan") drawPlanStage(); else drawHome();
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
@@ -466,7 +468,7 @@ function drawPlans() {
       "<ul>" + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></button>";
   }).join("");
   plansEl.querySelectorAll(".st-plan").forEach(function (b) {
-    b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); });
+    b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); pwHead(); });
   });
   line();
 }
@@ -478,7 +480,7 @@ perEl.querySelectorAll("button").forEach(function (b) {
   b.addEventListener("click", function () {
     me.period = b.getAttribute("data-per");
     perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x === b ? "true" : "false"); });
-    slidePer(); drawPlans();
+    slidePer(); drawPlans(); pwHead();
   });
 });
 function slidePer() { var on = perEl.querySelector('[aria-checked="true"]'); if (!on || !on.offsetWidth) return; perEl.style.setProperty("--w", on.offsetWidth + "px"); perEl.style.setProperty("--x", (on.offsetLeft - 4) + "px"); }
@@ -525,7 +527,7 @@ function payStep() {
   $("[data-st-then]").textContent = "Then " + bare + " a " + per + ".";
   $("[data-st-agree-t]").textContent = "I agree that after my 14-day trial for $1, Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + RENEW_FULL + " and every " + per + " after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + RENEW_FULL + ", I won't be charged " + bare + ".";
   $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>. The $1 trial fee isn't refundable. By paying, you agree to the <a href=\"terms/\" target=\"_blank\" rel=\"noopener\">Terms</a> and <a href=\"privacy/\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>.";
-  $("[data-st-go-t]").textContent = "Start 14 days for $1";
+  $("[data-st-go-t]").textContent = PAYWALL ? "Start for $1" : "Start 14 days for $1";
   agree.checked = false; go.classList.add("off");   /* the terms just changed (or are new): ask again */
   reveal(stepEl("pay"));
   if (peMounted) return;
@@ -681,12 +683,13 @@ function showDone(has) {
   $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : "You're in";
   $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
   $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : "Studio is downloading.";
-  if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = "Back to your export"; }); }
+  if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
     : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
+  if (STUDIO && h.code) { h.download = h.open = STUDIO + "/_launch/download?code=" + encodeURIComponent(h.code); }
   open.href = h.open || "studio://"; dl.href = h.download || "#";
   drawPass(pass2);
   pass1.stop();
@@ -697,18 +700,21 @@ function showDone(has) {
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("done");
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
-    if (PAYWALL) { try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
+    if (PAYWALL) { tell({ type: "studio-paywall:unlocked", plan: me.plan, period: me.period }); try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
     else setTimeout(download, 1800);   /* the download starts by itself */
   }
 }
+var STUDIO = (Q.get("studio") || "").replace(/\/+$/, "");
+if (!/^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(STUDIO)) STUDIO = "";   /* the Hub's launch journey: a test Studio on this Mac */
 function download() {
   var u = me.hand && me.hand.download;
+  if (STUDIO && u) { location.href = u; return; }
   if (!u || u === "#download" || MOCK) { toast("Downloading Studio (stand-in)."); return; }
   var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
 }
 $("[data-st-dl]").addEventListener("click", function (e) { e.preventDefault(); download(); });
 $("[data-st-open]").addEventListener("click", function (e) {
-  if (PAYWALL) { e.preventDefault(); try { window.webkit.messageHandlers.studio.postMessage({ close: true }); } catch (x) { close(); } return; }
+  if (PAYWALL) { e.preventDefault(); tell({ type: "studio-paywall:close" }); try { window.webkit.messageHandlers.studio.postMessage({ close: true }); } catch (x) { if (!EMBED) close(); } return; }
   if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); }
 });
 
@@ -760,7 +766,8 @@ function close() {
 window.addEventListener("popstate", function () { if (DEEP.test(location.hash)) open(); else { pushed = false; hide(); } });
 window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)) open(); });
 document.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-start], a[href='" + HASH + "']"); if (!t || sheet.contains(t)) return; e.preventDefault(); open(); });
-$("[data-st-close]").addEventListener("click", close);
+$("[data-st-close]").addEventListener("click", function () { if (EMBED && PAYWALL) { tell({ type: "studio-paywall:close" }); return; } close(); });
+$("[data-st-look]").addEventListener("click", function () { tell({ type: "studio-paywall:look" }); try { window.webkit.messageHandlers.studio.postMessage({ look: true }); } catch (e) {} });
 sheet.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { e.preventDefault(); close(); return; }
   if (e.key !== "Tab") return;
@@ -778,18 +785,40 @@ restartB.addEventListener("click", function () { location.href = location.pathna
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
 if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
 
+/* Studio shows #paywall in an iframe and talks to it with postMessage (no token ever in a URL). Only Studio's own window, on
+   this Mac (127.0.0.1 / localhost), is listened to; everything goes back to that exact origin, never "*" (except "ready"). */
+var PARENT = "", PW = { mode: "onboarding", action: "" };
+function tell(msg) { if (EMBED && PARENT) try { window.parent.postMessage(msg, PARENT); } catch (e) {} }
+window.addEventListener("message", function (e) {
+  if (!EMBED || e.source !== window.parent || !/^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(e.origin)) return;
+  var d = e.data || {};
+  if (d.type === "studio-paywall:open") { PARENT = e.origin; window.StudioPaywall.open(d); }
+});
+var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
+function pwHead() {
+  if (!PAYWALL) return;
+  var pl = planOf(me.plan), pq = stepEl("plan"), head = PW.mode === "locked" ? (HEADS[PW.action] || "Keep making with Studio.") : "Keep your Studio.";
+  pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>14 days for $1, then " + esc(then(pl.id, me.period)) + ".</span>";
+  pq.querySelector(".wl-qs").textContent = "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
+  $("[data-st-look]").textContent = PW.mode === "locked" ? "Not now" : "Look around first";
+}
 function paywall(o) {
   o = o || {};
+  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] ? o.action : "";
+  if (o.plan && planOf(o.plan).id === o.plan) me.plan = o.plan;
+  if (o.period === "year" || o.period === "month") me.period = o.period;
   me.first = (o.first || "").split(/\s+/)[0]; me.email = o.email || ""; me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
-  $("[data-st-badge]").textContent = "Keep your Studio";
-  var pq = stepEl("plan");
-  pq.querySelector(".wl-qh").innerHTML = "Keep your Studio.<span>14 days for $1.</span>";
-  pq.querySelector(".wl-qs").textContent = "Your video's ready to export. Pick a plan, and cancel anytime before day 14.";
+  $("[data-st-badge]").textContent = "Unlock";
+  perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
+  drawPlans(); slidePer(); pwHead();
   if (MOCK && !me.first) { me.first = "Evan"; me.email = "evan@studio.com"; }
   steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
   at = 0; setStep(0, true); drawPlanStage();
 }
 window.StudioPaywall = { open: function (o) { paywall(o); open(); } };
+
+if (EMBED && PAYWALL0) { try { window.parent.postMessage({ type: "studio-paywall:ready" }, "*"); } catch (e) {} }
+if (EMBED) sheet.classList.add("embed");
 
 /* first paint */
 drawPlans(); drawHome(); setStep(0, true);

@@ -4387,3 +4387,8 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st .wl-err.slow::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 8px; border-radius: 50%; background: #E1FF4F; box-shadow: 0 0 8px rgba(225, 255, 79, .6); animation: st-wait 1s ease-in-out infinite; vertical-align: 1px; }
 .st-hint { margin-top: 12px; max-width: 30em; font-size: 13.5px; line-height: 1.5; color: var(--wl-l2); }
 .st-hint:not([hidden]) { animation: wl-rise .5s var(--ease) both; }
+
+/* the paywall in Studio's iframe: a quiet "Look around first" beside the bar on the plan step */
+.st-look { height: 46px; padding: 0 18px; border-radius: 999px; font: 500 14px/1 var(--sans); color: var(--wl-l2); background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); align-self: center; }
+.st-look:hover { color: #fff; background: rgba(var(--tint), .62); }
+.wl.st.embed [data-st-snd] { display: none; }
