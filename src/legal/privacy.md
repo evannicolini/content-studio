@@ -16,7 +16,7 @@
 
 ## 1. Who we are
 
-This Privacy Policy explains how Nicolini Productions LLC, a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"), collects, uses and shares personal information when you use the Studio Mac app, the website at askstudio.ai, our waitlist, and related services (the "**Service**"). We are the "controller" (or "business") for the information described here. Our [Terms of Service](terms.md) also apply.
+This Privacy Policy explains how Nicolini Productions LLC, a California company doing business as Studio ("**Studio**", "**we**", "**us**"), collects, uses and shares personal information when you use the Studio Mac app, the website at askstudio.ai, our waitlist, and related services (the "**Service**"). We are the "controller" (or "business") for the information described here. Our [Terms of Service](terms.md) also apply.
 
 ## 2. Information we collect
 
@@ -165,11 +165,11 @@ These terms apply if you opt in to text messages from Studio.
 
 - **Program:** Studio Updates. Texts about your waitlist status, invites, launch news and occasional offers. Messages may be sent using automated technology.
 - **Consent:** we text you only if you've checked the SMS consent box. **Consent is not a condition of any purchase.** You confirm that you are the subscriber or customary user of the number you provide.
-- **Frequency:** recurring. Up to [MAX MSGS/MONTH] messages per month.
+- **Frequency:** recurring. Up to 4 messages per month.
 - **Cost:** **Message and data rates may apply.** Check with your mobile carrier.
 - **Opt out:** **Reply STOP** to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email hello@askstudio.ai.
 - **Help:** **Reply HELP** for help, or email hello@askstudio.ai.
-- **Sender:** [SMS SHORT CODE / NUMBER].
+- **Sender:** Studio's registered SMS number, shown in your confirmation text.
 - **Carriers** are not liable for delayed or undelivered messages.
 - **Privacy:** we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. **We do not share or sell your mobile number or SMS opt-in data to third parties or affiliates for their marketing or promotional purposes.**
 - **Quiet hours:** we aim to send texts only between 8 a.m. and 8 p.m. in your local time.

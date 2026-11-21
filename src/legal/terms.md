@@ -9,7 +9,7 @@
 
 ## 1. Who we are and what these Terms cover
 
-These Terms of Service ("**Terms**") are a contract between you and Nicolini Productions LLC, a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"). They cover the Studio Mac app (the "**App**"), the website at askstudio.ai (the "**Site**"), our waitlist, our accounts and subscriptions, and any related services, updates and support (together, the "**Service**").
+These Terms of Service ("**Terms**") are a contract between you and Nicolini Productions LLC, a California company doing business as Studio ("**Studio**", "**we**", "**us**"). They cover the Studio Mac app (the "**App**"), the website at askstudio.ai (the "**Site**"), our waitlist, our accounts and subscriptions, and any related services, updates and support (together, the "**Service**").
 
 You accept these Terms when you create an account, start a trial, join the waitlist, download or use the App, or otherwise use the Service. Our [Privacy Policy](privacy.md) explains how we handle personal information, and is part of these Terms. If you don't agree, don't use the Service.
 
@@ -179,7 +179,7 @@ We respect intellectual property rights and respond to valid notices under the D
 5. a statement that you believe in good faith that the use is not authorized by the copyright owner, its agent or the law;
 6. a statement, under penalty of perjury, that the information in your notice is accurate and that you are the owner or authorized to act for the owner.
 
-**Designated agent:** [DMCA AGENT NAME], Nicolini Productions LLC. Email: [DMCA EMAIL].
+**Designated agent:** Copyright Agent, Nicolini Productions LLC. Email: hello@askstudio.ai.
 
 If your material was removed and you believe that was a mistake, you may send a counter-notice that meets 17 U.S.C. § 512(g)(3). We terminate the accounts of repeat infringers where appropriate. Knowingly false notices may result in liability for damages.
 
@@ -249,7 +249,7 @@ We may update these Terms from time to time. If a change is material, we'll give
 
 **22.8 30-day opt-out.** **You can opt out of this arbitration agreement by emailing hello@askstudio.ai, within 30 days of first accepting these Terms, with the subject "Arbitration Opt-Out", your name, your account email, and a clear statement that you opt out.** Opting out doesn't affect any other part of these Terms.
 
-**22.9 Governing law and courts.** These Terms are governed by the laws of the State of [GOVERNING LAW STATE] and applicable US federal law, without regard to conflict-of-laws rules. For any dispute not subject to arbitration, you and Studio submit to the exclusive jurisdiction of the state and federal courts located in [GOVERNING LAW STATE / COUNTY]. The UN Convention on Contracts for the International Sale of Goods does not apply. If you are a consumer living in the EU or UK, you also keep the protection of the mandatory laws of your country, and may bring proceedings in your local courts where the law gives you that right.
+**22.9 Governing law and courts.** These Terms are governed by the laws of the State of California and applicable US federal law, without regard to conflict-of-laws rules. For any dispute not subject to arbitration, you and Studio submit to the exclusive jurisdiction of the state and federal courts located in the State of California. The UN Convention on Contracts for the International Sale of Goods does not apply. If you are a consumer living in the EU or UK, you also keep the protection of the mandatory laws of your country, and may bring proceedings in your local courts where the law gives you that right.
 
 **22.10 Time limit.** To the extent permitted by law, any claim must be filed within one year after it arises, or it is permanently barred.
 
