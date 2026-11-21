@@ -79,7 +79,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=e36645e4">
+<link rel="stylesheet" href="site.css?v=784f2005">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1697,6 +1697,26 @@ set.</span></span></figure>
             </div>
             <p class="wl-legal">By joining, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>, and to get emails from Studio about the waitlist and launch. Unsubscribe anytime.</p>
           </div>
+
+          <!-- the email's code (or its button) holds the place: nothing counts until it is confirmed -->
+          <div class="wl-q" data-q="check" role="group" aria-labelledby="wl-q-check">
+            <p class="wl-k">Early access · Confirm</p>
+            <h3 class="wl-qh" id="wl-q-check"><b data-wl-hi="Check your email, {first}.">Check your email.</b><span>Your spot is waiting.</span></h3>
+            <p class="wl-qs">We sent a 6-digit code to <b class="wl-cmail" data-wl-cmail>your inbox</b>. Type it here, or tap Confirm my spot in the email.</p>
+            <div class="wl-otp" data-wl-otp><span class="wl-otpb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span>
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1" maxlength="6" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 2" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 3" maxlength="1" pattern="[0-9]*">
+              <i aria-hidden="true"></i>
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 4" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 5" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 6" maxlength="1" pattern="[0-9]*">
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="wl-links"><button type="button" class="wl-tl" data-wl-resend disabled>Send a new code <span data-wl-wait>in 60s</span></button><span class="dot" aria-hidden="true">·</span><button type="button" class="wl-tl" data-wl-other>Use another email</button></p>
+            <p class="wl-hint" data-wl-chint hidden>Didn't get it? It can take a minute. Check spam or promotions, or send a new code.</p>
+            <p class="wl-hint" data-wl-dev hidden>Review build: any 6 digits work here. Nothing is sent.</p>
+          </div>
         </div>
 
         <!-- the opening film's bar: back, where you are, Continue; Kayla beside it -->
@@ -1834,6 +1854,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=e36645e4"></script>
+<script src="site.js?v=784f2005"></script>
 </body>
 </html>

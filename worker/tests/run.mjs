@@ -3,7 +3,7 @@
 // The Worker's own fetch handler runs against a fresh in-memory D1 stand-in (tests/d1.mjs) and a fake Brevo
 // (tests/fakes.mjs) for each test.
 import assert from "node:assert/strict";
-import worker, { e164 } from "../src/index.js";
+import worker, { e164, confirmEmail } from "../src/index.js";
 import { d1 } from "./d1.mjs";
 import { fakeBrevo } from "./fakes.mjs";
 
@@ -15,7 +15,7 @@ const CODE = /^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{7}$/;
 function setup(envOverrides = {}, brevoOptions = {}) {
   const brevo = fakeBrevo(brevoOptions);
   globalThis.fetch = brevo.fetch;
-  const env = { DB: d1(), ORIGINS, BOOST: "10", BREVO_API_KEY: "test-brevo-key-not-real", BREVO_LIST_ID: "7", ADMIN_TOKEN: ADMIN, ...envOverrides };
+  const env = { DB: d1(), ORIGINS, BOOST: "10", BREVO_API_KEY: "test-brevo-key-not-real", BREVO_LIST_ID: "7", ADMIN_TOKEN: ADMIN, DEV_ECHO: "1", ...envOverrides };
   for (const k of Object.keys(env)) if (env[k] === undefined) delete env[k];
   const pending = [];
   const settle = async () => { while (pending.length) await pending.shift(); };
@@ -35,10 +35,21 @@ function setup(envOverrides = {}, brevoOptions = {}) {
     try { json = JSON.parse(text); } catch {}
     return { status: res.status, headers: res.headers, json, text };
   }
-  const join = (body, opts = {}) => call("POST", "/join", { body, ...opts });
+  // join() signs up and then confirms with the code from the email, the way a person would; joinOnly() stops at the email.
+  const joinOnly = (body, opts = {}) => call("POST", "/join", { body, ...opts });
+  async function join(body, opts = {}) {
+    const r = await joinOnly(body, opts);
+    if (!r.json || !r.json.needs_confirm) return r;
+    const mail = brevo.lastEmail(r.json.email), code = (mail && mail.code) || r.json.dev_code;
+    if (!code || (body && body.hp)) return r;
+    return call("POST", "/confirm", { body: { email: r.json.email, code }, ...opts, ip: undefined });
+  }
   const row = (email) => { const r = env.DB.sqlite.prepare("SELECT * FROM signups WHERE email = ?").get(email); return r ? { ...r } : null; };
   const count = () => env.DB.sqlite.prepare("SELECT COUNT(*) AS n FROM signups").get().n;
-  return { env, brevo, call, join, row, count, settle, pending };
+  const confirmed = () => env.DB.sqlite.prepare("SELECT COUNT(*) AS n FROM signups WHERE confirmed_at IS NOT NULL").get().n;
+  const age = (email, seconds) => env.DB.sqlite.prepare(`UPDATE signups SET confirm_sent_at = confirm_sent_at - ?1, confirm_expires = confirm_expires - ?1,
+    confirm_link_expires = confirm_link_expires - ?1 WHERE email = ?2`).run(seconds, email);   // as if that much time had passed
+  return { env, brevo, call, join, joinOnly, row, count, confirmed, age, settle, pending };
 }
 const person = (n, extra = {}) => ({
   first: `First${n}`, last: `Last${n}`, email: `person${n}@example.com`, phone: "", cc: "", roles: ["Creator"],
@@ -165,10 +176,9 @@ test("honeypot: a fake success, nothing stored, nothing sent", async () => {
   const r = await t.join(person(2, { hp: "http://spam.example" }));
   assert.equal(r.status, 200);
   assert.equal(r.json.ok, true);
-  assert.match(r.json.code, CODE);
-  assert.equal(r.json.position, 2);
-  assert.equal(r.json.total, 2);
-  assert.equal(r.json.already, false);
+  assert.equal(r.json.needs_confirm, true, "it looks like any other sign-up");
+  assert.equal(r.json.sent, true);
+  assert.equal(t.brevo.emails.length, 1, "no email to the honeypot address");
   assert.equal(t.count(), 1);
   assert.equal(t.brevo.calls.length, 0);
   assert.equal((await t.call("GET", "/status?code=" + r.json.code)).status, 404);
@@ -321,7 +331,7 @@ test("Brevo: the contact, its attributes and the list; the referrer's count", as
     attributes: { FIRSTNAME: "First1", LASTNAME: "Last1", SMS: "+447700900123", ROLE: "Creator", BRANDS: "", CLAUDE: "", SOURCE: "test",
       REF_CODE: a.code, REFERRED_BY: "", REFERRALS: 0, POSITION: 1, PHONE: "+447700900123", SMS_CONSENT: true,
       SMS_CONSENT_AT: c.body.attributes.SMS_CONSENT_AT, SMS_CONSENT_TEXT: "[waitlist-sms-v1] Text me",
-      SMS_NOTIFY: true, SMS_NOTIFY_AT: c.body.attributes.SMS_CONSENT_AT, SMS_MARKETING: true, SMS_MARKETING_AT: c.body.attributes.SMS_CONSENT_AT },
+      SMS_NOTIFY: true, SMS_NOTIFY_AT: c.body.attributes.SMS_CONSENT_AT, SMS_MARKETING: true, SMS_MARKETING_AT: c.body.attributes.SMS_CONSENT_AT, EMAIL_CONFIRMED: true },
   });
   assert.match(c.body.attributes.SMS_CONSENT_AT, /^\d{4}-\d\d-\d\dT/);
   assert.equal(t.row("person1@example.com").brevo_synced, 1);
@@ -471,7 +481,7 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.match(r.headers.get("Content-Type"), /^text\/csv/);
   const lines = r.text.trim().split("\r\n");
   assert.equal(lines.length, 14);
-  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,sms_notify,sms_notify_at,sms_marketing,sms_marketing_at,consent_ip,consent_country,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
+  assert.equal(lines[0], "seq,position,front,joined,confirmed_at,confirmed_via,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,sms_notify,sms_notify_at,sms_marketing,sms_marketing_at,consent_ip,consent_country,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
   const twelve = lines.find((l) => l.startsWith("12,"));
   assert.match(twelve, /^12,3,/, "seq 12 with one referral (score 2) is third");
   const thirteen = lines.find((l) => l.startsWith("13,"));
@@ -505,6 +515,193 @@ test("SMS: two separate opt-ins, each with its own time and words, and Brevo hea
   r = t.row("person3@example.com");
   assert.equal(r.sms_notify + r.sms_marketing + r.sms_consent, 0, "a number with no box ticked is not a consent");
   assert.equal(t.brevo.contacts.get("person3@example.com").attributes.SMS, undefined);
+});
+
+// ------------------------------------------------------------------------------------------------ confirmation
+test("confirm: a new sign-up is saved, emailed a code, and has no place until it is confirmed", async () => {
+  const t = setup({ DEV_ECHO: undefined });
+  const j = await t.joinOnly(person(1, { phone: "4155550100", cc: "1" }));
+  assert.equal(j.status, 200);
+  assert.deepEqual(Object.keys(j.json).sort(), ["email", "first", "needs_confirm", "ok", "resend_in", "sent"], "no code, no place, no dev echo");
+  assert.equal(j.json.sent, true);
+  assert.equal(j.json.resend_in, 60);
+  assert.equal(t.count(), 1, "saved");
+  assert.equal(t.confirmed(), 0, "but not confirmed");
+  assert.equal(t.brevo.calls.length, 0, "an unconfirmed email never reaches the Brevo list");
+  assert.equal((await t.call("GET", "/count")).json.total, 0, "the live count waits for confirmation");
+
+  const mail = t.brevo.lastEmail("person1@example.com");
+  assert.match(mail.code, /^\d{6}$/);
+  assert.match(mail.token, /^[A-Za-z0-9_-]{43}$/);
+  assert.equal(mail.subject, "Confirm your spot");
+  assert.deepEqual(mail.body.sender, { name: "Studio", email: "hello@askstudio.ai" });
+  assert.deepEqual(mail.body.to, [{ email: "person1@example.com", name: "First1 Last1" }]);
+  assert.ok(mail.html.includes(mail.code.slice(0, 3) + " " + mail.code.slice(3)), "the code is in the HTML");
+  assert.ok(mail.html.includes("https://askstudio.ai/?confirm=" + mail.token + "#early-access"), "one link, straight to the site");
+  assert.ok(!/<img|<script|https?:\/\/(?!askstudio\.ai)/i.test(mail.html), "no images, scripts or other hosts");
+  const r = t.row("person1@example.com");
+  assert.notEqual(r.confirm_code_hash, mail.code, "only hashes are kept");
+  assert.ok(!JSON.stringify(r).includes(mail.code) && !JSON.stringify(r).includes(mail.token));
+  assert.equal(r.confirm_expires - r.confirm_sent_at, 600);
+  assert.equal(r.confirm_link_expires - r.confirm_sent_at, 86400);
+
+  const c = await t.call("POST", "/confirm", { body: { email: "PERSON1@example.com ", code: mail.code.slice(0, 3) + " " + mail.code.slice(3) } });
+  assert.equal(c.status, 200);
+  assert.equal(c.json.position, 1);
+  assert.equal(c.json.total, 1);
+  assert.equal(c.json.already, false);
+  assert.match(c.json.code, CODE);
+  assert.equal(t.row("person1@example.com").confirmed_via, "code");
+  assert.ok(t.row("person1@example.com").confirmed_at > 0);
+  assert.equal(t.row("person1@example.com").confirm_code_hash, null, "a used code is gone");
+  assert.equal(t.brevo.contacts.get("person1@example.com").attributes.EMAIL_CONFIRMED, true);
+  assert.equal((await t.call("GET", "/count")).json.total, 1);
+  const again = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: mail.code } });
+  assert.equal(again.json.already, true, "confirming twice is harmless");
+  assert.equal(t.brevo.calls.length, 1, "and sends Brevo nothing new");
+});
+
+test("confirm: the link in the email confirms too, more than once, for 24 hours", async () => {
+  const t = setup();
+  await t.joinOnly(person(1));
+  const { token } = t.brevo.lastEmail("person1@example.com");
+  const a = await t.call("POST", "/confirm", { body: { token } });
+  assert.equal(a.status, 200);
+  assert.equal(a.json.position, 1);
+  assert.equal(a.json.already, false);
+  assert.equal(t.row("person1@example.com").confirmed_via, "link");
+  const b = await t.call("POST", "/confirm", { body: { token } });
+  assert.equal(b.json.already, true, "a second tap shows the place again");
+  const bad = await t.call("POST", "/confirm", { body: { token: "x".repeat(43) } });
+  assert.equal(bad.status, 410);
+  assert.equal(bad.json.expired, true);
+
+  await t.joinOnly(person(2));
+  const late = t.brevo.lastEmail("person2@example.com").token;
+  t.age("person2@example.com", 86401);
+  const old = await t.call("POST", "/confirm", { body: { token: late } });
+  assert.equal(old.status, 410, "a day-old link has expired");
+  assert.equal(t.row("person2@example.com").confirmed_at, null);
+});
+
+test("confirm: wrong codes count down, 5 tries, codes expire in 10 minutes", async () => {
+  const t = setup();
+  await t.joinOnly(person(1));
+  const { code } = t.brevo.lastEmail("person1@example.com");
+  const wrong = code === "000000" ? "111111" : "000000";
+  const short = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: "123" } });
+  assert.equal(short.status, 400);
+  assert.equal(short.json.error, "Enter the 6-digit code from the email.");
+  for (let i = 1; i <= 4; i++) {
+    const r = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: wrong } });
+    assert.equal(r.status, 400);
+    assert.equal(r.json.tries_left, 5 - i);
+    assert.equal(r.json.error, "That code isn't right.");
+  }
+  const fifth = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: wrong } });
+  assert.equal(fifth.json.tries_left, 0);
+  assert.equal(fifth.json.expired, true);
+  const locked = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code } });
+  assert.equal(locked.status, 429, "after 5 wrong tries even the right code needs a new send");
+  assert.equal(t.confirmed(), 0);
+  const unknown = await t.call("POST", "/confirm", { body: { email: "nobody@example.com", code } });
+  assert.equal(unknown.status, 400);
+  assert.equal(unknown.json.error, "That code isn't right.", "an unknown email reads like a wrong code");
+
+  await t.joinOnly(person(2));
+  const two = t.brevo.lastEmail("person2@example.com").code;
+  t.age("person2@example.com", 601);
+  const expired = await t.call("POST", "/confirm", { body: { email: "person2@example.com", code: two } });
+  assert.equal(expired.status, 410);
+  assert.equal(expired.json.expired, true);
+  assert.equal(expired.json.error, "That code has expired. Send a new one.");
+});
+
+test("resend: 60 seconds apart, a new code that replaces the old one, 5 an hour", async () => {
+  const t = setup();
+  await t.joinOnly(person(1));
+  const first = t.brevo.lastEmail("person1@example.com").code;
+  const soon = await t.call("POST", "/resend", { body: { email: "person1@example.com" } });
+  assert.equal(soon.status, 429);
+  assert.ok(soon.json.resend_in > 0 && soon.json.resend_in <= 60);
+  assert.equal(t.brevo.emails.length, 1);
+  const repeat = await t.joinOnly(person(1));
+  assert.equal(repeat.json.sent, false, "signing up again inside the minute sends nothing new");
+  assert.ok(repeat.json.resend_in > 0);
+  t.age("person1@example.com", 61);
+  const r = await t.call("POST", "/resend", { body: { email: "person1@example.com" } });
+  assert.equal(r.status, 200);
+  assert.equal(r.json.sent, true);
+  assert.equal(r.json.resend_in, 60);
+  const second = t.brevo.lastEmail("person1@example.com").code;
+  if (second !== first) {
+    const old = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: first } });
+    assert.equal(old.status, 400, "the old code no longer works");
+  }
+  for (let i = 0; i < 3; i++) { t.age("person1@example.com", 61); assert.equal((await t.call("POST", "/resend", { body: { email: "person1@example.com" } })).json.sent, true); }
+  t.age("person1@example.com", 61);
+  const capped = await t.call("POST", "/resend", { body: { email: "person1@example.com" } });
+  assert.equal(capped.json.sent, false, "the sixth email in an hour is not sent");
+  assert.equal(capped.json.capped, true);
+  assert.equal(t.brevo.emails.length, 5);
+  const ok = await t.call("POST", "/confirm", { body: { email: "person1@example.com", code: t.brevo.lastEmail("person1@example.com").code } });
+  assert.equal(ok.status, 200, "the newest code still works");
+  const done = await t.call("POST", "/resend", { body: { email: "person1@example.com" } });
+  assert.equal(done.json.confirmed, true);
+  const nobody = await t.call("POST", "/resend", { body: { email: "nobody@example.com" } });
+  assert.deepEqual(nobody.json, { ok: true, sent: true, resend_in: 60 }, "an unknown email looks the same and sends nothing");
+  assert.equal(t.brevo.emails.length, 5);
+});
+
+test("confirm: a friend counts only once confirmed, and only then moves the referrer", async () => {
+  const t = setup();
+  const host = (await t.join(person(1))).json;
+  for (let n = 2; n <= 5; n++) await t.join(person(n));
+  await t.joinOnly(person(6, { ref: host.code }));
+  assert.equal(t.row("person1@example.com").referrals, 0, "an unconfirmed friend counts for nothing");
+  assert.equal((await t.call("GET", "/status?code=" + host.code)).json.referrals, 0);
+  const c = await t.call("POST", "/confirm", { body: { email: "person6@example.com", code: t.brevo.lastEmail("person6@example.com").code } });
+  assert.equal(c.status, 200);
+  assert.equal(t.row("person1@example.com").referrals, 1);
+  assert.equal(t.brevo.contacts.get("person1@example.com").attributes.REFERRALS, 1, "Brevo hears about it on confirm");
+  const unconfirmedCode = t.row("person6@example.com").code;
+  await t.joinOnly(person(7));
+  assert.equal((await t.call("GET", "/status?code=" + t.row("person7@example.com").code)).status, 404, "an unconfirmed code has no place");
+  assert.equal((await t.call("GET", "/status?code=" + unconfirmedCode)).status, 200);
+});
+
+test("confirm: Brevo down still answers; the email can be sent again at once", async () => {
+  const t = setup({}, { mailDown: true });
+  const j = await t.joinOnly(person(1));
+  assert.equal(j.status, 200);
+  assert.equal(j.json.sent, false);
+  assert.equal(j.json.resend_in, 0, "no wait after a failed send");
+  t.brevo.set({ mailDown: false });
+  const r = await t.call("POST", "/resend", { body: { email: "person1@example.com" } });
+  assert.equal(r.json.sent, true);
+  const none = setup({ BREVO_API_KEY: undefined, DEV_ECHO: undefined });
+  const k = await none.joinOnly(person(1));
+  assert.equal(k.json.sent, false);
+  assert.equal(k.json.dev_code, undefined, "the code is never in an answer outside worker/dev.mjs");
+});
+
+test("confirm: the rows from before confirmation keep their place, marked legacy", async () => {
+  const t = setup();
+  const db = t.env.DB.sqlite;
+  db.exec("UPDATE signups SET confirmed_at = NULL");
+  db.prepare("INSERT INTO signups (email, first, last, code, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)").run("old@example.com", "Old", "Timer", "OLDCODE", 1, 1);
+  db.exec("UPDATE signups SET confirmed_at = created_at, confirmed_via = 'legacy' WHERE confirmed_at IS NULL");   // the migration's own line
+  assert.equal((await t.call("GET", "/status?code=OLDCODE")).json.position, 1);
+  await t.call("POST", "/admin/resync", { headers: { Authorization: "Bearer " + ADMIN }, origin: null });
+  assert.equal(t.brevo.contacts.get("old@example.com").attributes.EMAIL_CONFIRMED, false, "legacy is not an email confirmation");
+});
+
+test("confirmEmail: plain text and HTML, the name escaped", () => {
+  const m = confirmEmail('<b>Ada</b> & "co"', "123456", "https://askstudio.ai/?confirm=abc#early-access");
+  assert.ok(m.text.includes("Your Studio code is 123 456."));
+  assert.ok(m.text.includes("https://askstudio.ai/?confirm=abc#early-access"));
+  assert.ok(m.html.includes("Hi &lt;b&gt;Ada&lt;/b&gt; &amp; &quot;co&quot;,"));
+  assert.ok(!m.html.includes("<b>Ada"));
 });
 
 test("phone numbers become E.164 when they can", () => {

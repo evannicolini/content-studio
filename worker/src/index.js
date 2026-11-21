@@ -1,12 +1,17 @@
 // Studio's early-access waitlist: one Cloudflare Worker. What it is for and how to run it: worker/README.md.
 //
-//   POST /join               a sign-up from the website: kept once per email, a referral code back, the place in line
+//   POST /join               a sign-up from the website: kept once per email; a new email is sent a code to confirm it
+//   POST /confirm            { email, code } or { token } (the link in the email): confirms it, the referral code and place back
+//   POST /resend             { email }: a new code (60 s apart)
 //   GET  /status?code=…      the place in line for a referral code
 //   GET  /count              { ok, total }: how many are on the list (the site's live count)
 //   GET  /health             { ok: true }
 //   POST /admin/resync       send Brevo the sign-ups it has not got yet (Authorization: Bearer ADMIN_TOKEN)
 //   GET  /admin/export.csv   everyone, as a spreadsheet (the same token)
+//   GET  /admin/brevo-check  the Brevo account the key belongs to, its senders and domains (read only; the same token)
 //
+// Confirmation: a sign-up is saved straight away but holds a place, counts as a friend and goes to Brevo only once its email is
+// confirmed, with the 6-digit code (10 minutes, 5 tries) or the link (24 hours) in the "Confirm your spot" email.
 // The place in line: score = seq − referrals × BOOST, lower is better, ties go to whoever joined first.
 // The front of the line: get GOAL (3) friends on the list and you, and every friend who joined with your link, go ahead of everyone
 // else (in the same order among yourselves).
@@ -18,6 +23,9 @@ const MAX_BODY = 8 * 1024;                                  // bytes; a sign-up 
 const BREVO = "https://api.brevo.com/v3";
 const DEFAULT_ORIGINS = "https://askstudio.ai,https://www.askstudio.ai,https://evannicolini.github.io,http://127.0.0.1:*,http://localhost:*";
 const RESYNC_BATCH = 20;                                    // rows per /admin/resync call (each is 1–2 Brevo calls)
+const CODE_TTL = 600, LINK_TTL = 86400, RESEND_WAIT = 60, MAX_TRIES = 5;   // seconds, seconds, seconds, wrong codes per send
+const MAILS_PER_HOUR = 5;                                   // confirmation emails to one address
+const SENDER = { name: "Studio", email: "hello@askstudio.ai" };
 
 const te = new TextEncoder();
 const now = () => Math.floor(Date.now() / 1000);
@@ -93,8 +101,10 @@ function corsFor(request, env) {
 
 // ------------------------------------------------------------------------------------------------ the line
 // Every row with its score and whether it is at the front (?1 = BOOST, ?2 = GOAL).
+// Only confirmed rows are in the line; referrals already count only confirmed friends.
 const LINE = `WITH l AS (SELECT *, seq - referrals * ?1 AS score,
-  CASE WHEN referrals >= ?2 OR referred_by IN (SELECT code FROM signups WHERE referrals >= ?2) THEN 1 ELSE 0 END AS front FROM signups)`;
+  CASE WHEN referrals >= ?2 OR referred_by IN (SELECT code FROM signups WHERE referrals >= ?2 AND confirmed_at IS NOT NULL) THEN 1 ELSE 0 END AS front
+  FROM signups WHERE confirmed_at IS NOT NULL)`;
 async function standing(env, row) {
   const boost = boostOf(env), goal = goalOf(env);
   const r = await env.DB.prepare(LINE + `, me AS (SELECT * FROM l WHERE seq = ?3)
@@ -108,11 +118,12 @@ async function answer(env, row, already) {
   return { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front, already };
 }
 const bySeq = (env, seq) => env.DB.prepare("SELECT * FROM signups WHERE seq = ?").bind(seq).first();
+const recount = (env, code) => env.DB.prepare("UPDATE signups SET referrals = (SELECT COUNT(*) FROM signups WHERE referred_by = ?1 AND confirmed_at IS NOT NULL) WHERE code = ?1").bind(code).run();
 
 // ------------------------------------------------------------------------------------------------ POST /join
-async function rateOk(env, who) {
-  const t = now(), win = int(env.RATE_WINDOW, 600), max = int(env.RATE_LIMIT, 10);
-  await env.DB.prepare("DELETE FROM hits WHERE at <= ?").bind(t - win).run();
+async function rateOk(env, who, win = int(env.RATE_WINDOW, 600), max = int(env.RATE_LIMIT, 10)) {
+  const t = now();
+  await env.DB.prepare("DELETE FROM hits WHERE at <= ?").bind(t - Math.max(win, 3600)).run();
   const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM hits WHERE who = ? AND at > ?").bind(who, t - win).first();
   if (r.n >= max) return false;
   await env.DB.prepare("INSERT INTO hits (who, at) VALUES (?, ?)").bind(who, t).run();
@@ -156,8 +167,7 @@ async function join(request, env, ctx) {
   if (!b || typeof b !== "object" || Array.isArray(b)) return fail("The form did not arrive as JSON. Try again.");
 
   if (text(b.hp, 200)) {            // the honeypot: a bot filled the hidden field. Look pleased, keep nothing.
-    const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups").first();
-    return json({ ok: true, code: newCode(), first: text(b.first, 80), position: n + 1, total: n + 1, referrals: 0, boost: boostOf(env), already: false });
+    return json({ ok: true, needs_confirm: true, email: text(b.email, 300).toLowerCase(), first: text(b.first, 80), sent: true, resend_in: RESEND_WAIT });
   }
   const f = readForm(b);
   if (f.error) return fail(f.error);
@@ -186,13 +196,7 @@ async function join(request, env, ctx) {
         if (!/UNIQUE.*signups\.code/i.test(String((e && e.message) || e))) throw e;   // a code already taken: draw again
       }
     }
-    if (added) {
-      if (referrer) {                // counted from the rows themselves, so one email can never count twice
-        await env.DB.prepare("UPDATE signups SET referrals = (SELECT COUNT(*) FROM signups WHERE referred_by = ?1) WHERE code = ?1").bind(referrer.code).run();
-      }
-      later(ctx, afterJoin(env, added.seq, referrer && referrer.seq));
-      return json(await answer(env, added, false));
-    }
+    if (added) return json(await pending(env, added, await sendCode(env, added)));   // the referrer's count goes up on confirm
     if (!raced) throw new Error("six referral codes in a row were taken");
     row = await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(f.email).first();
   }
@@ -211,8 +215,149 @@ async function join(request, env, ctx) {
   if (f.marketing) await env.DB.prepare("UPDATE signups SET sms_marketing = 1, sms_marketing_at = ?, sms_marketing_text = ? WHERE seq = ?").bind(t, f.marketingText, row.seq).run();
   if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
   row = await bySeq(env, row.seq);
+  if (!row.confirmed_at) {
+    const wait = waitLeft(row);
+    return json(await pending(env, row, wait ? { sent: false, resend_in: wait } : await sendCode(env, row)));
+  }
   later(ctx, afterJoin(env, row.seq, null));
   return json(await answer(env, row, true));
+}
+
+// ------------------------------------------------------------------------------------------------ confirmation
+const waitLeft = (row) => (row.confirm_sent_at ? Math.max(0, row.confirm_sent_at + RESEND_WAIT - now()) : 0);
+function sixDigits() {
+  for (;;) { const [n] = crypto.getRandomValues(new Uint32Array(1)); if (n < 4294000000) return String(n % 1000000).padStart(6, "0"); }   // no bias
+}
+function linkToken() {
+  return btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(32)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+const codeHash = (seq, code) => sha("studio-confirm:" + seq + ":" + code);
+const tokenHash = (token) => sha("studio-link:" + token);
+const siteOf = (env) => String(env.SITE || "https://askstudio.ai").replace(/\/+$/, "");
+
+async function pending(env, row, sent) {
+  const out = { ok: true, needs_confirm: true, email: row.email, first: row.first, sent: !!sent.sent, resend_in: sent.resend_in };
+  if (sent.capped) out.capped = true;
+  if (env.DEV_ECHO === "1" && sent.dev) Object.assign(out, sent.dev);   // worker/dev.mjs only: the code on screen, no inbox needed
+  return out;
+}
+
+// A new code and link for this row, and the email that carries them. { sent, resend_in, capped?, dev? }
+async function sendCode(env, row) {
+  const mailKey = "mail:" + (await sha("studio-mail:" + row.email)).slice(0, 24);
+  if (!(await rateOk(env, mailKey, 3600, MAILS_PER_HOUR))) return { sent: false, capped: true, resend_in: RESEND_WAIT };
+  const t = now(), code = sixDigits(), token = linkToken();
+  await env.DB.prepare(`UPDATE signups SET confirm_code_hash = ?, confirm_token_hash = ?, confirm_expires = ?, confirm_link_expires = ?,
+     confirm_sent_at = ?, confirm_tries = 0 WHERE seq = ?`).bind(await codeHash(row.seq, code), await tokenHash(token), t + CODE_TTL, t + LINK_TTL, t, row.seq).run();
+  const link = siteOf(env) + "/?confirm=" + token + "#early-access";
+  let ok = false;
+  if (env.BREVO_API_KEY) {
+    const mail = confirmEmail(row.first, code, link);
+    const r = await brevo(env, "POST", "/smtp/email", {
+      sender: SENDER, to: [{ email: row.email, name: (row.first + " " + row.last).trim() }], subject: mail.subject,
+      htmlContent: mail.html, textContent: mail.text, tags: ["waitlist-confirm"],
+    });
+    ok = r.ok;
+    if (!ok) {
+      console.error("confirm email", r.detail);
+      await env.DB.prepare("UPDATE signups SET confirm_sent_at = NULL WHERE seq = ?").bind(row.seq).run();   // let them try again now
+    }
+  }
+  return { sent: ok, resend_in: ok ? RESEND_WAIT : 0, dev: { dev_code: code, dev_token: token } };
+}
+
+// Confirmed: a place in line, the referrer's count, Brevo. Only the first confirmation does anything.
+async function confirmRow(env, ctx, row, via) {
+  const t = now();
+  const r = await env.DB.prepare(`UPDATE signups SET confirmed_at = ?, confirmed_via = ?, confirm_code_hash = NULL, confirm_tries = 0,
+     brevo_synced = 0, updated_at = ? WHERE seq = ? AND confirmed_at IS NULL`).bind(t, via, Math.max(t, row.updated_at + 1), row.seq).run();
+  let referrer = null;
+  if (r.meta.changes && row.referred_by) {
+    referrer = await env.DB.prepare("SELECT seq, code FROM signups WHERE code = ?").bind(row.referred_by).first();
+    if (referrer) await recount(env, referrer.code);   // counted from the rows themselves, so one email can never count twice
+  }
+  if (r.meta.changes) later(ctx, afterJoin(env, row.seq, referrer && referrer.seq));
+  return json(await answer(env, await bySeq(env, row.seq), !r.meta.changes));
+}
+
+async function confirm(request, env, ctx) {
+  const b = await body(request);
+  if (b.error) return fail(b.error);
+  const who = await ipKey(request);
+  if (!(await rateOk(env, "confirm:" + who, 600, int(env.CONFIRM_LIMIT, 30)))) return fail("Too many tries from here. Try again in a few minutes.", 429);
+  const token = typeof b.token === "string" ? b.token.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64) : "";
+  if (token) {
+    const row = await env.DB.prepare("SELECT * FROM signups WHERE confirm_token_hash = ?").bind(await tokenHash(token)).first();
+    if (!row || (!row.confirmed_at && !(row.confirm_link_expires > now()))) return json({ ok: false, expired: true, error: "That link has expired. Sign up again and we'll send a new one." }, 410);
+    return await confirmRow(env, ctx, row, "link");
+  }
+  const email = text(b.email, 300).toLowerCase(), code = String(typeof b.code === "string" || typeof b.code === "number" ? b.code : "").replace(/\D/g, "");
+  if (code.length !== 6) return fail("Enter the 6-digit code from the email.");
+  const row = email ? await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(email).first() : null;
+  if (!row) return fail("That code isn't right.");
+  if (row.confirmed_at) return json(await answer(env, row, true));
+  if (!row.confirm_code_hash || !(row.confirm_expires > now())) return json({ ok: false, expired: true, error: "That code has expired. Send a new one." }, 410);
+  if (row.confirm_tries >= MAX_TRIES) return json({ ok: false, expired: true, error: "Too many tries. Send a new code." }, 429);
+  if (!same(await codeHash(row.seq, code), row.confirm_code_hash)) {
+    await env.DB.prepare("UPDATE signups SET confirm_tries = confirm_tries + 1 WHERE seq = ?").bind(row.seq).run();
+    const left = MAX_TRIES - row.confirm_tries - 1;
+    return json({ ok: false, tries_left: left, expired: left <= 0, error: left > 0 ? "That code isn't right." : "Too many tries. Send a new code." }, 400);
+  }
+  return await confirmRow(env, ctx, row, "code");
+}
+
+async function resend(request, env) {
+  const b = await body(request);
+  if (b.error) return fail(b.error);
+  if (!(await rateOk(env, "resend:" + (await ipKey(request)), 600, int(env.RESEND_LIMIT, 10)))) return fail("Too many emails from here. Try again in a few minutes.", 429);
+  const email = text(b.email, 300).toLowerCase();
+  const row = email ? await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(email).first() : null;
+  if (!row) return json({ ok: true, sent: true, resend_in: RESEND_WAIT });    // the same answer as a real send: no list lookups
+  if (row.confirmed_at) return json({ ok: true, sent: false, confirmed: true, resend_in: 0 });
+  const wait = waitLeft(row);
+  if (wait) return json({ ok: false, error: "Wait a moment before sending another.", resend_in: wait }, 429);
+  return json(await pending(env, row, await sendCode(env, row)));
+}
+
+const ipKey = async (request) => (await sha("studio-waitlist:" + (request.headers.get("CF-Connecting-IP") || "local"))).slice(0, 24);
+async function body(request) {
+  if (int(request.headers.get("Content-Length"), 0) > MAX_BODY) return { error: "That is more than this needs." };
+  const raw = await request.text();
+  if (te.encode(raw).length > MAX_BODY) return { error: "That is more than this needs." };
+  try { const b = JSON.parse(raw); if (b && typeof b === "object" && !Array.isArray(b)) return b; } catch {}
+  return { error: "That did not arrive as JSON. Try again." };
+}
+
+// ------------------------------------------------------------------------------------------------ the email
+const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Plain HTML in the waitlist's glass look: no images, no scripts, no tracking of our own; one link, straight to askstudio.ai.
+export function confirmEmail(first, code, link) {
+  const name = text(first, 80), hi = name ? "Hi " + name + "," : "Hi,";
+  const spaced = code.slice(0, 3) + " " + code.slice(3);
+  const subject = "Confirm your spot";
+  const textBody = [hi, "", "Your Studio code is " + spaced + ".", "", "Enter it on the page, or confirm here:", link, "",
+    "The code works for 10 minutes and the link for 24 hours. Didn't sign up? Ignore this and nothing happens.", "", "Studio", "askstudio.ai"].join("\n");
+  const font = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>${subject}</title></head>
+<body style="margin:0;padding:0;background:#0E191E;">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#0E191E;">Your code is ${spaced}. It works for 10 minutes.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0E191E;background-image:linear-gradient(160deg,#536878 0%,#1d2b32 45%,#0E191E 100%);">
+<tr><td align="center" style="padding:48px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:28px;">
+<tr><td style="padding:40px 36px 36px;font-family:${font};color:#E5E4E2;">
+<div style="font-size:15px;letter-spacing:.32em;text-transform:uppercase;color:#BBC9C7;">Studio</div>
+<h1 style="margin:28px 0 12px;font-size:30px;line-height:1.15;font-weight:600;letter-spacing:-.01em;color:#FFFFFF;">Confirm your spot</h1>
+<p style="margin:0 0 28px;font-size:16px;line-height:1.55;color:#E5E4E2;">${escHtml(hi)} here's your code. Enter it on the page to hold your place in line.</p>
+<div style="margin:0 0 28px;padding:20px 0;text-align:center;background:rgba(10,10,10,0.35);border:1px solid rgba(255,255,255,0.14);border-radius:18px;font-size:38px;line-height:1;font-weight:600;letter-spacing:.28em;color:#FFFFFF;font-family:'SF Mono',Menlo,Consolas,monospace;">${spaced}</div>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center" style="border-radius:999px;background:#E5E4E2;">
+<a href="${escHtml(link)}" style="display:block;padding:16px 24px;font-family:${font};font-size:16px;font-weight:600;color:#0A0A0A;text-decoration:none;border-radius:999px;">Confirm my spot</a>
+</td></tr></table>
+<p style="margin:28px 0 0;font-size:13px;line-height:1.55;color:#BBC9C7;">The code works for 10 minutes and the button for 24 hours. Didn't sign up? Ignore this email and nothing happens.</p>
+</td></tr></table>
+<p style="margin:24px 0 0;font-family:${font};font-size:12px;color:#8fa1a8;">Studio &middot; askstudio.ai</p>
+</td></tr></table></body></html>`;
+  return { subject, html, text: textBody };
 }
 
 function later(ctx, promise) {
@@ -225,7 +370,7 @@ async function status(url, env) {
   const code = cleanCode(url.searchParams.get("code"));
   if (!code) return json({ ok: false, error: "Add a code." }, 404);
   const row = await env.DB.prepare("SELECT * FROM signups WHERE code = ?").bind(code).first();
-  if (!row) return json({ ok: false, error: "We don't know that code." }, 404);
+  if (!row || !row.confirmed_at) return json({ ok: false, error: "We don't know that code." }, 404);
   return json(await answer(env, row, true));
 }
 
@@ -250,7 +395,7 @@ async function brevo(env, method, path, body) {
 async function pushContact(env, seq) {
   if (!env.BREVO_API_KEY) return false;
   const row = await bySeq(env, seq);
-  if (!row) return false;
+  if (!row || !row.confirmed_at) return false;            // an unconfirmed email never reaches the list
   const { position } = await standing(env, row);
   const attributes = {
     FIRSTNAME: row.first, LASTNAME: row.last, ROLE: row.roles, BRANDS: row.brands, CLAUDE: row.claude, SOURCE: row.source,
@@ -260,6 +405,7 @@ async function pushContact(env, seq) {
     SMS_CONSENT_TEXT: row.sms_consent ? (row.sms_consent_version ? "[" + row.sms_consent_version + "] " : "") + (row.sms_consent_text || "") : "",
     SMS_NOTIFY: !!row.sms_notify, SMS_NOTIFY_AT: row.sms_notify_at ? new Date(row.sms_notify_at * 1000).toISOString() : "",
     SMS_MARKETING: !!row.sms_marketing, SMS_MARKETING_AT: row.sms_marketing_at ? new Date(row.sms_marketing_at * 1000).toISOString() : "",
+    EMAIL_CONFIRMED: row.confirmed_via === "code" || row.confirmed_via === "link",   // 'legacy' rows joined before confirmation: false
   };
   if (row.sms && row.sms_consent) attributes.SMS = row.sms;   // the SMS channel only for someone who ticked the box
   const body = { email: row.email, attributes, updateEnabled: true };
@@ -285,14 +431,14 @@ async function pushReferrals(env, seq) {
   const row = await bySeq(env, seq);
   if (!row) return;
   if (row.referrals >= goalOf(env)) {
-    const { results } = await env.DB.prepare("SELECT seq FROM signups WHERE referred_by = ?").bind(row.code).all();
+    const { results } = await env.DB.prepare("SELECT seq FROM signups WHERE referred_by = ? AND confirmed_at IS NOT NULL").bind(row.code).all();
     await Promise.all(results.map((f) => pushPosition(env, f.seq)));
   }
   await pushPosition(env, seq);
 }
 async function pushPosition(env, seq) {
   const row = await bySeq(env, seq);
-  if (!row) return;
+  if (!row || !row.confirmed_at) return;
   const { position } = await standing(env, row);
   const r = await brevo(env, "PUT", "/contacts/" + encodeURIComponent(row.email), { attributes: { REFERRALS: row.referrals, POSITION: position } });
   if (!r.ok) {
@@ -320,11 +466,11 @@ async function resync(url, env) {
   const limit = Math.min(Math.max(int(url.searchParams.get("limit"), RESYNC_BATCH), 1), 500);
   const all = url.searchParams.get("all") === "1";
   const rows = all
-    ? (await env.DB.prepare("SELECT seq FROM signups WHERE seq >= ? ORDER BY seq LIMIT ?").bind(int(url.searchParams.get("from"), 0), limit).all()).results
-    : (await env.DB.prepare("SELECT seq FROM signups WHERE brevo_synced = 0 ORDER BY seq LIMIT ?").bind(limit).all()).results;
+    ? (await env.DB.prepare("SELECT seq FROM signups WHERE seq >= ? AND confirmed_at IS NOT NULL ORDER BY seq LIMIT ?").bind(int(url.searchParams.get("from"), 0), limit).all()).results
+    : (await env.DB.prepare("SELECT seq FROM signups WHERE brevo_synced = 0 AND confirmed_at IS NOT NULL ORDER BY seq LIMIT ?").bind(limit).all()).results;
   let synced = 0;
   for (const { seq } of rows) if (await pushContact(env, seq)) synced++;
-  const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE brevo_synced = 0").first();
+  const { n } = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE brevo_synced = 0 AND confirmed_at IS NOT NULL").first();
   const out = { ok: true, tried: rows.length, synced, failed: rows.length - synced, unsynced: n };
   if (all) out.next = rows.length === limit ? rows[rows.length - 1].seq + 1 : null;
   return json(out);
@@ -333,7 +479,7 @@ async function resync(url, env) {
 // Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
 const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
   PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text",
-  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text" };
+  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean" };
 async function brevoSetup(env) {
   if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
   const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
@@ -348,20 +494,39 @@ async function brevoSetup(env) {
   return json({ ok: !failed.length, made, failed });
 }
 
+// Which Brevo account the key is, and whether it may send as hello@askstudio.ai. Reads only.
+async function brevoCheck(env) {
+  if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
+  const get = async (path) => {
+    const res = await fetch(BREVO + path, { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
+    return res.ok ? res.json() : { error: res.status };
+  };
+  const [account, senders, domains] = await Promise.all([get("/account"), get("/senders"), get("/senders/domains")]);
+  return json({
+    ok: true, account: account.error ? account : { company: account.companyName, enterprise: account.enterprise, plan: account.plan },
+    senders: (senders.senders || []).map((x) => ({ email: x.email, name: x.name, active: x.active })),
+    domains: (domains.domains || []).map((d) => ({ domain: d.domain_name, authenticated: d.authenticated, verified: d.verified })),
+    sender_ready: (senders.senders || []).some((x) => x.email === SENDER.email && x.active) || (domains.domains || []).some((d) => d.domain_name === "askstudio.ai" && d.authenticated),
+  });
+}
+
 function csvCell(v) {
   let s = v === null || v === undefined ? "" : String(v);
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
-const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "sms_notify", "sms_notify_at", "sms_marketing", "sms_marketing_at", "consent_ip", "consent_country", "terms_version", "roles", "brands", "claude", "source",
+const COLUMNS = ["seq", "position", "front", "joined", "confirmed_at", "confirmed_via", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "sms_notify", "sms_notify_at", "sms_marketing", "sms_marketing_at", "consent_ip", "consent_country", "terms_version", "roles", "brands", "claude", "source",
   "code", "referred_by", "referrals", "ip", "brevo_synced", "brevo_error"];
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(
-    LINE + " SELECT *, ROW_NUMBER() OVER (ORDER BY front DESC, score, seq) AS position FROM l ORDER BY seq"
+    LINE + `, p AS (SELECT seq, front, ROW_NUMBER() OVER (ORDER BY front DESC, score, seq) AS position FROM l)
+      SELECT s.*, p.position, p.front FROM signups s LEFT JOIN p ON p.seq = s.seq ORDER BY s.seq`
   ).bind(boostOf(env), goalOf(env)).all();
+  const iso = (t) => (t ? new Date(t * 1000).toISOString().slice(0, 19) + "Z" : "");
   const lines = [COLUMNS.join(",")];
   for (const r of results) {
-    r.joined = new Date(r.created_at * 1000).toISOString().slice(0, 19) + "Z";
+    r.joined = iso(r.created_at);
+    r.confirmed_at = iso(r.confirmed_at);
     lines.push(COLUMNS.map((c) => csvCell(r[c])).join(","));
   }
   return new Response(lines.join("\r\n") + "\r\n", {
@@ -373,10 +538,12 @@ async function exportCsv(env) {
 async function route(request, url, env, ctx) {
   const path = url.pathname, m = request.method;
   if (path === "/join") return m === "POST" ? await join(request, env, ctx) : fail("Use POST.", 405);
+  if (path === "/confirm") return m === "POST" ? await confirm(request, env, ctx) : fail("Use POST.", 405);
+  if (path === "/resend") return m === "POST" ? await resend(request, env) : fail("Use POST.", 405);
   if (path === "/status") return m === "GET" ? await status(url, env) : fail("Use GET.", 405);
   if (path === "/count") {
     if (m !== "GET") return fail("Use GET.", 405);
-    const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups").first();
+    const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE confirmed_at IS NOT NULL").first();
     return json({ ok: true, total: r.n }, 200, { "Cache-Control": "public, max-age=15" });
   }
   if (path === "/health") return json({ ok: true });
@@ -385,6 +552,7 @@ async function route(request, url, env, ctx) {
     if (path === "/admin/resync" && m === "POST") return await resync(url, env);
     if (path === "/admin/export.csv" && m === "GET") return await exportCsv(env);
     if (path === "/admin/brevo-setup" && m === "POST") return await brevoSetup(env);
+    if (path === "/admin/brevo-check" && m === "GET") return await brevoCheck(env);
   }
   return fail("Not found.", 404);
 }

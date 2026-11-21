@@ -4550,12 +4550,14 @@ var KAY = (function () {
     share: "Want to skip the line? Get three friends on the list... and you all move to the front. Together.",
     /* her answers to a pick (single-choice steps): they cut in, and the last pick wins */
     b1: "One brand. All in. Love that.", b2: "Two or three. Studio keeps every one of them looking like itself.", b4: "Four or more? You're exactly who we built this for.",
-    cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it."
+    cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it.",
+    check: "Almost there. I just sent a code to your email. Pop it in here... and your spot is yours."
   };
+  var UNRECORDED = { check: 1 };   /* no voice file yet: she shows the words and stays quiet (drop it from here once wl-check.mp3 is in) */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
-  Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k]) fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
   function wave(k) {
     var p = peaks[k] || [], n = 34, out = "";
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
@@ -4575,8 +4577,8 @@ var KAY = (function () {
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
     if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
-    words(cur, !SOUND); wave(cur);
-    if (!SOUND) { pill.classList.remove("talk"); return; }
+    words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
+    if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
     a.pause();
     /* the intro from its decoded buffer, started right now inside the click; the rest stream as before */
     if (SFX.has(cur) && SFX.live()) {
@@ -4676,8 +4678,9 @@ function wall(k) {
     sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = u; });
   });
 }
-var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite" };
-var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you" }; /* question 3 opens Home's All brands menu */
+var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite", check: "check" };
+var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you", check: "you" };
+WALL.check = WALL.you; /* question 3 opens Home's All brands menu */
 var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
 sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
 var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go");
@@ -4922,6 +4925,7 @@ function ready(n) {
   if (q === "name") return !!val("first") && !!val("last");
   if (q === "roles") return ans.roles.length > 0 && (ans.roles.indexOf("Something else") < 0 || !!val("other"));
   if (q === "you") return true;
+  if (q === "check") return otpCode().length === 6;
   return !!ans[q];
 }
 function personal() {
@@ -4947,8 +4951,10 @@ function setStep(n, quiet) {
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1]); }
   segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
   back.disabled = n === 0;
-  var last = q === "you";
+  var last = q === "you" || q === "check";
   next.hidden = last; go.hidden = !last;
+  go.querySelector(".t").textContent = q === "check" ? "Confirm" : "Get early access";
+  go.disabled = q === "check" && !ready(n);
   scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
   if (SCENE[q] === "claude") { drawClaude(); claudeLoop(); } else loopTok++;
@@ -5020,7 +5026,7 @@ function focusStep(delay) {
   }, delay);
 }
 function advance() {
-  if (busy || at >= ORDER.length - 1) return;
+  if (busy || at >= ORDER.length - 1 || ORDER[at] === "you" || ORDER[at] === "check") return;   /* those two move on only by sending */
   if (!ready(at)) { if (ORDER[at] === "name") checkName(); return; }
   busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450);
 }
@@ -5058,7 +5064,7 @@ next.addEventListener("click", advance);
 back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
 
 /* ---------- the details: the beam runs round the field you're in; a field that needs you turns it auburn ---------- */
-var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp):not(.wl-cbx)"));
+var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp):not(.wl-cbx):not(.wl-od)"));
 function mark(names, msg) {
   form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); var fb = f.querySelector(".wl-fb"); if (fb && !f.contains(document.activeElement)) fb.removeAttribute("data-active"); });
   names.forEach(function (n) { var f = form.elements[n].closest(".wl-f"); void f.offsetWidth; f.classList.add("bad"); f.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); });
@@ -5076,7 +5082,7 @@ inputs.forEach(function (inp) {
   inp.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") return;
     e.preventDefault();
-    var here = [].slice.call(steps[at].querySelectorAll("input:not(.wl-hp):not(.wl-cbx)")).filter(function (x) { return x.offsetParent; }), i = here.indexOf(inp);
+    var here = [].slice.call(steps[at].querySelectorAll("input:not(.wl-hp):not(.wl-cbx):not(.wl-od)")).filter(function (x) { return x.offsetParent; }), i = here.indexOf(inp);
     if (i > -1 && i < here.length - 1) here[i + 1].focus();
     else if (ORDER[at] === "you") form.requestSubmit ? form.requestSubmit() : go.click();
     else advance();
@@ -5119,13 +5125,14 @@ function send(d) {
     return timed(fetch(cfg.webhook, { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body: JSON.stringify(Object.assign({ code: mine }, d)) }), 15000)
       .then(function () { return base; }, function () { return fetch(cfg.webhook, { method: "POST", mode: "no-cors", body: JSON.stringify(Object.assign({ code: mine }, d)) }).then(function () { return base; }); });
   }
-  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, code: mine, first: d.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; }); }
+  if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, needs_confirm: true, email: d.email, first: d.first, sent: true, resend_in: 60, fake: true }; }); }
   return Promise.reject(new Error("not connected"));
 }
 /* the exact words a person agreed to: the box they ticked plus the terms beside the phone field */
 function smsWords(sel) { return sheet.querySelector(sel).textContent.trim() + ". " + sheet.querySelector("[data-wl-smstext]").textContent.trim(); }
 form.addEventListener("submit", function (e) {
   e.preventDefault();
+  if (ORDER[at] === "check") { verify(); return; }
   if (ORDER[at] !== "you") { advance(); return; }
   if (go.classList.contains("busy")) return;
   var email = val("email"), phone = val("phone"), digits = phone.replace(/\D/g, ""), c = cc(), bad = [], msg = "";
@@ -5140,13 +5147,125 @@ form.addEventListener("submit", function (e) {
     sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v1" };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
-    var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
-    try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
-    showDone(rec);
+    if (j.needs_confirm) { checkEmail(j, d); return; }
+    landed(j, d);
   }, function (x) {
     mark([], x && x.human ? x.message : "That didn't go through. Check your connection and try again.");
   }).then(function () { go.classList.remove("busy"); });
 });
+
+/* ---------- Check your email: the code from the email (or its link) holds the place ---------- */
+var PEND = KEY + "-pending", pend = null, FAKE = local && !API;
+var otp = [].slice.call(sheet.querySelectorAll("[data-wl-otp] input")), otpBox = sheet.querySelector("[data-wl-otp]"), otpBeam = sheet.querySelector(".wl-otpb");
+var resendB = sheet.querySelector("[data-wl-resend]"), waitEl = sheet.querySelector("[data-wl-wait]"), chint = sheet.querySelector("[data-wl-chint]"), resendT = 0, hintT = 0, checking = false;
+sheet.querySelector("[data-wl-dev]").hidden = !FAKE;
+function otpCode() { return otp.map(function (i) { return i.value; }).join("").replace(/\D/g, ""); }
+function cerr(t) { steps[ORDER.indexOf("check")].querySelector(".wl-err").textContent = t || ""; }
+function badOtp(on) { otpBox.classList.toggle("bad", on); if (on) { void otpBox.offsetWidth; otpBeam.setAttribute("data-active", ""); } else otpBeam.removeAttribute("data-active"); }
+function clearOtp() { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otpBox.classList.remove("ok", "busy"); badOtp(false); go.disabled = ORDER[at] === "check"; }
+function otpChanged() { badOtp(false); cerr(""); go.disabled = !ready(at); if (otpCode().length === 6) setTimeout(verify, 180); }
+function fill(from, digits) {
+  digits = digits.replace(/\D/g, "").slice(0, 6 - from);
+  for (var k = 0; k < digits.length; k++) { otp[from + k].value = digits[k]; otp[from + k].classList.add("has"); }
+  otp[Math.min(5, from + digits.length)].focus();
+  otpChanged();
+}
+otp.forEach(function (inp, i) {
+  inp.addEventListener("input", function () {
+    var v = inp.value.replace(/\D/g, "");
+    if (v.length > 1) { inp.value = ""; fill(i, v); return; }   /* autofill or a fast paste puts the whole code in one box */
+    inp.value = v; inp.classList.toggle("has", !!v);
+    if (v && i < 5) otp[i + 1].focus();
+    otpChanged();
+  });
+  inp.addEventListener("keydown", function (e) {
+    if (e.key === "Backspace" && !inp.value && i > 0) { e.preventDefault(); otp[i - 1].value = ""; otp[i - 1].classList.remove("has"); otp[i - 1].focus(); go.disabled = true; }
+    else if (e.key === "ArrowLeft" && i > 0) { e.preventDefault(); otp[i - 1].focus(); }
+    else if (e.key === "ArrowRight" && i < 5) { e.preventDefault(); otp[i + 1].focus(); }
+    else if (e.key === "Enter") { e.preventDefault(); verify(); }
+  });
+  inp.addEventListener("paste", function (e) { var t = (e.clipboardData || window.clipboardData).getData("text") || ""; if (/\d/.test(t)) { e.preventDefault(); fill(0, t); } });
+  inp.addEventListener("focus", function () { setTimeout(function () { if (document.activeElement === inp) try { inp.select(); } catch (x) {} }, 0); });   /* only if still here: a fast typist has moved on */
+});
+function resendIn(s) {
+  chint.hidden = true; clearTimeout(hintT); hintT = setTimeout(function () { if (ORDER[at] === "check" && otpCode().length < 6) chint.hidden = false; }, 20000);
+  clearInterval(resendT);
+  if (!(s > 0)) { resendB.disabled = false; waitEl.textContent = ""; return; }
+  resendB.disabled = true; waitEl.textContent = "in " + s + "s";
+  resendT = setInterval(function () { s--; if (s <= 0) { clearInterval(resendT); resendB.disabled = false; waitEl.textContent = ""; } else waitEl.textContent = "in " + s + "s"; }, 1000);
+}
+function savePend(p) { pend = p; try { if (p) localStorage.setItem(PEND, JSON.stringify(p)); else localStorage.removeItem(PEND); } catch (x) {} }
+function loadPend() { try { var p = JSON.parse(localStorage.getItem(PEND) || "null"); return p && p.email && Date.now() - (p.at || 0) < 864e5 ? p : null; } catch (e) { return null; } }
+function post(path, body) {
+  return timed(fetch(API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), 15000)
+    .then(function (r) { return r.json().catch(function () { return { ok: false }; }); }, function () { return { ok: false, error: "That didn't go through. Check your connection and try again." }; });
+}
+/* the Worker saved the sign-up and sent the email: on to the code */
+function checkEmail(j, d) {
+  savePend({ email: j.email || d.email, first: d.first, last: d.last, at: Date.now() });
+  if (j.dev_code) console.info("[early access] dev worker: the code is " + j.dev_code);
+  sheet.querySelector("[data-wl-cmail]").textContent = pend.email;
+  clearOtp(); cerr("");
+  if (ORDER[at] !== "check") setStep(ORDER.indexOf("check"));
+  resendIn(j.resend_in);
+  if (j.capped) cerr("We've sent a few codes already. Use the newest one, or try again in an hour.");
+  else if (!j.sent && !(j.resend_in > 0)) cerr("We couldn't send the email just now. Tap Send a new code.");
+}
+/* confirmed (or an email that already was): the place, saved on this device, then You're in */
+function landed(j, d) {
+  var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
+  try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
+  savePend(null);
+  showDone(rec);
+}
+function verify() {
+  if (checking || ORDER[at] !== "check" || otpCode().length !== 6 || !pend) return;
+  checking = true; otpBox.classList.add("busy"); go.classList.add("busy"); badOtp(false); cerr("");
+  var ask = FAKE ? SK.sleep(900).then(function () { return { ok: true, code: code6().toUpperCase(), first: pend.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; })
+    : post("/confirm", { email: pend.email, code: otpCode() });
+  ask.then(function (j) {
+    otpBox.classList.remove("busy");
+    if (j && j.ok) {
+      otpBox.classList.add("ok"); SFX.play("land");
+      var p = pend; setTimeout(function () { landed(j, p); }, SK.reduced ? 0 : 520);
+      return;
+    }
+    badOtp(true); SFX.play("tick");
+    cerr((j && j.error) || "That didn't go through. Try again.");
+    if (j && j.expired) { resendIn(0); chint.hidden = true; }
+    setTimeout(function () { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); if (ORDER[at] === "check") otp[0].focus({ preventScroll: true }); go.disabled = true; }, 650);
+  }).then(function () { checking = false; go.classList.remove("busy"); });
+}
+resendB.addEventListener("click", function () {
+  if (resendB.disabled || !pend) return;
+  cerr(""); resendB.disabled = true;
+  (FAKE ? SK.sleep(500).then(function () { return { ok: true, sent: true, resend_in: 60 }; }) : post("/resend", { email: pend.email })).then(function (j) {
+    if (j && j.confirmed) { cerr("That email is already confirmed. Tap Confirm my spot in the email to see your place."); resendIn(0); return; }
+    if (j && j.ok && j.sent) { toast("A new code is on its way to " + pend.email + "."); clearOtp(); otp[0].focus({ preventScroll: true }); if (j.dev_code) console.info("[early access] dev worker: the code is " + j.dev_code); }
+    else if (j && j.capped) cerr("We've sent a few codes already. Use the newest one, or try again in an hour.");
+    else cerr((j && j.error) || "We couldn't send the email just now. Try again in a moment.");
+    resendIn(j && j.resend_in);
+  });
+});
+sheet.querySelector("[data-wl-other]").addEventListener("click", function () {
+  clearOtp(); cerr(""); savePend(null); setStep(ORDER.indexOf("you"));
+  setTimeout(function () { var m = form.elements.email; m.focus(); try { m.select(); } catch (x) {} }, 450);
+});
+/* the button in the email: askstudio.ai/?confirm=<token>#early-access. Taken off the address at once, then sent when the sheet opens. */
+var CTOK = (Q.get("confirm") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
+if (Q.has("confirm")) try { Q.delete("confirm"); history.replaceState(history.state, "", location.pathname + (Q.toString() ? "?" + Q : "") + location.hash); } catch (e) {}
+function confirmLink() {
+  var t = CTOK; CTOK = "";
+  sheet.querySelector("[data-wl-cmail]").textContent = pend ? pend.email : "your inbox";
+  if (ORDER[at] !== "check") setStep(ORDER.indexOf("check"), true);
+  clearOtp(); otpBox.classList.add("busy"); cerr(""); resendIn(0);
+  (FAKE ? SK.sleep(900).then(function () { return { ok: true, code: code6().toUpperCase(), first: pend ? pend.first : "there", position: 140, total: 412, referrals: 0, boost: 10 }; }) : post("/confirm", { token: t })).then(function (j) {
+    otpBox.classList.remove("busy");
+    if (j && j.ok) { otpBox.classList.add("ok"); SFX.play("land"); var p = pend || {}; setTimeout(function () { landed(j, p); }, SK.reduced ? 0 : 520); return; }
+    if (pend) { cerr((j && j.error ? j.error.replace("Sign up again and we'll send a new one.", "Send a new code.") : "That didn't go through. Try the code instead.")); return; }
+    setStep(0, true); toast((j && j.error) || "That link didn't work. Sign up again and we'll send a new one.");
+  });
+}
 
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
@@ -5164,7 +5283,14 @@ function open(src) {
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
   wallNow = sky.getAttribute("src");
   count(); clearInterval(countT); countT = setInterval(count, 30000);
-  if (j) showDone(j, true);
+  if (!pend) pend = loadPend();
+  if (CTOK) { wall("you"); confirmLink(); KAY.say(["check"]); }
+  else if (j) showDone(j, true);
+  else if (pend && at === 0) {   /* signed up on this device and the code is still waiting: back to it */
+    form.elements.first.value = pend.first || ""; form.elements.last.value = pend.last || ""; form.elements.email.value = pend.email;
+    sheet.querySelector("[data-wl-cmail]").textContent = pend.email;
+    setStep(ORDER.indexOf("check"), true); wall("you"); pass1.start(); resendIn(0); KAY.say(["check"]); focusStep(SK.reduced ? 0 : 560);
+  }
   else {
     wall(ORDER[at]); want(ORDER[at + 1]); personal(); reveal(steps[at]);
     if (SCENE[ORDER[at]] === "claude") claudeLoop();
@@ -5197,7 +5323,7 @@ document.addEventListener("click", function (e) {
 sheet.querySelectorAll("[data-wl-close]").forEach(function (b) { b.addEventListener("click", close); });
 sheet.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { e.preventDefault(); close(); return; }
-  if (e.key === "Enter" && !sheet.classList.contains("done") && !/^(name|you)$/.test(ORDER[at]) && !e.target.closest(".wl-opt, .wl-back, input, .pass")) { e.preventDefault(); advance(); return; }
+  if (e.key === "Enter" && !sheet.classList.contains("done") && !/^(name|you|check)$/.test(ORDER[at]) && !e.target.closest(".wl-opt, .wl-back, input, .pass")) { e.preventDefault(); advance(); return; }
   if (e.key !== "Tab") return;
   var f = [].slice.call(sheet.querySelectorAll("button, input:not(.wl-hp), select, a[href], [tabindex='0']")).filter(function (x) { return !x.disabled && x.offsetParent !== null && getComputedStyle(x).visibility !== "hidden"; });
   if (!f.length) return;
@@ -5281,6 +5407,7 @@ sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e
 /* ---------- start over: "Not you?" on the done screen, and Restart on localhost or with ?early. Clears the saved sign-up. ---------- */
 function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
+  savePend(null); clearOtp(); cerr(""); clearInterval(resendT);
   rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
   inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_notify.checked = false; form.elements.sms_marketing.checked = false; other.hidden = true;

@@ -6,7 +6,7 @@ referral link, and every referral moves them up `BOOST` places (10 by default). 
 | Piece | Where |
 | --- | --- |
 | The Worker | `worker/src/index.js` |
-| Its database (Cloudflare D1) | `worker/migrations/0001_init.sql` |
+| Its database (Cloudflare D1) | `worker/migrations/` (0004 adds email confirmation) |
 | Config | `worker/wrangler.json` (vars: `ORIGINS`, `BOOST`, `BREVO_LIST_ID`). Secrets: `BREVO_API_KEY`, `ADMIN_TOKEN` |
 | Tests (no network) | `node worker/tests/run.mjs` |
 | Local server for the site | `node worker/dev.mjs`, which serves on http://127.0.0.1:8787 with a fake Brevo that only prints. `--reset` empties it |
@@ -25,7 +25,23 @@ Every answer is JSON. An error looks like `{ "ok": false, "error": "A short sent
   - `phone` plus `cc` becomes `+<cc><digits>` for Brevo's SMS field. A number typed with `+` or `00` keeps its own
     country code. If a number can't be read, the sign-up still works and only the SMS field is left out.
   - Limits: a body of up to 8 KB, and 10 sign-ups per IP address per 10 minutes (`RATE_LIMIT`, `RATE_WINDOW`).
-- **`GET /status?code=XXXXXXX`** answers with the same shape for that code (`already: true`), or 404.
+- **Email confirmation.** A new email is saved at once (`confirmed_at` empty), and `/join` answers
+  `{ ok, needs_confirm: true, email, first, sent, resend_in }` with no code and no place. The Worker sends "Confirm your spot" from
+  "Studio" <hello@askstudio.ai> through Brevo's transactional API (`POST /v3/smtp/email`, the same `BREVO_API_KEY`). The email has a
+  6-digit code (10 minutes, 5 wrong tries) and a button to `https://askstudio.ai/?confirm=<token>#early-access` (24 hours; the page posts
+  the token, so a mail scanner that opens links confirms nothing). Only SHA-256 hashes of the code and token are kept. Until a row is
+  confirmed it has no place, doesn't count as anyone's friend, isn't in `/count`, and is never sent to the Brevo list. Confirming sets
+  `confirmed_at`, `confirmed_via` (`code` or `link`) and Brevo's `EMAIL_CONFIRMED` (true), then counts the referral. The rows from before
+  this change are marked `legacy`: they keep their place, and `EMAIL_CONFIRMED` is false for them. A confirmed email that signs up
+  again gets its place straight away, as before.
+- **`POST /confirm`** takes `{ email, code }` or `{ token }` and answers the `/join` shape of old (code, place, `already`), or
+  `{ ok: false, error, tries_left?, expired? }` with 400, 410 (expired) or 429. 30 tries per IP address per 10 minutes.
+- **`POST /resend`** takes `{ email }`: a new code and link (the old ones stop working), at least 60 s apart (429 with `resend_in`),
+  at most 5 emails per address per hour (`capped: true`), 10 calls per IP address per 10 minutes. An unknown email gets the same answer as
+  a real send.
+- **`GET /status?code=XXXXXXX`** answers with the same shape for that code (`already: true`), or 404 (unknown or not confirmed yet).
+- **`GET /admin/brevo-check`** (admin token) shows the key's Brevo account, its senders and domains, and `sender_ready`: whether it
+  may send as hello@askstudio.ai. It only reads.
 - **`GET /health`** answers `{ ok: true }`.
 - **`POST /admin/resync`** (header `Authorization: Bearer <ADMIN_TOKEN>`) sends Brevo the rows it doesn't have yet
   (`brevo_synced = 0`), 20 per call (`?limit=`). `?all=1&from=<seq>` resends everyone, which refreshes POSITION. The

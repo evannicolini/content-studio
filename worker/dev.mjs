@@ -31,6 +31,7 @@ const env = {
   BREVO_API_KEY: "dev-fake-brevo-key",          // not a real key: it only switches the Brevo code path on
   ADMIN_TOKEN: process.env.ADMIN_TOKEN || "dev",
   RATE_LIMIT: process.env.RATE_LIMIT || "100",
+  DEV_ECHO: "1",                                 // the confirmation code comes back in the answer too (dev only), so no inbox is needed
   DB: d1(FILE),
 };
 const SKIP = new Set(["host", "connection", "keep-alive", "content-length", "transfer-encoding", "upgrade"]);

@@ -21,7 +21,7 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 .wl .wl-sky.nx { opacity: 0; transform: scale(1); transition: opacity 1.5s var(--ease), transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl .wl-sky.nx.in { opacity: 1; transform: scale(1.03); }
 .wl { --wl-dim: 0; }
-.wl[data-step="name"]:not(.done) { --wl-dim: .2; } .wl[data-step="roles"]:not(.done) { --wl-dim: .2; } .wl[data-step="brands"]:not(.done) { --wl-dim: .14; } .wl[data-step="claude"]:not(.done) { --wl-dim: .14; } .wl[data-step="you"]:not(.done) { --wl-dim: .16; }
+.wl[data-step="name"]:not(.done) { --wl-dim: .2; } .wl[data-step="roles"]:not(.done) { --wl-dim: .2; } .wl[data-step="brands"]:not(.done) { --wl-dim: .14; } .wl[data-step="claude"]:not(.done) { --wl-dim: .14; } .wl[data-step="you"]:not(.done) { --wl-dim: .16; } .wl[data-step="check"]:not(.done) { --wl-dim: .16; }
 .wl-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5, 9, 10, .5), rgba(5, 9, 10, .14) 46%, rgba(5, 9, 10, 0) 70%), linear-gradient(180deg, rgba(5, 9, 10, .3), rgba(5, 9, 10, 0) 26%, rgba(5, 9, 10, 0) 70%, rgba(5, 9, 10, .4)); background-color: rgba(5, 9, 10, var(--wl-dim)); transition: background-color 1.2s var(--ease); }
 
 /* Fading without breaking the glass. backdrop-filter only sees up to the nearest ancestor with opacity below 1, so a panel inside a
@@ -32,9 +32,9 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 @property --wl-o1 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o2 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o3 { syntax: "<number>"; inherits: false; initial-value: 1; }
-.wl-q > :not(.wl-opts):not(.wl-fields):not(.wl-other):not(.wl-count), .wl-f > span:first-child, .wl-tel > label, .wl-smsnote, .wl-fly, .wl-sc > .p3 { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
+.wl-q > :not(.wl-opts):not(.wl-fields):not(.wl-other):not(.wl-count):not(.wl-otp), .wl-otp > i, .wl-f > span:first-child, .wl-tel > label, .wl-smsnote, .wl-fly, .wl-sc > .p3 { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
 /* the glass itself comes up 3x faster than the fade, so the clear-sky blend lasts a blink, then it is all frost */
-.wl-ref, .wl-count, .wl-opt, .wl-f input:not(.wl-hp), .wl-ccv, .wl-dock > *, .wl-sc > .wl-comp, .wl-appwin > *, .wl-cl2 > * { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
+.wl-ref, .wl-count, .wl-opt, .wl-f input:not(.wl-hp), .wl-otp input, .wl-ccv, .wl-dock > *, .wl-sc > .wl-comp, .wl-appwin > *, .wl-cl2 > * { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
 
 /* ---------- top: the app's mark, then sound and close ---------- */
 .wl-top { position: absolute; z-index: 8; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: max(18px, env(safe-area-inset-top)) var(--pad) 0; pointer-events: none; }
@@ -495,7 +495,7 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-in { display: block; padding: 70px 16px 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .wl-in::after { content: ""; display: block; height: 196px; }
   .wl-stage { height: 220px; margin: 0 -16px 18px; overflow: hidden; transition: height .5s var(--ease), --wl-o1 .4s, margin .5s var(--ease); }
-  .wl[data-step="name"] .wl-stage, .wl[data-step="you"] .wl-stage { height: 0; --wl-o1: 0; margin-bottom: 0; }
+  .wl[data-step="name"] .wl-stage, .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { height: 0; --wl-o1: 0; margin-bottom: 0; }
   .wl-fit { left: 50%; margin-left: -490px; transform-origin: 50% 50%; }
   .wl-qh { font-size: clamp(34px, 9.6vw, 44px); }
   .wl-qs { margin: 12px 0 18px; font-size: 15px; }
@@ -562,3 +562,31 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
 .wl.done.shown .wl-slots li:nth-child(3):not(.got) i { animation-delay: .7s; }
 @keyframes wl-slot { 0%, 100% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); } 50% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .7), 0 0 14px rgba(225, 255, 79, .35); } }
 @media (prefers-reduced-motion: reduce) { .wl.done .wl-sky { filter: none; } .wl-dstage.bloom::before, .wl.done.shown .wl-slots li i { animation: none; } }
+
+/* ---------- Check your email: six glass boxes (the app's sign-in code), a wrong code runs the auburn beam round them ---------- */
+.wl-cmail { font-weight: 500; color: #fff; word-break: break-all; }
+.wl-otp { position: relative; display: inline-flex; max-width: 100%; align-items: center; gap: 10px; margin-top: 4px; }
+.wl-otp input { position: relative; z-index: 1; width: 64px; height: 78px; padding: 0; border: 0; outline: 0; border-radius: 18px; text-align: center; font: 300 36px/1 var(--sans); color: #fff; caret-color: #4aa3ff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .06)), rgba(var(--tint), .38); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%);
+  box-shadow: var(--v-rim), inset 0 8px 16px -10px rgba(0, 0, 0, .42); transition: background-color .2s, box-shadow .2s, transform .25s var(--ease); -webkit-appearance: none; appearance: none; }
+.wl-otp input:focus { box-shadow: var(--v-rim-on), 0 0 0 1px rgba(74, 163, 255, .5), 0 0 26px -6px rgba(74, 163, 255, .55); }
+.wl-otp input.has { background: linear-gradient(180deg, rgba(255, 255, 255, .17), rgba(255, 255, 255, .08)), rgba(var(--tint), .45); box-shadow: var(--v-rim-on); }
+.wl-otp > i { position: relative; z-index: 1; width: 10px; height: 2px; border-radius: 1px; background: rgba(255, 255, 255, .35); flex: none; }
+.wl-otp.bad input { animation: wl-shake .4s var(--ease); box-shadow: var(--v-rim); }
+.wl-otp.ok input { background: linear-gradient(180deg, rgba(190, 210, 195, .26), rgba(190, 210, 195, .1)), rgba(var(--tint), .45); box-shadow: var(--v-rim-on), 0 0 26px -8px rgba(143, 214, 163, .6); transform: scale(.96); }
+.wl-otp.busy input { animation: wl-wait 1s ease-in-out infinite; }
+@keyframes wl-wait { 50% { opacity: .55; } }
+.wl-otpb { position: absolute !important; inset: -7px -8px; z-index: 0; border-radius: 24px !important; pointer-events: none; opacity: 0; transition: opacity .3s; filter: hue-rotate(165deg) saturate(1.6) brightness(1.05); --beam-strength: 1.6; }
+.wl-otpb::after, .wl-otpb::before, .wl-otpb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
+.wl-otp.bad .wl-otpb { opacity: 1; }
+.wl-links { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 18px; font-size: 14.5px; }
+.wl-tl { padding: 0; border: 0; background: none; font: inherit; color: var(--wl-l2); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .3); text-underline-offset: 3px; }
+.wl-tl:hover:not(:disabled) { color: #fff; }
+.wl-tl:disabled { cursor: default; text-decoration: none; color: var(--wl-l3); }
+.wl-links .dot { color: var(--wl-l3); }
+.wl-hint { margin-top: 12px; max-width: 34em; font-size: 13px; line-height: 1.5; color: var(--wl-l2); }
+@media (max-width: 700px) {
+  .wl-otp { gap: 6px; }
+  .wl-otp input { width: calc((100vw - 32px - 5 * 6px - 16px) / 6); max-width: 56px; height: 64px; font-size: 30px; border-radius: 14px; }
+  .wl-otp > i { width: 6px; }
+}
