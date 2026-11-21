@@ -542,6 +542,13 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-dwrap { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .wl-dstage { order: -1; min-height: 0; gap: 12px; padding: 10px 0 6px; }
   .wl-dstage .pass { --w: min(350px, 88vw); }
+  /* You're in, on a phone: the same fix as the compact pass. A slightly taller card, rows spaced, so "#1,392", the trial and the
+     friends never sit on the dashed line or the barcode (Evan's iPhone) */
+  .wl-dstage .pass { height: calc(var(--w) * .7); }
+  .wl-dstage .pass.big .who { top: 17%; }
+  .wl-dstage .pass.big .row { top: 51%; }
+  .wl-dstage .pass .cut { top: 80.5%; }
+  .wl-dstage .pass .bars { top: 85%; height: 8%; }
   .wl-dh { font-size: clamp(38px, 10.6vw, 52px); }
   .wl-dsub { font-size: 15.5px; }
   .wl-refbox { margin-top: 18px; padding: 16px 14px; border-radius: 24px; }
