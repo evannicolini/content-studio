@@ -9,7 +9,8 @@ var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 var sheet = document.getElementById("signup");
 if (!sheet) return;
 var EMBED = window.parent !== window, PAYWALL0 = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
-if (!(local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {   /* not a live CTA yet: this Mac, ?review, or Studio's own window (?app#paywall) */
+var OPEN = !!(window.SK_WAITLIST && SK_WAITLIST.signup_open);   /* the public switch (src/waitlist.json signup_open) */
+if (!(OPEN || local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {   /* not open yet: this Mac, ?review, or Studio's own window (?app#paywall) */
   if (window.SK_PAGE === "start") { location.replace("early-access/" + location.search + "#early-access"); return; }   /* its own page (askstudio.ai/start/): until sign-up opens, early access is the way in */
   sheet.remove(); return;
 }

@@ -33,6 +33,18 @@ var REF = (Q.get("ref") || H.get("ref") || "").replace(/[^A-Za-z0-9_-]/g, "").sl
 try { if (REF) sessionStorage.setItem("studio-ref", REF); else REF = sessionStorage.getItem("studio-ref") || ""; } catch (e) {}
 
 /* ---------- the buttons ---------- */
+/* the public sign-up (src/waitlist.json signup_open, or ?open on this Mac): the Download buttons say Get Studio and go to /start/;
+   the waitlist stays on the pricing band and at /early-access/ */
+var OPEN = !!cfg.signup_open || (local && Q.has("open"));
+if (OPEN) document.querySelectorAll("[data-download]").forEach(function (b) {
+  b.removeAttribute("data-download");
+  var where = b.closest(".nav") ? "nav" : b.closest("#hero") ? "hero" : "steps";
+  b.setAttribute("href", "start/" + location.search); b.setAttribute("data-get", where);
+  var sp = b.querySelector(":scope > span:not([data-beam-bloom])");
+  if (sp) sp.textContent = where === "nav" ? "Get Studio" : "Get Studio for Mac";
+  var help = b.parentNode && b.parentNode.querySelector("[data-send-help]");
+  if (help && !help.closest(".pr-open")) { help.removeAttribute("data-send-help"); help.textContent = "Free to start. Studio is for Mac."; }
+});
 document.querySelectorAll("[data-download]").forEach(function (b) {
   b.removeAttribute("data-download");
   var where = b.closest(".nav") ? "nav" : b.closest("#hero") ? "hero" : "steps";
@@ -1029,6 +1041,15 @@ window.addEventListener("popstate", function () {
   var n = typeof st.step === "number" ? st.step : 0;
   while (n > 0 && !ready(n - 1)) n--;   /* never past a step that isn't answered */
   if (n !== at) setStep(n, false, true);
+});
+/* sign-up open: the plans and the floating pill go to /start/ too; the pricing band stays the way onto the waitlist */
+if (OPEN) document.querySelectorAll("[data-early]").forEach(function (b) {
+  var w = b.getAttribute("data-early") || ""; if (w === "band") return;
+  b.removeAttribute("data-early"); b.setAttribute("data-get", w);
+  if (b.tagName === "A") b.setAttribute("href", "start/" + location.search);
+  else b.addEventListener("click", function () { location.href = "start/" + location.search; });
+  var tw = document.createTreeWalker(b, NodeFilter.SHOW_TEXT), tn;
+  while ((tn = tw.nextNode())) if (/get early access/i.test(tn.nodeValue)) tn.nodeValue = tn.nodeValue.replace(/get early access/i, /^plan/.test(w) ? "Start free" : "Get Studio");
 });
 window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)) open("link"); });
 document.addEventListener("click", function (e) {
