@@ -6169,8 +6169,9 @@ form.addEventListener("submit", function (e) {
     return checkout();
   }).then(function (c) {
     if (c.mock) return c;
-    var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + "?review&paid=1" + HASH }, redirect: "if_required" };
-    return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return c; });
+    try { sessionStorage.setItem("studio-checkout", JSON.stringify({ subscription: c.subscription, handoff: me.hand && me.hand.code, first: me.first, email: me.email, plan: me.plan, period: me.period })); } catch (e) {}
+    var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + (local ? "?live&paid=1" : "?review&paid=1") + HASH }, redirect: "if_required" };
+    return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return status(c.subscription); });
   }).then(paid, function (x) { err(say(x)); }).then(function () { go.classList.remove("busy"); });
 });
 function paid(c) {
@@ -6234,6 +6235,15 @@ function checkout() {
     consent: { version: CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: RENEW.toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } }).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
+  });
+}
+/* after Stripe: the server asks Stripe itself, and gives the download and Open Studio links (it covers a bank's 3-D Secure return too) */
+function status(sub) {
+  var h = me.hand && me.hand.code;
+  return api("/web/checkout/status?subscription=" + encodeURIComponent(sub || "") + "&handoff=" + encodeURIComponent(h || "")).then(function (j) {
+    if (j.state === "failed") throw E("failed", "Your bank didn't approve the $1. Try another card.");
+    if (j.state === "incomplete") throw E("incomplete", "The payment isn't finished yet. Try again, or use another card.");
+    return j;
   });
 }
 function lookup(code) {
@@ -6380,7 +6390,14 @@ if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { retu
   try { history.replaceState(null, "", location.pathname + location.search + HASH); } catch (e) {}
   open(); signedIn().catch(function (x) { err(say(x)); });
 });
-if (Q.has("paid") && Q.get("redirect_status") === "succeeded") { open(); paid({}); }
+if (Q.has("paid") && LIVE) {   /* back from the bank: pick up where Pay left off */
+  var back = null; try { back = JSON.parse(sessionStorage.getItem("studio-checkout") || "null"); } catch (e) {}
+  if (back) {
+    me.first = back.first || ""; me.email = back.email || ""; me.plan = back.plan || "pro"; me.period = back.period || "month"; me.hand = { code: back.handoff };
+    open();
+    status(back.subscription).then(paid, function (x) { setStep(ORDER.indexOf("pay")); err(Q.get("redirect_status") === "failed" ? "Your bank didn't approve the $1. Try another card." : say(x)); });
+  }
+}
 if (DEEP.test(location.hash)) setTimeout(open, SK.reduced ? 0 : 250);
 
 } catch (e) { console.error("section 910-start", e); }
