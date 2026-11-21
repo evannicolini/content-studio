@@ -33,7 +33,13 @@
 <script>
   /* the sheet opens on its own hash (#early-access, #signup, #paywall); the address keeps ?ref=, ?confirm=, ?pass= and the rest */
   window.SK_PAGE = "{{SLUG}}";
-  if (!/^#[a-z]/.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search + "{{HASH}}" + location.hash.replace(/^#/, "&").replace(/^&$/, "")); } catch (e) {}
+  (function (l) {   /* the page's own hash, with any extras (#early-access?ref=CODE, #ref=CODE) moved into the ?query */
+    var m = l.hash.match(/^#([a-z-]*)([?&].*)?$/), name = m && m[1] ? "#" + m[1] : "{{HASH}}", extra = m ? (m[2] || "").replace(/^[?&]/, "") : l.hash.replace(/^#/, "");
+    if (m && m[1] && !m[2] && /^#(early-access|signup|paywall)$/.test(name)) return;
+    if (!/^#(early-access|signup|paywall)$/.test(name)) { if (m && m[1] && m[1].indexOf("=") < 0 && !m[2]) extra = ""; name = "{{HASH}}"; }
+    var q = l.search + (extra ? (l.search ? "&" : "?") + extra : "");
+    try { history.replaceState(null, "", l.pathname + q + name); } catch (e) {}
+  })(location);
   document.documentElement.classList.add("pg-in");
 </script>
 <!-- the first wallpaper, fetched before anything else, so the page never sits black waiting for it -->

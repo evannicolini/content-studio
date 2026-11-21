@@ -556,6 +556,11 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       '<button type="button" class="sk-chb" data-n="1" aria-label="The chapter after"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6.5 4 4 4-4 4"/></svg></button>' +
       '<div class="sk-chm" role="menu" hidden></div>';
     document.body.appendChild(el);
+    document.documentElement.classList.add("sk-ch-on");
+    /* phones: in the sheet's top bar (nothing floats over the form); desktops: centred at the top */
+    var mq = matchMedia("(max-width: 960px)");
+    var dock = function () { var bar = document.querySelector(".wl .wl-tr"); if (mq.matches && bar) { el.classList.add("in-bar"); bar.insertBefore(el, bar.firstChild); } else { el.classList.remove("in-bar"); if (el.parentNode !== document.body) document.body.appendChild(el); } };
+    dock(); if (mq.addEventListener) mq.addEventListener("change", dock);
     var pill = el.querySelector(".sk-chp"), menu = el.querySelector(".sk-chm");
     var idx = function () { var n = o.now(); for (var i = 0; i < o.list.length; i++) if (o.list[i][0] === n) return i; return 0; };
     function paint() { el.querySelector(".c").textContent = (o.list[idx()] || [])[1] || ""; el.querySelector('[data-n="-1"]').disabled = idx() === 0; el.querySelector('[data-n="1"]').disabled = idx() === o.list.length - 1; }
@@ -7069,7 +7074,7 @@ if (local && !EMBED && window.SK_PAGE) {
     setStep(n, false);
   };
   var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Orange dune", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
-  if (H.get("ch")) setTimeout(function () { chGo(H.get("ch")); chUI.paint(); }, 600);
+  var CHQ = Q.get("ch") || H.get("ch"); if (CHQ) setTimeout(function () { chGo(CHQ); chUI.paint(); }, 600);
 }
 
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */

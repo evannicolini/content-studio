@@ -1088,7 +1088,7 @@ if (local && !EMBED && window.SK_PAGE) {
     setStep(n, false);
   };
   var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Orange dune", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
-  if (H.get("ch")) setTimeout(function () { chGo(H.get("ch")); chUI.paint(); }, 600);
+  var CHQ = Q.get("ch") || H.get("ch"); if (CHQ) setTimeout(function () { chGo(CHQ); chUI.paint(); }, 600);
 }
 
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */

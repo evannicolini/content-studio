@@ -1337,3 +1337,33 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass { --w: min(66vw, 280px); }
   .wl.kb[data-step="you"] .wl-stage, .wl.kb[data-step="check"] .wl-stage { height: 0; margin: 0; opacity: 0; }
 }
+
+/* ---------- phones: one row at the bottom, nothing floating over the form (lead): the bar, and Kayla beside it as a round glass
+   button (her face, play/pause), not a pill above it. The Chapters pill (this Mac only) sits in the top bar instead. ---------- */
+@media (max-width: 960px) {
+  .wl-dock { flex-direction: row; align-items: center; gap: 8px; }
+  .wl-dock > .wl-bar { flex: 1; min-width: 0; }
+  .wl-kay { align-self: auto; flex: none; position: relative; width: 60px; height: 60px; padding: 0; gap: 0; justify-content: center; border-radius: 50%; }
+  .wl-kay img { width: 48px; height: 48px; border-radius: 50%; }
+  .wl-kay .wl-kp { position: absolute; right: 2px; bottom: 2px; width: 22px; height: 22px; background: rgba(20, 20, 20, .72); }
+  .wl-kay .wl-kp svg { width: 9px; height: 9px; }
+  .wl-kay .wl-kw, .wl-kay .wl-kt { display: none !important; }
+  .wl-seg { gap: 4px; }
+  .wl-next { padding: 0 14px 0 16px; font-size: 14.5px; }
+  .wl-go { font-size: 14.5px; gap: 10px; }
+  /* Chapters (this Mac): in the top bar, a compact pill; Restart and Test mode make way for it */
+  html.sk-ch-on .wl-restart, html.sk-ch-on .st-mode { display: none !important; }
+  .sk-ch.in-bar { position: static; transform: none; z-index: auto; }
+  .sk-ch.in-bar .sk-chb, .sk-ch.in-bar .sk-chp .k { display: none; }
+  .sk-ch.in-bar .sk-chp { height: 44px; padding: 0 12px; gap: 7px; max-width: 128px; }
+  .sk-ch.in-bar .sk-chp .c { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sk-ch.in-bar .sk-chm { top: calc(100% + 8px); bottom: auto; left: auto; right: 0; transform: none; }
+}
+@media (max-width: 380px) { .sk-ch.in-bar .sk-chp .c { display: none; } }
+/* phones: the questions scroll in the space above the bottom row, so no field, checkbox or label is ever under it (lead) */
+@media (max-width: 960px) {
+  .wl:not(.done) .wl-in { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 68px); }
+  .wl .wl-in::after { height: 14px; }
+  .wl.kb .wl-in { bottom: 0; }
+  .wl.kb .wl-in::after { height: 60vh; }
+}
