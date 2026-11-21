@@ -4887,3 +4887,4 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
 .st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */
+.st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }   /* five chips: Something else takes the last row */

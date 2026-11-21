@@ -567,7 +567,7 @@ async function supaUser(env, token) {
     return { email: String(u.email).toLowerCase(), first: text(md.first_name || md.given_name || md.name || "", 80).split(/\s+/)[0] };
   } catch { return null; }
 }
-const PICK = { roles: ["Founder", "Business owner", "Creator", "Video editor", "Agency", "Social media manager", "Marketer", "Something else"], brands: ["1", "2-3", "4+"], claude: ["Pro or Max", "Free plan", "Not yet"], make: ["Ads", "Reels", "Launch films", "Carousels", "Podcasts", "Something else"] };
+const PICK = { roles: ["Founder", "Business owner", "Creator", "Video editor", "Agency", "Social media manager", "Marketer", "Something else"], brands: ["1", "2-3", "4+"], claude: ["Pro or Max", "Free plan", "Not yet"], make: ["Ads", "Reels", "Launch films", "Carousels", "Something else"] };
 const pick = (v, list, many) => { const a = (Array.isArray(v) ? v : [v]).map((x) => text(x, 60)).filter((x) => list.includes(x)); return many ? [...new Set(a)] : a[0] || ""; };
 async function signupProfile(request, env) {
   const b = await body(request); if (!b) return fail("Send JSON.");
