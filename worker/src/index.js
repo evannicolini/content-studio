@@ -17,6 +17,9 @@
 // else (in the same order among yourselves).
 // Brevo is told after the answer has gone (ctx.waitUntil), so a slow or failing Brevo never fails a sign-up.
 
+import { confirmEmail, youreInEmail } from "./emails.js";
+export { confirmEmail, youreInEmail, inviteEmail, welcomeEmail } from "./emails.js";
+
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-alikes
 const CODE_LENGTH = 7;
 const MAX_BODY = 8 * 1024;                                  // bytes; a sign-up is a few hundred
@@ -276,8 +279,20 @@ async function confirmRow(env, ctx, row, via) {
     referrer = await env.DB.prepare("SELECT seq, code FROM signups WHERE code = ?").bind(row.referred_by).first();
     if (referrer) await recount(env, referrer.code);   // counted from the rows themselves, so one email can never count twice
   }
-  if (r.meta.changes) later(ctx, afterJoin(env, row.seq, referrer && referrer.seq));
+  if (r.meta.changes) later(ctx, afterJoin(env, row.seq, referrer && referrer.seq).then(() => (env.SEND_YOURE_IN === "1" ? sendYoureIn(env, row.seq) : null)));
   return json(await answer(env, await bySeq(env, row.seq), !r.meta.changes));
+}
+
+// "You're in": Evan's plain note, once, right after confirming. Off until the lead switches it on (SEND_YOURE_IN = "1").
+async function sendYoureIn(env, seq) {
+  if (!env.BREVO_API_KEY) return;
+  const row = await bySeq(env, seq);
+  if (!row || !row.confirmed_at) return;
+  const s = await standing(env, row), place = s.front ? s.position : s.position + int(env.COUNT_OFFSET, 0);   // the place the page shows
+  const mail = youreInEmail(row.first, place, siteOf(env) + "/?ref=" + encodeURIComponent(row.code) + "#early-access");
+  const r = await brevo(env, "POST", "/smtp/email", { sender: mail.sender, replyTo: mail.replyTo, to: [{ email: row.email, name: (row.first + " " + row.last).trim() }],
+    subject: mail.subject, htmlContent: mail.html, textContent: mail.text, tags: ["waitlist-youre-in"] });
+  if (!r.ok) console.error("you're in email", r.detail);
 }
 
 async function confirm(request, env, ctx) {
@@ -326,38 +341,6 @@ async function body(request) {
   if (te.encode(raw).length > MAX_BODY) return { error: "That is more than this needs." };
   try { const b = JSON.parse(raw); if (b && typeof b === "object" && !Array.isArray(b)) return b; } catch {}
   return { error: "That did not arrive as JSON. Try again." };
-}
-
-// ------------------------------------------------------------------------------------------------ the email
-const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-// Plain HTML in the waitlist's glass look: no images, no scripts, no tracking of our own; one link, straight to askstudio.ai.
-export function confirmEmail(first, code, link) {
-  const name = text(first, 80), hi = name ? "Hi " + name + "," : "Hi,";
-  const spaced = code.slice(0, 3) + " " + code.slice(3);
-  const subject = "Confirm your spot";
-  const textBody = [hi, "", "Your Studio code is " + spaced + ".", "", "Enter it on the page, or confirm here:", link, "",
-    "The code works for 10 minutes and the link for 24 hours. Didn't sign up? Ignore this and nothing happens.", "", "Studio", "askstudio.ai"].join("\n");
-  const font = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Helvetica,Arial,sans-serif";
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>${subject}</title></head>
-<body style="margin:0;padding:0;background:#0E191E;">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#0E191E;">Your code is ${spaced}. It works for 10 minutes.</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0E191E;background-image:linear-gradient(160deg,#536878 0%,#1d2b32 45%,#0E191E 100%);">
-<tr><td align="center" style="padding:48px 16px;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:28px;">
-<tr><td style="padding:40px 36px 36px;font-family:${font};color:#E5E4E2;">
-<div style="font-size:15px;letter-spacing:.32em;text-transform:uppercase;color:#BBC9C7;">Studio</div>
-<h1 style="margin:28px 0 12px;font-size:30px;line-height:1.15;font-weight:600;letter-spacing:-.01em;color:#FFFFFF;">Confirm your spot</h1>
-<p style="margin:0 0 28px;font-size:16px;line-height:1.55;color:#E5E4E2;">${escHtml(hi)} here's your code. Enter it on the page to hold your place in line.</p>
-<div style="margin:0 0 28px;padding:20px 0;text-align:center;background:rgba(10,10,10,0.35);border:1px solid rgba(255,255,255,0.14);border-radius:18px;font-size:38px;line-height:1;font-weight:600;letter-spacing:.28em;color:#FFFFFF;font-family:'SF Mono',Menlo,Consolas,monospace;">${spaced}</div>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr><td align="center" style="border-radius:999px;background:#E5E4E2;">
-<a href="${escHtml(link)}" style="display:block;padding:16px 24px;font-family:${font};font-size:16px;font-weight:600;color:#0A0A0A;text-decoration:none;border-radius:999px;">Confirm my spot</a>
-</td></tr></table>
-<p style="margin:28px 0 0;font-size:13px;line-height:1.55;color:#BBC9C7;">The code works for 10 minutes and the button for 24 hours. Didn't sign up? Ignore this email and nothing happens.</p>
-</td></tr></table>
-<p style="margin:24px 0 0;font-family:${font};font-size:12px;color:#8fa1a8;">Studio &middot; askstudio.ai</p>
-</td></tr></table></body></html>`;
-  return { subject, html, text: textBody };
 }
 
 function later(ctx, promise) {

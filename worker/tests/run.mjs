@@ -538,7 +538,9 @@ test("confirm: a new sign-up is saved, emailed a code, and has no place until it
   assert.deepEqual(mail.body.to, [{ email: "person1@example.com", name: "First1 Last1" }]);
   assert.ok(mail.html.includes(mail.code.slice(0, 3) + " " + mail.code.slice(3)), "the code is in the HTML");
   assert.ok(mail.html.includes("https://askstudio.ai/?confirm=" + mail.token + "#early-access"), "one link, straight to the site");
-  assert.ok(!/<img|<script|https?:\/\/(?!askstudio\.ai)/i.test(mail.html), "no images, scripts or other hosts");
+  assert.ok(!/<script|https?:\/\/(?!askstudio\.ai)/i.test(mail.html), "no scripts, and nothing from any host but askstudio.ai");
+  assert.ok(/<img[^>]+src="https:\/\/askstudio\.ai\/assets\/email\/hero-confirm\.jpg"[^>]+alt="[^"]+"/.test(mail.html), "the hero is ours, with alt text");
+  assert.ok(Buffer.byteLength(mail.html) < 102 * 1024 * .5, "well under Gmail's clip");
   const r = t.row("person1@example.com");
   assert.notEqual(r.confirm_code_hash, mail.code, "only hashes are kept");
   assert.ok(!JSON.stringify(r).includes(mail.code) && !JSON.stringify(r).includes(mail.token));
@@ -702,6 +704,25 @@ test("confirmEmail: plain text and HTML, the name escaped", () => {
   assert.ok(m.text.includes("https://askstudio.ai/?confirm=abc#early-access"));
   assert.ok(m.html.includes("Hi &lt;b&gt;Ada&lt;/b&gt; &amp; &quot;co&quot;,"));
   assert.ok(!m.html.includes("<b>Ada"));
+});
+
+test("You're in: Evan's plain note goes out only when switched on, with the place the page shows", async () => {
+  const off = setup();
+  await off.join(person(1));
+  assert.equal(off.brevo.emails.length, 1, "only the confirmation email: You're in is off by default");
+  const t = setup({ SEND_YOURE_IN: "1", COUNT_OFFSET: "1224" });
+  await t.join(person(1));
+  const m = t.brevo.lastEmail("person1@example.com");
+  assert.equal(m.subject, "You're in, First1");
+  assert.deepEqual(m.body.sender, { name: "Evan from Studio", email: "hello@askstudio.ai" });
+  assert.deepEqual(m.body.replyTo, { name: "Evan from Studio", email: "hello@askstudio.ai" });
+  assert.ok(m.text.startsWith("Hey First1, it's Evan from Studio."));
+  assert.ok(m.text.includes("You're #1,225 on the list. Quick favour: reply 'yes' so I know this landed (it also keeps us out of your spam)."), m.text);
+  assert.ok(m.text.includes("Your link to move up: https://askstudio.ai/?ref=" + t.row("person1@example.com").code + "#early-access"));
+  assert.ok(!/<img|<style|style=|<table/i.test(m.html), "no images, no styling, no layout");
+  assert.equal(t.brevo.emails.length, 2, "the code, then You're in, once");
+  await t.join(person(1));
+  assert.equal(t.brevo.emails.length, 2, "signing up again sends nothing more");
 });
 
 test("phone numbers become E.164 when they can", () => {
