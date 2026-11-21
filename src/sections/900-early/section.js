@@ -860,7 +860,7 @@ function checkEmail(j, d) {
 }
 /* confirmed (or an email that already was): the place, saved on this device, then You're in */
 function landed(j, d) {
-  var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
+  var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || "", at: Date.now() };
   try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
   savePend(null); clearDraft();
   showDone(rec);
@@ -899,6 +899,13 @@ sheet.querySelector("[data-wl-other]").addEventListener("click", function () {
   setTimeout(function () { var m = form.elements.email; m.focus(); try { m.select(); } catch (x) {} }, 450);
 });
 /* the button in the email: askstudio.ai/?confirm=<token>#early-access. Taken off the address at once, then sent when the sheet opens. */
+var PTOK = (Q.get("pass") || "").toLowerCase().replace(/[^0-9a-f]/g, "").slice(0, 64);
+if (Q.has("pass")) try { Q.delete("pass"); history.replaceState(history.state, "", location.pathname + (Q.toString() ? "?" + Q : "") + location.hash); } catch (e) {}
+if (PTOK && API) fetch(API + "/pass?t=" + encodeURIComponent(PTOK)).then(function (r) { return r.json(); }).then(function (j) {
+  if (!j || !j.ok) return;
+  try { localStorage.setItem(KEY, JSON.stringify({ first: j.first, last: j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || PTOK, at: Date.now() })); } catch (e) {}
+  if (sheet.classList.contains("open")) showDone(joined(), true); else open("pass");
+}).catch(function () {});
 var CTOK = (Q.get("confirm") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
 if (Q.has("confirm")) try { Q.delete("confirm"); history.replaceState(history.state, "", location.pathname + (Q.toString() ? "?" + Q : "") + location.hash); } catch (e) {}
 function confirmLink() {
@@ -1077,7 +1084,8 @@ function showDone(r, quiet) {
     KAY.say(["in", "share"]);
   }
   if (!quiet) setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
-  if (API && r.code) fetch(API + "/status?code=" + encodeURIComponent(r.code)).then(function (x) { return x.json(); }).then(function (j) {
+  var pl = sheet.querySelector("[data-wl-plink]"); pl.hidden = !r.pass;
+  if (API && r.code) fetch(API + (r.pass ? "/pass?t=" + encodeURIComponent(r.pass) : "/status?code=" + encodeURIComponent(r.code))).then(function (x) { return x.json(); }).then(function (j) {
     if (!j || !j.ok || !rec || rec.code !== r.code) return;
     if (j.position === r.position && j.referrals === r.referrals && !!j.front === !!r.front) return;
     var n = Object.assign({}, r, { position: j.position, total: j.total, referrals: j.referrals, boost: j.boost, front: !!j.front });
@@ -1114,6 +1122,12 @@ function startOver() {
   KAY.say(["name"]); focusStep(300);
 }
 sheet.querySelector("[data-wl-over]").addEventListener("click", startOver);
+sheet.querySelector("[data-wl-plink]").addEventListener("click", function () {
+  if (!rec || !rec.pass) return;
+  var u = (local ? location.origin + location.pathname : "https://askstudio.ai/") + "?pass=" + rec.pass;
+  var ok = function () { toast("Your pass link is copied. It's just for you: open it on any device to see your friends join."); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function () { old(u); ok(); }); else { old(u); ok(); }
+});
 var restartB = sheet.querySelector("[data-wl-restart]");
 restartB.hidden = !(local || Q.has("review"));   /* review only: never on the live site */
 restartB.addEventListener("click", startOver);

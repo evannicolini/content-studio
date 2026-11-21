@@ -4,6 +4,7 @@
 //   POST /confirm            { email, code } or { token } (the link in the email): confirms it, the referral code and place back
 //   POST /resend             { email }: a new code (60 s apart)
 //   GET  /status?code=…      the place in line for a referral code
+//   GET  /pass?t=…           your own pass from its private link: the place, the friends, your full name (the token is the proof)
 //   GET  /count              { ok, total }: how many are on the list (the site's live count)
 //   GET  /health             { ok: true }
 //   POST /admin/resync       send Brevo the sign-ups it has not got yet (Authorization: Bearer ADMIN_TOKEN)
@@ -116,10 +117,19 @@ async function standing(env, row) {
     FROM me`).bind(boost, goal, row.seq).first();
   return { position: r.ahead + 1, total: r.total, boost, goal, front: !!r.front };
 }
-async function answer(env, row, already) {
+// priv: the answer goes to the person themselves (a new sign-up, a confirmation, their private link), so it carries their private
+// pass link and last name. Never on /status or a repeat sign-up (anyone can type an email).
+async function answer(env, row, already, priv) {
   const s = await standing(env, row);
-  return { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front, already };
+  const out = { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front, already };
+  if (priv) {
+    if (!row.pass_token) { row.pass_token = passToken(); await env.DB.prepare("UPDATE signups SET pass_token = ? WHERE seq = ? AND pass_token IS NULL").bind(row.pass_token, row.seq).run(); row = await bySeq(env, row.seq); }
+    out.last = row.last; out.pass = row.pass_token;
+  }
+  return out;
 }
+function passToken() { return [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, "0")).join(""); }
+const confirmOn = (env) => env.CONFIRM_EMAIL === "1";   // email confirmation: on once Brevo can send it (until then a sign-up counts at once)
 const bySeq = (env, seq) => env.DB.prepare("SELECT * FROM signups WHERE seq = ?").bind(seq).first();
 const recount = (env, code) => env.DB.prepare("UPDATE signups SET referrals = (SELECT COUNT(*) FROM signups WHERE referred_by = ?1 AND confirmed_at IS NOT NULL) WHERE code = ?1").bind(code).run();
 
@@ -188,17 +198,18 @@ async function join(request, env, ctx) {
         const r = await env.DB.prepare(
           `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at,
              sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent, consent_ip, consent_country,
-             sms_notify, sms_notify_at, sms_notify_text, sms_marketing, sms_marketing_at, sms_marketing_text)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
+             sms_notify, sms_notify_at, sms_notify_text, sms_marketing, sms_marketing_at, sms_marketing_text, pass_token)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
         ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t,
           f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua, f.smsOk ? cip : null, f.smsOk ? ccountry : null,
-          f.notify ? 1 : 0, f.notify ? t : null, f.notify ? f.notifyText : null, f.marketing ? 1 : 0, f.marketing ? t : null, f.marketing ? f.marketingText : null).run();
+          f.notify ? 1 : 0, f.notify ? t : null, f.notify ? f.notifyText : null, f.marketing ? 1 : 0, f.marketing ? t : null, f.marketing ? f.marketingText : null, passToken()).run();
         if (r.meta.changes) added = await bySeq(env, r.meta.last_row_id);
         else raced = true;                                             // the same email landed a moment ago: update it below
       } catch (e) {
         if (!/UNIQUE.*signups\.code/i.test(String((e && e.message) || e))) throw e;   // a code already taken: draw again
       }
     }
+    if (added && !confirmOn(env)) return await confirmRow(env, ctx, added, "unverified", true);   // confirmation off: it counts now
     if (added) return json(await pending(env, added, await sendCode(env, added)));   // the referrer's count goes up on confirm
     if (!raced) throw new Error("six referral codes in a row were taken");
     row = await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(f.email).first();
@@ -218,6 +229,7 @@ async function join(request, env, ctx) {
   if (f.marketing) await env.DB.prepare("UPDATE signups SET sms_marketing = 1, sms_marketing_at = ?, sms_marketing_text = ? WHERE seq = ?").bind(t, f.marketingText, row.seq).run();
   if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
   row = await bySeq(env, row.seq);
+  if (!row.confirmed_at && !confirmOn(env)) return await confirmRow(env, ctx, row, "unverified", false);
   if (!row.confirmed_at) {
     const wait = waitLeft(row);
     return json(await pending(env, row, wait ? { sent: false, resend_in: wait } : await sendCode(env, row)));
@@ -270,7 +282,7 @@ async function sendCode(env, row) {
 }
 
 // Confirmed: a place in line, the referrer's count, Brevo. Only the first confirmation does anything.
-async function confirmRow(env, ctx, row, via) {
+async function confirmRow(env, ctx, row, via, priv = true) {
   const t = now();
   const r = await env.DB.prepare(`UPDATE signups SET confirmed_at = ?, confirmed_via = ?, confirm_code_hash = NULL, confirm_tries = 0,
      brevo_synced = 0, updated_at = ? WHERE seq = ? AND confirmed_at IS NULL`).bind(t, via, Math.max(t, row.updated_at + 1), row.seq).run();
@@ -280,7 +292,7 @@ async function confirmRow(env, ctx, row, via) {
     if (referrer) await recount(env, referrer.code);   // counted from the rows themselves, so one email can never count twice
   }
   if (r.meta.changes) later(ctx, afterJoin(env, row.seq, referrer && referrer.seq).then(() => (env.SEND_YOURE_IN === "1" ? sendYoureIn(env, row.seq) : null)));
-  return json(await answer(env, await bySeq(env, row.seq), !r.meta.changes));
+  return json(await answer(env, await bySeq(env, row.seq), !r.meta.changes, priv));
 }
 
 // "You're in": Evan's plain note, once, right after confirming. Off until the lead switches it on (SEND_YOURE_IN = "1").
@@ -289,7 +301,9 @@ async function sendYoureIn(env, seq) {
   const row = await bySeq(env, seq);
   if (!row || !row.confirmed_at) return;
   const s = await standing(env, row), place = s.front ? s.position : s.position + int(env.COUNT_OFFSET, 0);   // the place the page shows
-  const mail = youreInEmail(row.first, place, siteOf(env) + "/?ref=" + encodeURIComponent(row.code) + "#early-access");
+  if (!row.pass_token) await answer(env, row, true, true);   // makes the private link if this row predates it
+  const fresh = await bySeq(env, seq);
+  const mail = youreInEmail(row.first, place, siteOf(env) + "/?ref=" + encodeURIComponent(row.code) + "#early-access", siteOf(env) + "/?pass=" + fresh.pass_token);
   const r = await brevo(env, "POST", "/smtp/email", { sender: mail.sender, replyTo: mail.replyTo, to: [{ email: row.email, name: (row.first + " " + row.last).trim() }],
     subject: mail.subject, htmlContent: mail.html, textContent: mail.text, tags: ["waitlist-youre-in"] });
   if (!r.ok) console.error("you're in email", r.detail);
@@ -310,7 +324,7 @@ async function confirm(request, env, ctx) {
   if (code.length !== 6) return fail("Enter the 6-digit code from the email.");
   const row = email ? await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(email).first() : null;
   if (!row) return fail("That code isn't right.");
-  if (row.confirmed_at) return json(await answer(env, row, true));
+  if (row.confirmed_at) return json(await answer(env, row, true, true));
   if (!row.confirm_code_hash || !(row.confirm_expires > now())) return json({ ok: false, expired: true, error: "That code has expired. Send a new one." }, 410);
   if (row.confirm_tries >= MAX_TRIES) return json({ ok: false, expired: true, error: "Too many tries. Send a new code." }, 429);
   if (!same(await codeHash(row.seq, code), row.confirm_code_hash)) {
@@ -355,6 +369,16 @@ async function status(url, env) {
   const row = await env.DB.prepare("SELECT * FROM signups WHERE code = ?").bind(code).first();
   if (!row || !row.confirmed_at) return json({ ok: false, error: "We don't know that code." }, 404);
   return json(await answer(env, row, true));
+}
+
+// ------------------------------------------------------------------------------------------------ GET /pass
+async function passView(request, url, env) {
+  if (!(await rateOk(env, "pass:" + (await ipKey(request)), 600, 60))) return fail("Too many tries from here. Try again in a few minutes.", 429);
+  const t = String(url.searchParams.get("t") || "").toLowerCase().replace(/[^0-9a-f]/g, "").slice(0, 64);
+  if (t.length < 32) return json({ ok: false, error: "That link isn't right." }, 404);
+  const row = await env.DB.prepare("SELECT * FROM signups WHERE pass_token = ?").bind(t).first();
+  if (!row || !row.confirmed_at) return json({ ok: false, error: "That link isn't right." }, 404);
+  return json(await answer(env, row, true, true));
 }
 
 // ------------------------------------------------------------------------------------------------ Brevo
@@ -535,6 +559,7 @@ async function route(request, url, env, ctx) {
   if (path === "/confirm") return m === "POST" ? await confirm(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/resend") return m === "POST" ? await resend(request, env) : fail("Use POST.", 405);
   if (path === "/status") return m === "GET" ? await status(url, env) : fail("Use GET.", 405);
+  if (path === "/pass") return m === "GET" ? await passView(request, url, env) : fail("Use GET.", 405);
   if (path === "/count") {
     if (m !== "GET") return fail("Use GET.", 405);
     const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE confirmed_at IS NOT NULL").first();

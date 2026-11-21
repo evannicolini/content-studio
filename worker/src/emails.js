@@ -67,7 +67,7 @@ export function confirmEmail(first, code, link) {
 }
 
 // 2. You're in: a plain note from Evan. No design, no images, no tracking; it should look like he typed it.
-export function youreInEmail(first, place, refLink) {
+export function youreInEmail(first, place, refLink, passLink) {
   const name = one(first) || "there";
   const subject = "You're in, " + name;
   const lines = [
@@ -75,8 +75,10 @@ export function youreInEmail(first, place, refLink) {
     `You're #${Number(place).toLocaleString("en-US")} on the list. Quick favour: reply 'yes' so I know this landed (it also keeps us out of your spam).`,
     `Your link to move up: ${refLink}`,
   ];
+  if (passLink) lines.push(`Your pass, to see friends join (just for you): ${passLink}`);
   const html = `<!doctype html><html><head><meta charset="utf-8"></head><body>` +
     `<div>${esc(lines[0])}</div><div><br></div><div>${esc(lines[1])}</div><div><br></div><div>Your link to move up: <a href="${esc(refLink)}">${esc(refLink)}</a></div>` +
+    (passLink ? `<div><br></div><div>Your pass, to see friends join (just for you): <a href="${esc(passLink)}">${esc(passLink)}</a></div>` : "") +
     `</body></html>`;
   return { subject, html, text: lines.join("\n\n"), sender: { name: "Evan from Studio", email: "hello@askstudio.ai" }, replyTo: { name: "Evan from Studio", email: "hello@askstudio.ai" } };
 }

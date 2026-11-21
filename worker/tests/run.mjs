@@ -15,7 +15,7 @@ const CODE = /^[23456789ABCDEFGHJKMNPQRSTUVWXYZ]{7}$/;
 function setup(envOverrides = {}, brevoOptions = {}) {
   const brevo = fakeBrevo(brevoOptions);
   globalThis.fetch = brevo.fetch;
-  const env = { DB: d1(), ORIGINS, BOOST: "10", BREVO_API_KEY: "test-brevo-key-not-real", BREVO_LIST_ID: "7", ADMIN_TOKEN: ADMIN, DEV_ECHO: "1", ...envOverrides };
+  const env = { DB: d1(), ORIGINS, BOOST: "10", BREVO_API_KEY: "test-brevo-key-not-real", BREVO_LIST_ID: "7", ADMIN_TOKEN: ADMIN, DEV_ECHO: "1", CONFIRM_EMAIL: "1", ...envOverrides };
   for (const k of Object.keys(env)) if (env[k] === undefined) delete env[k];
   const pending = [];
   const settle = async () => { while (pending.length) await pending.shift(); };
@@ -71,7 +71,8 @@ test("join: a new sign-up gets a code, its place and the whole shape", async () 
   const t = setup();
   const a = await t.join(person(1, { roles: ["Creator", "Agency"], brands: "3", claude: "Pro" }));
   assert.equal(a.status, 200);
-  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "front", "goal", "ok", "position", "referrals", "total"]);
+  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "front", "goal", "last", "ok", "pass", "position", "referrals", "total"]);
+  assert.match(a.json.pass, /^[0-9a-f]{32}$/, "the private pass link's token");
   assert.equal(a.json.ok, true);
   assert.match(a.json.code, CODE);
   assert.equal(a.json.first, "First1");
@@ -719,10 +720,41 @@ test("You're in: Evan's plain note goes out only when switched on, with the plac
   assert.ok(m.text.startsWith("Hey First1, it's Evan from Studio."));
   assert.ok(m.text.includes("You're #1,225 on the list. Quick favour: reply 'yes' so I know this landed (it also keeps us out of your spam)."), m.text);
   assert.ok(m.text.includes("Your link to move up: https://askstudio.ai/?ref=" + t.row("person1@example.com").code + "#early-access"));
+  assert.ok(m.text.includes("Your pass, to see friends join (just for you): https://askstudio.ai/?pass=" + t.row("person1@example.com").pass_token));
   assert.ok(!/<img|<style|style=|<table/i.test(m.html), "no images, no styling, no layout");
   assert.equal(t.brevo.emails.length, 2, "the code, then You're in, once");
   await t.join(person(1));
   assert.equal(t.brevo.emails.length, 2, "signing up again sends nothing more");
+});
+
+test("pass: the private link shows your own pass (and nothing for a wrong or unconfirmed one); /status and a repeat sign-up never carry it", async () => {
+  const t = setup();
+  const a = (await t.join(person(1))).json;
+  await t.join(person(2, { ref: a.code }));
+  const r = await t.call("GET", "/pass?t=" + a.pass);
+  assert.equal(r.status, 200);
+  assert.equal(r.json.code, a.code); assert.equal(r.json.last, "Last1"); assert.equal(r.json.referrals, 1); assert.equal(r.json.pass, a.pass);
+  assert.equal((await t.call("GET", "/pass?t=" + "0".repeat(32))).status, 404);
+  assert.equal((await t.call("GET", "/pass?t=short")).status, 404);
+  assert.equal((await t.call("GET", "/status?code=" + a.code)).json.pass, undefined, "the public code never gives the private link");
+  const again = await t.joinOnly(person(1));
+  assert.equal(again.json.pass, undefined, "typing someone's email never gives their private link");
+  await t.joinOnly(person(3));
+  const p3 = t.row("person3@example.com").pass_token;
+  assert.equal((await t.call("GET", "/pass?t=" + p3)).status, 404, "not until it is confirmed");
+});
+
+test("confirmation off (CONFIRM_EMAIL unset): a sign-up counts at once, no email is sent, it is marked unverified", async () => {
+  const t = setup({ CONFIRM_EMAIL: undefined });
+  const host = (await t.joinOnly(person(1))).json;
+  assert.equal(host.needs_confirm, undefined); assert.equal(host.position, 1); assert.match(host.pass, /^[0-9a-f]{32}$/);
+  const f = (await t.joinOnly(person(2, { ref: host.code }))).json;
+  assert.equal(f.position, 2);
+  assert.equal(t.row("person1@example.com").referrals, 1, "the friend counts at once");
+  assert.equal(t.row("person2@example.com").confirmed_via, "unverified");
+  assert.equal(t.brevo.emails.length, 0, "no confirmation email");
+  assert.equal(t.brevo.contacts.get("person2@example.com").attributes.EMAIL_CONFIRMED, false);
+  assert.equal((await t.call("GET", "/count")).json.total, 2);
 });
 
 test("phone numbers become E.164 when they can", () => {
