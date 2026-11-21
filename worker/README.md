@@ -33,6 +33,10 @@ Every answer is JSON. An error looks like `{ "ok": false, "error": "A short sent
 - **`GET /admin/export.csv`** (same token) downloads everyone with their current place.
 
 Place in line: score = seq − referrals × BOOST. The lowest score is first, and on a tie whoever joined first goes ahead.
+Consent (Studio legal, consent copy c): the last step has an optional, unticked "Text me Studio updates" box. The sign-up sends
+`sms_consent`, `sms_consent_text` (the exact words), `sms_consent_version` and `terms_version`. The Worker keeps them with the time and the
+browser (`user_agent`), and sends Brevo PHONE, SMS_CONSENT, SMS_CONSENT_AT and SMS_CONSENT_TEXT. Brevo's SMS field (the SMS channel) is
+filled only for someone who ticked the box. `POST /admin/brevo-setup` (admin token) makes any missing contact fields.
 The front of the line: once someone has `GOAL` (3) friends on the list, they and every friend who joined with their link go
 ahead of everyone else, in the same order among themselves. The answer says `front: true` for them. `GET /count` gives `{ ok, total }`.
 `position` = 1 + the number of people with a better score.

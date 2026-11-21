@@ -309,7 +309,7 @@ test("BOOST is a var", async () => {
 
 test("Brevo: the contact, its attributes and the list; the referrer's count", async () => {
   const t = setup();
-  const a = (await t.join(person(1, { phone: "07700 900123", cc: "44" }))).json;
+  const a = (await t.join(person(1, { phone: "07700 900123", cc: "44", sms_consent: true, sms_consent_text: "Text me", sms_consent_version: "waitlist-sms-v1" }))).json;
   assert.equal(t.brevo.calls.length, 1);
   let c = t.brevo.calls[0];
   assert.equal(c.method, "POST");
@@ -319,12 +319,14 @@ test("Brevo: the contact, its attributes and the list; the referrer's count", as
   assert.deepEqual(c.body, {
     email: "person1@example.com", updateEnabled: true, listIds: [7],
     attributes: { FIRSTNAME: "First1", LASTNAME: "Last1", SMS: "+447700900123", ROLE: "Creator", BRANDS: "", CLAUDE: "", SOURCE: "test",
-      REF_CODE: a.code, REFERRED_BY: "", REFERRALS: 0, POSITION: 1 },
+      REF_CODE: a.code, REFERRED_BY: "", REFERRALS: 0, POSITION: 1, PHONE: "+447700900123", SMS_CONSENT: true,
+      SMS_CONSENT_AT: c.body.attributes.SMS_CONSENT_AT, SMS_CONSENT_TEXT: "[waitlist-sms-v1] Text me" },
   });
+  assert.match(c.body.attributes.SMS_CONSENT_AT, /^\d{4}-\d\d-\d\dT/);
   assert.equal(t.row("person1@example.com").brevo_synced, 1);
 
   t.brevo.reset();
-  await t.join(person(2, { ref: a.code, phone: "+1 (415) 555-0100", cc: "44", roles: ["Creator", "Brand"] }));
+  await t.join(person(2, { ref: a.code, phone: "+1 (415) 555-0100", cc: "44", roles: ["Creator", "Brand"], sms_consent: true }));
   const post = t.brevo.calls.find((x) => x.method === "POST");
   assert.equal(post.body.attributes.SMS, "+14155550100", "a full +number wins over cc");
   assert.equal(post.body.attributes.REFERRED_BY, a.code);
@@ -337,11 +339,25 @@ test("Brevo: the contact, its attributes and the list; the referrer's count", as
   t.brevo.reset();
   await t.join(person(3));
   assert.equal(t.brevo.calls[0].body.attributes.SMS, undefined, "no phone, no SMS attribute");
+
+  t.brevo.reset();
+  await t.join(person(4, { phone: "4155550101", cc: "1" }));
+  const p4 = t.brevo.calls[0].body.attributes;
+  assert.equal(p4.SMS, undefined, "a phone without the box ticked never reaches the SMS channel");
+  assert.equal(p4.PHONE, "+14155550101"); assert.equal(p4.SMS_CONSENT, false); assert.equal(p4.SMS_CONSENT_TEXT, "");
+  const r4 = t.row("person4@example.com");
+  assert.equal(r4.sms_consent, 0); assert.equal(r4.sms_consent_at, null);
+  t.brevo.reset();
+  await t.join(person(4, { phone: "4155550101", cc: "1", sms_consent: true, sms_consent_text: "Text me v1", sms_consent_version: "waitlist-sms-v1", terms_version: "waitlist-email-v1" }));
+  const r4b = t.row("person4@example.com");
+  assert.equal(r4b.sms_consent, 1); assert.equal(r4b.sms_consent_text, "Text me v1"); assert.equal(r4b.terms_version, "waitlist-email-v1"); assert.ok(r4b.sms_consent_at > 0);
+  await t.join(person(4, { phone: "4155550101", cc: "1" }));
+  assert.equal(t.row("person4@example.com").sms_consent, 1, "leaving the box empty on a repeat sign-up is not an opt-out");
 });
 
 test("Brevo: a refused SMS is retried once without it", async () => {
   const t = setup({}, { rejectSms: true });
-  await t.join(person(1, { phone: "4155550100", cc: "1" }));
+  await t.join(person(1, { phone: "4155550100", cc: "1", sms_consent: true }));
   assert.equal(t.brevo.calls.length, 2);
   assert.equal(t.brevo.calls[0].body.attributes.SMS, "+14155550100");
   assert.equal(t.brevo.calls[1].body.attributes.SMS, undefined);
@@ -454,7 +470,7 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.match(r.headers.get("Content-Type"), /^text\/csv/);
   const lines = r.text.trim().split("\r\n");
   assert.equal(lines.length, 14);
-  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
+  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
   const twelve = lines.find((l) => l.startsWith("12,"));
   assert.match(twelve, /^12,3,/, "seq 12 with one referral (score 2) is third");
   const thirteen = lines.find((l) => l.startsWith("13,"));

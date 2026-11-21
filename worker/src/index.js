@@ -132,6 +132,7 @@ function readForm(b) {
   return {
     email, first, last, phone, cc, sms: e164(phone, cc), roles,
     brands: text(b.brands, 300), claude: text(b.claude, 120), source: text(b.source, 120), ref: cleanCode(b.ref),
+    smsOk: b.sms_consent === true && !!e164(phone, cc), smsText: text(b.sms_consent_text, 1000), smsVersion: text(b.sms_consent_version, 40), terms: text(b.terms_version, 40),
   };
 }
 
@@ -151,7 +152,7 @@ async function join(request, env, ctx) {
   }
   const f = readForm(b);
   if (f.error) return fail(f.error);
-  const t = now();
+  const t = now(), ua = text(request.headers.get("User-Agent") || "", 300);
 
   let row = await env.DB.prepare("SELECT * FROM signups WHERE email = ?").bind(f.email).first();
   let referrer = null;
@@ -162,9 +163,11 @@ async function join(request, env, ctx) {
     for (let attempt = 0; attempt < 6 && !added && !raced; attempt++) {
       try {
         const r = await env.DB.prepare(
-          `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
-        ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t).run();
+          `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at,
+             sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
+        ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t,
+          f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua).run();
         if (r.meta.changes) added = await bySeq(env, r.meta.last_row_id);
         else raced = true;                                             // the same email landed a moment ago: update it below
       } catch (e) {
@@ -189,6 +192,10 @@ async function join(request, env, ctx) {
      brevo_synced = 0, updated_at = ? WHERE seq = ?`
   ).bind(f.first, f.last, keepPhone ? row.phone : f.phone, keepPhone ? row.cc : f.cc, keepPhone ? row.sms : f.sms,
     f.roles || row.roles, f.brands || row.brands, f.claude || row.claude, f.source || row.source, Math.max(t, row.updated_at + 1), row.seq).run();
+  // A new tick is recorded with its own time and words; an unticked box on a repeat sign-up is not an opt-out (STOP is).
+  if (f.smsOk) await env.DB.prepare("UPDATE signups SET sms_consent = 1, sms_consent_at = ?, sms_consent_text = ?, sms_consent_version = ?, user_agent = ? WHERE seq = ?")
+    .bind(t, f.smsText, f.smsVersion, ua, row.seq).run();
+  if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
   row = await bySeq(env, row.seq);
   later(ctx, afterJoin(env, row.seq, null));
   return json(await answer(env, row, true));
@@ -234,8 +241,11 @@ async function pushContact(env, seq) {
   const attributes = {
     FIRSTNAME: row.first, LASTNAME: row.last, ROLE: row.roles, BRANDS: row.brands, CLAUDE: row.claude, SOURCE: row.source,
     REF_CODE: row.code, REFERRED_BY: row.referred_by || "", REFERRALS: row.referrals, POSITION: position,
+    PHONE: row.sms || row.phone || "", SMS_CONSENT: !!row.sms_consent,
+    SMS_CONSENT_AT: row.sms_consent_at ? new Date(row.sms_consent_at * 1000).toISOString() : "",
+    SMS_CONSENT_TEXT: row.sms_consent ? (row.sms_consent_version ? "[" + row.sms_consent_version + "] " : "") + (row.sms_consent_text || "") : "",
   };
-  if (row.sms) attributes.SMS = row.sms;
+  if (row.sms && row.sms_consent) attributes.SMS = row.sms;   // the SMS channel only for someone who ticked the box
   const body = { email: row.email, attributes, updateEnabled: true };
   if (listId(env)) body.listIds = [listId(env)];
   let r = await brevo(env, "POST", "/contacts", body);
@@ -304,12 +314,29 @@ async function resync(url, env) {
   return json(out);
 }
 
+// Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
+const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
+  PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text" };
+async function brevoSetup(env) {
+  if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
+  const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
+  if (!res.ok) return fail("Brevo said " + res.status + ".", 502);
+  const have = new Set(((await res.json()).attributes || []).map((a) => a.name));
+  const made = [], failed = [];
+  for (const [name, type] of Object.entries(ATTRS)) {
+    if (have.has(name)) continue;
+    const r = await brevo(env, "POST", "/contacts/attributes/normal/" + name, { type });
+    (r.ok ? made : failed).push(r.ok ? name : name + ": " + r.detail);
+  }
+  return json({ ok: !failed.length, made, failed });
+}
+
 function csvCell(v) {
   let s = v === null || v === undefined ? "" : String(v);
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
-const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "roles", "brands", "claude", "source",
+const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "terms_version", "roles", "brands", "claude", "source",
   "code", "referred_by", "referrals", "ip", "brevo_synced", "brevo_error"];
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(
@@ -340,6 +367,7 @@ async function route(request, url, env, ctx) {
     if (!isAdmin(request, env)) return fail("Not allowed.", 401);
     if (path === "/admin/resync" && m === "POST") return await resync(url, env);
     if (path === "/admin/export.csv" && m === "GET") return await exportCsv(env);
+    if (path === "/admin/brevo-setup" && m === "POST") return await brevoSetup(env);
   }
   return fail("Not found.", 404);
 }

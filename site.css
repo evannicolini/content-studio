@@ -3663,6 +3663,19 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 .wl-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .wl-err { margin-top: 12px; font-size: 14px; line-height: 1.45; color: #ffcfa8; }
 .wl-err:empty { display: none; }
+/* consent (Studio legal, consent copy c): an optional, unticked SMS box in our glass, and the email line; at least 13px, full contrast */
+.wl-help { margin-left: 6px; font: 400 12px/1 var(--sans); letter-spacing: 0; text-transform: none; color: var(--wl-l3); }
+.wl-sms { position: relative; display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; margin-top: 18px; max-width: 34em; cursor: pointer; }
+.wl-sms .wl-cbx { position: absolute; opacity: 0; width: 24px; height: 24px; margin: 0; cursor: pointer; }
+.wl-sms .bx { width: 24px; height: 24px; border-radius: 8px; background: rgba(var(--tint), .5); box-shadow: var(--v-rim), inset 0 4px 10px -6px rgba(0, 0, 0, .5); transition: background-color .2s, box-shadow .2s, transform .2s var(--ease); }
+.wl-sms:hover .bx { background: rgba(var(--tint), .7); }
+.wl-sms .wl-cbx:focus-visible + .bx { box-shadow: var(--v-rim-on), 0 0 0 1px rgba(74, 163, 255, .55), 0 0 22px -6px rgba(74, 163, 255, .6); }
+.wl-sms .wl-cbx:checked + .bx { box-shadow: none; transform: scale(1.04); background: var(--pearl) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%2305090A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat; }
+.wl-sms .tx { font-size: 14.5px; line-height: 1.4; color: #fff; }
+.wl-sms .tx em { font-style: normal; color: var(--wl-l2); }
+.wl-sms small { display: block; margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--wl-l2); }
+.wl-sms a, .wl-legal a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .35); text-underline-offset: 3px; }
+.wl-legal { margin-top: 14px; max-width: 34em; font-size: 13px; line-height: 1.5; color: var(--wl-l2); }
 .wl-fine { margin-top: 16px; max-width: 34em; font-size: 12.5px; line-height: 1.5; color: var(--wl-l3); text-wrap: pretty; }
 
 /* ---------- the film's bar at the bottom, Kayla beside it ---------- */

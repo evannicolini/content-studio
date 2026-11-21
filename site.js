@@ -4969,7 +4969,7 @@ next.addEventListener("click", advance);
 back.addEventListener("click", function () { if (at > 0 && !busy) setStep(at - 1); });
 
 /* ---------- the details: the beam runs round the field you're in; a field that needs you turns it auburn ---------- */
-var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp)"));
+var inputs = [].slice.call(form.querySelectorAll("input:not(.wl-hp):not(.wl-cbx)"));
 function mark(names, msg) {
   form.querySelectorAll(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); var fb = f.querySelector(".wl-fb"); if (fb && !f.contains(document.activeElement)) fb.removeAttribute("data-active"); });
   names.forEach(function (n) { var f = form.elements[n].closest(".wl-f"); void f.offsetWidth; f.classList.add("bad"); f.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); });
@@ -4987,7 +4987,7 @@ inputs.forEach(function (inp) {
   inp.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") return;
     e.preventDefault();
-    var here = [].slice.call(steps[at].querySelectorAll("input:not(.wl-hp)")).filter(function (x) { return x.offsetParent; }), i = here.indexOf(inp);
+    var here = [].slice.call(steps[at].querySelectorAll("input:not(.wl-hp):not(.wl-cbx)")).filter(function (x) { return x.offsetParent; }), i = here.indexOf(inp);
     if (i > -1 && i < here.length - 1) here[i + 1].focus();
     else if (ORDER[at] === "you") form.requestSubmit ? form.requestSubmit() : go.click();
     else advance();
@@ -5043,7 +5043,8 @@ form.addEventListener("submit", function (e) {
   mark(bad, msg);
   if (bad.length) { form.elements[bad[0]].focus(); return; }
   var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
-  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company") };
+  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
+    sms_consent: !!form.elements.sms_ok.checked, sms_consent_text: sheet.querySelector("[data-wl-smstext]").textContent.trim(), sms_consent_version: "waitlist-sms-v1", terms_version: "waitlist-email-v1" };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
     var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
@@ -5186,7 +5187,7 @@ function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
   rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
-  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; other.hidden = true;
+  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_ok.checked = false; other.hidden = true;
   mark([], ""); sheet.querySelectorAll(".wl-err").forEach(function (e) { e.textContent = ""; });
   steps.forEach(function (s, i) { s.classList.remove("past"); s.classList.toggle("on", i === 0); });
   Object.keys(scenes).forEach(function (k) { scenes[k].classList.remove("past"); scenes[k].classList.toggle("on", k === SCENE[ORDER[0]]); });
