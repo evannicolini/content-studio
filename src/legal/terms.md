@@ -283,8 +283,8 @@ These terms apply if you opt in to text messages from Studio.
 - **Consent:** we text you only if you've checked an SMS consent box. **Consent is not a condition of any purchase.** You confirm that you are the subscriber or customary user of the number you provide.
 - **Frequency:** message frequency varies, up to 4 messages per month.
 - **Cost:** **Message and data rates may apply.** Check with your mobile carrier.
-- **Opt out:** **Reply STOP** to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email hello@askstudio.ai.
-- **Help:** **Reply HELP** for help, or contact support at hello@askstudio.ai.
+- **Opt out:** **Reply STOP** to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email [hello@askstudio.ai](mailto:hello@askstudio.ai).
+- **Help:** **Reply HELP** for help, or contact support at [hello@askstudio.ai](mailto:hello@askstudio.ai).
 - **Carriers are not liable for any delayed or undelivered messages.**
 - **Privacy:** we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. **Your mobile information will not be sold or shared with third parties.** Text messaging originator opt-in data and consent are never shared with any third parties. See our [Privacy Policy](privacy.md).
 - **Quiet hours:** we aim to send texts only between 8 a.m. and 8 p.m. in your local time.
