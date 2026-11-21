@@ -16,7 +16,7 @@ const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-
 const CODE_LENGTH = 7;
 const MAX_BODY = 8 * 1024;                                  // bytes; a sign-up is a few hundred
 const BREVO = "https://api.brevo.com/v3";
-const DEFAULT_ORIGINS = "https://evannicolini.github.io,http://127.0.0.1:*,http://localhost:*";
+const DEFAULT_ORIGINS = "https://askstudio.ai,https://www.askstudio.ai,https://evannicolini.github.io,http://127.0.0.1:*,http://localhost:*";
 const RESYNC_BATCH = 20;                                    // rows per /admin/resync call (each is 1–2 Brevo calls)
 
 const te = new TextEncoder();

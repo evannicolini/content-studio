@@ -5127,7 +5127,7 @@ if (REF && !joined()) {
 
 /* ---------- You're in ---------- */
 var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
-function link(r) { return r && r.code ? location.origin + location.pathname + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }
+function link(r) { return r && r.code ? (local ? location.origin + location.pathname : "https://askstudio.ai/") + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }   /* the site's own address, wherever it was opened */
 var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Join with my link and we both move up the list:";
 function showDone(r, quiet) {
   var again = sheet.classList.contains("done");
