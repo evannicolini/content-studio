@@ -4415,7 +4415,7 @@ try {
 var cfg = Object.assign({}, window.SK_WAITLIST || {});
 var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
-if (local && Q.get("api")) cfg.api = Q.get("api");
+if (local) cfg.api = Q.get("api") || "";   /* review builds on this Mac never reach the real list: a made-up place, nothing sent */
 var API = (cfg.api || "").replace(/\/+$/, "");
 var wired = !!(API || cfg.brevo_form || cfg.webhook);
 var sheet = document.getElementById("early-access");
@@ -4423,6 +4423,7 @@ if (!sheet) return;
 if (!(wired || local || /[?&]early(=|&|$)/.test(location.search))) { sheet.remove(); return; }
 SK.early = true;
 var html = document.documentElement, KEY = "studio-early", HASH = "#early-access", DEEP = /^#early(-access)?(&|$)/;
+if (local && Q.has("restart")) try { localStorage.removeItem(KEY); sessionStorage.removeItem("studio-ref"); } catch (e) {}   /* the Hub's Restart */
 var STAR = '<svg class="ea-ic" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .9c.5 4.1 2.9 6.6 7.1 7.1-4.2.5-6.6 2.9-7.1 7.1C7.5 10.9 5 8.5.9 8 5 7.5 7.5 5 8 .9Z"/></svg>';
 var ARROW = '<span class="go"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span>';
 var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
@@ -4569,6 +4570,26 @@ sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SF
 var form = sheet.querySelector(".wl-form"), box = sheet.querySelector(".wl-steps"), steps = [].slice.call(sheet.querySelectorAll(".wl-q"));
 sheet.appendChild(sheet.querySelector(".wl-dock")); /* the bar and Kayla sit on the sheet, above both the questions and You're in (the submit button stays tied to the form) */
 var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
+/* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
+var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
+var WALL = { name: PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
+["roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+var wallCache = {}, wallTok = 0, wallNow = "";
+function want(k) {
+  var u = WALL[k]; if (!u) return Promise.resolve("");
+  if (!wallCache[u]) { var i = new Image(); i.decoding = "async"; i.src = u; wallCache[u] = (i.decode ? i.decode() : new Promise(function (r) { i.onload = r; })).then(function () { return u; }, function () { return u; }); }
+  return wallCache[u];
+}
+function wall(k) {
+  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  want(k).then(function () {
+    if (tok !== wallTok) return;
+    var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { nx.classList.add("in"); }); });
+    setTimeout(function () { if (tok !== wallTok) return; [].slice.call(bg.querySelectorAll(".wl-sky")).forEach(function (o) { if (o !== nx && o !== sky) o.remove(); else if (o === sky) sky.classList.add("gone"); }); }, 1400);
+    sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = u; });
+  });
+}
 var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite" };
 var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you" }; /* question 3 opens Home's All brands menu */
 var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
@@ -4817,7 +4838,7 @@ function setStep(n, quiet) {
   if (cur !== nx) {
     var h0 = box.offsetHeight;
     cur.classList.remove("on"); cur.classList.toggle("past", n > at);
-    nx.classList.remove("past"); nx.classList.add("on");
+    nx.classList.remove("past"); nx.classList.add("on"); reveal(nx);
     var h1 = nx.offsetHeight;
     box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
     clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
@@ -4827,6 +4848,7 @@ function setStep(n, quiet) {
   }
   at = n;
   sheet.setAttribute("data-step", q);
+  if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1]); }
   segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
   back.disabled = n === 0;
   var last = q === "you";
@@ -4838,6 +4860,59 @@ function setStep(n, quiet) {
   if (SCENE[q] === "home") drawHome();
   if (!quiet && sheet.classList.contains("open")) KAY.say([LINE[q]]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
+  setTimeout(function () { typeStep(); }, quiet ? 0 : 520);
+}
+/* each empty field types its own example, left to right with a caret, when its step comes up; focus stops it where a normal
+   placeholder would be, and any text hides it */
+var TY = { first: "Evan", last: "Nicolini", other: "Photographer, coach, musician…", email: "you@studio.com", phone: "(555) 123-4567" };
+var tyTok = 0;
+form.querySelectorAll("input").forEach(function (inp) {
+  var t = TY[inp.name], box = inp.closest(".wl-box"); if (!t || !box) return;
+  var o = document.createElement("span"); o.className = "wl-ty still"; o.setAttribute("aria-hidden", "true"); o.innerHTML = "<span></span><i></i>"; box.appendChild(o);
+  inp.setAttribute("aria-placeholder", t);
+  var sync = function () { box.classList.toggle("filled", !!inp.value); };
+  inp.addEventListener("input", sync); inp.addEventListener("change", sync);
+  inp.addEventListener("focus", function () { o.classList.add("still"); });   /* the real caret takes over; the example finishes typing */
+  inp._ty = o; sync();
+});
+/* the hero's word reveal on every step: the headline, then the line under it, each word pulled from a blur into focus, left to right */
+function words(el, n) {
+  var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), list = [], t;
+  while ((t = w.nextNode())) if (!(t.parentNode.classList && t.parentNode.classList.contains("wl-bw")) && t.nodeValue.trim()) list.push(t);
+  list.forEach(function (node) {
+    var frag = document.createDocumentFragment();
+    node.nodeValue.split(/(\s+)/).forEach(function (bit) {
+      if (!bit) return;
+      if (/^\s+$/.test(bit)) { frag.appendChild(document.createTextNode(bit)); return; }
+      var sp = document.createElement("span"); sp.className = "wl-bw"; sp.textContent = bit; frag.appendChild(sp);
+    });
+    node.parentNode.replaceChild(frag, node);
+  });
+  el.querySelectorAll(".wl-bw").forEach(function (sp) { sp.style.setProperty("--n", n++); });
+  return n;
+}
+function reveal(step) {
+  if (SK.reduced) return;
+  var n = 0; step.querySelectorAll(".wl-qh, .wl-qs").forEach(function (el) { n = words(el, n); });
+  step.classList.add("w0"); void step.offsetWidth;
+  requestAnimationFrame(function () { step.classList.remove("w0"); });
+}
+function typeStep(delay) {
+  var tok = ++tyTok;
+  form.querySelectorAll("input").forEach(function (i) { if (i._ty) i._ty.parentNode.classList.toggle("filled", !!i.value); });
+  var list = [].slice.call(steps[at].querySelectorAll("input")).filter(function (i) { return i._ty && !i.value && !i.closest("[hidden]"); });
+  list.forEach(function (i) { i._ty._stop = false; i._ty.classList.add("still"); i._ty.firstChild.textContent = SK.reduced ? TY[i.name] : ""; });   /* one drawn caret at a time */
+  if (SK.reduced) return;
+  var k = 0;
+  (function nextField() {
+    var inp = list[k++]; if (!inp) return;
+    var o = inp._ty, t = TY[inp.name], n = 0; o.classList.toggle("still", inp === document.activeElement);
+    (function tick() {
+      if (tok !== tyTok) return;
+      if (o._stop || n >= t.length) { o.firstChild.textContent = t; if (list[k]) o.classList.add("still"); return setTimeout(nextField, 120); }   /* the caret moves on to the next field */
+      o.firstChild.textContent = t.slice(0, ++n); setTimeout(tick, 46 + Math.random() * 50);
+    })();
+  })();
 }
 function focusStep(delay) {
   setTimeout(function () {
@@ -4958,7 +5033,7 @@ form.addEventListener("submit", function (e) {
   mark(bad, msg);
   if (bad.length) { form.elements[bad[0]].focus(); return; }
   var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
-  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: SRC + " · " + from, ref: REF, hp: val("company") };
+  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company") };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
     var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, at: Date.now() };
@@ -4983,13 +5058,16 @@ function open(src) {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  wallNow = sky.getAttribute("src");
   if (j) showDone(j, true);
   else {
+    wall(ORDER[at]); want(ORDER[at + 1]); personal(); reveal(steps[at]);
     if (SCENE[ORDER[at]] === "claude") claudeLoop();
     if (SCENE[ORDER[at]] === "you") pass1.start();
     drawHome();
     KAY.say(at === 0 ? ["hello", "name"] : [LINE[ORDER[at]]]);
     focusStep(SK.reduced ? 0 : 560);
+    setTimeout(typeStep, 700);
   }
 }
 function hide() {
@@ -5042,6 +5120,7 @@ function link(r) { return r && r.code ? location.origin + location.pathname + "?
 var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Get on the list:";
 function showDone(r, quiet) {
   var again = sheet.classList.contains("done");
+  wall("in");
   rec = r;
   var ranked = typeof r.position === "number" && r.position > 0;
   sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
@@ -5104,7 +5183,7 @@ function startOver() {
 }
 sheet.querySelector("[data-wl-over]").addEventListener("click", startOver);
 var restartB = sheet.querySelector("[data-wl-restart]");
-restartB.hidden = !(local || /[?&]early(=|&|$)/.test(location.search));
+restartB.hidden = !(local || Q.has("review"));   /* review only: never on the live site */
 restartB.addEventListener("click", startOver);
 
 /* an Instagram story: a 1080 x 1920 picture of the pass. Phones share it straight to Instagram; elsewhere it saves, and the link is copied */
