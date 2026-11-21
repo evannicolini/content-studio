@@ -1048,3 +1048,28 @@
     });
   };
 })();
+
+/* ---------- SK.keepTyping: a field that loses focus to nothing while someone is typing takes it straight back ----------
+   Seen in Studio's own window: the paywall's code field blurred 1 ms after the first key, focus went to the page itself (no
+   focusin anywhere, no focus call in our code), so the rest of STUDIOK7 was lost. If a field blurs within 600 ms of a key and
+   focus lands on nothing (body or none), it's refocused with the caret where it was. A real click or Tab elsewhere is untouched. */
+(function () {
+  var SK = (window.SK = window.SK || {});
+  SK.keepTyping = function (fields) {
+    [].forEach.call(fields, function (el) {
+      if (!el || el._keep) return; el._keep = true;
+      var lastKey = 0, caret = null, down = false;
+      el.addEventListener("keydown", function () { lastKey = Date.now(); });
+      el.addEventListener("input", function () { lastKey = Date.now(); try { caret = el.selectionStart; } catch (e) {} });
+      document.addEventListener("pointerdown", function (e) { if (el.contains(e.target)) return; down = true; setTimeout(function () { down = false; }, 400); }, true);   /* a press somewhere else: they meant to leave */
+      el.addEventListener("blur", function (e) {
+        if (down || e.relatedTarget || Date.now() - lastKey > 600 || el.offsetParent === null) return;
+        setTimeout(function () {
+          var a = document.activeElement;
+          if (a && a !== document.body && a !== document.documentElement) return;   /* focus went somewhere real: leave it */
+          try { el.focus({ preventScroll: true }); if (caret != null && el.setSelectionRange) el.setSelectionRange(caret, caret); } catch (x) {}
+        }, 0);
+      });
+    });
+  };
+})();

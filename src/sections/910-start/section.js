@@ -877,6 +877,7 @@ function applyCode() {
 applyB.addEventListener("click", applyCode);
 pin.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
 pin.addEventListener("input", function () { pfield.classList.remove("bad"); });
+SK.keepTyping([pin, form.elements.pname, form.elements.first, form.elements.email]);   /* a field that loses focus to nothing mid-typing takes it back */
 $("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast("Code removed. Back to 14 days for $1."); });
 agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 

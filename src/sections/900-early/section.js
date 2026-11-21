@@ -973,6 +973,7 @@ function confirmLink() {
   });
 }
 
+SK.keepTyping(form.querySelectorAll('input[name="first"], input[name="last"], input[name="email"], input[name="phone"], input[name="other"]'));   /* a field that loses focus to nothing mid-typing takes it back */
 /* ---------- the keyboard on a phone (SK.keyboard): the bar steps aside only while the keyboard is really up ---------- */
 var KBD = !fine;
 if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"); } });

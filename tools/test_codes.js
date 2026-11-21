@@ -20,6 +20,13 @@ const check = (name, ok, got) => { if (!ok) failed++; console.log((ok ? "PASS " 
   check("paywall code typed at 30 ms a key", (await p.inputValue('[name="promo"]')) === "STUDIOK7", await p.inputValue('[name="promo"]'));
   await p.fill('[name="promo"]', ""); await paste('[name="promo"]', "STUDIOK7"); await p.waitForTimeout(200);
   check("paywall code pasted", (await p.inputValue('[name="promo"]')) === "STUDIOK7", await p.inputValue('[name="promo"]'));
+  /* what App & releases saw in Studio's window: the field blurs 1 ms after the first key, focus lands on nothing */
+  await p.fill('[name="promo"]', ""); await p.click('[name="promo"]');
+  await p.evaluate(() => { const i = document.querySelector('[name="promo"]'); const once = () => { i.removeEventListener("input", once); setTimeout(() => i.blur(), 1); }; i.addEventListener("input", once); });
+  await p.keyboard.type("STUDIOK7", { delay: 60 }); await p.waitForTimeout(300);
+  check("paywall code survives a stray blur after the first key", (await p.inputValue('[name="promo"]')) === "STUDIOK7", await p.inputValue('[name="promo"]'));
+  await p.mouse.click(20, 450); await p.waitForTimeout(200);
+  check("a real click elsewhere still takes focus away", await p.evaluate(() => document.activeElement.name !== "promo"), await p.evaluate(() => document.activeElement.name || document.activeElement.tagName));
   await p.click("[data-st-apply]"); await p.waitForTimeout(1500);
   const today = await p.textContent("[data-st-today]");
   check("STUDIOK7 applied: $0 today", /\$0 today/.test(today), today);
