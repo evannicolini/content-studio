@@ -2146,7 +2146,7 @@ if (REF && !joined()) {
 
 /* ---------- You're in ---------- */
 var doneEl = sheet.querySelector("[data-wl-done]"), rec = null;
-function link(r) { return r && r.code ? (local ? location.origin + location.pathname : "https://askstudio.ai/") + "?ref=" + encodeURIComponent(r.code) + HASH : ""; }   /* the site's own address, wherever it was opened */
+function link(r) { return r && r.code ? (local ? location.origin + "/early-access/" : "https://askstudio.ai/early-access/") + "?ref=" + encodeURIComponent(r.code) : ""; }   /* the waitlist page itself: short, and it opens straight on the sign-up */
 var SAY = "I just got early access to Studio. One prompt takes the idea in your head to a finished video. Join with my link and we both move up the list:";
 function showDone(r, quiet) {
   var again = sheet.classList.contains("done");
@@ -2170,9 +2170,11 @@ function showDone(r, quiet) {
   urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
   pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
   var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
-  var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
+  var casual = TXT[txtAt] + url;
+  var hrefs = { x: "https://twitter.com/intent/tweet?text=" + encodeURIComponent("just got on the list for Studio, it turns one sentence into a finished video 🤯") + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("you have to see this") + "&body=" + encodeURIComponent(casual) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
   sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
+  if (url && !again) setTimeout(function () { thumb(r); }, 1600);   /* the Story tile shows the real image, made once the screen has settled */
   loopTok++; stopStory(); pass1.stop();
   if (!again) {
     /* the pass on the invite step glides into its place on You're in (one object, not a cut); without it in view, it spins in */
@@ -2213,9 +2215,78 @@ sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { old(url); ok(); }); else { old(url); ok(); }
 });
 function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
-sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: SAY, url: link(rec) }).catch(function () {}); });
-sheet.querySelector('[data-sh="ig"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec, "story"); });
-sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) { e.preventDefault(); if (rec && rec.code) story(rec, "save"); });
+sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: txt() }).catch(function () {}); });
+sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code) story(rec, "save"); });
+
+/* ---------- share, text-first (Evan: "98% of sharing is texting a friend"). Text a friend opens our own preview of the message,
+   editable, then Messages; Copy link and Share to your Story next; X, Email, Save and other apps under More. ---------- */
+var TXT = [   /* casual, like a real text; each ends with their link */
+  "yo I just got on the list for Studio, it turns one sentence into a finished video 🤯 sign up with my link and we both move up the list → ",
+  "ok you have to see this. Studio makes a whole video from one sentence. get on the list with my link and we both move up → ",
+  "just got on the waitlist for Studio (you type one sentence, it makes the video 😳) use my link and we both move up → "
+];
+var txtAt = Math.floor(Math.random() * TXT.length);
+function txt() { return TXT[txtAt] + link(rec); }
+var UA = navigator.userAgent, CAN_SMS = /iPhone|iPad|iPod|Android/.test(UA) || /Macintosh/.test(UA);   /* phones, and Macs (Messages) */
+function smsHref(body) { return (/Android/.test(UA) ? "sms:?body=" : "sms:&body=") + encodeURIComponent(body); }
+var tsheet = sheet.querySelector("[data-wl-tsheet]"), tmsg = sheet.querySelector("[data-wl-tmsg]"), smsA = sheet.querySelector("[data-wl-sms]"), storyOv = sheet.querySelector("[data-wl-story]"), ovFrom = null;
+function overlay(el, on) {
+  if (on) { ovFrom = document.activeElement; el.hidden = false; requestAnimationFrame(function () { el.classList.add("on"); }); SFX.play("move", { gain: .7 }); }
+  else { el.classList.remove("on"); setTimeout(function () { el.hidden = true; }, 320); if (ovFrom && ovFrom.focus) ovFrom.focus({ preventScroll: true }); }
+}
+function fitMsg() { tmsg.style.height = "auto"; tmsg.style.height = Math.min(tmsg.scrollHeight + 2, 220) + "px"; }
+sheet.querySelector("[data-wl-text]").addEventListener("click", function () {
+  if (!rec || !rec.code) return;
+  tmsg.value = txt(); smsA.hidden = !CAN_SMS; overlay(tsheet, true); fitMsg();
+  sheet.querySelector("[data-wl-copym]").classList.toggle("solo", !CAN_SMS);
+});
+tmsg.addEventListener("input", fitMsg);
+sheet.querySelector("[data-wl-again]").addEventListener("click", function () { txtAt = (txtAt + 1) % TXT.length; tmsg.value = txt(); fitMsg(); SFX.play("tick"); });
+smsA.addEventListener("click", function () { smsA.href = smsHref(tmsg.value.trim()); setTimeout(function () { overlay(tsheet, false); }, 400); });   /* Messages opens with it written; they pick who */
+sheet.querySelector("[data-wl-copym]").addEventListener("click", function () {
+  var t = tmsg.value.trim(), ok = function () { toast("Message copied. Paste it to a friend."); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, function () { old(t); ok(); }); else { old(t); ok(); }
+});
+/* More: X, Email, Save the image, other apps */
+var moreB = sheet.querySelector("[data-wl-moreb]"), moreM = sheet.querySelector("[data-wl-more]");
+function moreMenu(on) { moreM.hidden = !on; moreB.setAttribute("aria-expanded", on ? "true" : "false"); moreB.classList.toggle("on", on); }
+moreB.addEventListener("click", function (e) { e.stopPropagation(); moreMenu(moreM.hidden); });
+document.addEventListener("click", function (e) { if (!moreM.hidden && !moreM.contains(e.target)) moreMenu(false); });
+moreM.querySelectorAll('[data-sh="x"], [data-sh="mail"]').forEach(function (a) { a.addEventListener("click", function () { setTimeout(function () { moreMenu(false); }, 200); }); });
+/* Share to your Story: our own full-screen preview of the real image (as MIRRA does), then Save to Photos and Open Instagram */
+var storyBlob = null, storyFor = "";
+function storyOf(r) {
+  if (storyBlob && storyFor === r.code) return Promise.resolve(storyBlob);
+  return story(r, "blob").then(function (b) { if (b) { storyBlob = b; storyFor = r.code; } return b; });
+}
+function thumb(r) { storyOf(r).then(function (b) { if (!b) return; var im = sheet.querySelector("[data-wl-thumb]"); im.src = URL.createObjectURL(b); im.hidden = false; }); }
+var MOBILE = !fine, IG = /iPhone|iPad|iPod|Android/.test(UA);
+sheet.querySelector("[data-wl-storyb]").addEventListener("click", function () {
+  if (!rec || !rec.code) return;
+  var img = sheet.querySelector("[data-wl-storyimg]"), ld = sheet.querySelector("[data-wl-storyload]");
+  sheet.querySelector("[data-wl-ig]").hidden = !IG;
+  sheet.querySelector("[data-wl-savet]").textContent = MOBILE ? "Save to Photos" : "Download image";
+  sheet.querySelector("[data-wl-storyhint]").textContent = IG ? "Post it, then add your link with the link sticker. It's copied." : "Post it, and add your link (it's copied).";
+  img.hidden = true; ld.hidden = false; overlay(storyOv, true);
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link(rec)).catch(function () {});
+  storyOf(rec).then(function (b) { if (!b) return; img.src = URL.createObjectURL(b); img.onload = function () { ld.hidden = true; img.hidden = false; }; });
+});
+sheet.querySelector("[data-wl-saveimg]").addEventListener("click", function () {
+  if (!rec || !rec.code) return;
+  storyOf(rec).then(function (b) {
+    if (!b) return;
+    var file = new File([b], "studio-pass.png", { type: "image/png" });
+    if (MOBILE && navigator.canShare && navigator.canShare({ files: [file] })) {   /* a phone: the system sheet, where Save Image is */
+      toast("Tap Save Image."); navigator.share({ files: [file] }).catch(function () {}); return;
+    }
+    var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = file.name; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a); toast("Image saved.");
+  });
+});
+[tsheet, storyOv].forEach(function (ov) {
+  ov.querySelector("[data-wl-ovx]").addEventListener("click", function () { overlay(ov, false); });
+  ov.addEventListener("click", function (e) { if (e.target === ov) overlay(ov, false); });
+  ov.addEventListener("keydown", function (e) { if (e.key === "Escape") { e.stopPropagation(); overlay(ov, false); } });
+});
 sheet.querySelector("[data-wl-fliph]").textContent = fine ? "Drag to turn · click to flip" : "Tap to flip";
 
 /* ---------- start over: "Not you?" on the done screen, and Restart on localhost or with ?early. Clears the saved sign-up. ---------- */
@@ -2273,7 +2344,8 @@ function img(src) { return new Promise(function (res) { var i = new Image(); i.o
 function rr(g, x, y, w, h, r) { g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r); g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath(); }
 var storyBusy = false;
 async function story(r, mode) {
-  if (storyBusy) return; storyBusy = true;
+  if (storyBusy) { if (mode === "blob") { await new Promise(function (res) { var t = setInterval(function () { if (!storyBusy) { clearInterval(t); res(); } }, 80); }); if (storyBlob && storyFor === r.code) return storyBlob; } else return; }
+  storyBusy = true;
   try {
     var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
     var g = cv.getContext("2d"), sky0 = await img("assets/wl/in-m.jpg"), ui = await img("assets/wl/story-ui.webp"), mark = await img("assets/email/studio-lockup.png");   /* the crisp white lockup, never the glass mark */
@@ -2337,6 +2409,7 @@ async function story(r, mode) {
     g.textAlign = "left";
     var blob = await new Promise(function (res) { cv.toBlob(res, "image/png"); });
     if (!blob) return;
+    if (mode === "blob") return blob;   /* the Story preview and its tile */
     var file = new File([blob], "studio-pass.png", { type: "image/png" });
     if (!fine && navigator.canShare && navigator.canShare({ files: [file] })) {   /* phones: the share sheet (Instagram, Save Image); computers: a download */
       try { await navigator.share(mode === "story" ? { files: [file], text: SAY + " " + url } : { files: [file] }); return; } catch (e) { if (e && e.name === "AbortError") return; }

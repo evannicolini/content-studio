@@ -88,7 +88,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=7179f0f9">
+<link rel="stylesheet" href="site.css?v=b9c8ef37">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1794,21 +1794,45 @@ set.</span></span></figure>
         <div class="wl-refbox">
           <div class="wl-rtop"><div class="wl-rhead"><b data-wl-rhead>Get 3 friends on the list. You all skip to the front.</b><span class="wl-goal" data-wl-goal><i></i><em>0/3</em></span></div><span data-wl-rboost>When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.</span></div>
           <ol class="wl-slots" data-wl-slots><li><i></i><span>Friend 1</span></li><li><i></i><span>Friend 2</span></li><li><i></i><span>Friend 3</span></li></ol>
-          <div class="wl-link"><span class="wl-url" data-wl-url>studio</span><button type="button" class="wl-copy" data-wl-copy data-gx><span>Copy link</span></button></div>
+          <!-- text-first (Evan): Text a friend first; Copy link and the Story next; X, Email and the rest under More -->
+          <button type="button" class="wl-text" data-wl-text><span class="wl-msgic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 5.2c-4.5 0-8 2.9-8 6.5 0 2 1.1 3.8 2.9 5-.1.9-.6 2.1-1.5 2.9 1.7 0 3.2-.7 4.1-1.4.8.2 1.6.3 2.5.3 4.5 0 8-2.9 8-6.5s-3.5-6.8-8-6.8Z"/></svg></span><span class="t"><b>Text a friend</b><small>A quick message with your link</small></span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
           <div class="wl-share" data-wl-share>
-            <a class="wl-sh" data-sh="sms" title="Messages" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.2c-4.6 0-8.3 3-8.3 6.8 0 2.1 1.1 3.9 2.9 5.2-.1 1.1-.6 2.2-1.4 3.1 1.8-.1 3.3-.7 4.4-1.6.8.2 1.6.3 2.4.3 4.6 0 8.3-3 8.3-6.9S16.6 4.2 12 4.2Z"/></svg></span><span>Messages</span></a>
-            <a class="wl-sh" data-sh="x" title="X" href="#" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.42 4.74H5.6l11.07 14.43Z"/></svg></span><span>X</span></a>
-            <a class="wl-sh" data-sh="ig" title="Story" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.1" cy="6.9" r=".6" fill="currentColor" stroke="none"/></svg></span><span>Story</span></a>
-            <a class="wl-sh" data-sh="save" title="Save image" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="3.5"/><path d="M4.5 16.2 9 11.8l3.4 3.3 2.4-2.3 4.7 4.4"/><circle cx="15.6" cy="8.4" r="1.6"/></svg></span><span>Save image</span></a>
-            <a class="wl-sh" data-sh="mail" title="Email" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="5.5" width="17.6" height="13" rx="3"/><path d="m4.2 7.4 6.6 5.1a2 2 0 0 0 2.4 0l6.6-5.1"/></svg></span><span>Email</span></a>
-            <a class="wl-sh" data-sh="more" title="More" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.2 9.6H7a2.2 2.2 0 0 0-2.2 2.2v6.6A2.2 2.2 0 0 0 7 20.6h10a2.2 2.2 0 0 0 2.2-2.2v-6.6A2.2 2.2 0 0 0 17 9.6h-1.2M12 14.4V3.6M8.6 7 12 3.6 15.4 7"/></svg></span><span>More</span></a>
+            <button type="button" class="wl-s2" data-wl-copy><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.2 13.8a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.1 1.1M13.8 10.2a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.1-1.1"/></svg><span>Copy link</span></button>
+            <button type="button" class="wl-s2 wl-story-b" data-wl-storyb><span class="th"><img data-wl-thumb alt="" hidden></span><span>Share to your Story</span></button>
+            <button type="button" class="wl-s2 wl-more-b" data-wl-moreb aria-expanded="false" aria-label="More ways to share"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg><span>More</span></button>
+            <div class="wl-more" data-wl-more hidden>
+              <a data-sh="x" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" stroke="none" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.32l4.37 5.78L17.75 3Zm-1.08 16.17h1.7L7.4 4.74H5.58l11.09 14.43Z"/></svg>Post on X</a>
+              <a data-sh="mail" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.5" width="17.6" height="13" rx="2.6"/><path d="m4 7.2 8 6 8-6"/></svg>Email</a>
+              <a data-sh="save" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>Save the image</a>
+              <a data-sh="more" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4M6 12v6.5a1.5 1.5 0 0 0 1.5 1.5h9a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>More apps</a>
+            </div>
           </div>
+          <p class="wl-urlline"><span class="wl-url" data-wl-url>studio</span></p>
         </div>
         <div class="wl-dfoot"><button type="button" class="wl-home" data-wl-close data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg><span>Back to Studio</span></button>
         <button type="button" class="wl-over" data-wl-plink hidden>Copy my pass link</button>
         <button type="button" class="wl-over" data-wl-over>Not you? Start over</button></div>
       </div>
       <div class="wl-dstage p3"><div class="pass big" data-wl-pass2></div><p class="wl-hint"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg><span data-wl-fliph>Tap to flip</span></p></div>
+    </div>
+  </div>
+  <!-- Text a friend: our own preview of the message (editable), then Messages -->
+  <div class="wl-ov" data-wl-tsheet hidden role="dialog" aria-modal="true" aria-labelledby="wl-tsh">
+    <div class="wl-ovc wl-tsheet">
+      <div class="wl-ovh"><b id="wl-tsh">Text a friend</b><button type="button" class="wl-ovx" data-wl-ovx aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div>
+      <p class="wl-ovs">Here's what they'll get. Change anything.</p>
+      <div class="wl-bubble"><textarea data-wl-tmsg rows="4" aria-label="Your message"></textarea></div>
+      <button type="button" class="wl-again" data-wl-again><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg>Say it another way</button>
+      <div class="wl-ova"><a class="wl-sendb" data-wl-sms href="#"><span class="wl-msgic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 5.2c-4.5 0-8 2.9-8 6.5 0 2 1.1 3.8 2.9 5-.1.9-.6 2.1-1.5 2.9 1.7 0 3.2-.7 4.1-1.4.8.2 1.6.3 2.5.3 4.5 0 8-2.9 8-6.5s-3.5-6.8-8-6.8Z"/></svg></span><span>Open Messages</span></a><button type="button" class="wl-s2 wl-copym" data-wl-copym><span>Copy message</span></button></div>
+    </div>
+  </div>
+  <!-- Share to your Story: the image, big, then Save to Photos and Open Instagram -->
+  <div class="wl-ov wl-ovs-story" data-wl-story hidden role="dialog" aria-modal="true" aria-labelledby="wl-stt">
+    <div class="wl-ovc wl-storyc">
+      <div class="wl-ovh"><b id="wl-stt">Share to your Story</b><button type="button" class="wl-ovx" data-wl-ovx aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div>
+      <div class="wl-storyimg"><img data-wl-storyimg alt="Your Studio pass, as a story image" hidden><span class="wl-load" data-wl-storyload><i></i><i></i><i></i></span></div>
+      <p class="wl-ovs" data-wl-storyhint>Post it, then add your link with the link sticker. It's copied.</p>
+      <div class="wl-ova"><button type="button" class="wl-sendb wl-saveb" data-wl-saveimg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg><span data-wl-savet>Save to Photos</span></button><a class="wl-s2" data-wl-ig href="instagram://story-camera" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="4.8"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.2" cy="6.8" r=".6"/></svg><span>Open Instagram</span></a></div>
     </div>
   </div>
   <p class="wl-toast" data-wl-toast role="status" aria-live="polite"></p>
@@ -2054,6 +2078,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=7179f0f9"></script>
+<script src="site.js?v=b9c8ef37"></script>
 </body>
 </html>
