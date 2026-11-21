@@ -12,7 +12,7 @@
 const SITE = "https://askstudio.ai";
 const FONT = "'Hanken Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif";
 const MONO = "'Studio Mono','IBM Plex Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace";
-const C = { night: "#0B0F14", panel: "#171c24", top: "#1b2029", bot: "#14181f", rim: "#2b313b", ink: "#FFFFFF", body: "#d9dcdf", soft: "#aab4ba", dim: "#7f8a91", sand: "#f5f3ee", jet: "#0B0F14", pill: "#222833", pillrim: "#3a414c" };
+const C = { night: "#0B0F14", panel: "#171c24", top: "#1b2029", bot: "#14181f", rim: "#2b313b", ink: "#FFFFFF", body: "#d9dcdf", soft: "#b3b7bc", dim: "#868a90", sand: "#f5f3ee", jet: "#0B0F14", pill: "#222833", pillrim: "#3a414c" };
 
 const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const one = (v, max = 80) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
@@ -36,10 +36,10 @@ function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, mi
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${C.night}" style="background:${C.night};">
 <tr><td align="center" style="padding:28px 12px 36px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
-<tr><td bgcolor="#1d2a36" style="background:#1d2a36;border-radius:24px;overflow:hidden;line-height:0;font-size:0;">
+<tr><td bgcolor="#1b2029" style="background:#1b2029;border-radius:24px;overflow:hidden;line-height:0;font-size:0;">
 <img src="${esc(site + "/assets/email/" + hero)}" width="600" height="420" alt="${esc(heroAlt)}" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:24px;font-family:${FONT};font-size:18px;line-height:26px;color:${C.ink};"></td></tr>
 <tr><td height="12" style="height:12px;line-height:12px;font-size:12px;">&nbsp;</td></tr>
-<tr><td bgcolor="${C.panel}" style="background:${C.panel};background-image:linear-gradient(180deg,${C.top},${C.bot});border:1px solid ${C.rim};border-radius:24px;">
+<tr><td bgcolor="${C.panel}" style="background:${C.panel};background-image:linear-gradient(180deg,${C.top},${C.bot});border:1px solid ${C.rim};border-radius:24px;box-shadow:inset 1px 1px 1px -1px rgba(255,255,255,.6),inset -1px -1px 1px -1px rgba(255,255,255,.5);">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="px" style="padding:40px 46px 38px;font-family:${FONT};color:${C.body};">
 ${kicker ? `<div style="font-family:${MONO};font-size:11px;line-height:14px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:${C.soft};margin:0 0 16px;">${esc(kicker)}</div>` : ""}
 <h1 class="h1" style="margin:0 0 14px;font-family:${FONT};font-size:40px;line-height:44px;font-weight:300;letter-spacing:-1.2px;color:${C.ink};">${headline}</h1>
@@ -61,7 +61,7 @@ export function confirmEmail(first, code, link) {
     "The code works for 10 minutes and the link for 24 hours. Didn't sign up? Ignore this and nothing happens.", "", "Studio", "askstudio.ai"].join("\n");
   const middle = `<div style="font-family:${MONO};font-size:10px;line-height:14px;font-weight:500;letter-spacing:2.6px;text-transform:uppercase;color:${C.dim};text-align:center;margin:0 0 10px;">Your code</div>
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 30px;"><tr>
-<td class="code" align="center" bgcolor="${C.pill}" style="background:${C.pill};background-image:linear-gradient(180deg,#2a313c,#1f252e);border:1px solid ${C.pillrim};border-radius:999px;padding:18px 22px 18px 32px;font-family:${MONO};font-size:34px;line-height:38px;font-weight:500;letter-spacing:10px;color:${C.ink};box-shadow:inset 0 1px 0 rgba(255,255,255,.16);">${spaced}</td></tr></table>`;
+<td class="code" align="center" bgcolor="${C.pill}" style="background:${C.pill};background-image:linear-gradient(180deg,#2a313c,#1f252e);border:1px solid ${C.pillrim};border-radius:999px;padding:18px 22px 18px 32px;font-family:${MONO};font-size:34px;line-height:38px;font-weight:500;letter-spacing:10px;color:${C.ink};box-shadow:inset 1px 1px 1px -1px rgba(255,255,255,.6),inset -1px -1px 1px -1px rgba(255,255,255,.5);">${spaced}</td></tr></table>`;
   const html = designed({
     title: subject, preheader: "Your code is " + spaced + ". It works for 10 minutes.", hero: "hero-confirm.jpg", heroAlt: "Studio. Confirm your spot: your code is " + spaced + ".",
     kicker: "Early access · Confirm", headline: "Confirm your spot.", intro: esc(hi) + " here's your code. Enter it on the page, or tap the button, to hold your place in line.",
@@ -97,8 +97,8 @@ export function inviteEmail(first, accessLink, { unsubscribe = "{{ unsubscribe }
     "Open your invite:", accessLink, "", "This link is just for you.", "", "Studio", "askstudio.ai", "Nicolini Productions LLC · " + address, "",
     "You're getting this because you joined the Studio waitlist. Unsubscribe: " + unsubscribe].join("\n");
   const pass = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 30px;"><tr>
-<td width="50%" style="padding:16px 18px;border:1px solid ${C.rim};border-radius:16px 0 0 16px;background:#1a1f27;"><div style="font-family:${MONO};font-size:10px;line-height:14px;font-weight:500;letter-spacing:2.4px;text-transform:uppercase;color:${C.dim};">Trial</div><div style="margin-top:6px;font-family:${FONT};font-size:17px;line-height:22px;color:${C.ink};">14 days, free</div></td>
-<td width="50%" style="padding:16px 18px;border:1px solid ${C.rim};border-left:0;border-radius:0 16px 16px 0;background:#1a1f27;"><div style="font-family:${MONO};font-size:10px;line-height:14px;font-weight:500;letter-spacing:2.4px;text-transform:uppercase;color:${C.dim};">For</div><div style="margin-top:6px;font-family:${FONT};font-size:17px;line-height:22px;color:${C.ink};">Your Mac</div></td>
+<td width="50%" style="padding:16px 18px;border:1px solid ${C.rim};border-radius:16px 0 0 16px;background:#1a1f27;box-shadow:inset 1px 1px 1px -1px rgba(255,255,255,.6),inset -1px -1px 1px -1px rgba(255,255,255,.5);"><div style="font-family:${MONO};font-size:10px;line-height:14px;font-weight:500;letter-spacing:2.4px;text-transform:uppercase;color:${C.dim};">Trial</div><div style="margin-top:6px;font-family:${FONT};font-size:17px;line-height:22px;color:${C.ink};">14 days, free</div></td>
+<td width="50%" style="padding:16px 18px;border:1px solid ${C.rim};border-left:0;border-radius:0 16px 16px 0;background:#1a1f27;box-shadow:inset 1px 1px 1px -1px rgba(255,255,255,.6),inset -1px -1px 1px -1px rgba(255,255,255,.5);"><div style="font-family:${MONO};font-size:10px;line-height:14px;font-weight:500;letter-spacing:2.4px;text-transform:uppercase;color:${C.dim};">For</div><div style="margin-top:6px;font-family:${FONT};font-size:17px;line-height:22px;color:${C.ink};">Your Mac</div></td>
 </tr></table>`;
   const html = designed({
     title: subject, preheader: "Studio is ready for you. 14 days of everything, free.", hero: "hero-invite.jpg", heroAlt: "Studio. Your invite is here: 14 days of everything, free.",
