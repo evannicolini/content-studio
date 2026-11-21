@@ -85,11 +85,11 @@ export function youreInEmail(first, place, refLink, passLink) {
 
 // 3. Your invite is here (held for launch): the access link, and 14 days free.
 // It goes to the waitlist (a list), so its footer carries the unsubscribe link and the company's postal address (CAN-SPAM).
-// unsubscribe defaults to Brevo's own tag; address must be the real mailing address before it is sent.
-export function inviteEmail(first, accessLink, { unsubscribe = "{{ unsubscribe }}", address = "[MAILING ADDRESS]" } = {}) {
+// unsubscribe defaults to Brevo's own tag; address is the company's mailing address (Evan, 2026-11-20).
+export function inviteEmail(first, accessLink, { unsubscribe = "{{ unsubscribe }}", address = "4328 Del Mar Ave, San Diego, CA 92107" } = {}) {
   const name = one(first), subject = "Your Studio invite is here";
   const text = [(name ? name + ", your" : "Your") + " invite to Studio is here.", "", "Your 14 days of everything, free, start when you open it.", "",
-    "Open your invite:", accessLink, "", "This link is just for you.", "", "Studio", "askstudio.ai", "Nicolini Productions LLC, " + address, "",
+    "Open your invite:", accessLink, "", "This link is just for you.", "", "Studio", "askstudio.ai", "Nicolini Productions LLC · " + address, "",
     "You're getting this because you joined the Studio waitlist. Unsubscribe: " + unsubscribe].join("\n");
   const pass = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;"><tr>
 <td bgcolor="${C.well}" style="background:${C.well};border:1px solid ${C.rim};border-radius:20px;padding:20px 22px;font-family:${FONT};">
@@ -105,7 +105,7 @@ export function inviteEmail(first, accessLink, { unsubscribe = "{{ unsubscribe }
     intro: "Your invite is here. Open it to start your 14 days of everything, free. One prompt, and the idea in your head becomes a finished video.",
     middle: pass, button: { label: "Open my invite", href: accessLink },
     fine: "This link is just for you. Questions? Reply to this email.",
-    footer: `<br>${esc(address)}<br><br>You're getting this because you joined the Studio waitlist.<br><a href="${esc(unsubscribe)}" style="color:${C.dim};text-decoration:underline;">Unsubscribe</a>`,
+    footer: ` &middot; ${esc(address)}<br><br>You're getting this because you joined the Studio waitlist.<br><a href="${esc(unsubscribe)}" style="color:${C.dim};text-decoration:underline;">Unsubscribe</a>`,
   });
   return { subject, html, text };
 }
