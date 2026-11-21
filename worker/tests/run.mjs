@@ -797,7 +797,7 @@ test("sign-up: the answers reach Brevo for the signed-in person only, cleaned to
   assert.equal(r.status, 200); assert.equal(r.json.brevo, true);
   const c = t.brevo.calls.find((x) => x.path === "/v3/contacts");
   assert.equal(c.body.email, "maker@example.com", "Supabase's email, never the page's");
-  assert.deepEqual(c.body.attributes, { FIRSTNAME: "Mae", ROLE: "Founder, Creator", BRANDS: "2-3", CLAUDE: "Free plan", SOURCE: "signup" });
+  assert.deepEqual(c.body.attributes, { FIRSTNAME: "Mae", ROLE: "Founder, Creator", BRANDS: "2-3", CLAUDE: "Free plan", FIRST_MAKE: "Ads, Reels", SOURCE: "signup" });
   assert.ok(!c.body.listIds, "not added to the waitlist list");
 });
 test("sign-up on a phone: one Get Studio on your Mac email, at most 3 an hour", async () => {

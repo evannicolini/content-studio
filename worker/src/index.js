@@ -10,6 +10,7 @@
 //   POST /admin/resync       send Brevo the sign-ups it has not got yet (Authorization: Bearer ADMIN_TOKEN)
 //   GET  /admin/export.csv   everyone, as a spreadsheet (the same token)
 //   GET  /admin/brevo-check  the Brevo account the key belongs to, its senders and domains (read only; the same token)
+//   GET  /admin/brevo-contact?email=  one contact's fields in Brevo (read only; the same token)
 //
 // Confirmation: a sign-up is saved straight away but holds a place, counts as a friend and goes to Brevo only once its email is
 // confirmed, with the 6-digit code (10 minutes, 5 tries) or the link (24 hours) in the "Confirm your spot" email.
@@ -486,7 +487,7 @@ async function resync(url, env) {
 // Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
 const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
   PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text",
-  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean" };
+  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean", FIRST_MAKE: "text" };
 async function brevoSetup(env) {
   if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
   const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
@@ -515,6 +516,18 @@ async function brevoCheck(env) {
     domains: (domains.domains || []).map((d) => ({ domain: d.domain_name, authenticated: d.authenticated, verified: d.verified })),
     sender_ready: (senders.senders || []).some((x) => x.email === SENDER.email && x.active) || (domains.domains || []).some((d) => d.domain_name === "askstudio.ai" && d.authenticated),
   });
+}
+
+// One contact's fields in Brevo (to check a sign-up's answers landed). Reads only.
+async function brevoContact(url, env) {
+  if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
+  const email = String(url.searchParams.get("email") || "").trim().toLowerCase();
+  if (!email) return fail("Add ?email=.");
+  const res = await fetch(BREVO + "/contacts/" + encodeURIComponent(email), { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
+  if (res.status === 404) return json({ ok: true, found: false });
+  if (!res.ok) return fail("Brevo said " + res.status + ".", 502);
+  const c = await res.json();
+  return json({ ok: true, found: true, email: c.email, attributes: c.attributes || {}, lists: c.listIds || [] });
 }
 
 // What Brevo did with the emails to one address (sent, delivered, bounced…), newest first. Reads only.
@@ -575,8 +588,7 @@ async function signupProfile(request, env) {
   if (!(await rateOk(env, "prof:" + (await sha(u.email)).slice(0, 24), 3600, 20))) return fail("Too many tries. Wait a little.", 429);
   const roles = pick(b.roles, PICK.roles, true), brands = pick(b.brands, PICK.brands), claude = pick(b.claude, PICK.claude), make = pick(b.first_make, PICK.make, true);
   if (!env.BREVO_API_KEY) return json({ ok: true, brevo: false });
-  const attributes = { FIRSTNAME: u.first, ROLE: roles.join(", "), BRANDS: brands, CLAUDE: claude, SOURCE: "signup" };
-  if (env.BREVO_FIRST_MAKE === "1") attributes.FIRST_MAKE = make.join(", ");   // the attribute is made in Brevo first (Evan's account)
+  const attributes = { FIRSTNAME: u.first, ROLE: roles.join(", "), BRANDS: brands, CLAUDE: claude, FIRST_MAKE: make.join(", "), SOURCE: "signup" };   // FIRST_MAKE made by /admin/brevo-setup (Evan, 2026-11-21)
   const r = await brevo(env, "POST", "/contacts", { email: u.email, attributes, updateEnabled: true });
   if (!r.ok) console.error("signup profile", r.detail);
   return json({ ok: true, brevo: r.ok });
@@ -614,6 +626,7 @@ async function route(request, url, env, ctx) {
     if (path === "/admin/export.csv" && m === "GET") return await exportCsv(env);
     if (path === "/admin/brevo-setup" && m === "POST") return await brevoSetup(env);
     if (path === "/admin/brevo-check" && m === "GET") return await brevoCheck(env);
+    if (path === "/admin/brevo-contact" && m === "GET") return await brevoContact(url, env);
     if (path === "/admin/mail-events" && m === "GET") return await mailEvents(url, env);
   }
   return fail("Not found.", 404);
