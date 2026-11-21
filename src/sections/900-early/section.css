@@ -617,3 +617,14 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 /* ---------- typing on a phone: the bar steps aside so the field stays in view above the keyboard ---------- */
 .wl.kb .wl-dock { opacity: 0; pointer-events: none; transform: translateY(140%) !important; transition: opacity .2s, transform .3s var(--ease); }
 .wl.kb .wl-in::after { height: 60vh; }
+
+/* the SMS boxes sit inside the phone's field group: their hidden inputs never take the fields' glass (it showed over the words) */
+.wl .wl-sms .wl-cbx { position: absolute; left: 0; top: 50%; width: 22px; height: 22px; margin: -11px 0 0; padding: 0; border: 0; opacity: 0 !important; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; display: block; z-index: 2; }
+.wl-smsbox .wl-sms + .wl-sms .wl-cbx { margin-top: -6px; }
+/* phones: the header has its own frosted backing, so anything scrolled up fades under it instead of sliding beneath the buttons */
+@media (max-width: 960px) {
+  .wl-top::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: calc(100% + 30px); pointer-events: none;
+    background: linear-gradient(180deg, rgba(8, 13, 17, .42), rgba(8, 13, 17, .18) 70%, rgba(8, 13, 17, 0)); -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
+    -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent); mask-image: linear-gradient(180deg, #000 58%, transparent); }
+  .wl-top { padding-bottom: 12px; }
+}
