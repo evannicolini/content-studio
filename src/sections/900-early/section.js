@@ -193,13 +193,21 @@ sheet.appendChild(sheet.querySelector(".wl-dock")); /* the bar and Kayla sit on 
 var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 /* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
 var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
-var WALL = { name: PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
-["roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, Big Sur, the dune, the alpine lake, Pebble Beach, peach dawn */
+["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
 var wallCache = {}, wallTok = 0, wallNow = "";
 /* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
 var GOAL = 3, countEl = sheet.querySelector("[data-wl-count]"), countN = sheet.querySelector("[data-wl-n]"), countT = 0, countLast = -1;
 /* the number lands like a slot machine: every digit is a column of 0-9 (three times over) that spins and stops, left to right,
    with a little overshoot; tabular figures, so the width never jumps. A later change rolls only to the new digits. */
+function roll(el, str, delay) {
+  el.innerHTML = String(str).split("").map(function (c) { return /\d/.test(c) ? '<span class="dg" aria-hidden="true"><span style="--to:0">' + COL + "</span></span>" : '<span class="sp" aria-hidden="true">' + esc(c) + "</span>"; }).join("");
+  el.setAttribute("aria-label", str);
+  var cols = el.querySelectorAll(".dg"), digits = String(str).replace(/\D/g, "");
+  var land = function () { cols.forEach(function (c, i) { c.classList.add("roll"); c.style.setProperty("--d", (.75 + i * .08).toFixed(2) + "s"); c.style.setProperty("--dl", ((delay || 0) + i * .07).toFixed(2) + "s"); c.firstChild.style.setProperty("--to", 20 + +digits[i]); }); };
+  if (SK.reduced) { cols.forEach(function (c, i) { c.firstChild.style.setProperty("--to", 20 + +digits[i]); }); return; }
+  requestAnimationFrame(function () { requestAnimationFrame(land); });
+}
 var COL = (function () { var o = ""; for (var r = 0; r < 3; r++) for (var d = 0; d < 10; d++) o += "<em>" + d + "</em>"; return o; })();
 function showCount(n) {
   if (n === countLast) return;
@@ -376,6 +384,13 @@ function sizeStage() {
   if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
   var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22); /* desktop: as tall as the space allows, running off the right edge like the opening film */
+  /* the Claude scene is taller than the rest (the composer, then the plan and the v01 film): it fits whole, inside the stage, clear of
+     the captions and the bar, from the top down */
+  if (!mob && sheet.getAttribute("data-step") === "claude") {
+    var v = sheet.querySelector("[data-wl-v01]"), pl = sheet.querySelector("[data-wl-plan]");
+    var H = 186 + Math.max(v ? v.offsetHeight : 0, pl ? pl.offsetHeight : 0, 494), W = 940;
+    s = Math.min(s, (r.height - 24) / H, (r.width - 64) / W, 1.1);   /* and a margin on the right */
+  }
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
@@ -457,7 +472,10 @@ function Pass(el, opts) {
   };
 }
 var pass1 = Pass(sheet.querySelector("[data-wl-pass1]"));
-var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { onLanded: function () { SFX.play("land"); } });
+var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { onLanded: function () {
+  SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
+  var st = sheet.querySelector(".wl-dstage"); st.classList.remove("bloom"); void st.offsetWidth; st.classList.add("bloom");
+} });
 function drawPass() {
   var f = val("first"), l = val("last"), e = val("email");
   pass1.set({ name: (f + " " + l).trim(), mail: e || "you@email.com", v3: (ans.roles[0] === "Something else" && val("other")) || ans.roles[0] || "Mac", seed: (f + l + e) || "studio" });
@@ -499,7 +517,8 @@ function setStep(n, quiet) {
   scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
   if (SCENE[q] === "claude") { drawClaude(); claudeLoop(); } else loopTok++;
-  if (SCENE[q] === "you") { drawPass(); pass1.start(); } else pass1.stop();
+  sizeStage(); setTimeout(sizeStage, 400);
+  if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
   if (!quiet && sheet.classList.contains("open")) KAY.say([LINE[q]]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
@@ -521,7 +540,7 @@ form.querySelectorAll("input").forEach(function (inp) {
 /* the hero's word reveal on every step: the headline, then the line under it, each word pulled from a blur into focus, left to right */
 function words(el, n) {
   var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), list = [], t;
-  while ((t = w.nextNode())) if (!(t.parentNode.classList && t.parentNode.classList.contains("wl-bw")) && t.nodeValue.trim()) list.push(t);
+  while ((t = w.nextNode())) if (!(t.parentNode.classList && t.parentNode.classList.contains("wl-bw")) && !(t.parentNode.closest && t.parentNode.closest(".wl-roll")) && t.nodeValue.trim()) list.push(t);
   list.forEach(function (node) {
     var frag = document.createDocumentFragment();
     node.nodeValue.split(/(\s+)/).forEach(function (bit) {
@@ -694,7 +713,7 @@ function open(src) {
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
-  if (!sky.getAttribute("src")) { sky.src = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg"; sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  if (!sky.getAttribute("src")) { sky.src = WALL.name; sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
   SFX.wake();
   var j = joined();
   sheet.hidden = false; sheet.scrollTop = 0;
@@ -770,7 +789,8 @@ function showDone(r, quiet) {
   var ranked = typeof r.position === "number" && r.position > 0;
   sheet.querySelector("[data-wl-dhi]").textContent = "You're in, " + r.first + ".";
   var pos = sheet.querySelector("[data-wl-dpos]");
-  pos.innerHTML = ranked ? "<b>#" + place(r).toLocaleString("en-US") + "</b> " + (r.front ? "at the front." : "on the list.") : "Welcome to Studio.";
+  pos.innerHTML = ranked ? '<b class="wl-roll"></b> ' + (r.front ? "at the front." : "on the list.") : "Welcome to Studio.";
+  if (ranked) roll(pos.querySelector(".wl-roll"), "#" + place(r).toLocaleString("en-US"), again ? 0 : .9);
   var got = Math.min(GOAL, r.referrals || 0), front = !!r.front;
   sheet.querySelector("[data-wl-rhead]").textContent = !ranked ? "Know someone who'd want this?" : front ? "You're at the front of the line." : "Get 3 friends on the list. You all skip to the front.";
   sheet.querySelector("[data-wl-rboost]").textContent = !ranked ? "Send them your link. They get early access too."
@@ -792,6 +812,8 @@ function showDone(r, quiet) {
     sheet.classList.add("done"); sheet.classList.remove("shown");
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
     pass2.enter(2100);
+    var dh = sheet.querySelector(".wl-dh");
+    if (!SK.reduced) { var n = 0; dh.querySelectorAll("span").forEach(function (sp) { if (!sp.closest(".wl-roll")) n = words(sp, n); }); doneEl.classList.add("w0"); void doneEl.offsetWidth; setTimeout(function () { doneEl.classList.remove("w0"); }, 500); }
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("done");
     KAY.say(["in", "share"]);
