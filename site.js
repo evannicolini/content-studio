@@ -5686,7 +5686,7 @@ sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.cl
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
-var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null, promo: null };
+var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null, promo: null, notrial: null };
 var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
 /* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
@@ -6106,7 +6106,7 @@ function drawPlans() {
       "<ul>" + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></button>";
   }).join("");
   plansEl.querySelectorAll(".st-plan").forEach(function (b) {
-    b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); pwHead(); });
+    b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); me.notrial = null; drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); pwHead(); });
   });
   line();
 }
@@ -6117,7 +6117,7 @@ function line() {
 }
 perEl.querySelectorAll("button").forEach(function (b) {
   b.addEventListener("click", function () {
-    me.period = b.getAttribute("data-per");
+    me.period = b.getAttribute("data-per"); if (me.notrial) me.notrial = null;
     if (me.period === "year" && me.promo) { setPromo(null); toast("Codes work on monthly plans. Your code was taken off."); }
     perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x === b ? "true" : "false"); });
     slidePer(); drawPlans(); pwHead();
@@ -6166,7 +6166,15 @@ function payStep() {
    /* the price and date live in the today row, written below */
   $("[data-st-then]").textContent = "Then " + bare + " a " + per + ".";
   var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
-  if (me.promo) {   /* the friends' code (checkout-promo-v1): $0 today, the first charge a month from today */
+  if (me.notrial && !me.promo) {   /* this account or card already had its trial (checkout-notrial-v1): the full price today, every month after */
+    var np = me.notrial.price, npm = np + "/" + per, nextD = (function () { var d = new Date(NOW); if (per === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); })();
+    $("[data-st-payh]").textContent = "You've had your free trial.";
+    $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
+    $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
+    $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
+    $("[data-st-under]").innerHTML = "You pay " + esc(np) + " today. It renews every " + per + " (next on " + esc(nextD) + ") until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>." + legal;
+    $("[data-st-go-t]").textContent = "Start for " + np;
+  } else if (me.promo) {   /* the friends' code (checkout-promo-v1): $0 today, the first charge a month from today */
     $("[data-st-payh]").textContent = "Your first month is free.";
     $("[data-st-today]").innerHTML = "<b>$0 today</b> for your first month. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(MONTH_FULL) + "</b>, until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + MONTH_FULL + " and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + MONTH_FULL + ", I won't be charged.";
@@ -6188,17 +6196,18 @@ function payStep() {
    mode on a live form, so a change of mode draws a new one. */
 var peMode = "", pe = null;
 function mountCard() {
-  var mode = me.promo ? "setup" : "subscription";
-  if (peMounted && peMode === mode) return;
+  var cents = me.notrial && !me.promo ? me.notrial.cents : 100, mode = me.promo ? "setup" : "subscription";
+  if (peMounted && peMode === mode + cents) return;
+  if (peMounted && elements && peMode.indexOf(mode) === 0 && mode === "subscription") { try { elements.update({ amount: cents }); peMode = mode + cents; return; } catch (x) {} }   /* same form, new amount: the card typed stays */
   var pk = MOCK ? DEMO_PK : CFG.stripe;
   if (!pk) { $("[data-st-pe]").innerHTML = '<p class="wl-fine">The card form opens once the payment key is set.</p>'; return; }
   if (pe) { try { pe.destroy(); } catch (x) {} pe = null; peMounted = false; elements = null; $("[data-st-pe]").innerHTML = '<div class="st-load"><i></i><i></i><i></i></div>'; }
-  peMode = mode;
+  peMode = mode + cents; var want = peMode;
   loadStripe().then(function () {
-    if (peMode !== mode || peMounted) return;
+    if (peMode !== want || peMounted) return;
     stripe = stripe || Stripe(pk);
     var opts = { mode: mode, currency: "usd", paymentMethodTypes: ["card"], appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] };
-    if (mode === "subscription") opts.amount = 100;
+    if (mode === "subscription") opts.amount = cents;
     elements = stripe.elements(opts);
     pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto", link: "never" } });
     var host = $("[data-st-pe]");
@@ -6223,7 +6232,10 @@ form.addEventListener("submit", function (e) {
     try { sessionStorage.setItem("studio-checkout", JSON.stringify({ subscription: c.subscription, handoff: me.hand && me.hand.code, first: me.first, email: me.email, plan: me.plan, period: me.period })); } catch (e) {}
     var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + (local ? "?live&paid=1" : "?review&paid=1") + HASH }, redirect: "if_required" };
     return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return status(c.subscription); });
-  }).then(paid, function (x) { err(say(x)); }).then(function () { go.classList.remove("busy"); });
+  }).then(paid, function (x) {
+    if (x && (x.code === "trial_used" || x.code === "trial_used_after") && !me.promo) { var m = noTrial(x); setTimeout(function () { err(m); }, 30); return; }
+    err(say(x));
+  }).then(function () { go.classList.remove("busy"); });
 });
 function paid(c) {
   me.paid = c || {};
@@ -6320,10 +6332,15 @@ function promoCheck(code) {
   return api("/web/promo", { code: code, period: me.period });
 }
 function checkout() {
-  if (MOCK) return wait(1200).then(function () { return { mock: true }; });
+  if (MOCK) return wait(1200).then(function () {   /* ?trialused / ?trialafter on this Mac: the server's two no-trial answers */
+    if (!me.promo && !me.notrial && Q.has("trialused")) throw E("trial_used", null, { status: 409, price: price(me.plan, me.period) });
+    if (!me.promo && !me.notrial && Q.has("trialafter")) throw E("trial_used_after", null, { state: "failed", reason: "trial_used" });
+    return { mock: true };
+  });
   var pl = planOf(me.plan), body = { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements",
-    consent: { version: me.promo ? "checkout-promo-v1" : CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: starts().toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } };
+    consent: { version: me.promo ? "checkout-promo-v1" : me.notrial ? "checkout-notrial-v1" : CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: starts().toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } };
   if (me.promo) body.promo = me.promo.code;
+  else if (me.notrial) { body.trial = false; body.consent.renewal_date = new Date().toISOString().slice(0, 10); }
   return api("/web/checkout", body).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
@@ -6331,12 +6348,26 @@ function checkout() {
 }
 /* after Stripe: the server asks Stripe itself, and gives the download and Open Studio links (it covers a bank's 3-D Secure return too) */
 function status(sub) {
-  var h = me.hand && me.hand.code;
-  return api("/web/checkout/status?subscription=" + encodeURIComponent(sub || "") + "&handoff=" + encodeURIComponent(h || "")).then(function (j) {
-    if (j.state === "failed") throw E("failed", "Your bank didn't approve the $1. Try another card.");
-    if (j.state === "incomplete") throw E("incomplete", "The payment isn't finished yet. Try again, or use another card.");
-    return j;
-  });
+  var h = me.hand && me.hand.code, t0 = Date.now(), watch = !me.promo && !me.notrial;   /* a trial: hold ~8 s, the card check lands after the $1 */
+  function once() {
+    return api("/web/checkout/status?subscription=" + encodeURIComponent(sub || "") + "&handoff=" + encodeURIComponent(h || "")).then(function (j) {
+      if (j.state === "failed" && j.reason === "trial_used") throw E("trial_used_after", null, j);
+      if (j.state === "failed") throw E("failed", "Your bank didn't approve the payment. Try another card.");
+      if (j.state === "incomplete") throw E("incomplete", "The payment isn't finished yet. Try again, or use another card.");
+      if (watch && Date.now() - t0 < 8000) return SK.sleep(1500).then(once);
+      return j;
+    });
+  }
+  return slowly(once(), "Confirming");
+}
+/* no trial for this account or card: the full price, the card form redrawn for it, the words changed, and the box asked again */
+function noTrial(x) {
+  var pl = planOf(me.plan), raw = x && x.price != null ? x.price : price(pl.id, me.period), num = parseFloat(String(raw).replace(/[^0-9.]/g, "")) || 0;
+  if (me.period === "year" && !(x && x.price != null)) num = parseFloat(String(then(pl.id, "year")).replace(/[^0-9.]/g, "")) || num;
+  me.notrial = { price: "$" + (num % 1 ? num.toFixed(2) : num), cents: Math.round(num * 100) };
+  payStep();
+  return x && x.code === "trial_used_after" ? "This card already had a free trial. Your $1 was refunded. Start at " + me.notrial.price + "/" + (me.period === "year" ? "yr" : "mo") + " instead?"
+    : "You've had your free trial. Studio " + pl.name + " is " + me.notrial.price + "/" + (me.period === "year" ? "year" : "month") + ".";
 }
 function lookup(code) {
   if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Evan Nicolini", name: "", plan: "pro" }; });
