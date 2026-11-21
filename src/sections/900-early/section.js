@@ -80,17 +80,15 @@ document.querySelectorAll("[data-early-band]").forEach(function (el) {
 var SOUND = true;
 try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
 var SFX = (function () {
+  /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
+     are fetched and decoded right away, so the first click can play her at once */
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
   var GAIN = { click: .5, tick: .16, key: .26, move: .38, send: .6, land: .45, done: .5 };
-  function wake() {
-    if (!AC || ctx) { if (ctx && ctx.state === "suspended") ctx.resume(); return; }
-    try { ctx = new AC(); } catch (e) { return; }
-    Object.keys(GAIN).forEach(function (n) {
-      fetch("assets/sfx/" + n + ".wav").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) {
-        if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {});
-      }).catch(function () {});
-    });
-  }
+  try { if (AC) ctx = new AC(); } catch (e) {}
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  Object.keys(GAIN).forEach(function (n) { load(n, "assets/sfx/" + n + ".wav"); });
+  load("vo:intro", "assets/audio/wl-intro.mp3");
+  function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -100,23 +98,32 @@ var SFX = (function () {
     var s = ctx.createBufferSource(), g = ctx.createGain();
     s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
     g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
-    var out = g;
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
   }
-  return { wake: wake, play: play };
+  /* a voice line from a decoded buffer: starts now, inside the click (no network, no gap); null if it isn't ready */
+  function voice(k, onend) {
+    var b = buf["vo:" + k]; if (!ctx || !b) return null;
+    var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = b; g.gain.value = 1; s.connect(g); g.connect(ctx.destination);
+    var t0 = ctx.currentTime, stopped = false; s.onended = function () { if (!stopped) onend && onend(); }; s.start();
+    return { dur: b.duration, at: function () { return Math.max(0, ctx.currentTime - t0); }, stop: function () { stopped = true; try { s.stop(); } catch (e) {} } };
+  }
+  function live() { var ua = navigator.userActivation; return !!ctx && (ctx.state === "running" || !ua || ua.isActive); }   /* a click or key is happening now (or already happened) */
+  return { wake: wake, play: play, voice: voice, live: live, has: function (k) { return !!buf["vo:" + k]; } };
 })();
 
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
-    hello: "Let's get you into Studio. It only takes a minute.", name: "First things first. What should I call you?",
+    intro: "Welcome to Studio. Let's get you on the early access list, it only takes a minute. First things first... what should I call you?",
+    name: "First things first. What should I call you?",
     roles: "Nice to meet you. So, what do you do? Pick everything that fits.", brands: "And how many brands are you making content for?",
     claude: "Studio runs on Claude. If you don't use it yet, that's totally fine. We'll help you set it up later.",
     invite: "Last thing. Where should we send your invite?", in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free.",
     share: "Want to skip the line? Get three friends on the list, and you all move up to the front."
   };
-  var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {};
+  var LEAD = { intro: 0 };   /* the intro has no lead-in silence; the other clips start 0.6 s in */
+  var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
   Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
   function wave(k) {
@@ -124,32 +131,47 @@ var KAY = (function () {
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
     kw.innerHTML = out;
   }
-  a.addEventListener("timeupdate", function () { var bars = kw.children, f = a.duration ? a.currentTime / a.duration : 0; for (var i = 0; i < bars.length; i++) bars[i].classList.toggle("on", i / bars.length < f); });
-  function words(k, all) {
-    cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" ");
-  }
+  function bars(f) { var b = kw.children; for (var i = 0; i < b.length; i++) b[i].classList.toggle("on", i / b.length < f); }
+  a.addEventListener("timeupdate", function () { bars(a.duration ? a.currentTime / a.duration : 0); });
+  function words(k, all) { cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" "); }
   function reveal(k, my) {
-    var spans = cap.querySelectorAll("span"), d = Math.max(1.2, (dur[k] || 6) - 3) * 1000, step = d / Math.max(1, spans.length);
-    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, 600 + i * step); });
+    var spans = cap.querySelectorAll("span"), lead = k in LEAD ? LEAD[k] * 1000 : 600, d = Math.max(1.2, (dur[k] || 6) - (k in LEAD ? .6 : 3)) * 1000, step = d / Math.max(1, spans.length);
+    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, lead + i * step); });
   }
+  function ended(my) { if (my === tok) setTimeout(next, 250); }
   function next() {
     var my = ++tok;
+    if (vo) { vo.stop(); vo = null; }
     cur = queue.shift();
     if (!cur) { pill.classList.remove("talk"); return; }
     words(cur, !SOUND); wave(cur);
     if (!SOUND) { pill.classList.remove("talk"); return; }
+    a.pause();
+    /* the intro from its decoded buffer, started right now inside the click; the rest stream as before */
+    if (SFX.has(cur) && SFX.live()) {
+      vo = SFX.voice(cur, function () { ended(my); });
+      if (vo) {
+        pill.classList.add("talk"); pill.classList.remove("ask"); reveal(cur, my);
+        (function tick() { if (my !== tok || !vo) return; bars(vo.at() / vo.dur); requestAnimationFrame(tick); })();
+        return;
+      }
+    }
+    if (SFX.has(cur) && !SFX.live()) { block(my); return; }   /* a link opened with no click: she waits for the first tap or key */
     a.src = "assets/audio/wl-" + cur + ".mp3";
     var p = a.play();
     pill.classList.add("talk"); pill.classList.remove("ask");
     reveal(cur, my);
-    if (p && p.catch) p.catch(function () { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); });
+    if (p && p.catch) p.catch(function () { block(my); });
   }
-  a.addEventListener("ended", function () { setTimeout(next, 250); });
+  function block(my) { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); }
+  a.addEventListener("ended", function () { ended(tok); });
   function say(keys) { queue = [].concat(keys); a.pause(); next(); }
-  function stop() { tok++; queue = []; a.pause(); pill.classList.remove("talk"); }
-  pill.addEventListener("click", function () { if (cur) { blocked = false; say([cur].concat(queue)); } });
-  /* a sign-up opened by a link has had no click yet, so the first line may be refused: the first tap anywhere in it plays her */
-  sheet.addEventListener("pointerdown", function () { if (blocked && cur) { blocked = false; say([cur].concat(queue)); } }, true);
+  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); }
+  pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
+  /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
+  function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); say([cur].concat(queue)); } }
+  sheet.addEventListener("pointerdown", unblock, true);
+  sheet.addEventListener("keydown", unblock, true);
   return { say: say, stop: stop, text: function (k) { return LINES[k]; } };
 })();
 var sndB = sheet.querySelector("[data-wl-snd]");
@@ -176,7 +198,21 @@ var WALL = { name: PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
 var wallCache = {}, wallTok = 0, wallNow = "";
 /* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
 var GOAL = 3, countEl = sheet.querySelector("[data-wl-count]"), countN = sheet.querySelector("[data-wl-n]"), countT = 0, countLast = -1;
-function showCount(n) { if (n === countLast) return; countLast = n; countN.textContent = n.toLocaleString("en-US"); countEl.hidden = false; }
+/* the number lands like a slot machine: every digit is a column of 0-9 (three times over) that spins and stops, left to right,
+   with a little overshoot; tabular figures, so the width never jumps. A later change rolls only to the new digits. */
+var COL = (function () { var o = ""; for (var r = 0; r < 3; r++) for (var d = 0; d < 10; d++) o += "<em>" + d + "</em>"; return o; })();
+function showCount(n) {
+  if (n === countLast) return;
+  var fresh = countLast < 0, str = n.toLocaleString("en-US"); countLast = n;
+  countEl.setAttribute("aria-label", str + " on the waitlist");
+  var same = countN.getAttribute("data-s") && countN.getAttribute("data-s").length === str.length && !fresh;
+  if (!same) countN.innerHTML = str.split("").map(function (c) { return /\d/.test(c) ? '<span class="dg" aria-hidden="true"><span style="--to:0">' + COL + "</span></span>" : '<span class="sp" aria-hidden="true">' + c + "</span>"; }).join("");
+  countN.setAttribute("data-s", str); countEl.hidden = false;
+  var cols = countN.querySelectorAll(".dg"), digits = str.replace(/\D/g, "");
+  var land = function () { cols.forEach(function (c, i) { var inner = c.firstChild; c.classList.add("roll"); c.style.setProperty("--d", same ? ".5s" : (.75 + i * .08).toFixed(2) + "s"); c.style.setProperty("--dl", same ? "0s" : (i * .07).toFixed(2) + "s"); inner.style.setProperty("--to", 20 + +digits[i]); }); };
+  if (SK.reduced) { cols.forEach(function (c, i) { c.firstChild.style.setProperty("--to", 20 + +digits[i]); }); return; }
+  if (same) land(); else requestAnimationFrame(function () { requestAnimationFrame(land); });
+}
 function count() {
   if (OFFSET) showCount(Math.max(countLast, OFFSET));
   if (!API) return;
@@ -674,7 +710,7 @@ function open(src) {
     if (SCENE[ORDER[at]] === "claude") claudeLoop();
     if (SCENE[ORDER[at]] === "you") pass1.start();
     drawHome();
-    KAY.say(at === 0 ? ["hello", "name"] : [LINE[ORDER[at]]]);
+    KAY.say(at === 0 ? ["intro"] : [LINE[ORDER[at]]]);
     focusStep(SK.reduced ? 0 : 560);
     setTimeout(typeStep, 700);
   }
