@@ -540,7 +540,10 @@ test("confirm: a new sign-up is saved, emailed a code, and has no place until it
   assert.ok(mail.html.includes(mail.code.slice(0, 3) + " " + mail.code.slice(3)), "the code is in the HTML");
   assert.ok(mail.html.includes("https://askstudio.ai/?confirm=" + mail.token + "#early-access"), "one link, straight to the site");
   assert.ok(!/<script|https?:\/\/(?!askstudio\.ai|fonts\.googleapis\.com\/css2)/i.test(mail.html), "no scripts; nothing from any host but askstudio.ai (and the Hanken Grotesk stylesheet)");
-  assert.ok(/<img[^>]+src="https:\/\/askstudio\.ai\/assets\/email\/hero-confirm\.jpg"[^>]+alt="[^"]+"/.test(mail.html), "the hero is ours, with alt text");
+  assert.ok(/<img[^>]+src="https:\/\/askstudio\.ai\/assets\/email\/hero21-confirm\.jpg"[^>]+alt="[^"]+"/.test(mail.html), "the hero is ours (21:9), with alt text");
+  assert.ok(mail.html.includes("assets/email/studio-lockup.png"), "the lockup at the top");
+  const light = (await import("../src/emails.js")).confirmEmail("Sam", "123456", "https://askstudio.ai/x", { theme: "light" });
+  assert.ok(light.html.includes("#f5f3ee") && light.html.includes("studio-lockup-ink.png") && light.html.includes("color-scheme\" content=\"light"), "a light version");
   assert.ok(Buffer.byteLength(mail.html) < 102 * 1024 * .5, "well under Gmail's clip");
   const r = t.row("person1@example.com");
   assert.notEqual(r.confirm_code_hash, mail.code, "only hashes are kept");
