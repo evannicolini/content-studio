@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en" class="no-js sk-page">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<!-- A page of its own (build.py PAGES): one sheet, the shared look, nothing of the main site. Every path is from the site's root. -->
+<base href="../">
+<title>Start free · Studio</title>
+<meta name="description" content="Sign in and Studio downloads. Make your first video before you pay a thing.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://askstudio.ai/start/">
+<meta property="og:title" content="Start free · Studio">
+<meta property="og:description" content="Sign in and Studio downloads. Make your first video before you pay a thing.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/start/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<link rel="icon" href="assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<script>
+  /* the sheet opens on its own hash (#early-access, #signup, #paywall); the address keeps ?ref=, ?confirm=, ?pass= and the rest */
+  window.SK_PAGE = "start";
+  if (!/^#[a-z]/.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search + "#signup" + location.hash.replace(/^#/, "&").replace(/^&$/, "")); } catch (e) {}
+  document.documentElement.classList.add("pg-in");
+</script>
+<!-- the first wallpaper, fetched before anything else, so the page never sits black waiting for it -->
+<link rel="preload" as="image" href="assets/su/done.jpg" media="(min-width: 701px)">
+<link rel="preload" as="image" href="assets/su/done-m.jpg" media="(max-width: 700px)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="start/page.css?v=3ca1ed6f">
+<style>html.sk-page, html.sk-page body { background: #000; }</style>
+</head>
+<body>
+
+<!-- the Studio mark, drawn once and reused -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
+    <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
+    <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+    <!-- the same mark in ink, for light sections -->
+    <linearGradient id="mk-dl" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".78"/><stop offset="1" stop-color="#15171b" stop-opacity=".5"/></linearGradient>
+    <linearGradient id="mk-dr" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".95"/><stop offset="1" stop-color="#15171b" stop-opacity=".42"/></linearGradient>
+  </defs>
+  <symbol id="studio-mark" viewBox="36 36 440 440">
+    <path fill="url(#mk-l)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-r)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </symbol>
+  <symbol id="studio-mark-ink" viewBox="36 36 440 440">
+    <path fill="url(#mk-dl)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-dr)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+  </symbol>
+  <symbol id="apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+  <symbol id="claude" viewBox="0 0 24 24"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
+</svg>
+
+<main>
+<!-- Start: the website sign-up (14 days for $1), in the early-access sign-up's own design: the question big on the left, the live
+     Studio app on the right answering it, a wallpaper per step, the film's bar at the bottom. Sign in (Google, Apple or an email
+     code), pick a plan, pay $1 inside the page (Stripe's Payment Element in our glass), then "You're in": the pass, and the download.
+     The friend-invite version skips the plan and the card. Opened by #signup; off on the live site until sales open (section.js). -->
+<div class="wl st" id="signup" role="dialog" aria-modal="true" aria-labelledby="st-h" hidden>
+  <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
+  <div class="st-intro" data-st-intro aria-hidden="true" hidden></div>
+  <div class="wl-top">
+    <span class="wl-brand"><span class="wl-app"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span>Studio<em data-st-badge>Start free</em></span>
+    <div class="wl-tr">
+      <span class="st-mode" data-st-mode hidden>Test mode</span>
+      <button type="button" class="wl-restart" data-st-restart hidden>Restart</button>
+      <button type="button" class="wl-snd" data-st-snd aria-pressed="true" aria-label="Sound on"><svg class="on" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6h2.2L8.5 3.2v9.6L5.2 10H3z"/><path d="M10.6 5.6a3.4 3.4 0 0 1 0 4.8M12.3 3.9a5.8 5.8 0 0 1 0 8.2"/></svg><svg class="off" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6h2.2L8.5 3.2v9.6L5.2 10H3z"/><path d="M10.5 6l3.5 4M14 6l-3.5 4"/></svg></button>
+      <button type="button" class="wl-x" data-st-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+    </div>
+  </div>
+
+  <div class="wl-in">
+    <div class="wl-left">
+      <p class="wl-ref st-from" data-st-from hidden><span class="wl-ri" data-st-fi>E</span><span data-st-ft>Evan invited you.</span></p>
+      <h2 id="st-h" class="sr">Start Studio</h2>
+      <form class="wl-form" id="st-form" novalidate>
+        <div class="wl-steps">
+
+          <!-- 1: sign in -->
+          <div class="wl-q on" data-q="in" role="group" aria-labelledby="st-q-in">
+            <p class="wl-k" data-st-k>Start · 1 of 2</p>
+            <h3 class="wl-qh" id="st-q-in" data-st-in-h>Start free.<span>Studio, on your Mac.</span></h3>
+            <p class="wl-qs" data-st-in-s>Sign in and Studio downloads. Make your first video before you pay a thing.</p>
+            <div class="st-ways" data-st-ways>
+              <button type="button" class="st-way" data-way="google"><span class="ic"><svg viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.8-5.4 3.8-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.7 3.3 14.6 2.4 12 2.4 6.8 2.4 2.6 6.6 2.6 11.9s4.2 9.5 9.4 9.5c5.4 0 9-3.8 9-9.2 0-.6-.1-1.1-.2-1.6H12z"/><path fill="#34A853" d="M3.7 7.5l3.2 2.3C7.8 7.8 9.7 6.3 12 6.3c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.7 3.3 14.6 2.4 12 2.4 8.3 2.4 5.2 4.5 3.7 7.5z" opacity="0"/><path fill="#4285F4" d="M21 12.2c0-.6-.1-1.1-.2-1.6H12v3.9h5.4c-.3 1.4-1.1 2.5-2.2 3.2l3.3 2.6c1.9-1.8 2.5-4.4 2.5-8.1z"/><path fill="#FBBC05" d="M6.4 14.3a5.8 5.8 0 0 1 0-4.6L3.1 7.2a9.4 9.4 0 0 0 0 8.4z"/><path fill="#34A853" d="M12 21.4c2.6 0 4.7-.9 6.3-2.4L15 16.4c-.9.6-2 1-3 1-2.4 0-4.4-1.6-5.2-3.8l-3.4 2.6c1.6 3.1 4.8 5.2 8.6 5.2z"/></svg></span><span class="t">Continue with Google</span><em class="soon" hidden>Soon</em></button>
+              <button type="button" class="st-way" data-way="apple"><span class="ic"><svg viewBox="0 0 24 24"><path fill="#fff" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.4.8c1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1zM13.9 5c.7-.8 1.2-2 1-3.2-1 .1-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3 1.1.1 2.2-.5 2.9-1.3z"/></svg></span><span class="t">Continue with Apple</span><em class="soon" hidden>Soon</em></button>
+              <p class="st-or"><span>or</span></p>
+              <button type="button" class="st-way em" data-way="email" aria-expanded="false"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5.5h16a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H4A1.5 1.5 0 0 1 2.5 17V7A1.5 1.5 0 0 1 4 5.5Zm.4 1.8 7.6 5.6 7.6-5.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span class="t">Continue with email</span></button>
+            </div>
+            <div class="wl-fields st-mail" data-st-mail hidden>
+              <label class="wl-f"><span>First name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" maxlength="80"></span></label>
+              <label class="wl-f"><span>Email</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="send" maxlength="254"></span></label>
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="st-fine" data-st-fine>By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+          </div>
+
+          <!-- 2: the email code -->
+          <div class="wl-q" data-q="code" role="group" aria-labelledby="st-q-code">
+            <p class="wl-k" data-st-k>Start · 2 of 2</p>
+            <h3 class="wl-qh" id="st-q-code"><b data-st-hi="Check your email, {first}.">Check your email.</b><span>Type the 6-digit code.</span></h3>
+            <p class="wl-qs">We sent it to <b data-st-to>you</b>. It's good for an hour.</p>
+            <div class="st-otp" data-st-otp><span class="st-otpb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span>
+              <input type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1" maxlength="6" pattern="[0-9]*">
+              <input type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 2" maxlength="1" pattern="[0-9]*">
+              <input type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 3" maxlength="1" pattern="[0-9]*">
+              <i aria-hidden="true"></i>
+              <input type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 4" maxlength="1" pattern="[0-9]*">
+              <input type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 5" maxlength="1" pattern="[0-9]*">
+              <input type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 6" maxlength="1" pattern="[0-9]*">
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="st-links"><button type="button" class="st-link" data-st-resend disabled>Send a new code <span data-st-wait>in 30s</span></button><span class="dot">·</span><button type="button" class="st-link" data-st-other>Use another email</button></p>
+            <p class="st-hint" data-st-hint hidden>Didn't get it? It can take a minute. Check spam or promotions, or send a new code.</p>
+          </div>
+
+          <!-- 3: the plan -->
+          <div class="wl-q" data-q="plan" role="group" aria-labelledby="st-q-plan">
+            <p class="wl-k" data-st-k>Start · 3 of 4</p>
+            <h3 class="wl-qh" id="st-q-plan"><b data-st-hi="Pick your plan, {first}.">Pick your plan.</b><span>Change it anytime.</span></h3>
+            <p class="wl-qs">Every plan does the work. Pick by how many brands you run.</p>
+            <div class="st-per" data-st-per role="radiogroup" aria-label="Billing"><button type="button" data-per="month" aria-checked="true" role="radio">Monthly</button><button type="button" data-per="year" aria-checked="false" role="radio">Yearly <em data-st-save>Save 20%</em></button><i aria-hidden="true"></i></div>
+            <div class="st-plans" data-st-plans></div>
+            <p class="st-line" data-st-line></p>
+          </div>
+
+          <!-- 4: pay $1, inside the page (consent copy b: summary, the renewal box, the line under the button) -->
+          <div class="wl-q" data-q="pay" role="group" aria-labelledby="st-q-pay">
+            <p class="wl-k" data-st-k>Start · 4 of 4</p>
+            <h3 class="wl-qh" id="st-q-pay"><b data-st-payh>14 days for $1.</b><span data-st-then>Then $199 a month.</span></h3>
+            <div class="st-sum" data-st-sum>
+              <div class="r"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><span><b data-st-sname>Studio Pro</b> · <span data-st-seats2>3 seats · up to 2 Macs each</span></span><button type="button" class="st-link" data-st-change>Change</button></div>
+              <div class="r"><span data-st-today><b>$1 today</b> for a 14-day trial. Then <b data-st-sprice>$199/month</b> plus tax, starting <b data-st-sdate>December 4, 2026</b>, until you cancel.</span></div>
+              <!-- a friends' code (STUDIOK7): the first month free, monthly plans only -->
+              <div class="r st-promo" data-st-promo>
+                <button type="button" class="st-link" data-st-havecode>Have a code?</button>
+                <span class="st-pfield" data-st-pfield hidden>
+                  <span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="promo" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" aria-label="Code" placeholder="Code" enterkeyhint="go"></span>
+                  <button type="button" class="st-apply" data-st-apply>Apply</button>
+                </span>
+                <span class="st-pchip" data-st-pchip hidden><span data-st-pchip-t>STUDIOK7 · First month free</span><button type="button" data-st-pdel aria-label="Remove the code"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></span>
+              </div>
+            </div>
+            <div class="st-pscroll">
+            <label class="wl-f st-name" data-st-name hidden><span>Your name, for your pass</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="pname" type="text" autocomplete="name" autocapitalize="words" maxlength="80" enterkeyhint="next"></span></label>
+            <div class="st-card"><span class="wl-fb st-cb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><div class="st-pe" data-st-pe><div class="st-load"><i></i><i></i><i></i></div></div></div>
+            <label class="wl-sms st-agree" data-st-agree><input type="checkbox" name="renew_ok" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><small data-st-agree-t>I agree that after my 14-day trial for $1, Studio Pro renews automatically at $199/month plus tax, starting December 4, 2026 and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before December 4, 2026, I won't be charged $199.</small></span></label>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="st-under" data-st-under></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- the film's bar: back, where you are, Continue -->
+        <div class="wl-dock st-dock">
+          <button type="button" class="st-look" data-st-look hidden>Look around first</button>
+          <div class="wl-bar">
+            <button type="button" class="wl-back" data-st-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
+            <span class="wl-seg" aria-hidden="true" data-st-seg><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
+            <button type="button" class="wl-next" data-st-next data-gx disabled><span data-st-next-t>Continue</span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
+            <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Start 14 days for $1</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
+          </div>
+          <button type="button" class="wl-kay" data-st-kay aria-label="Play Kayla again"><img src="assets/kayla.jpg" alt="" width="80" height="80"><span class="wl-kp" aria-hidden="true"><svg class="pl" viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><span class="wl-kw" data-st-kw aria-hidden="true"></span><span class="wl-kt" data-st-kt></span></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ===== the right: the real Studio Home (kit.js SK.appHome), drawn at the app's own 1440 x 900 and scaled to the space ===== -->
+    <div class="wl-stage" aria-hidden="true">
+      <div class="wl-fit">
+        <div class="wl-sc on" data-sc="home">
+          <div class="wl-appwin st-app">
+            <div class="st-ah" data-st-ah></div>
+            <div class="wl-menu" data-st-menu><p class="wl-mono" data-st-menuh>All brands</p><ul class="wl-bl" data-st-bl></ul><p class="st-seats" data-st-seats></p></div>
+          </div>
+        </div>
+        <div class="wl-sc" data-sc="pass">
+          <div class="p3"><div class="pass" data-st-pass1></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== You're in: the pass, the download, Open Studio ===== -->
+  <div class="wl-done" data-st-done tabindex="-1">
+    <div class="wl-dwrap">
+      <div class="wl-dl">
+        <p class="wl-k" data-st-dk>Trial started</p>
+        <h3 class="wl-dh"><span data-st-dhi>You're in, Evan.</span><span class="wl-dpos" data-st-dsub2>Studio is downloading.</span></h3>
+        <p class="wl-dsub" data-st-dsub>Your 14 days run until Dec 4. We'll remind you 3 days before.</p>
+        <ol class="st-how">
+          <li><b>1</b><span>Open <em>Studio.dmg</em> from your downloads.</span></li>
+          <li><b>2</b><span>Drag Studio into Applications.</span></li>
+          <li><b>3</b><span>Open it. You're already signed in.</span></li>
+        </ol>
+        <div class="st-acts">
+          <a class="st-open" data-st-open href="#" data-gx="hot"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><span>Open Studio</span></a>
+          <a class="st-dl" data-st-dl href="#" data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg><span>Download again</span></a>
+        </div>
+        <p class="wl-fine" data-st-dfine>Studio is for Mac (Apple silicon and Intel, macOS 13 or later).</p>
+      </div>
+      <div class="wl-dstage p3"><div class="pass big" data-st-pass2></div><p class="wl-hint"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg>Drag to turn it · click to flip</p></div>
+    </div>
+  </div>
+  <p class="wl-toast" data-st-toast role="status" aria-live="polite"></p>
+</div>
+</main>
+
+<script src="vendor/beam_styles.js"></script>
+<script src="vendor/orb_engine.js"></script>
+<script src="start/page.js?v=3ca1ed6f"></script>
+</body>
+</html>

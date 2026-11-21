@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en" class="no-js sk-page">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<!-- A page of its own (build.py PAGES): one sheet, the shared look, nothing of the main site. Every path is from the site's root. -->
+<base href="../">
+<title>Get early access · Studio</title>
+<meta name="description" content="Join the Studio waitlist: 14 days of everything, free, when your invite comes.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://askstudio.ai/early-access/">
+<meta property="og:title" content="Get early access · Studio">
+<meta property="og:description" content="Join the Studio waitlist: 14 days of everything, free, when your invite comes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/early-access/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<link rel="icon" href="assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<script>
+  /* the sheet opens on its own hash (#early-access, #signup, #paywall); the address keeps ?ref=, ?confirm=, ?pass= and the rest */
+  window.SK_PAGE = "early-access";
+  if (!/^#[a-z]/.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search + "#early-access" + location.hash.replace(/^#/, "&").replace(/^&$/, "")); } catch (e) {}
+  document.documentElement.classList.add("pg-in");
+</script>
+<!-- the first wallpaper, fetched before anything else, so the page never sits black waiting for it -->
+<link rel="preload" as="image" href="assets/wl/name.jpg" media="(min-width: 701px)">
+<link rel="preload" as="image" href="assets/wl/name-m.jpg" media="(max-width: 700px)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="early-access/page.css?v=c41d668d">
+<style>html.sk-page, html.sk-page body { background: #000; }</style>
+</head>
+<body>
+
+<!-- the Studio mark, drawn once and reused -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
+    <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
+    <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+    <!-- the same mark in ink, for light sections -->
+    <linearGradient id="mk-dl" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".78"/><stop offset="1" stop-color="#15171b" stop-opacity=".5"/></linearGradient>
+    <linearGradient id="mk-dr" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".95"/><stop offset="1" stop-color="#15171b" stop-opacity=".42"/></linearGradient>
+  </defs>
+  <symbol id="studio-mark" viewBox="36 36 440 440">
+    <path fill="url(#mk-l)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-r)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </symbol>
+  <symbol id="studio-mark-ink" viewBox="36 36 440 440">
+    <path fill="url(#mk-dl)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-dr)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+  </symbol>
+  <symbol id="apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+  <symbol id="claude" viewBox="0 0 24 24"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
+</svg>
+
+<main>
+<!-- Early access: the full-screen sign-up, laid out like the app's opening film. Opened by every "Get early access" button and by
+     links ending in #early-access (a ?ref= link is a friend's invite). The question big on the left; the live Studio app on the right,
+     answering it and using the whole screen; the film's bar at the bottom (back, progress, Continue) with Kayla beside it.
+     Then "You're in": the 3D pass and the link to share. section.js; off until src/waitlist.json says where sign-ups go. -->
+<div class="wl" id="early-access" role="dialog" aria-modal="true" aria-labelledby="wl-h" hidden>
+  <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
+  <div class="wl-top">
+    <span class="wl-brand"><span class="wl-app"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span>Studio<em>Early access</em></span>
+    <div class="wl-tr">
+      <button type="button" class="wl-restart" data-wl-restart hidden>Restart</button>
+      <button type="button" class="wl-snd" data-wl-snd aria-label="Sound on" aria-pressed="true"><svg class="on" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 7h2.6L9.4 4v10L5.6 11H3z"/><path class="w" d="M12.2 6.6a3.4 3.4 0 0 1 0 4.8M14.4 4.6a6.3 6.3 0 0 1 0 8.8"/></svg><svg class="off" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 7h2.6L9.4 4v10L5.6 11H3z"/><path class="w" d="M12.5 7l4 4M16.5 7l-4 4"/></svg></button>
+      <button type="button" class="wl-x" data-wl-close aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
+    </div>
+  </div>
+
+  <div class="wl-in">
+    <!-- ===== the question ===== -->
+    <div class="wl-left">
+      <p class="wl-ref" data-wl-ref hidden><span class="wl-ri" data-wl-ri>S</span><span data-wl-ref-t>A friend saved you a spot.</span></p>
+      <h2 id="wl-h" class="sr">Get early access to Studio</h2>
+      <form class="wl-form" id="wl-form" novalidate>
+        <div class="wl-steps">
+          <div class="wl-q on" data-q="name" role="group" aria-labelledby="wl-q-name">
+            <p class="wl-count" data-wl-count hidden><span class="wl-cnb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><i aria-hidden="true"></i><b data-wl-n></b><span>on the waitlist</span></p>
+            <p class="wl-k">Early access · 1 of 5</p>
+            <h3 class="wl-qh" id="wl-q-name">Let's get you in.<span>What should I call you?</span></h3>
+            <p class="wl-qs">Studio greets you by name, every morning.</p>
+            <div class="wl-fields">
+              <label class="wl-f"><span>First name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
+              <label class="wl-f"><span>Last name</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="last" type="text" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" required maxlength="60"></span></label>
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+          </div>
+
+          <div class="wl-q" data-q="roles" data-multi role="group" aria-labelledby="wl-q-roles">
+            <p class="wl-k">Early access · 2 of 5</p>
+            <h3 class="wl-qh" id="wl-q-roles"><b data-wl-hi="Nice to meet you, {first}.">Nice to meet you.</b><span>What do you do?</span></h3>
+            <p class="wl-qs">Pick everything that fits. Studio makes things for each.</p>
+            <div class="wl-opts two">
+              <button type="button" class="wl-opt" data-v="Business owner" aria-pressed="false"><b>Business owner</b></button>
+              <button type="button" class="wl-opt" data-v="Founder" aria-pressed="false"><b>Founder</b></button>
+              <button type="button" class="wl-opt" data-v="Creator" aria-pressed="false"><b>Creator</b></button>
+              <button type="button" class="wl-opt" data-v="Video editor" aria-pressed="false"><b>Video editor</b></button>
+              <button type="button" class="wl-opt" data-v="Social media manager" aria-pressed="false"><b>Social media manager</b></button>
+              <button type="button" class="wl-opt" data-v="Marketer" aria-pressed="false"><b>Marketer</b></button>
+              <button type="button" class="wl-opt" data-v="Agency" aria-pressed="false"><b>Agency</b></button>
+              <button type="button" class="wl-opt" data-v="Something else" aria-pressed="false"><b>Something else</b></button>
+            </div>
+            <label class="wl-f wl-other" data-wl-other hidden><span>What do you do?</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="other" type="text" autocapitalize="sentences" enterkeyhint="next" maxlength="80"></span></label>
+          </div>
+
+          <div class="wl-q" data-q="brands" role="group" aria-labelledby="wl-q-brands">
+            <p class="wl-k">Early access · 3 of 5</p>
+            <h3 class="wl-qh" id="wl-q-brands">How many brands<span>do you make content for?</span></h3>
+            <p class="wl-qs">Each one gets its own look, voice and library.</p>
+            <div class="wl-opts three">
+              <button type="button" class="wl-opt big" data-v="1" aria-pressed="false"><b>1</b><small>brand</small></button>
+              <button type="button" class="wl-opt big" data-v="2-3" aria-pressed="false"><b>2–3</b><small>brands</small></button>
+              <button type="button" class="wl-opt big" data-v="4+" aria-pressed="false"><b>4+</b><small>brands</small></button>
+            </div>
+          </div>
+
+          <div class="wl-q" data-q="claude" role="group" aria-labelledby="wl-q-claude">
+            <p class="wl-k">Early access · 4 of 5</p>
+            <h3 class="wl-qh" id="wl-q-claude">Studio runs on Claude.<span>Do you use it yet?</span></h3>
+            <p class="wl-qs">If you don't yet, that's totally fine. We'll help you set it up.</p>
+            <div class="wl-opts">
+              <button type="button" class="wl-opt row" data-v="Pro or Max" aria-pressed="false"><b>Yes, on Pro or Max</b></button>
+              <button type="button" class="wl-opt row" data-v="Free plan" aria-pressed="false"><b>Yes, on the free plan</b></button>
+              <button type="button" class="wl-opt row" data-v="Not yet" aria-pressed="false"><b>Not yet</b><small>We'll help you set it up</small></button>
+            </div>
+          </div>
+
+          <div class="wl-q" data-q="you" role="group" aria-labelledby="wl-q-you">
+            <p class="wl-k">Early access · 5 of 5</p>
+            <h3 class="wl-qh" id="wl-q-you"><b data-wl-hi="Last thing, {first}.">Last thing.</b><span>Where should we send your invite?</span></h3>
+            <p class="wl-qs">Your pass is ready the moment you finish. Then get 3 friends on the list, and you all skip to the front.</p>
+            <div class="wl-fields">
+              <label class="wl-f wide"><span>Email</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" required maxlength="120"></span></label>
+              <div class="wl-f wide wl-tel">
+                <label for="wl-phone">Phone <span class="wl-help">Optional. Only for texts you opt in to below.</span></label>
+                <div class="wl-telrow">
+                  <span class="wl-box wl-cc"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><select name="cc" aria-label="Country code" autocomplete="tel-country-code"></select><span class="wl-ccv" aria-hidden="true">+1</span></span>
+                  <span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input id="wl-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="done" maxlength="24"></span>
+                </div>
+                <!-- two separate opt-ins (the carriers' rule), never ticked for you, never required; the carriers' words verbatim beneath -->
+                <div class="wl-smsbox">
+                  <label class="wl-sms"><input type="checkbox" name="sms_notify" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsn>Text me when my Studio invite is ready</b> <em>(optional)</em></span></label>
+                  <label class="wl-sms"><input type="checkbox" name="sms_marketing" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsm>Text me Studio news and offers</b> <em>(optional)</em></span></label>
+                  <p class="wl-smsnote"><span data-wl-smstext>Message frequency varies. Message and data rates may apply. Reply STOP to cancel or HELP for help. Your mobile information will not be sold or shared with third parties.</span> <a href="terms/#sms-terms" target="_blank" rel="noopener">SMS Terms</a> · <a href="privacy/" target="_blank" rel="noopener">Privacy</a></p>
+                </div>
+              </div>
+              <input class="wl-hp" name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="wl-legal">By joining, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a>, <a href="privacy/" target="_blank" rel="noopener">Privacy</a> and emails from Studio. Unsubscribe anytime.</p>
+          </div>
+
+          <!-- the email's code (or its button) holds the place: nothing counts until it is confirmed -->
+          <div class="wl-q" data-q="check" role="group" aria-labelledby="wl-q-check">
+            <p class="wl-k">Early access · Confirm</p>
+            <h3 class="wl-qh" id="wl-q-check"><b data-wl-hi="Check your email, {first}.">Check your email.</b><span>Your spot is waiting.</span></h3>
+            <p class="wl-qs">We sent a 6-digit code to <b class="wl-cmail" data-wl-cmail>your inbox</b>. Type it here, or tap Confirm my spot in the email.</p>
+            <div class="wl-otp" data-wl-otp><span class="wl-otpb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span>
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1" maxlength="6" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 2" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 3" maxlength="1" pattern="[0-9]*">
+              <i aria-hidden="true"></i>
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 4" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 5" maxlength="1" pattern="[0-9]*">
+              <input class="wl-od" type="text" inputmode="numeric" autocomplete="off" aria-label="Digit 6" maxlength="1" pattern="[0-9]*">
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
+            <p class="wl-links"><button type="button" class="wl-tl" data-wl-resend disabled>Send a new code <span data-wl-wait>in 60s</span></button><span class="dot" aria-hidden="true">·</span><button type="button" class="wl-tl" data-wl-other>Use another email</button></p>
+            <p class="wl-chint" data-wl-chint hidden>Didn't get it? It can take a minute. Check spam or promotions, or send a new code.</p>
+            <p class="wl-chint" data-wl-dev hidden>Review build: any 6 digits work here. Nothing is sent.</p>
+          </div>
+        </div>
+
+        <!-- the opening film's bar: back, where you are, Continue; Kayla beside it -->
+        <div class="wl-dock">
+          <div class="wl-bar">
+            <button type="button" class="wl-back" data-wl-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
+            <span class="wl-seg" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
+            <button type="button" class="wl-next" data-wl-next data-gx disabled><span>Continue</span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
+            <button type="submit" form="wl-form" class="wl-go" data-gx="hot" hidden><span class="t">Get early access</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
+          </div>
+          <button type="button" class="wl-kay" data-wl-kay aria-label="Play the voice-over again"><img src="assets/kayla.jpg" alt="" width="80" height="80"><span class="wl-kp" aria-hidden="true"><svg class="pl" viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><span class="wl-kw" data-wl-kw aria-hidden="true"></span><span class="wl-kt" data-wl-kt>Hi, I'm Kayla.</span></button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ===== the right: the real Studio app (kit.js SK.appHome), answering each question as you go (drawn at 1440 x 900, scaled to the space) ===== -->
+    <div class="wl-stage" aria-hidden="true">
+      <div class="wl-fit">
+        <!-- Home: greets you, makes things for who you are, and its All brands menu answers question 3 -->
+        <div class="wl-sc on" data-sc="home">
+          <div class="wl-appwin wl-real">
+            <div class="wl-ah" data-wl-ah></div>
+            <!-- All brands, open on question 3 -->
+            <div class="wl-menu" data-wl-menu><p class="wl-mono">All brands</p><ul class="wl-bl" data-wl-bl></ul></div>
+          </div>
+        </div>
+        <!-- Claude: clips dragged into the composer, a request, the launch film builds itself and v01 lands -->
+        <div class="wl-sc" data-sc="claude">
+          <div class="wl-comp" data-wl-comp><span class="wl-cbeam" data-beam="cx" data-active><span data-beam-bloom></span></span>
+            <div class="wl-att" data-wl-att></div>
+            <p class="wl-cq"><span data-wl-type></span><i></i></p>
+            <div class="wl-crow"><span class="wl-lockmini"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span>Studio <em>×</em> <svg class="cl"><use href="#claude"/></svg>Claude</span><span class="wl-cst">Working</span><span class="wl-cgo"><svg class="up" viewBox="0 0 16 16"><path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/></svg><i></i><i></i><i></i></span></div>
+            <span class="wl-drop" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16h12"/></svg>Drop to add</span>
+          </div>
+          <div class="wl-cl2">
+            <div class="wl-plan" data-wl-plan>
+              <p class="wl-pt"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><b>Studio</b><span class="wl-mono dim" data-wl-kind>Launch film</span></p>
+              <ul>
+                <li data-row="0"><span class="ic"><svg viewBox="0 0 16 16"><path d="M4 2.5h5.5L12 5v8.5H4zM6 7h4M6 9.5h4"/></svg></span><span class="t"><b>Script</b><small>0:14</small></span><span class="v"><small>0:00 Dawn. The crew walks in.</small><small>0:05 Six days. One crew.</small><small>0:11 Title, then the mark.</small></span><i></i></li>
+                <li data-row="1"><span class="ic"><svg viewBox="0 0 16 16"><rect x="3" y="2.5" width="8" height="11" rx="2"/><path d="M13 5v8.5H6"/></svg></span><span class="t"><b>Your footage</b><small>3 clips</small></span><span class="v thumbs" data-wl-ft></span><i></i></li>
+                <li data-row="2"><span class="ic"><svg viewBox="0 0 16 16"><path d="M8 2.5l1.3 3.2 3.2 1.3-3.2 1.3L8 11.5 6.7 8.3 3.5 7l3.2-1.3zM12.5 11l.5 1.2 1.2.5-1.2.5-.5 1.3-.5-1.3-1.2-.5 1.2-.5z"/></svg></span><span class="t"><b>AI shots</b><small>3 made</small></span><span class="v slots"><em></em><em></em><em></em></span><i></i></li>
+                <li data-row="3"><span class="ic"><svg viewBox="0 0 16 16"><path d="M3 7v2M5.5 5v6M8 3v10M10.5 5.5v5M13 7v2"/></svg></span><span class="t"><b>Music</b><small>timed to the cut</small></span><span class="v wave"></span><i></i></li>
+                <li data-row="4"><span class="ic"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2"/><path d="M4.5 4.5a5 5 0 0 0 0 7M11.5 4.5a5 5 0 0 1 0 7"/></svg></span><span class="t"><b>Sound design</b><small>12 hits</small></span><span class="v ticks"></span><i></i></li>
+                <li data-row="5"><span class="ic aa">Aa</span><span class="t"><b>Graphics</b><small>in your brand</small></span><span class="v gfx"></span><i></i></li>
+              </ul>
+            </div>
+            <div class="wl-v01" data-wl-v01><p class="wl-pt"><span class="wl-mono">v01</span><b data-wl-v01t>Launch film</b><span class="wl-mono dim">Made by Studio</span></p><div class="wl-vid"><video muted playsinline loop preload="none" data-wl-vid></video><p data-wl-vidline>Your place for ambitious young founders</p></div></div>
+          </div>
+          <div class="wl-fly" data-wl-fly></div>
+        </div>
+        <!-- the pass, written as you type -->
+        <div class="wl-sc" data-sc="you">
+          <div class="p3"><div class="pass" data-wl-pass1></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== You're in: the pass, your place, and the link to share ===== -->
+  <div class="wl-done" data-wl-done tabindex="-1">
+    <div class="wl-dwrap">
+      <div class="wl-dl">
+        <p class="wl-k">You're on the list</p>
+        <h3 class="wl-dh"><span data-wl-dhi>You're in, Evan.</span><span class="wl-dpos" data-wl-dpos></span></h3>
+        <p class="wl-dsub">When your invite lands, you get 14 days of everything, free. We'll email and text you the moment it's ready.</p>
+        <div class="wl-refbox">
+          <div class="wl-rtop"><div class="wl-rhead"><b data-wl-rhead>Get 3 friends on the list. You all skip to the front.</b><span class="wl-goal" data-wl-goal><i></i><em>0/3</em></span></div><span data-wl-rboost>When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.</span></div>
+          <ol class="wl-slots" data-wl-slots><li><i></i><span>Friend 1</span></li><li><i></i><span>Friend 2</span></li><li><i></i><span>Friend 3</span></li></ol>
+          <div class="wl-link"><span class="wl-url" data-wl-url>studio</span><button type="button" class="wl-copy" data-wl-copy data-gx><span>Copy link</span></button></div>
+          <div class="wl-share" data-wl-share>
+            <a class="wl-sh" data-sh="sms" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.2c-4.6 0-8.3 3-8.3 6.8 0 2.1 1.1 3.9 2.9 5.2-.1 1.1-.6 2.2-1.4 3.1 1.8-.1 3.3-.7 4.4-1.6.8.2 1.6.3 2.4.3 4.6 0 8.3-3 8.3-6.9S16.6 4.2 12 4.2Z"/></svg></span><span>Messages</span></a>
+            <a class="wl-sh" data-sh="x" href="#" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.33l4.37 5.77L17.75 3Zm-1.08 16.17h1.7L7.42 4.74H5.6l11.07 14.43Z"/></svg></span><span>X</span></a>
+            <a class="wl-sh" data-sh="ig" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.6" y="3.6" width="16.8" height="16.8" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="17.1" cy="6.9" r=".6" fill="currentColor" stroke="none"/></svg></span><span>Story</span></a>
+            <a class="wl-sh" data-sh="save" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="3.5"/><path d="M4.5 16.2 9 11.8l3.4 3.3 2.4-2.3 4.7 4.4"/><circle cx="15.6" cy="8.4" r="1.6"/></svg></span><span>Save image</span></a>
+            <a class="wl-sh" data-sh="mail" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="5.5" width="17.6" height="13" rx="3"/><path d="m4.2 7.4 6.6 5.1a2 2 0 0 0 2.4 0l6.6-5.1"/></svg></span><span>Email</span></a>
+            <a class="wl-sh" data-sh="more" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.2 9.6H7a2.2 2.2 0 0 0-2.2 2.2v6.6A2.2 2.2 0 0 0 7 20.6h10a2.2 2.2 0 0 0 2.2-2.2v-6.6A2.2 2.2 0 0 0 17 9.6h-1.2M12 14.4V3.6M8.6 7 12 3.6 15.4 7"/></svg></span><span>More</span></a>
+          </div>
+        </div>
+        <div class="wl-dfoot"><button type="button" class="wl-home" data-wl-close data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg><span>Back to Studio</span></button>
+        <button type="button" class="wl-over" data-wl-plink hidden>Copy my pass link</button>
+        <button type="button" class="wl-over" data-wl-over>Not you? Start over</button></div>
+      </div>
+      <div class="wl-dstage p3"><div class="pass big" data-wl-pass2></div><p class="wl-hint"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg><span data-wl-fliph>Tap to flip</span></p></div>
+    </div>
+  </div>
+  <p class="wl-toast" data-wl-toast role="status" aria-live="polite"></p>
+</div>
+</main>
+
+<script src="vendor/beam_styles.js"></script>
+<script src="vendor/orb_engine.js"></script>
+<script src="early-access/page.js?v=c41d668d"></script>
+</body>
+</html>

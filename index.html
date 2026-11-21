@@ -32,6 +32,9 @@
      presses Enter. The hold goes on here, on the first frame, before anything can be scrolled: no wheel, touch, scroll keys,
      restored scroll or anchor jump moves it. The hero's section.js lifts it on Enter (window.__hxRelease), or at once when there is
      no gate (already entered this session, an invite= link, an #early-access link); after 12 s it lifts by itself if that script never runs. -->
+<!-- The waitlist and the sign-up are pages of their own now (build.py PAGES): an old #early-access / #signup / #paywall link goes
+     straight there, before anything of this page loads, with its ?ref= / ?confirm= / ?pass= kept. -->
+<script>(function (l) { var h = l.hash, q = l.search; if (/^#early(-access)?(&|$)/.test(h)) l.replace("early-access/" + q + h); else if (/^#(signup|paywall)(&|$)/.test(h)) l.replace("start/" + q + h); })(location);</script>
 <style>html.hx-hold, html.hx-hold body { overflow: hidden; overflow-anchor: none; overscroll-behavior: none; } html.hx-hold { scrollbar-gutter: stable; }</style>
 <script>(function (r, w) {
   var hold = true;
@@ -79,7 +82,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=d21bcde1">
+<link rel="stylesheet" href="site.css?v=6b1b9f0f">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1812,7 +1815,7 @@ set.</span></span></figure>
      The friend-invite version skips the plan and the card. Opened by #signup; off on the live site until sales open (section.js). -->
 <div class="wl st" id="signup" role="dialog" aria-modal="true" aria-labelledby="st-h" hidden>
   <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
-  <div class="st-intro" data-st-intro aria-hidden="true"><div class="lg" data-st-logo></div></div>
+  <div class="st-intro" data-st-intro aria-hidden="true" hidden></div>
   <div class="wl-top">
     <span class="wl-brand"><span class="wl-app"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span>Studio<em data-st-badge>Start free</em></span>
     <div class="wl-tr">
@@ -1986,6 +1989,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=d21bcde1"></script>
+<script src="site.js?v=6b1b9f0f"></script>
 </body>
 </html>

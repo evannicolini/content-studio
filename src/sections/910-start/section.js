@@ -39,7 +39,8 @@ var SFX = (function () {
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
@@ -72,7 +73,9 @@ var SFX = (function () {
     function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
     return {
       start: function () {
-        if (!SOUND || !ctx || !buf.bed || src) return;
+        if (!SOUND || !ctx || src) return;
+        if (!buf.bed) { bedWant = true; return; }
+        bedWant = false;
         g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
         src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
         to(level(), 1.5);
@@ -99,7 +102,7 @@ var KAY = (function () {
     "pw-notrial": "Looks like you've had your free trial already. Here's the plan at its regular price.",
     "pw-done": "You're all set. Studio is unlocked. Let's get back to it."
   };
-  var UNRECORDED = {};   /* a line with no voice file yet: she shows the words and stays quiet */
+  var UNRECORDED = {}, waits = {};   /* a line with no voice file yet: she shows the words and stays quiet */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
@@ -123,6 +126,7 @@ var KAY = (function () {
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
     if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    if (!SFX.has(cur) && VO.indexOf(cur) > -1 && (waits[cur] = (waits[cur] || 0) + 1) < 50) { var k0 = cur; queue.unshift(k0); setTimeout(function () { if (my === tok) next(); }, 100); return; }   /* recorded but still loading (a fresh page): wait for it, up to 5 s */
     if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }   /* not recorded yet: skip it, quietly */
     words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
     if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
@@ -214,24 +218,27 @@ function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[
 
 /* ---------- the stage: the app, signing you in ---------- */
 var BRANDS = [
-  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
-  { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] },
-  { n: "Northwind", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
+  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
+  { n: "MIRRA", s: "Social app", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
+  { n: "Custom Esignature", s: "E-signatures", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
   { n: "Fourth brand", s: "Ready when you are", m: "4", bg: "linear-gradient(140deg, #BBC9C7, #536878)", ink: "#05090A", sw: ["#05090A", "#536878", "#BBC9C7", "#DFEAE8"] },
   { n: "Fifth brand", s: "Ready when you are", m: "5", bg: "linear-gradient(140deg, #BED2C3, #0E191E)", ink: "#05090A", sw: ["#0E191E", "#536878", "#BED2C3", "#E5E4E2"] }
 ];
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
-function brandList(n) { var f = first(); return BRANDS.slice(0, Math.min(5, n)).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); }); }
+function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
 var AH = SK.appHome($("[data-st-ah]"), {});
+/* the Home at work while you sign in (SK.appStory): footage dragged in, the request, the editor, Ask Studio; it rests on the plan and pay steps */
+var STORY = null;
+function story(on) { if (on && !STORY) STORY = SK.appStory(AH, { sfx: function (n) { SFX.play(n === "key" ? "key" : n, { gain: n === "key" ? .5 : .4 }); } }); else if (!on && STORY) { STORY.stop(); STORY = null; } }
 function drawHome(typing) {
   var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
   AH.name(f);
-  var bl = brandList(Math.max(n, 3)).slice(0, n > 3 ? 3 : Math.max(n, 3)).map(function (b, i) { return { n: b.n, m: b.m || "Y", bg: b.bg, ink: b.ink }; });
+  var bl = SK.BRANDS.slice();
   if (n > 3) bl.push({ n: "+ " + (pl.brands > 5 ? "every brand" : (pl.brands - 3) + " more"), m: "+", bg: "rgba(255,255,255,.12)" });
   AH.brands(bl);
-  AH.allBrands(n === 1 ? (f ? f + "'s brand" : "Your brand") : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands);
+  AH.allBrands(n > 3 ? (pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands) : "All brands");
 }
 function drawPlanStage() {
   var pl = planOf(me.plan), bl = brandList(pl.brands), ul = $("[data-st-bl]");
@@ -249,6 +256,7 @@ function sizeStage() {
   var r = stage.getBoundingClientRect(); if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
   /* the app at its own 1440 x 900: as tall as the space allows (up to 5K), running off the right edge like the opening film */
+  if (mob) { var sm = Math.max(.38, Math.min(.5, innerWidth * 1.55 / 1440)); stage.style.setProperty("--stage-h", Math.round(Math.min(370, 760 * sm)) + "px"); fit.style.setProperty("--s", sm.toFixed(3)); return; }   /* phones: as on the waitlist */
   var s = mob ? Math.min(r.width / 1440, 220 / 900) : Math.min((r.height || 900) / 860, (r.width + 300) / 1440, 1.75);
   if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);   /* the plans take the room; the app stays tall and runs off the edge */
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
@@ -259,7 +267,9 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
 /* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
-["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = "assets/su/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+/* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
+function setWalls(src) { var u = src || "assets/su/done.jpg"; if (PHONE) u = u.replace(/\.jpg$/, "-m.jpg"); ["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = u; }); }
+setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
 var wallCache = {}, wallTok = 0, wallNow = "";
 function want(k) {
   var u = WALL[k]; if (!u) return Promise.resolve("");
@@ -407,6 +417,9 @@ function ready() {
   return true;
 }
 var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
+/* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
+function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
   personal();
@@ -421,7 +434,7 @@ function setStep(n, quiet, ack) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n;
+  at = n; setTimeout(beamsOn, 40);
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -434,6 +447,7 @@ function setStep(n, quiet, ack) {
   scenes.home.classList.remove("menu");
   $("[data-st-look]").hidden = !(PAYWALL && q === "plan");
   if (q === "plan") drawPlanStage(); else drawHome();
+  story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
   if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
@@ -478,6 +492,9 @@ $$(".st-way").forEach(function (b) {
     oauth(way, b);
   });
 });
+/* Google and Apple only once Supabase OAuth is wired (?oauth on this Mac): until then they are not shown, and the email fields are
+   simply there, nothing to expand */
+if (!CFG.oauth) { $$('.st-way[data-way="google"], .st-way[data-way="apple"], .st-or').forEach(function (el) { el.hidden = true; }); emailWay.hidden = true; mailBox.hidden = false; emailWay.setAttribute("aria-expanded", "true"); }
 form.elements.first.addEventListener("input", function () { drawHome(true); clearTimeout(this._t); this._t = setTimeout(function () { drawHome(); }, 900); personal(); next.disabled = !ready(); });
 form.elements.email.addEventListener("input", function () { next.disabled = !ready(); });
 [form.elements.first, form.elements.email].forEach(function (inp) {
@@ -970,6 +987,7 @@ $("[data-st-open]").addEventListener("click", function (e) {
 
 /* ---------- open / close ---------- */
 function open() {
+  if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
@@ -982,13 +1000,13 @@ function open() {
   wallNow = sky.getAttribute("src");
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
-  drawHome();
+  drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
   focusStep(SK.reduced ? 0 : 560);
 }
 /* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  if (introDone || SK.reduced || PAYWALL) { introDone = true; introEl.hidden = true; return Promise.resolve(); }
+  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader (Evan): the page builds itself in instead (.wl.open, section.css) */
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {
@@ -1009,6 +1027,7 @@ function hide() {
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
+  if (window.SK_PAGE) { KAY.stop(); SFX.bed.stop(); var r = ""; try { r = document.referrer && new URL(document.referrer).origin === location.origin && !/early-access|\/start/.test(document.referrer) ? document.referrer : ""; } catch (e) {} location.href = r || "./"; return; }
   if (pushed) { pushed = false; history.back(); return; }
   hide();
   if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
@@ -1031,6 +1050,25 @@ sheet.addEventListener("keydown", function (e) {
 var restartB = $("[data-st-restart]");
 restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
+
+/* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
+if (local && !EMBED) {
+  var CH = [["in", "Sign in"], ["code", "Email code"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
+  var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
+  var chGo = function (id) {
+    var wantPay = /^(plan|pay|unlocked)$/.test(id);
+    if (wantPay !== PAYWALL || sheet.classList.contains("done")) { location.href = location.pathname + location.search + (wantPay ? "#paywall" : "#signup") + "&ch=" + id; location.reload(); return; }
+    if (!val("first")) form.elements.first.value = "Sam";
+    if (!val("email")) form.elements.email.value = "sam@example.com";
+    me.first = me.first || "Sam"; me.email = me.email || "sam@example.com"; personal();
+    if (id === "done" || id === "unlocked") { if (PAYWALL) me.paid = me.paid || { plan: me.plan, period: me.period }; showDone(false); return; }
+    var n = ORDER.indexOf(id); if (n < 0) return;
+    if (id === "code") $("[data-st-to]").textContent = me.email;
+    setStep(n, false);
+  };
+  var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Orange dune", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
+  if (H.get("ch")) setTimeout(function () { chGo(H.get("ch")); chUI.paint(); }, 600);
+}
 
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
 if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
@@ -1102,4 +1140,4 @@ if (Q.has("paid") && LIVE) {   /* back from the bank: pick up where Pay left off
     status(back.subscription).then(paid, function (x) { setStep(ORDER.indexOf("pay")); err(Q.get("redirect_status") === "failed" ? "Your bank didn't approve the $1. Try another card." : say(x)); });
   }
 }
-if (DEEP.test(location.hash)) setTimeout(open, SK.reduced ? 0 : 250);
+if (DEEP.test(location.hash)) setTimeout(open, SK.reduced || window.SK_PAGE ? 0 : 250);

@@ -32,6 +32,9 @@
      presses Enter. The hold goes on here, on the first frame, before anything can be scrolled: no wheel, touch, scroll keys,
      restored scroll or anchor jump moves it. The hero's section.js lifts it on Enter (window.__hxRelease), or at once when there is
      no gate (already entered this session, an invite= link, an #early-access link); after 12 s it lifts by itself if that script never runs. -->
+<!-- The waitlist and the sign-up are pages of their own now (build.py PAGES): an old #early-access / #signup / #paywall link goes
+     straight there, before anything of this page loads, with its ?ref= / ?confirm= / ?pass= kept. -->
+<script>(function (l) { var h = l.hash, q = l.search; if (/^#early(-access)?(&|$)/.test(h)) l.replace("early-access/" + q + h); else if (/^#(signup|paywall)(&|$)/.test(h)) l.replace("start/" + q + h); })(location);</script>
 <style>html.hx-hold, html.hx-hold body { overflow: hidden; overflow-anchor: none; overscroll-behavior: none; } html.hx-hold { scrollbar-gutter: stable; }</style>
 <script>(function (r, w) {
   var hold = true;

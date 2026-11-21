@@ -88,7 +88,8 @@ var SFX = (function () {
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
@@ -121,7 +122,9 @@ var SFX = (function () {
     function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
     return {
       start: function () {
-        if (!SOUND || !ctx || !buf.bed || src) return;
+        if (!SOUND || !ctx || src) return;
+        if (!buf.bed) { bedWant = true; return; }
+        bedWant = false;
         g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
         src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
         to(level(), 1.5);
@@ -228,7 +231,8 @@ var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 /* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
 var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
 var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, Big Sur, the dune, the alpine lake, Pebble Beach, peach dawn */
-["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+function setWalls(src) { ["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { var u = src || "assets/wl/" + k + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
+setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");   /* each step its own; the Chapters pill can try one for all (SK.wallPick) */
 var wallCache = {}, wallTok = 0, wallNow = "";
 /* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
 var GOAL = 3, countEl = sheet.querySelector("[data-wl-count]"), countN = sheet.querySelector("[data-wl-n]"), countT = 0, countLast = -1;
@@ -324,9 +328,9 @@ var PROMPT = {
 };
 /* brand kits in the brand palette: vampire black, chinese black, jet stream, platinum, celadon, blue slate, obsidian chrome */
 var BRANDS = [
-  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
-  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#05090A", "#536878", "#B4B9BA", "#E5E4E2"] },
-  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#0E191E", "#536878", "#BACCD0", "#DFEAE8"] },
+  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
+  { n: "MIRRA", s: "14 posts this week", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
+  { n: "Custom Esignature", s: "3 ads running", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
   { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
   { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] }
 ];
@@ -335,7 +339,7 @@ function article(w) { return /^[AEIOU]/i.test(w) ? "an" : "a"; }
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
 function brandList() {
   var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, f = first();
-  return BRANDS.slice(0, n).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); });
+  return BRANDS.slice(0, n);   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
 }
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 /* the real Studio Home (kit.js SK.appHome): your name in the greeting, your brands as chips, and Post next made for who you are */
@@ -343,7 +347,7 @@ var AH = SK.appHome(sheet.querySelector("[data-wl-ah]"), { brands: [] }), ahHave
 function drawHome(typing) {
   var f = first();
   AH.name(f, typing);
-  AH.brands(brandList().slice(0, 3).map(function (b) { return { n: b.n, m: b.m || (b.n || "Y").charAt(0), bg: b.bg, ink: b.ink }; }));
+  AH.brands(SK.BRANDS);   /* always the three real brands, as on the sign-up */
   var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; });
   var want = ans.roles.slice(0, 4), key = want.join("|") + "#" + val("other");
   if (key === ahHave) return;
@@ -370,27 +374,12 @@ var loopTok = 0;
 var VIDLINE = { "Business owner": "This week only. Come see us.", "Founder": "Your place for ambitious young founders", "Creator": "Same crew. Every morning.", "Video editor": "Take the long way.", "Social media manager": "The corner table. Saturdays.", "Marketer": "Made to be felt.", "Agency": "Every brand, its own voice.", "Something else": "If you can dream it, you can post it." };
 /* step 4, on the real Home: three of your clips drop into Ask Studio, the request types itself and goes, Studio works (Working now),
    and the finished cut lands at the front of To review as v01. Then it clears and runs again with your next role. */
-function askLoop() {
-  var my = ++loopTok, w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== loopTok) throw 0; }); };
-  (async function () {
-    try {
-      for (var round = 0; ; round++) {
-        var picks = ans.roles.length ? ans.roles : ["Founder"], k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
-        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"].map(function (x) { return M + "selects/" + x + ".jpg"; });
-        AH.review(null); AH.working(false); AH.sending(false); AH.attach([]); AH.typeAsk("", true);
-        await w(500); AH.attach(clips); SFX.play("tick", { gain: .6 });
-        await w(700);
-        for (var i = 1; i <= text.length; i++) { AH.typeAsk(text.slice(0, i), true); if (i % 3 === 0) SFX.play("key", { gain: .5 }); await w(34 + Math.random() * 30); }
-        await w(500); AH.sending(true); SFX.play("send", { gain: .5 });
-        await w(320); AH.sending(false); AH.typeAsk("", false); AH.attach([]);
-        AH.working(true, "Studio · " + (film[1] === "Film" ? "Launch film" : film[1]), "Cutting 3 clips…");
-        await w(1500); AH.working(true, null, "Music, captions, your brand…");
-        await w(1500); AH.working(false);
-        AH.review({ img: M + "selects/" + film[0] + ".jpg", kicker: film[1], title: film[2] }); SFX.play("land", { gain: .5 });
-        await w(4200);
-      }
-    } catch (e) {}
-  })();
+var STORY = null;
+function stopStory() { if (STORY) { STORY.stop(); STORY = null; } }
+function askLoop() {   /* the full story (kit.js SK.appStory): footage dragged in, the request, the editor cutting, Ask Studio answering */
+  loopTok++; stopStory();
+  var ps = ["Create a new launch commercial for my company"].concat(ans.roles.map(function (k) { return PROMPT[k]; }).filter(Boolean));
+  STORY = SK.appStory(AH, { prompts: ps, sfx: function (n) { SFX.play(n, { gain: n === "key" ? .5 : .45 }); } });
 }
 function claudeLoop() {
   var my = ++loopTok, sc = scenes.claude, comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]"), plan = sheet.querySelector("[data-wl-plan]");
@@ -561,6 +550,9 @@ function personal() {
   var f = first();
   sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); });
 }
+/* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
+function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+setTimeout(beamsOn, 0);
 function setStep(n, quiet, fromHist) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
   personal();
@@ -575,7 +567,7 @@ function setStep(n, quiet, fromHist) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n;
+  at = n; setTimeout(beamsOn, 40);
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1]); }
   segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -586,7 +578,7 @@ function setStep(n, quiet, fromHist) {
   go.disabled = q === "check" && !ready(n);
   scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
-  if (q === "claude") askLoop(); else { loopTok++; AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
+  if (q === "claude") askLoop(); else { loopTok++; stopStory(); AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
   sizeStage(); setTimeout(sizeStage, 400);
   if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
@@ -958,6 +950,7 @@ if (window.visualViewport) visualViewport.addEventListener("resize", function ()
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
 function open(src) {
+  if (!window.SK_PAGE) { location.href = "early-access/" + location.search; return; }   /* a page of its own (build.py PAGES): the site never loads behind it */
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
@@ -992,13 +985,16 @@ function open(src) {
     setTimeout(typeStep, 700);
   }
 }
+/* closing the page goes to the site: the page it came from when that was the site, else askstudio.ai */
+function leave() { KAY.stop(); SFX.bed.stop(); var r = ""; try { r = document.referrer && new URL(document.referrer).origin === location.origin && !/early-access|\/start/.test(document.referrer) ? document.referrer : ""; } catch (e) {} location.href = r || "./"; }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
+  sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; stopStory(); KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
+  if (window.SK_PAGE) { leave(); return; }
   if (pushed && depth > 0) { pushed = false; closing = true; history.go(-depth); return; }   /* popstate hides it */
   if (depth > 0) { closing = true; history.go(-depth); return; }
   hide();
@@ -1033,7 +1029,7 @@ sheet.addEventListener("keydown", function (e) {
   if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
   else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
 });
-if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "link"); }, SK.reduced ? 0 : 250);
+if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "link"); }, SK.reduced || window.SK_PAGE ? 0 : 250);
 
 /* a friend's invite: say whose */
 if (REF && !joined()) {
@@ -1076,7 +1072,7 @@ function showDone(r, quiet) {
   var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
   sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
-  loopTok++; pass1.stop();
+  loopTok++; stopStory(); pass1.stop();
   if (!again) {
     /* the pass on the invite step glides into its place on You're in (one object, not a cut); without it in view, it spins in */
     var p1 = sheet.querySelector("[data-wl-pass1]"), r1 = p1.getBoundingClientRect();
@@ -1125,7 +1121,7 @@ sheet.querySelector("[data-wl-fliph]").textContent = fine ? "Drag to turn · cli
 function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
   savePend(null); clearOtp(); cerr(""); clearInterval(resendT); clearDraft();
-  rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
+  rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; stopStory(); pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
   inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_notify.checked = false; form.elements.sms_marketing.checked = false; other.hidden = true;
   mark([], ""); sheet.querySelectorAll(".wl-err").forEach(function (e) { e.textContent = ""; });
@@ -1147,6 +1143,27 @@ sheet.querySelector("[data-wl-plink]").addEventListener("click", function () {
 var restartB = sheet.querySelector("[data-wl-restart]");
 restartB.hidden = !(local || Q.has("review"));   /* review only: never on the live site */
 restartB.addEventListener("click", startOver);
+
+/* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code) ---------- */
+if (local) {
+  var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
+  var chGo = function (id) {
+    if (sheet.classList.contains("done")) startOver();
+    if (!val("first")) form.elements.first.value = "Sam";
+    if (!val("last")) form.elements.last.value = "Lee";
+    if (!ans.roles.length) ans.roles = ["Founder", "Creator"];
+    if (!ans.brands) ans.brands = "2-3";
+    if (!ans.claude) ans.claude = "Pro or Max";
+    if (!val("email")) form.elements.email.value = "sam@example.com";
+    personal(); drawHome(); drawBrands();
+    if (id === "done") { showDone({ first: first() || "Sam", code: "QEYAB67", position: 1231, referrals: 1, pass: "demo" }); return; }
+    var n = ORDER.indexOf(id); if (n < 0) return;
+    if (id === "check") sheet.querySelector("[data-wl-cmail]").textContent = val("email");
+    setStep(n, false);
+  };
+  var chUI = SK.chapters({ list: CH, now: function () { return sheet.classList.contains("done") ? "done" : ORDER[at]; }, go: chGo, walls: true, wallDefault: "Each step its own",
+    wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "in" : ORDER[at]); } });
+}
 
 /* the story image (Story and Save image): 1080 x 1920, drawn here on a canvas. Their pass floating on the You're in sky, the Studio app
    large and running off the right edge (as on the site's phone hero), askstudio.ai. Phones share it (Instagram, Save Image); elsewhere

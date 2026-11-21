@@ -11,6 +11,7 @@ Layout
     src/sections/NN-name/       section.html (required), section.css, section.js (each optional)
     assets/media/manifest.json  inlined as window.SK_MEDIA so sections can read what media exists
     pricing.py                  Studio's prices, from the app's published pricing.json; the build fails if the site could differ
+    src/page.html               the frame of the pages of their own (PAGES): askstudio.ai/early-access/ and /start/
     src/legal/                  terms.md + privacy.md -> terms/index.html + privacy/index.html (legal.py: page.html, legal.css, legal.js)
 
 Each section.js is wrapped in its own function and only runs if its <section> is on the page.
@@ -77,13 +78,45 @@ def build():
     open(os.path.join(ROOT, "site.css"), "w", encoding="utf-8").write(css_s)
     open(os.path.join(ROOT, "site.js"), "w", encoding="utf-8").write(js_s)
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(page)
+    pages(secdir, [x for x in js if x.startswith("window.SK_")])
     legal.build(ROOT)  # askstudio.ai/terms and /privacy
     return names, ver
 
 
+# The waitlist and the sign-up are pages of their own (askstudio.ai/early-access/, askstudio.ai/start/): only their section, the
+# shared look (base.css, kit.js) and the CSS they share, so the main site (its intro, films and voice) never loads behind them.
+# The main page sends #early-access and #signup / #paywall links here (src/shell.html), keeping ?ref=, ?confirm= and the rest.
+PAGES = [
+    # slug, title, description, the sections whose CSS it needs, the section it shows
+    ("early-access", "Get early access · Studio", "Join the Studio waitlist: 14 days of everything, free, when your invite comes.", ["900-early"], "900-early", "#early-access", "assets/wl/name"),
+    ("start", "Start free · Studio", "Sign in and Studio downloads. Make your first video before you pay a thing.", ["900-early", "910-start"], "910-start", "#signup", "assets/su/done"),
+]
+
+
+def pages(secdir, head_js):
+    shell = read(SRC, "shell.html")
+    defs = shell[shell.index("<!-- the Studio mark"):shell.index("</svg>", shell.index("<!-- the Studio mark")) + 6]
+    tpl = read(SRC, "page.html")
+    for slug, title, desc, css_from, sec, hash_, sky in PAGES:
+        css = [read(SRC, "base.css")] + ["/* ===== %s ===== */\n%s" % (n, read(secdir, n, "section.css")) for n in css_from]
+        js = list(head_js) + [read(SRC, "kit.js")]
+        j = read(secdir, sec, "section.js")
+        js.append("/* ===== %s ===== */\n;(function () {\ntry {\n%s\n} catch (e) { console.error(%s, e); }\n})();" % (sec, j, json.dumps("section " + sec)))
+        js.append("window.SK && SK.start && SK.start();")
+        css_s, js_s = "\n\n".join(css), "\n\n".join(js)
+        ver = hashlib.sha1((css_s + js_s).encode()).hexdigest()[:8]
+        out = os.path.join(ROOT, slug)
+        os.makedirs(out, exist_ok=True)
+        page = (tpl.replace("{{TITLE}}", title).replace("{{DESC}}", desc).replace("{{SLUG}}", slug).replace("{{HASH}}", hash_)
+                .replace("{{DEFS}}", defs).replace("{{SKY}}", sky).replace("<!--SECTION-->", read(secdir, sec, "section.html").strip()).replace("{{V}}", ver))
+        open(os.path.join(out, "page.css"), "w", encoding="utf-8").write(css_s)
+        open(os.path.join(out, "page.js"), "w", encoding="utf-8").write(js_s)
+        open(os.path.join(out, "index.html"), "w", encoding="utf-8").write(page)
+
+
 class H(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path.split("?")[0] in ("/", "/index.html", "/terms/", "/privacy/"):
+        if self.path.split("?")[0] in ("/", "/index.html", "/terms/", "/privacy/", "/early-access/", "/start/"):
             try:
                 build()
             except Exception as e:  # keep serving the last good build

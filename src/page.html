@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" class="no-js sk-page">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<!-- A page of its own (build.py PAGES): one sheet, the shared look, nothing of the main site. Every path is from the site's root. -->
+<base href="../">
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESC}}">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://askstudio.ai/{{SLUG}}/">
+<meta property="og:title" content="{{TITLE}}">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/{{SLUG}}/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<link rel="icon" href="assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<script>
+  /* the sheet opens on its own hash (#early-access, #signup, #paywall); the address keeps ?ref=, ?confirm=, ?pass= and the rest */
+  window.SK_PAGE = "{{SLUG}}";
+  if (!/^#[a-z]/.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search + "{{HASH}}" + location.hash.replace(/^#/, "&").replace(/^&$/, "")); } catch (e) {}
+  document.documentElement.classList.add("pg-in");
+</script>
+<!-- the first wallpaper, fetched before anything else, so the page never sits black waiting for it -->
+<link rel="preload" as="image" href="{{SKY}}.jpg" media="(min-width: 701px)">
+<link rel="preload" as="image" href="{{SKY}}-m.jpg" media="(max-width: 700px)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="{{SLUG}}/page.css?v={{V}}">
+<style>html.sk-page, html.sk-page body { background: #000; }</style>
+</head>
+<body>
+
+{{DEFS}}
+
+<main>
+<!--SECTION-->
+</main>
+
+<script src="vendor/beam_styles.js"></script>
+<script src="vendor/orb_engine.js"></script>
+<script src="{{SLUG}}/page.js?v={{V}}"></script>
+</body>
+</html>

@@ -323,6 +323,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var ni = function (k, t, n, on) { return '<p class="ah-ni' + (on ? " on" : "") + '">' + sv(k) + "<span>" + t + "</span>" + (n != null ? "<em>" + n + "</em>" : "") + "</p>"; };
     var MARK = '<svg class="ah-mk" viewBox="36 36 440 440" aria-hidden="true"><use href="#studio-mark"/></svg>';
     var CLA = '<svg class="ah-cl" aria-hidden="true"><use href="#claude"/></svg>';
+    var BEAM = '<span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>';   /* the composer's border beam */
     var IG = '<i class="ah-p ig"></i>', TT = '<i class="ah-p tt"></i>', YT = '<i class="ah-p yt"></i>', LI = '<i class="ah-p li"></i>';
     var now = new Date(), DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var hour = now.getHours(), greet = hour < 5 ? "Good evening" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -346,13 +347,13 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 18) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 23) + ni("cre", "Creators", 441) +
         '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
-        '<p class="ah-ask"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
+        '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
-          '<div class="ah-comp"><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
+          '<div class="ah-comp"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-drop">Drop to add to Studio</span><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
           '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
@@ -367,7 +368,18 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
           "</div>" +
           '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
         "</div>" +
-      "</div></div>";
+        /* the full editor: the preview, and the timeline filling as Studio cuts (SK.appStory) */
+        '<div class="ah-ed" aria-hidden="true"><div class="ah-edh">' + sv("l") + '<span class="ah-edt"><b>Launch commercial</b><em data-ed-v>v01 · Cutting…</em></span><span class="ah-fl"></span><span class="ah-edb">16:9</span><span class="ah-edb">0:30</span><b class="ah-pill on">Export</b></div>' +
+          '<div class="ah-pv"><img alt="" data-ed-pv><p class="ah-cap" data-ed-cap></p><span class="ah-pvl">' + MARK + 'Studio</span><span class="ah-pvt" data-ed-t>0:00</span></div>' +
+          '<div class="ah-tln"><p class="ah-trk"><em>Video</em><span data-ed-trk="v"></span></p><p class="ah-trk"><em>Captions</em><span data-ed-trk="c"></span></p><p class="ah-trk"><em>Music</em><span data-ed-trk="m"></span></p><p class="ah-trk"><em>Brand</em><span data-ed-trk="b"></span></p><i class="ah-ph" data-ed-ph></i></div>' +
+        "</div>" +
+      "</div>" +
+      /* Ask Studio, the chat that slides in from the right */
+      '<aside class="ah-ap" aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
+        '<div class="ah-apc">' + BEAM + '<span>Reply to Studio…</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></aside>" +
+      /* the footage you drag in */
+      '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
+      "</div>";
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
       name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
@@ -378,7 +390,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
       },
       brands: function (list) {
-        chips.innerHTML = (list || []).map(function (b) { return '<span class="ah-chip"><span class="ah-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>" + esc(b.n) + "</span>"; }).join("");
+        chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
       typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
@@ -393,10 +405,127 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       }
     };
     ctl.name(o.name || "");
-    ctl.brands(o.brands || [{ n: "Your brand", m: "Y", bg: "linear-gradient(140deg, #DFEAE8, #536878)", ink: "#05090A" }, { n: "Halden", m: "H", bg: "linear-gradient(140deg, #536878, #0E191E)" }, { n: "Northwind", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)" }]);
+    /* ---- the story pieces (SK.appStory): footage dragged in, the editor, the Ask Studio panel ---- */
+    var root = host.querySelector(".ah"), comp = host.querySelector(".ah-comp"), drag = host.querySelector(".ah-drag"), msgs = host.querySelector("[data-ap-m]");
+    var ed = host.querySelector(".ah-ed"), trk = function (k) { return host.querySelector('[data-ed-trk="' + k + '"]'); };
+    var at = function (el) { var x = 0, y = 0; while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; };
+    ctl.drag = function (imgs) {   /* the clips fly in from off the bottom right, on the pointer, and drop into the composer */
+      host.querySelector("[data-ah-dst]").innerHTML = imgs.map(function (u, i) { return '<img src="' + esc(u) + '" alt="" style="--i:' + i + '">'; }).join("");
+      var c = at(comp), tx = c.x + comp.offsetWidth * .42, ty = c.y + 18;
+      drag.style.transition = "none"; drag.style.transform = "translate(1500px, 960px)"; drag.className = "ah-drag on"; void drag.offsetWidth;
+      drag.style.transition = ""; drag.style.transform = "translate(" + tx + "px, " + ty + "px)";
+      setTimeout(function () { comp.classList.add("over"); }, 700);
+      return SK.sleep(SK.reduced ? 0 : 1300).then(function () { drag.classList.add("drop"); comp.classList.remove("over"); ctl.attach(imgs); return SK.sleep(SK.reduced ? 0 : 380); }).then(function () { drag.className = "ah-drag"; });
+    };
+    /* the app runs off the right edge of the screen: the editor and Ask Studio keep to the part you can see (--cut, app pixels) */
+    var fitCut = function () { var r = root.getBoundingClientRect(), k = r.width / 1440 || 1, vis = (window.innerWidth - r.left) / k; root.style.setProperty("--cut", Math.max(0, Math.round(1440 - vis + 28)) + "px"); };
+    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
+    ctl.clip = function (u, i) { trk("v").insertAdjacentHTML("beforeend", '<i class="ah-tc wl-in-a" style="--i:0;flex:' + (i === 1 ? 1.5 : 1) + '"><img src="' + esc(u) + '" alt=""></i>'); host.querySelector("[data-ed-pv]").src = u; };
+    ctl.music = function () { var w = ""; for (var i = 0; i < 90; i++) w += '<b style="height:' + Math.round(22 + 70 * Math.abs(Math.sin(i * .37) * Math.cos(i * .11))) + '%"></b>'; trk("m").innerHTML = '<i class="ah-tw">' + w + "</i>"; };
+    ctl.captions = function (lines) { trk("c").innerHTML = lines.map(function (t, i) { return '<i class="ah-tcp wl-in-a" style="--i:' + i + '">' + esc(t) + "</i>"; }).join(""); };
+    ctl.brandTrack = function () { trk("b").innerHTML = '<i class="ah-tb wl-in-a" style="--i:0">' + MARK + 'Logo · end card</i><i class="ah-tb wl-in-a" style="--i:1">Brand colours</i>'; };
+    ctl.title = function (t) { host.querySelector(".ah-edt b").textContent = t; };
+    ctl.caption = function (t) { host.querySelector("[data-ed-cap]").textContent = t; };
+    ctl.play = function (on) { root.classList.toggle("ed-play", !!on); if (on) host.querySelector("[data-ed-v]").textContent = "v01 · Ready to review"; };
+    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
+    ctl.msg = function (who, html, imgs) {   /* who: "you" | "studio" | "step" (a line that turns from a spinner to a tick) */
+      var m = document.createElement("div"); m.className = "ah-m " + who + " wl-in-a";
+      m.innerHTML = who === "studio" ? '<span class="ah-av">' + MARK + "</span><p>" + html + "</p>" : who === "step" ? '<i class="ah-spin"></i><span>' + html + "</span>" :
+        (imgs && imgs.length ? '<span class="ah-mi">' + imgs.map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join("") + "</span>" : "") + "<p>" + html + "</p>";
+      msgs.appendChild(m); return { done: function () { m.classList.add("ok"); } };
+    };
+    ctl.brands(o.brands || SK.BRANDS);
     return ctl;
   };
 
+
+  /* the three brands every Studio on the site shows: Studio, MIRRA, Custom Esignature (their own logos, assets/brands/) */
+  SK.BRANDS = [{ n: "Studio", img: "assets/brands/studio.svg" }, { n: "MIRRA", img: "assets/brands/mirra.png" }, { n: "Custom Esignature", img: "assets/brands/ces.png" }];
+
+  /* SK.appStory(ctl, o): the Home at work, on a loop. Your footage is dragged into the composer, the request types itself and goes,
+     Ask Studio opens on the right and answers while the full editor cuts it (clips land on the timeline, music, captions, the brand),
+     the film plays, then it lands at the front of To review and it all starts again. o.sfx(name) for the app's own sounds, o.prompts
+     (the requests it cycles), o.clips (sets of three images). Returns { stop() }. Reduced motion: nothing moves. */
+  SK.appStory = function (ctl, o) {
+    o = o || {}; var tok = { on: true }, sfx = o.sfx || function () {}, M = "assets/media/selects/";
+    var prompts = o.prompts || ["Create a new launch commercial for my company", "Cut a 15-second ad from my newest clips", "Make this week's reel for every channel"];
+    var sets = o.clips || [["cofounder-whiteboard", "coffee-friend-arrives", "dinner-toast"], ["tennis-forehand", "run-club", "golf"], ["surfing", "yacht", "coastal-highway"]];
+    var caps = o.captions || [["Meet Studio.", "One prompt.", "A finished film."], ["Built to move.", "Made in minutes."], ["Every channel.", "One request."]];
+    var titles = ["Launch commercial", "15-second ad", "This week's reel"];
+    var w = function (ms) { return SK.sleep(ms).then(function () { if (!tok.on) throw 0; }); };
+    if (SK.reduced) { ctl.typeAsk(prompts[0]); return { stop: function () {} }; }
+    (async function () {
+      try {
+        for (var r = 0; ; r++) {
+          var text = prompts[r % prompts.length], imgs = sets[r % sets.length].map(function (x) { return M + x + ".jpg"; }), cp = caps[r % caps.length];
+          ctl.editor(false); ctl.panel(false); ctl.working(false); ctl.sending(false); ctl.attach([]); ctl.typeAsk("", true);
+          await w(r ? 900 : 1400);
+          sfx("tick"); await ctl.drag(imgs); if (!tok.on) throw 0; sfx("land");
+          await w(450);
+          for (var i = 1; i <= text.length; i++) { ctl.typeAsk(text.slice(0, i), true); if (i % 3 === 0) sfx("key"); await w(30 + Math.random() * 28); }
+          await w(420); ctl.sending(true); sfx("send");
+          await w(300); ctl.sending(false); ctl.typeAsk("", false); ctl.attach([]);
+          ctl.panel(true); ctl.msg("you", text, imgs);
+          await w(700); ctl.title(titles[r % titles.length]); ctl.editor(true);
+          var m1 = ctl.msg("studio", "On it. A 30-second film from your 3 clips, in your brand.");
+          await w(900);
+          var s1 = ctl.msg("step", "Picking the best moments");
+          for (var k = 0; k < imgs.length; k++) { await w(420); ctl.clip(imgs[k], k); sfx("tick"); }
+          s1.done(); var s2 = ctl.msg("step", "Cutting to the music"); await w(500); ctl.music(); await w(700); s2.done();
+          var s3 = ctl.msg("step", "Captions and your logo"); await w(400); ctl.captions(cp); ctl.caption(cp[0]); await w(500); ctl.brandTrack(); await w(500); s3.done();
+          ctl.play(true); sfx("done");
+          for (var c = 1; c <= cp.length; c++) { await w(900); ctl.caption(cp[c % cp.length]); }
+          ctl.msg("studio", "Done. <b>v01</b> is in To review. Want a 15-second cut too?");
+          await w(2200);
+          ctl.panel(false); ctl.editor(false);
+          ctl.review({ img: imgs[0], kicker: "Film", title: titles[r % titles.length] }); sfx("land");
+          await w(3600);
+        }
+      } catch (e) {}
+    })();
+    return { stop: function () { tok.on = false; ctl.editor(false); ctl.panel(false); } };
+  };
+
+  /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
+     Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
+     code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
+     SK.chapters({ list: [[id, name]], now: () => id, go: (id) => {}, walls: true, wall: (src or "") => {}, wallDefault: "Orange dune" })
+     SK.wallPick() is the background picked here ("" = the page's own). ---------- */
+  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Big Sur"], ["wl/claude", "Alpine lake"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
+  SK.wallPick = function () { try { return localStorage.getItem("studio-wall-" + (window.SK_PAGE || "site")) || ""; } catch (e) { return ""; } };
+  SK.chapters = function (o) {
+    var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var el = document.createElement("div"); el.className = "sk-ch"; el.setAttribute("data-sfx", "off");
+    var CHEV = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4.5 6.5 3.5 3.5 3.5-3.5"/></svg>';
+    el.innerHTML = '<button type="button" class="sk-chb" data-n="-1" aria-label="The chapter before"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m9.5 4-4 4 4 4"/></svg></button>' +
+      '<button type="button" class="sk-chp" aria-haspopup="menu" aria-expanded="false"><i class="dot"></i><span class="k">Chapters</span><span class="c"></span>' + CHEV + "</button>" +
+      '<button type="button" class="sk-chb" data-n="1" aria-label="The chapter after"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6.5 4 4 4-4 4"/></svg></button>' +
+      '<div class="sk-chm" role="menu" hidden></div>';
+    document.body.appendChild(el);
+    var pill = el.querySelector(".sk-chp"), menu = el.querySelector(".sk-chm");
+    var idx = function () { var n = o.now(); for (var i = 0; i < o.list.length; i++) if (o.list[i][0] === n) return i; return 0; };
+    function paint() { el.querySelector(".c").textContent = (o.list[idx()] || [])[1] || ""; el.querySelector('[data-n="-1"]').disabled = idx() === 0; el.querySelector('[data-n="1"]').disabled = idx() === o.list.length - 1; }
+    function paintMenu() {
+      var c = idx(), pick = SK.wallPick();
+      var h = '<p class="h">Chapters</p>' + o.list.map(function (x, i) { return '<button type="button" class="i' + (i === c ? " on" : "") + '" role="menuitem" data-to="' + esc(x[0]) + '"><span class="n">' + (i < 9 ? "0" : "") + (i + 1) + '</span><b>' + esc(x[1]) + "</b><em>" + (i === c ? "Now" : "") + "</em></button>"; }).join("");
+      if (o.walls) h += '<p class="h">Background</p><div class="w">' + '<button type="button" class="t' + (pick ? "" : " on") + '" data-wall=""><span class="d">' + esc(o.wallDefault || "Each step") + "</span><b>Default</b></button>" +
+        SK.WALLS.map(function (w) { return '<button type="button" class="t' + (pick === w[0] ? " on" : "") + '" data-wall="' + w[0] + '"><img src="assets/' + w[0] + '.jpg" alt="" loading="lazy"><b>' + esc(w[1]) + "</b></button>"; }).join("") + "</div>";
+      menu.innerHTML = h;
+    }
+    function open(on) { menu.hidden = !on; pill.setAttribute("aria-expanded", on ? "true" : "false"); if (on) paintMenu(); }
+    pill.addEventListener("click", function (e) { e.stopPropagation(); open(menu.hidden); });
+    el.querySelectorAll(".sk-chb").forEach(function (b) { b.addEventListener("click", function () { var i = idx() + +b.getAttribute("data-n"); if (o.list[i]) { o.go(o.list[i][0]); setTimeout(paint, 60); } }); });
+    menu.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var t = e.target.closest("[data-to]"), w = e.target.closest("[data-wall]");
+      if (t) { open(false); o.go(t.getAttribute("data-to")); setTimeout(paint, 60); }
+      if (w) { var v = w.getAttribute("data-wall"); try { if (v) localStorage.setItem("studio-wall-" + (window.SK_PAGE || "site"), v); else localStorage.removeItem("studio-wall-" + (window.SK_PAGE || "site")); } catch (x) {} if (o.wall) o.wall(v ? "assets/" + v + ".jpg" : ""); paintMenu(); }
+    });
+    document.addEventListener("click", function () { if (!menu.hidden) open(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) open(false); });
+    paint();
+    return { paint: paint };
+  };
 
   /* ---------- film modal ---------- */
   var fm;
@@ -680,7 +809,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       }, { passive: true });
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
-    kayla();
+    if (!window.SK_PAGE) kayla();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
     growFrames();
     focusSections();
     restLoops();
@@ -4603,7 +4732,8 @@ var SFX = (function () {
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
@@ -4636,7 +4766,9 @@ var SFX = (function () {
     function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
     return {
       start: function () {
-        if (!SOUND || !ctx || !buf.bed || src) return;
+        if (!SOUND || !ctx || src) return;
+        if (!buf.bed) { bedWant = true; return; }
+        bedWant = false;
         g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
         src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
         to(level(), 1.5);
@@ -4743,7 +4875,8 @@ var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 /* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
 var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
 var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, Big Sur, the dune, the alpine lake, Pebble Beach, peach dawn */
-["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { WALL[k] = "assets/wl/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+function setWalls(src) { ["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { var u = src || "assets/wl/" + k + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
+setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");   /* each step its own; the Chapters pill can try one for all (SK.wallPick) */
 var wallCache = {}, wallTok = 0, wallNow = "";
 /* the live count on the first step: the people already waiting plus everyone the Worker has, every 30 s while it's open */
 var GOAL = 3, countEl = sheet.querySelector("[data-wl-count]"), countN = sheet.querySelector("[data-wl-n]"), countT = 0, countLast = -1;
@@ -4839,9 +4972,9 @@ var PROMPT = {
 };
 /* brand kits in the brand palette: vampire black, chinese black, jet stream, platinum, celadon, blue slate, obsidian chrome */
 var BRANDS = [
-  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
-  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#05090A", "#536878", "#B4B9BA", "#E5E4E2"] },
-  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#0E191E", "#536878", "#BACCD0", "#DFEAE8"] },
+  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
+  { n: "MIRRA", s: "14 posts this week", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
+  { n: "Custom Esignature", s: "3 ads running", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
   { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
   { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] }
 ];
@@ -4850,7 +4983,7 @@ function article(w) { return /^[AEIOU]/i.test(w) ? "an" : "a"; }
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
 function brandList() {
   var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, f = first();
-  return BRANDS.slice(0, n).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); });
+  return BRANDS.slice(0, n);   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
 }
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 /* the real Studio Home (kit.js SK.appHome): your name in the greeting, your brands as chips, and Post next made for who you are */
@@ -4858,7 +4991,7 @@ var AH = SK.appHome(sheet.querySelector("[data-wl-ah]"), { brands: [] }), ahHave
 function drawHome(typing) {
   var f = first();
   AH.name(f, typing);
-  AH.brands(brandList().slice(0, 3).map(function (b) { return { n: b.n, m: b.m || (b.n || "Y").charAt(0), bg: b.bg, ink: b.ink }; }));
+  AH.brands(SK.BRANDS);   /* always the three real brands, as on the sign-up */
   var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; });
   var want = ans.roles.slice(0, 4), key = want.join("|") + "#" + val("other");
   if (key === ahHave) return;
@@ -4885,27 +5018,12 @@ var loopTok = 0;
 var VIDLINE = { "Business owner": "This week only. Come see us.", "Founder": "Your place for ambitious young founders", "Creator": "Same crew. Every morning.", "Video editor": "Take the long way.", "Social media manager": "The corner table. Saturdays.", "Marketer": "Made to be felt.", "Agency": "Every brand, its own voice.", "Something else": "If you can dream it, you can post it." };
 /* step 4, on the real Home: three of your clips drop into Ask Studio, the request types itself and goes, Studio works (Working now),
    and the finished cut lands at the front of To review as v01. Then it clears and runs again with your next role. */
-function askLoop() {
-  var my = ++loopTok, w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== loopTok) throw 0; }); };
-  (async function () {
-    try {
-      for (var round = 0; ; round++) {
-        var picks = ans.roles.length ? ans.roles : ["Founder"], k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
-        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"].map(function (x) { return M + "selects/" + x + ".jpg"; });
-        AH.review(null); AH.working(false); AH.sending(false); AH.attach([]); AH.typeAsk("", true);
-        await w(500); AH.attach(clips); SFX.play("tick", { gain: .6 });
-        await w(700);
-        for (var i = 1; i <= text.length; i++) { AH.typeAsk(text.slice(0, i), true); if (i % 3 === 0) SFX.play("key", { gain: .5 }); await w(34 + Math.random() * 30); }
-        await w(500); AH.sending(true); SFX.play("send", { gain: .5 });
-        await w(320); AH.sending(false); AH.typeAsk("", false); AH.attach([]);
-        AH.working(true, "Studio · " + (film[1] === "Film" ? "Launch film" : film[1]), "Cutting 3 clips…");
-        await w(1500); AH.working(true, null, "Music, captions, your brand…");
-        await w(1500); AH.working(false);
-        AH.review({ img: M + "selects/" + film[0] + ".jpg", kicker: film[1], title: film[2] }); SFX.play("land", { gain: .5 });
-        await w(4200);
-      }
-    } catch (e) {}
-  })();
+var STORY = null;
+function stopStory() { if (STORY) { STORY.stop(); STORY = null; } }
+function askLoop() {   /* the full story (kit.js SK.appStory): footage dragged in, the request, the editor cutting, Ask Studio answering */
+  loopTok++; stopStory();
+  var ps = ["Create a new launch commercial for my company"].concat(ans.roles.map(function (k) { return PROMPT[k]; }).filter(Boolean));
+  STORY = SK.appStory(AH, { prompts: ps, sfx: function (n) { SFX.play(n, { gain: n === "key" ? .5 : .45 }); } });
 }
 function claudeLoop() {
   var my = ++loopTok, sc = scenes.claude, comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]"), plan = sheet.querySelector("[data-wl-plan]");
@@ -5076,6 +5194,9 @@ function personal() {
   var f = first();
   sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); });
 }
+/* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
+function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+setTimeout(beamsOn, 0);
 function setStep(n, quiet, fromHist) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
   personal();
@@ -5090,7 +5211,7 @@ function setStep(n, quiet, fromHist) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n;
+  at = n; setTimeout(beamsOn, 40);
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1]); }
   segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -5101,7 +5222,7 @@ function setStep(n, quiet, fromHist) {
   go.disabled = q === "check" && !ready(n);
   scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
-  if (q === "claude") askLoop(); else { loopTok++; AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
+  if (q === "claude") askLoop(); else { loopTok++; stopStory(); AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
   sizeStage(); setTimeout(sizeStage, 400);
   if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
@@ -5473,6 +5594,7 @@ if (window.visualViewport) visualViewport.addEventListener("resize", function ()
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
 function open(src) {
+  if (!window.SK_PAGE) { location.href = "early-access/" + location.search; return; }   /* a page of its own (build.py PAGES): the site never loads behind it */
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
@@ -5507,13 +5629,16 @@ function open(src) {
     setTimeout(typeStep, 700);
   }
 }
+/* closing the page goes to the site: the page it came from when that was the site, else askstudio.ai */
+function leave() { KAY.stop(); SFX.bed.stop(); var r = ""; try { r = document.referrer && new URL(document.referrer).origin === location.origin && !/early-access|\/start/.test(document.referrer) ? document.referrer : ""; } catch (e) {} location.href = r || "./"; }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
+  sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; stopStory(); KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
+  if (window.SK_PAGE) { leave(); return; }
   if (pushed && depth > 0) { pushed = false; closing = true; history.go(-depth); return; }   /* popstate hides it */
   if (depth > 0) { closing = true; history.go(-depth); return; }
   hide();
@@ -5548,7 +5673,7 @@ sheet.addEventListener("keydown", function (e) {
   if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
   else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
 });
-if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "link"); }, SK.reduced ? 0 : 250);
+if (DEEP.test(location.hash)) setTimeout(function () { open(REF ? "friend" : "link"); }, SK.reduced || window.SK_PAGE ? 0 : 250);
 
 /* a friend's invite: say whose */
 if (REF && !joined()) {
@@ -5591,7 +5716,7 @@ function showDone(r, quiet) {
   var hrefs = { sms: "sms:?&body=" + encodeURIComponent(SAY + " " + url), x: "https://twitter.com/intent/tweet?text=" + t + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("Get early access to Studio") + "&body=" + encodeURIComponent(SAY + "\n\n" + url) };
   sheet.querySelectorAll("[data-sh]").forEach(function (a) { var k = a.getAttribute("data-sh"); if (hrefs[k]) a.href = hrefs[k]; });
   sheet.querySelector('[data-sh="more"]').hidden = !navigator.share;
-  loopTok++; pass1.stop();
+  loopTok++; stopStory(); pass1.stop();
   if (!again) {
     /* the pass on the invite step glides into its place on You're in (one object, not a cut); without it in view, it spins in */
     var p1 = sheet.querySelector("[data-wl-pass1]"), r1 = p1.getBoundingClientRect();
@@ -5640,7 +5765,7 @@ sheet.querySelector("[data-wl-fliph]").textContent = fine ? "Drag to turn · cli
 function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
   savePend(null); clearOtp(); cerr(""); clearInterval(resendT); clearDraft();
-  rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
+  rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; stopStory(); pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
   inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_notify.checked = false; form.elements.sms_marketing.checked = false; other.hidden = true;
   mark([], ""); sheet.querySelectorAll(".wl-err").forEach(function (e) { e.textContent = ""; });
@@ -5662,6 +5787,27 @@ sheet.querySelector("[data-wl-plink]").addEventListener("click", function () {
 var restartB = sheet.querySelector("[data-wl-restart]");
 restartB.hidden = !(local || Q.has("review"));   /* review only: never on the live site */
 restartB.addEventListener("click", startOver);
+
+/* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code) ---------- */
+if (local) {
+  var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
+  var chGo = function (id) {
+    if (sheet.classList.contains("done")) startOver();
+    if (!val("first")) form.elements.first.value = "Sam";
+    if (!val("last")) form.elements.last.value = "Lee";
+    if (!ans.roles.length) ans.roles = ["Founder", "Creator"];
+    if (!ans.brands) ans.brands = "2-3";
+    if (!ans.claude) ans.claude = "Pro or Max";
+    if (!val("email")) form.elements.email.value = "sam@example.com";
+    personal(); drawHome(); drawBrands();
+    if (id === "done") { showDone({ first: first() || "Sam", code: "QEYAB67", position: 1231, referrals: 1, pass: "demo" }); return; }
+    var n = ORDER.indexOf(id); if (n < 0) return;
+    if (id === "check") sheet.querySelector("[data-wl-cmail]").textContent = val("email");
+    setStep(n, false);
+  };
+  var chUI = SK.chapters({ list: CH, now: function () { return sheet.classList.contains("done") ? "done" : ORDER[at]; }, go: chGo, walls: true, wallDefault: "Each step its own",
+    wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "in" : ORDER[at]); } });
+}
 
 /* the story image (Story and Save image): 1080 x 1920, drawn here on a canvas. Their pass floating on the You're in sky, the Studio app
    large and running off the right edge (as on the site's phone hero), askstudio.ai. Phones share it (Instagram, Save Image); elsewhere
@@ -5795,7 +5941,8 @@ var SFX = (function () {
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
@@ -5828,7 +5975,9 @@ var SFX = (function () {
     function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
     return {
       start: function () {
-        if (!SOUND || !ctx || !buf.bed || src) return;
+        if (!SOUND || !ctx || src) return;
+        if (!buf.bed) { bedWant = true; return; }
+        bedWant = false;
         g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
         src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
         to(level(), 1.5);
@@ -5855,7 +6004,7 @@ var KAY = (function () {
     "pw-notrial": "Looks like you've had your free trial already. Here's the plan at its regular price.",
     "pw-done": "You're all set. Studio is unlocked. Let's get back to it."
   };
-  var UNRECORDED = {};   /* a line with no voice file yet: she shows the words and stays quiet */
+  var UNRECORDED = {}, waits = {};   /* a line with no voice file yet: she shows the words and stays quiet */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
@@ -5879,6 +6028,7 @@ var KAY = (function () {
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
     if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    if (!SFX.has(cur) && VO.indexOf(cur) > -1 && (waits[cur] = (waits[cur] || 0) + 1) < 50) { var k0 = cur; queue.unshift(k0); setTimeout(function () { if (my === tok) next(); }, 100); return; }   /* recorded but still loading (a fresh page): wait for it, up to 5 s */
     if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }   /* not recorded yet: skip it, quietly */
     words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
     if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
@@ -5970,24 +6120,27 @@ function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[
 
 /* ---------- the stage: the app, signing you in ---------- */
 var BRANDS = [
-  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
-  { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] },
-  { n: "Northwind", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
+  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
+  { n: "MIRRA", s: "Social app", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
+  { n: "Custom Esignature", s: "E-signatures", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
   { n: "Fourth brand", s: "Ready when you are", m: "4", bg: "linear-gradient(140deg, #BBC9C7, #536878)", ink: "#05090A", sw: ["#05090A", "#536878", "#BBC9C7", "#DFEAE8"] },
   { n: "Fifth brand", s: "Ready when you are", m: "5", bg: "linear-gradient(140deg, #BED2C3, #0E191E)", ink: "#05090A", sw: ["#0E191E", "#536878", "#BED2C3", "#E5E4E2"] }
 ];
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
-function brandList(n) { var f = first(); return BRANDS.slice(0, Math.min(5, n)).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); }); }
+function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
 var AH = SK.appHome($("[data-st-ah]"), {});
+/* the Home at work while you sign in (SK.appStory): footage dragged in, the request, the editor, Ask Studio; it rests on the plan and pay steps */
+var STORY = null;
+function story(on) { if (on && !STORY) STORY = SK.appStory(AH, { sfx: function (n) { SFX.play(n === "key" ? "key" : n, { gain: n === "key" ? .5 : .4 }); } }); else if (!on && STORY) { STORY.stop(); STORY = null; } }
 function drawHome(typing) {
   var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
   AH.name(f);
-  var bl = brandList(Math.max(n, 3)).slice(0, n > 3 ? 3 : Math.max(n, 3)).map(function (b, i) { return { n: b.n, m: b.m || "Y", bg: b.bg, ink: b.ink }; });
+  var bl = SK.BRANDS.slice();
   if (n > 3) bl.push({ n: "+ " + (pl.brands > 5 ? "every brand" : (pl.brands - 3) + " more"), m: "+", bg: "rgba(255,255,255,.12)" });
   AH.brands(bl);
-  AH.allBrands(n === 1 ? (f ? f + "'s brand" : "Your brand") : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands);
+  AH.allBrands(n > 3 ? (pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands) : "All brands");
 }
 function drawPlanStage() {
   var pl = planOf(me.plan), bl = brandList(pl.brands), ul = $("[data-st-bl]");
@@ -6005,6 +6158,7 @@ function sizeStage() {
   var r = stage.getBoundingClientRect(); if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
   /* the app at its own 1440 x 900: as tall as the space allows (up to 5K), running off the right edge like the opening film */
+  if (mob) { var sm = Math.max(.38, Math.min(.5, innerWidth * 1.55 / 1440)); stage.style.setProperty("--stage-h", Math.round(Math.min(370, 760 * sm)) + "px"); fit.style.setProperty("--s", sm.toFixed(3)); return; }   /* phones: as on the waitlist */
   var s = mob ? Math.min(r.width / 1440, 220 / 900) : Math.min((r.height || 900) / 860, (r.width + 300) / 1440, 1.75);
   if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);   /* the plans take the room; the app stays tall and runs off the edge */
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
@@ -6015,7 +6169,9 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
 /* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
-["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = "assets/su/" + k + (PHONE ? "-m" : "") + ".jpg"; });
+/* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
+function setWalls(src) { var u = src || "assets/su/done.jpg"; if (PHONE) u = u.replace(/\.jpg$/, "-m.jpg"); ["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = u; }); }
+setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
 var wallCache = {}, wallTok = 0, wallNow = "";
 function want(k) {
   var u = WALL[k]; if (!u) return Promise.resolve("");
@@ -6163,6 +6319,9 @@ function ready() {
   return true;
 }
 var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
+/* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
+function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
   personal();
@@ -6177,7 +6336,7 @@ function setStep(n, quiet, ack) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n;
+  at = n; setTimeout(beamsOn, 40);
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -6190,6 +6349,7 @@ function setStep(n, quiet, ack) {
   scenes.home.classList.remove("menu");
   $("[data-st-look]").hidden = !(PAYWALL && q === "plan");
   if (q === "plan") drawPlanStage(); else drawHome();
+  story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
   if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
@@ -6234,6 +6394,9 @@ $$(".st-way").forEach(function (b) {
     oauth(way, b);
   });
 });
+/* Google and Apple only once Supabase OAuth is wired (?oauth on this Mac): until then they are not shown, and the email fields are
+   simply there, nothing to expand */
+if (!CFG.oauth) { $$('.st-way[data-way="google"], .st-way[data-way="apple"], .st-or').forEach(function (el) { el.hidden = true; }); emailWay.hidden = true; mailBox.hidden = false; emailWay.setAttribute("aria-expanded", "true"); }
 form.elements.first.addEventListener("input", function () { drawHome(true); clearTimeout(this._t); this._t = setTimeout(function () { drawHome(); }, 900); personal(); next.disabled = !ready(); });
 form.elements.email.addEventListener("input", function () { next.disabled = !ready(); });
 [form.elements.first, form.elements.email].forEach(function (inp) {
@@ -6726,6 +6889,7 @@ $("[data-st-open]").addEventListener("click", function (e) {
 
 /* ---------- open / close ---------- */
 function open() {
+  if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
@@ -6738,13 +6902,13 @@ function open() {
   wallNow = sky.getAttribute("src");
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
-  drawHome();
+  drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
   focusStep(SK.reduced ? 0 : 560);
 }
 /* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  if (introDone || SK.reduced || PAYWALL) { introDone = true; introEl.hidden = true; return Promise.resolve(); }
+  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader (Evan): the page builds itself in instead (.wl.open, section.css) */
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {
@@ -6765,6 +6929,7 @@ function hide() {
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
 function close() {
+  if (window.SK_PAGE) { KAY.stop(); SFX.bed.stop(); var r = ""; try { r = document.referrer && new URL(document.referrer).origin === location.origin && !/early-access|\/start/.test(document.referrer) ? document.referrer : ""; } catch (e) {} location.href = r || "./"; return; }
   if (pushed) { pushed = false; history.back(); return; }
   hide();
   if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
@@ -6787,6 +6952,25 @@ sheet.addEventListener("keydown", function (e) {
 var restartB = $("[data-st-restart]");
 restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
+
+/* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
+if (local && !EMBED) {
+  var CH = [["in", "Sign in"], ["code", "Email code"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
+  var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
+  var chGo = function (id) {
+    var wantPay = /^(plan|pay|unlocked)$/.test(id);
+    if (wantPay !== PAYWALL || sheet.classList.contains("done")) { location.href = location.pathname + location.search + (wantPay ? "#paywall" : "#signup") + "&ch=" + id; location.reload(); return; }
+    if (!val("first")) form.elements.first.value = "Sam";
+    if (!val("email")) form.elements.email.value = "sam@example.com";
+    me.first = me.first || "Sam"; me.email = me.email || "sam@example.com"; personal();
+    if (id === "done" || id === "unlocked") { if (PAYWALL) me.paid = me.paid || { plan: me.plan, period: me.period }; showDone(false); return; }
+    var n = ORDER.indexOf(id); if (n < 0) return;
+    if (id === "code") $("[data-st-to]").textContent = me.email;
+    setStep(n, false);
+  };
+  var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Orange dune", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
+  if (H.get("ch")) setTimeout(function () { chGo(H.get("ch")); chUI.paint(); }, 600);
+}
 
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
 if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
@@ -6858,7 +7042,7 @@ if (Q.has("paid") && LIVE) {   /* back from the bank: pick up where Pay left off
     status(back.subscription).then(paid, function (x) { setStep(ORDER.indexOf("pay")); err(Q.get("redirect_status") === "failed" ? "Your bank didn't approve the $1. Try another card." : say(x)); });
   }
 }
-if (DEEP.test(location.hash)) setTimeout(open, SK.reduced ? 0 : 250);
+if (DEEP.test(location.hash)) setTimeout(open, SK.reduced || window.SK_PAGE ? 0 : 250);
 
 } catch (e) { console.error("section 910-start", e); }
 })();

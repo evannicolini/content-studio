@@ -4048,7 +4048,7 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-f input, .wl-ccv { height: 56px; }
   /* the dock: Kayla above, the bar the full width */
   .wl-dock { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); flex-direction: column-reverse; align-items: stretch; gap: 8px; transform: translateY(30px); transition: transform .5s var(--ease), opacity .3s, --wl-o1 .5s var(--ease); }
-  .wl-kay { display: none !important; }   /* phones: no Kayla pill (her voice still plays; the speaker button mutes it) */
+  .wl-kay { align-self: flex-end; }   /* phones: Kayla's pill above the bar, at the right (Evan: keep her on phones) */
   .wl.done .wl-dock { display: none; }
   .wl.open .wl-dock { transform: none; }
   .wl-bar { height: 60px; gap: 10px; }
@@ -4307,6 +4307,167 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 @media (min-width: 961px) { .wl[data-step="claude"] .wl-fit { top: 50%; margin-top: -450px; transform-origin: 0 50%; } }   /* step 4 is the real Home now, centred like the rest */
 .ah [hidden] { display: none !important; }
 
+/* ---------- the Home, round 5 (Evan): real frost on the main panel, the composer's border beam, round brand logos, white Scheduled,
+   and the story (SK.appStory): footage dragged in, the full editor cutting, Ask Studio answering from the right ---------- */
+.ah-main { -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); background: rgba(var(--tint), .22); }
+.ah-comp, .ah-ask, .ah-apc { position: relative; }
+.ah-cb { position: absolute !important; inset: 0; z-index: 2; border-radius: inherit !important; pointer-events: none; --beam-strength: 1.15; }
+.ah-cb::after, .ah-cb::before, .ah-cb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
+.ah-ask .ah-cb { --beam-strength: .9; }
+.ah-chip { padding: 0 15px 0 4px; gap: 9px; animation: ah-chip .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms); }
+.ah-bm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); }
+@keyframes ah-chip { from { opacity: 0; transform: translateY(6px) scale(.96); } }
+.ah-dot.sc { background: #fff; }
+.ah-dg.on { color: #fff; }
+
+/* footage, dragged in on the pointer */
+.ah-drag { position: absolute; left: 0; top: 0; z-index: 40; width: 0; height: 0; opacity: 0; pointer-events: none; transition: transform 1.25s cubic-bezier(.3, .7, .2, 1), opacity .3s; }
+.ah-drag.on { opacity: 1; }
+.ah-dst { position: absolute; left: 0; top: 0; }
+.ah-dst img { position: absolute; left: calc(var(--i) * 22px); top: calc(var(--i) * -6px); width: 92px; height: 124px; border-radius: 14px; object-fit: cover; transform: rotate(calc(-8deg + var(--i) * 8deg)); box-shadow: 0 24px 44px -14px rgba(0, 0, 0, .7), inset 0 0 0 1px rgba(255, 255, 255, .25); transition: transform .35s var(--ease), opacity .35s; }
+.ah-cur { position: absolute; left: 96px; top: 96px; width: 30px; height: 30px; fill: #fff; stroke: rgba(0, 0, 0, .55); stroke-width: 1.2; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, .45)); }
+.ah-drag.drop .ah-dst img { transform: translateY(40px) scale(.4); opacity: 0; }
+.ah-drop { position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; border-radius: inherit; font: 500 16px/1 var(--sans); color: #fff; background: rgba(255, 255, 255, .08); box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .55); opacity: 0; transition: opacity .25s; pointer-events: none; }
+.ah-comp.over .ah-drop { opacity: 1; }
+.ah-comp.over { transform: scale(1.015); }
+
+/* the Home steps back while the editor works */
+.ah-top, .ah-hi, .ah-band { transition: opacity .55s var(--ease), filter .55s var(--ease), transform .7s var(--ease); }
+.ah.editing .ah-top, .ah.editing .ah-hi, .ah.editing .ah-band { opacity: 0; filter: blur(14px); transform: scale(.985); pointer-events: none; }
+.ah-ed { position: absolute; top: 22px; bottom: 22px; left: 22px; right: calc(22px + var(--cut, 0px)); display: grid; grid-template-rows: 46px minmax(0, 1fr) 222px; gap: 14px; opacity: 0; visibility: hidden; transform: scale(1.015); transition: opacity .6s var(--ease) .1s, transform .8s var(--ease) .1s, visibility 0s linear .8s, right .7s var(--ease); }
+.ah.editing .ah-ed { opacity: 1; visibility: visible; transform: none; transition: opacity .6s var(--ease) .15s, transform .8s var(--ease) .1s, visibility 0s, right .7s var(--ease); }
+.ah.asking .ah-ed { right: calc(452px + var(--cut, 0px)); }
+.ah-edh { display: flex; align-items: center; gap: 10px; padding: 0 4px 0 10px; }
+.ah-edh > svg { width: 16px; height: 16px; color: var(--s2); }
+.ah-edt b { font: 500 19px/1 var(--sans); letter-spacing: -.01em; }
+.ah-edt em { margin-left: 12px; font: 500 10px/1 var(--mono); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: var(--s2); }
+.ah-edb { height: 28px; display: inline-flex; align-items: center; padding: 0 11px; border-radius: 999px; font: 500 10.5px/1 var(--mono); color: var(--s2); background: var(--v-g); box-shadow: var(--v-rim); }
+.ah-pill.on { color: #05090A; background: #f5f3ee; box-shadow: none; }
+.ah-pv { position: relative; justify-self: center; height: 100%; aspect-ratio: 16 / 9; max-width: 100%; border-radius: 18px; overflow: hidden; background: #0a0a0a; box-shadow: var(--v-rim), 0 30px 60px -30px rgba(0, 0, 0, .8); }
+.ah-pv img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .4s; }
+.ah-pv img:not([src]) { opacity: 0; }
+.ah.ed-play .ah-pv img { animation: ah-ken 6s ease-out both; }
+@keyframes ah-ken { from { transform: scale(1.08); } }
+.ah-pv::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(180deg, transparent, rgba(0, 0, 0, .6)); }
+.ah-cap { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 2; text-align: center; font: 500 34px/1.1 var(--sans); letter-spacing: -.02em; text-shadow: 0 2px 18px rgba(0, 0, 0, .5); }
+.ah-cap:not(:empty) { animation: ah-capin .5s var(--ease) both; }
+@keyframes ah-capin { from { opacity: 0; transform: translateY(8px); filter: blur(6px); } }
+.ah-pvl { position: absolute; left: 18px; top: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; font: 500 14px/1 var(--sans); }
+.ah-pvl .ah-mk { width: 18px; height: 18px; }
+.ah-pvt { position: absolute; right: 16px; top: 16px; z-index: 2; font: 500 10.5px/1 var(--mono); color: var(--s2); }
+.ah-tln { position: relative; display: grid; gap: 8px; padding: 14px 16px; border-radius: 22px; background: var(--ag); -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); box-shadow: var(--v-rim); overflow: hidden; }
+.ah-trk { display: grid; grid-template-columns: 78px minmax(0, 1fr); align-items: center; gap: 10px; min-height: 0; }
+.ah-trk em { font: 500 9.5px/1 var(--mono); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: var(--s3); }
+.ah-trk > span { display: flex; gap: 4px; height: 100%; min-height: 34px; padding: 3px; border-radius: 10px; background: rgba(255, 255, 255, .04); }
+.ah-tc { position: relative; flex: 1; min-width: 0; border-radius: 7px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28); }
+.ah-tc img { width: 100%; height: 100%; object-fit: cover; }
+.ah-tcp, .ah-tb { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 7px; font: 500 11.5px/1 var(--sans); white-space: nowrap; background: rgba(255, 255, 255, .14); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2); }
+.ah-tcp { flex: 1; }
+.ah-tb .ah-mk { width: 13px; height: 13px; }
+.ah-tw { display: flex; align-items: center; gap: 2px; width: 100%; height: 100%; padding: 0 6px; transform-origin: 0 50%; animation: ah-draw 1s var(--ease) both; }
+.ah-tw b { flex: 1; min-width: 1px; border-radius: 1px; background: rgba(255, 255, 255, .6); }
+@keyframes ah-draw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.ah-ph { position: absolute; top: 10px; bottom: 10px; left: 104px; width: 2px; border-radius: 2px; background: #fff; box-shadow: 0 0 12px rgba(255, 255, 255, .7); opacity: 0; }
+.ah.ed-play .ah-ph { opacity: 1; animation: ah-ph 3.6s linear both; }
+@keyframes ah-ph { to { left: calc(100% - 18px); } }
+
+/* Ask Studio, from the right */
+.ah-ap { position: absolute; z-index: 30; top: 0; right: var(--cut, 0px); bottom: 0; width: 432px; display: flex; flex-direction: column; padding: 18px 16px 16px; border-radius: 30px; background: rgba(var(--tint), .5); -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); box-shadow: var(--v-rim), -30px 0 60px -30px rgba(0, 0, 0, .55); transform: translateX(calc(100% + 40px + var(--cut, 0px))); transition: transform .8s cubic-bezier(.2, .9, .2, 1); }
+.ah.asking .ah-ap { transform: none; }
+.ah-aph { display: flex; align-items: center; gap: 10px; height: 34px; margin: 0 2px 14px; }
+.ah-aph > b:nth-child(2) { font: 500 16px/1 var(--sans); }
+.ah-msgs { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; overflow: hidden; }
+.ah-m { max-width: 92%; font-size: 14.5px; line-height: 1.45; }
+.ah-m p { margin: 0; }
+.ah-m.you { align-self: flex-end; padding: 10px 14px; border-radius: 18px 18px 6px 18px; background: rgba(255, 255, 255, .14); box-shadow: var(--v-rim); }
+.ah-mi { display: flex; gap: 5px; margin-bottom: 8px; }
+.ah-mi img { width: 46px; height: 62px; border-radius: 9px; object-fit: cover; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25); }
+.ah-m.studio { display: flex; gap: 10px; align-items: flex-start; }
+.ah-av { display: grid; place-items: center; width: 28px; height: 28px; flex: none; border-radius: 50%; background: rgba(255, 255, 255, .1); box-shadow: var(--v-rim); }
+.ah-av .ah-mk { width: 16px; height: 16px; }
+.ah-m.step { display: flex; align-items: center; gap: 10px; margin-left: 38px; font-size: 13.5px; color: var(--s2); }
+.ah-m.step .ah-spin { width: 13px; height: 13px; }
+.ah-m.step.ok { color: #fff; }
+.ah-m.step.ok .ah-spin { animation: none; border: 0; background: #fff; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4l2.8 2.8 6.2-6.4' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center / 13px no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4l2.8 2.8 6.2-6.4' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") center / 13px no-repeat; }
+.ah-apc { display: flex; align-items: center; gap: 10px; height: 56px; margin-top: 14px; padding: 0 8px 0 16px; border-radius: 22px; font-size: 14px; color: var(--s2); background: rgba(5, 7, 11, .45); box-shadow: var(--v-rim); }
+.ah-apc .ah-mic, .ah-apc .ah-send { width: 34px; height: 34px; }
+@media (prefers-reduced-motion: reduce) { .ah-ap, .ah-ed, .ah-drag { transition: none; } }
+/* while the editor works the sidebar tucks away (as the app does in the editor), so the cut and Ask Studio both have room */
+.ah-sb { transition: width .7s var(--ease), padding .7s var(--ease), opacity .4s var(--ease), margin .7s var(--ease); overflow: hidden; }
+.ah.editing .ah-sb { width: 0; padding-left: 0; padding-right: 0; margin-right: -16px; opacity: 0; }
+.ah-ap { width: 400px; }
+.ah.asking .ah-ed { right: calc(420px + var(--cut, 0px)); }
+.ah-edh { min-width: 0; white-space: nowrap; }
+.ah-edt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.ah-pv { justify-self: start; }
+
+/* ---------- Chapters (review only, this Mac): kit.js SK.chapters. The app's Fresh Studio pill, at the top in the middle ---------- */
+.sk-ch { --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); position: fixed; z-index: 300; top: max(20px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; font-family: var(--sans); color: #fff; }
+.sk-chp, .sk-chb { height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: #fff; background: rgba(14, 16, 20, .5); -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); box-shadow: var(--rim), 0 10px 26px -12px rgba(0, 0, 0, .55); transition: background-color .2s; }
+.sk-chp:hover, .sk-chb:hover:not([disabled]) { background: rgba(14, 16, 20, .66); }
+.sk-chb { width: 36px; }
+.sk-chb[disabled] { opacity: .4; cursor: default; }
+.sk-chp { gap: 9px; padding: 0 12px 0 13px; font: 500 12.5px/1 var(--sans); }
+.sk-chp .dot { width: 7px; height: 7px; border-radius: 50%; background: #ff9f43; box-shadow: 0 0 10px rgba(255, 159, 67, .7); }
+.sk-chp .k { font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 243, 238, .66); }
+.sk-chp svg, .sk-chb svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sk-chm { position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 340px; max-height: min(76vh, 720px); overflow: auto; padding: 8px; border-radius: 20px; background: rgba(14, 16, 20, .62); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: var(--rim), 0 24px 60px -20px rgba(0, 0, 0, .7); animation: sk-chm .22s var(--ease) both; }
+@keyframes sk-chm { from { opacity: 0; transform: translate(-50%, -6px); } }
+.sk-chm .h { margin: 8px 10px 6px; font: 500 9.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgba(245, 243, 238, .5); }
+.sk-chm .i { width: 100%; display: flex; align-items: center; gap: 12px; height: 38px; padding: 0 10px; border-radius: 12px; text-align: left; color: rgba(245, 243, 238, .86); font: 400 14px/1 var(--sans); }
+.sk-chm .i:hover { background: rgba(255, 255, 255, .07); }
+.sk-chm .i.on { color: #fff; background: rgba(255, 255, 255, .1); box-shadow: var(--rim); }
+.sk-chm .i .n { font: 500 10.5px/1 var(--mono); color: rgba(245, 243, 238, .45); }
+.sk-chm .i b { flex: 1; font-weight: 500; }
+.sk-chm .i em { font: 500 9.5px/1 var(--mono); font-style: normal; letter-spacing: .14em; text-transform: uppercase; color: #ff9f43; }
+.sk-chm .w { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0 4px 6px; }
+.sk-chm .t { display: flex; flex-direction: column; gap: 5px; padding: 4px; border-radius: 12px; text-align: left; color: rgba(245, 243, 238, .8); }
+.sk-chm .t:hover { background: rgba(255, 255, 255, .07); }
+.sk-chm .t.on { background: rgba(255, 255, 255, .12); box-shadow: var(--rim); color: #fff; }
+.sk-chm .t img, .sk-chm .t .d { width: 100%; aspect-ratio: 16 / 10; border-radius: 8px; object-fit: cover; }
+.sk-chm .t .d { display: grid; place-items: center; padding: 4px; font: 500 9.5px/1.2 var(--mono); text-align: center; letter-spacing: .08em; text-transform: uppercase; color: rgba(245, 243, 238, .6); background: rgba(255, 255, 255, .06); }
+.sk-chm .t b { font: 500 11px/1.2 var(--sans); padding: 0 2px 2px; }
+@media (max-width: 700px) { .sk-ch { top: auto; bottom: 110px; } .sk-chp .k { display: none; } .sk-chm { top: auto; bottom: calc(100% + 8px); width: min(340px, calc(100vw - 24px)); max-height: 62vh; } }
+
+/* ---------- round 5: the dock and Kayla in real glass (the app's lit rim, a light sheen, more frost), the fields with the
+   composer's border beam always on (brighter when you're in one) ---------- */
+.wl-bar, .wl-kay { background: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .04) 58%), rgba(var(--tint), .2); -webkit-backdrop-filter: blur(30px) saturate(175%) brightness(1.06); backdrop-filter: blur(30px) saturate(175%) brightness(1.06); box-shadow: var(--v-rim-on), 0 22px 44px -20px rgba(0, 0, 0, .6); }
+.wl-back, .wl-kp { background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .07)); box-shadow: var(--v-rim-on); }
+.wl-kay img { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3), 0 6px 14px -6px rgba(0, 0, 0, .5); }
+.wl-q.on .wl-box > .wl-fb { opacity: calc(.6 * var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
+.wl-q.on .wl-box:focus-within > .wl-fb { opacity: 1; }
+.wl-f input, .wl-ccv { -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%); }
+
+/* ---------- round 5: the entrance (a page of its own, html.pg-in): no preloader. The sky comes up out of a soft push-in, the top bar
+   settles, the question builds line by line, the app swings in from the right in depth, the bar rises last. Transforms only on
+   anything holding glass, so the frost is there from the first frame. ---------- */
+html.pg-in .wl.open .wl-sky:not(.nx) { animation: pg-sky 2.4s cubic-bezier(.2, .7, .2, 1) both; }
+@keyframes pg-sky { from { transform: scale(1.16); filter: brightness(.5) saturate(.75); } }
+html.pg-in .wl.open .wl-top { animation: pg-top 1s var(--ease) .3s both; }
+@keyframes pg-top { from { transform: translateY(-18px); } }
+html.pg-in .wl.open .wl-q.on > * { animation: pg-up .9s var(--ease) both; }
+html.pg-in .wl.open .wl-q.on > :nth-child(1) { animation-delay: .35s; } html.pg-in .wl.open .wl-q.on > :nth-child(2) { animation-delay: .45s; }
+html.pg-in .wl.open .wl-q.on > :nth-child(3) { animation-delay: .6s; } html.pg-in .wl.open .wl-q.on > :nth-child(4) { animation-delay: .72s; }
+html.pg-in .wl.open .wl-q.on > :nth-child(5) { animation-delay: .84s; } html.pg-in .wl.open .wl-q.on > :nth-child(n+6) { animation-delay: .94s; }
+@keyframes pg-up { from { transform: translateY(22px); filter: blur(8px); } }
+html.pg-in .wl.open .wl-q.on > .wl-fields, html.pg-in .wl.open .wl-q.on > .wl-opts, html.pg-in .wl.open .wl-q.on > .wl-otp, html.pg-in .wl.open .wl-q.on > .st-otp, html.pg-in .wl.open .wl-q.on > .wl-count { animation-name: pg-up2; }
+@keyframes pg-up2 { from { transform: translateY(22px); } }
+html.pg-in .wl-stage { transform: translateX(90px) perspective(1800px) rotateY(-9deg) scale(.96); transform-origin: 0 50%; transition: transform 1.5s cubic-bezier(.2, .8, .2, 1) .45s, --wl-o1 1s var(--ease) .45s; }
+html.pg-in .wl.open .wl-stage { transform: none; }
+html.pg-in .wl.open .ah-sb { animation: pg-side 1.2s var(--ease) .7s both; }
+@keyframes pg-side { from { transform: translateX(-26px); } }
+html.pg-in .wl.open .ah-band > * { animation: pg-band 1.1s var(--ease) both; }
+html.pg-in .wl.open .ah-band > :nth-child(2) { animation-delay: .8s; } html.pg-in .wl.open .ah-band > :nth-child(3) { animation-delay: .9s; } html.pg-in .wl.open .ah-band > :nth-child(4) { animation-delay: 1s; }
+@keyframes pg-band { from { transform: translateY(30px); } }
+html.pg-in .wl-dock { transition: transform 1.1s cubic-bezier(.2, .8, .2, 1) .75s, --wl-o1 .8s var(--ease) .75s; }
+@media (prefers-reduced-motion: reduce) { html.pg-in .wl.open * { animation: none !important; } html.pg-in .wl-stage { transform: none; } }
+
+/* You're in: the questions behind it are gone once it has faded (phones showed them through) */
+.wl.done .wl-in { visibility: hidden; transition: --wl-o0 .5s var(--ease), transform .7s var(--ease), visibility 0s linear .55s; }
+.wl.done .wl-ty, .wl.done .wl-fb { visibility: hidden !important; }
+/* phones: the Chapters pill at the bottom left, clear of Kayla at the right; its menu opens upward */
+@media (max-width: 700px) { .sk-ch { left: 12px; transform: none; } .sk-chm { left: 0; transform: none; } @keyframes sk-chm { from { opacity: 0; } } }
+
 
 /* ===== 910-start ===== */
 /* Start: the website sign-up. It is the early-access sheet (.wl, 900-early/section.css) in every way that shows: the sky, the glass,
@@ -4460,10 +4621,10 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 
 /* phones */
 @media (max-width: 960px) {
-  .wl.st .wl-stage { display: none; }   /* phones: the steps are the screen; the app shows up on the pass */
+  /* phones: the app is there too, under the question, as on the waitlist (Evan: never cut it on phones) */
   .st-mode { height: 26px; padding: 0 9px; font-size: 9px; letter-spacing: .1em; }
   .st-plans { grid-template-columns: 1fr; gap: 8px; }
-  .st-plan { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; padding: 14px 16px; }
+  .st-plan { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 10px; padding: 14px 16px; }
   .st-plan .nm { grid-column: 1; padding-right: 30px; }
   .st-plan .pr { grid-column: 2; grid-row: 1 / 3; margin: 0 30px 0 0; font-size: 28px; text-align: right; }
   .st-plan .bl { grid-column: 1; }
@@ -4622,9 +4783,13 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 /* ---------- Kayla beside the bar (as in early access): her face, play, her voice; no captions; none on phones ---------- */
 .st .wl-kt { display: none !important; }
 .st .wl-dock { display: flex; align-items: center; gap: 12px; }
-@media (max-width: 960px) { .st .wl-kay { display: none !important; } }
+/* phones: Kayla stays (the waitlist's compact pill above the bar) */
 
 .st-name { margin: 0 0 12px; max-width: 460px; }
 /* checkout: the pass large and whole, in the part of the stage you can see */
 .st .wl-sc[data-sc="pass"] .p3 { position: absolute; left: 0; top: 0; bottom: 0; right: auto; width: 920px; }
 .st .wl-sc[data-sc="pass"] .pass { --w: 640px; }
+
+@media (max-width: 960px) { .st-plan > * { min-width: 0; } .st-why { max-width: 100%; } .st-why .wv { width: 56px; } }
+/* phones: the app sits at the top left of its box, as on the waitlist (the desktop centring above pushed it out of view) */
+@media (max-width: 960px) { .st .wl-fit { top: 0; margin-top: 0; transform-origin: 0 0; } }

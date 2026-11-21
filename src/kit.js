@@ -317,6 +317,7 @@
     var ni = function (k, t, n, on) { return '<p class="ah-ni' + (on ? " on" : "") + '">' + sv(k) + "<span>" + t + "</span>" + (n != null ? "<em>" + n + "</em>" : "") + "</p>"; };
     var MARK = '<svg class="ah-mk" viewBox="36 36 440 440" aria-hidden="true"><use href="#studio-mark"/></svg>';
     var CLA = '<svg class="ah-cl" aria-hidden="true"><use href="#claude"/></svg>';
+    var BEAM = '<span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>';   /* the composer's border beam */
     var IG = '<i class="ah-p ig"></i>', TT = '<i class="ah-p tt"></i>', YT = '<i class="ah-p yt"></i>', LI = '<i class="ah-p li"></i>';
     var now = new Date(), DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var hour = now.getHours(), greet = hour < 5 ? "Good evening" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -340,13 +341,13 @@
         '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 18) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 23) + ni("cre", "Creators", 441) +
         '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
-        '<p class="ah-ask"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
+        '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
-          '<div class="ah-comp"><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
+          '<div class="ah-comp"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-drop">Drop to add to Studio</span><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
           '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
@@ -361,7 +362,18 @@
           "</div>" +
           '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
         "</div>" +
-      "</div></div>";
+        /* the full editor: the preview, and the timeline filling as Studio cuts (SK.appStory) */
+        '<div class="ah-ed" aria-hidden="true"><div class="ah-edh">' + sv("l") + '<span class="ah-edt"><b>Launch commercial</b><em data-ed-v>v01 · Cutting…</em></span><span class="ah-fl"></span><span class="ah-edb">16:9</span><span class="ah-edb">0:30</span><b class="ah-pill on">Export</b></div>' +
+          '<div class="ah-pv"><img alt="" data-ed-pv><p class="ah-cap" data-ed-cap></p><span class="ah-pvl">' + MARK + 'Studio</span><span class="ah-pvt" data-ed-t>0:00</span></div>' +
+          '<div class="ah-tln"><p class="ah-trk"><em>Video</em><span data-ed-trk="v"></span></p><p class="ah-trk"><em>Captions</em><span data-ed-trk="c"></span></p><p class="ah-trk"><em>Music</em><span data-ed-trk="m"></span></p><p class="ah-trk"><em>Brand</em><span data-ed-trk="b"></span></p><i class="ah-ph" data-ed-ph></i></div>' +
+        "</div>" +
+      "</div>" +
+      /* Ask Studio, the chat that slides in from the right */
+      '<aside class="ah-ap" aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
+        '<div class="ah-apc">' + BEAM + '<span>Reply to Studio…</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></aside>" +
+      /* the footage you drag in */
+      '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
+      "</div>";
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
       name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
@@ -372,7 +384,7 @@
         pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
       },
       brands: function (list) {
-        chips.innerHTML = (list || []).map(function (b) { return '<span class="ah-chip"><span class="ah-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>" + esc(b.n) + "</span>"; }).join("");
+        chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
       typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
@@ -387,10 +399,127 @@
       }
     };
     ctl.name(o.name || "");
-    ctl.brands(o.brands || [{ n: "Your brand", m: "Y", bg: "linear-gradient(140deg, #DFEAE8, #536878)", ink: "#05090A" }, { n: "Halden", m: "H", bg: "linear-gradient(140deg, #536878, #0E191E)" }, { n: "Northwind", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)" }]);
+    /* ---- the story pieces (SK.appStory): footage dragged in, the editor, the Ask Studio panel ---- */
+    var root = host.querySelector(".ah"), comp = host.querySelector(".ah-comp"), drag = host.querySelector(".ah-drag"), msgs = host.querySelector("[data-ap-m]");
+    var ed = host.querySelector(".ah-ed"), trk = function (k) { return host.querySelector('[data-ed-trk="' + k + '"]'); };
+    var at = function (el) { var x = 0, y = 0; while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; };
+    ctl.drag = function (imgs) {   /* the clips fly in from off the bottom right, on the pointer, and drop into the composer */
+      host.querySelector("[data-ah-dst]").innerHTML = imgs.map(function (u, i) { return '<img src="' + esc(u) + '" alt="" style="--i:' + i + '">'; }).join("");
+      var c = at(comp), tx = c.x + comp.offsetWidth * .42, ty = c.y + 18;
+      drag.style.transition = "none"; drag.style.transform = "translate(1500px, 960px)"; drag.className = "ah-drag on"; void drag.offsetWidth;
+      drag.style.transition = ""; drag.style.transform = "translate(" + tx + "px, " + ty + "px)";
+      setTimeout(function () { comp.classList.add("over"); }, 700);
+      return SK.sleep(SK.reduced ? 0 : 1300).then(function () { drag.classList.add("drop"); comp.classList.remove("over"); ctl.attach(imgs); return SK.sleep(SK.reduced ? 0 : 380); }).then(function () { drag.className = "ah-drag"; });
+    };
+    /* the app runs off the right edge of the screen: the editor and Ask Studio keep to the part you can see (--cut, app pixels) */
+    var fitCut = function () { var r = root.getBoundingClientRect(), k = r.width / 1440 || 1, vis = (window.innerWidth - r.left) / k; root.style.setProperty("--cut", Math.max(0, Math.round(1440 - vis + 28)) + "px"); };
+    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
+    ctl.clip = function (u, i) { trk("v").insertAdjacentHTML("beforeend", '<i class="ah-tc wl-in-a" style="--i:0;flex:' + (i === 1 ? 1.5 : 1) + '"><img src="' + esc(u) + '" alt=""></i>'); host.querySelector("[data-ed-pv]").src = u; };
+    ctl.music = function () { var w = ""; for (var i = 0; i < 90; i++) w += '<b style="height:' + Math.round(22 + 70 * Math.abs(Math.sin(i * .37) * Math.cos(i * .11))) + '%"></b>'; trk("m").innerHTML = '<i class="ah-tw">' + w + "</i>"; };
+    ctl.captions = function (lines) { trk("c").innerHTML = lines.map(function (t, i) { return '<i class="ah-tcp wl-in-a" style="--i:' + i + '">' + esc(t) + "</i>"; }).join(""); };
+    ctl.brandTrack = function () { trk("b").innerHTML = '<i class="ah-tb wl-in-a" style="--i:0">' + MARK + 'Logo · end card</i><i class="ah-tb wl-in-a" style="--i:1">Brand colours</i>'; };
+    ctl.title = function (t) { host.querySelector(".ah-edt b").textContent = t; };
+    ctl.caption = function (t) { host.querySelector("[data-ed-cap]").textContent = t; };
+    ctl.play = function (on) { root.classList.toggle("ed-play", !!on); if (on) host.querySelector("[data-ed-v]").textContent = "v01 · Ready to review"; };
+    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
+    ctl.msg = function (who, html, imgs) {   /* who: "you" | "studio" | "step" (a line that turns from a spinner to a tick) */
+      var m = document.createElement("div"); m.className = "ah-m " + who + " wl-in-a";
+      m.innerHTML = who === "studio" ? '<span class="ah-av">' + MARK + "</span><p>" + html + "</p>" : who === "step" ? '<i class="ah-spin"></i><span>' + html + "</span>" :
+        (imgs && imgs.length ? '<span class="ah-mi">' + imgs.map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join("") + "</span>" : "") + "<p>" + html + "</p>";
+      msgs.appendChild(m); return { done: function () { m.classList.add("ok"); } };
+    };
+    ctl.brands(o.brands || SK.BRANDS);
     return ctl;
   };
 
+
+  /* the three brands every Studio on the site shows: Studio, MIRRA, Custom Esignature (their own logos, assets/brands/) */
+  SK.BRANDS = [{ n: "Studio", img: "assets/brands/studio.svg" }, { n: "MIRRA", img: "assets/brands/mirra.png" }, { n: "Custom Esignature", img: "assets/brands/ces.png" }];
+
+  /* SK.appStory(ctl, o): the Home at work, on a loop. Your footage is dragged into the composer, the request types itself and goes,
+     Ask Studio opens on the right and answers while the full editor cuts it (clips land on the timeline, music, captions, the brand),
+     the film plays, then it lands at the front of To review and it all starts again. o.sfx(name) for the app's own sounds, o.prompts
+     (the requests it cycles), o.clips (sets of three images). Returns { stop() }. Reduced motion: nothing moves. */
+  SK.appStory = function (ctl, o) {
+    o = o || {}; var tok = { on: true }, sfx = o.sfx || function () {}, M = "assets/media/selects/";
+    var prompts = o.prompts || ["Create a new launch commercial for my company", "Cut a 15-second ad from my newest clips", "Make this week's reel for every channel"];
+    var sets = o.clips || [["cofounder-whiteboard", "coffee-friend-arrives", "dinner-toast"], ["tennis-forehand", "run-club", "golf"], ["surfing", "yacht", "coastal-highway"]];
+    var caps = o.captions || [["Meet Studio.", "One prompt.", "A finished film."], ["Built to move.", "Made in minutes."], ["Every channel.", "One request."]];
+    var titles = ["Launch commercial", "15-second ad", "This week's reel"];
+    var w = function (ms) { return SK.sleep(ms).then(function () { if (!tok.on) throw 0; }); };
+    if (SK.reduced) { ctl.typeAsk(prompts[0]); return { stop: function () {} }; }
+    (async function () {
+      try {
+        for (var r = 0; ; r++) {
+          var text = prompts[r % prompts.length], imgs = sets[r % sets.length].map(function (x) { return M + x + ".jpg"; }), cp = caps[r % caps.length];
+          ctl.editor(false); ctl.panel(false); ctl.working(false); ctl.sending(false); ctl.attach([]); ctl.typeAsk("", true);
+          await w(r ? 900 : 1400);
+          sfx("tick"); await ctl.drag(imgs); if (!tok.on) throw 0; sfx("land");
+          await w(450);
+          for (var i = 1; i <= text.length; i++) { ctl.typeAsk(text.slice(0, i), true); if (i % 3 === 0) sfx("key"); await w(30 + Math.random() * 28); }
+          await w(420); ctl.sending(true); sfx("send");
+          await w(300); ctl.sending(false); ctl.typeAsk("", false); ctl.attach([]);
+          ctl.panel(true); ctl.msg("you", text, imgs);
+          await w(700); ctl.title(titles[r % titles.length]); ctl.editor(true);
+          var m1 = ctl.msg("studio", "On it. A 30-second film from your 3 clips, in your brand.");
+          await w(900);
+          var s1 = ctl.msg("step", "Picking the best moments");
+          for (var k = 0; k < imgs.length; k++) { await w(420); ctl.clip(imgs[k], k); sfx("tick"); }
+          s1.done(); var s2 = ctl.msg("step", "Cutting to the music"); await w(500); ctl.music(); await w(700); s2.done();
+          var s3 = ctl.msg("step", "Captions and your logo"); await w(400); ctl.captions(cp); ctl.caption(cp[0]); await w(500); ctl.brandTrack(); await w(500); s3.done();
+          ctl.play(true); sfx("done");
+          for (var c = 1; c <= cp.length; c++) { await w(900); ctl.caption(cp[c % cp.length]); }
+          ctl.msg("studio", "Done. <b>v01</b> is in To review. Want a 15-second cut too?");
+          await w(2200);
+          ctl.panel(false); ctl.editor(false);
+          ctl.review({ img: imgs[0], kicker: "Film", title: titles[r % titles.length] }); sfx("land");
+          await w(3600);
+        }
+      } catch (e) {}
+    })();
+    return { stop: function () { tok.on = false; ctl.editor(false); ctl.panel(false); } };
+  };
+
+  /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
+     Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
+     code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
+     SK.chapters({ list: [[id, name]], now: () => id, go: (id) => {}, walls: true, wall: (src or "") => {}, wallDefault: "Orange dune" })
+     SK.wallPick() is the background picked here ("" = the page's own). ---------- */
+  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Big Sur"], ["wl/claude", "Alpine lake"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
+  SK.wallPick = function () { try { return localStorage.getItem("studio-wall-" + (window.SK_PAGE || "site")) || ""; } catch (e) { return ""; } };
+  SK.chapters = function (o) {
+    var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var el = document.createElement("div"); el.className = "sk-ch"; el.setAttribute("data-sfx", "off");
+    var CHEV = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4.5 6.5 3.5 3.5 3.5-3.5"/></svg>';
+    el.innerHTML = '<button type="button" class="sk-chb" data-n="-1" aria-label="The chapter before"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m9.5 4-4 4 4 4"/></svg></button>' +
+      '<button type="button" class="sk-chp" aria-haspopup="menu" aria-expanded="false"><i class="dot"></i><span class="k">Chapters</span><span class="c"></span>' + CHEV + "</button>" +
+      '<button type="button" class="sk-chb" data-n="1" aria-label="The chapter after"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6.5 4 4 4-4 4"/></svg></button>' +
+      '<div class="sk-chm" role="menu" hidden></div>';
+    document.body.appendChild(el);
+    var pill = el.querySelector(".sk-chp"), menu = el.querySelector(".sk-chm");
+    var idx = function () { var n = o.now(); for (var i = 0; i < o.list.length; i++) if (o.list[i][0] === n) return i; return 0; };
+    function paint() { el.querySelector(".c").textContent = (o.list[idx()] || [])[1] || ""; el.querySelector('[data-n="-1"]').disabled = idx() === 0; el.querySelector('[data-n="1"]').disabled = idx() === o.list.length - 1; }
+    function paintMenu() {
+      var c = idx(), pick = SK.wallPick();
+      var h = '<p class="h">Chapters</p>' + o.list.map(function (x, i) { return '<button type="button" class="i' + (i === c ? " on" : "") + '" role="menuitem" data-to="' + esc(x[0]) + '"><span class="n">' + (i < 9 ? "0" : "") + (i + 1) + '</span><b>' + esc(x[1]) + "</b><em>" + (i === c ? "Now" : "") + "</em></button>"; }).join("");
+      if (o.walls) h += '<p class="h">Background</p><div class="w">' + '<button type="button" class="t' + (pick ? "" : " on") + '" data-wall=""><span class="d">' + esc(o.wallDefault || "Each step") + "</span><b>Default</b></button>" +
+        SK.WALLS.map(function (w) { return '<button type="button" class="t' + (pick === w[0] ? " on" : "") + '" data-wall="' + w[0] + '"><img src="assets/' + w[0] + '.jpg" alt="" loading="lazy"><b>' + esc(w[1]) + "</b></button>"; }).join("") + "</div>";
+      menu.innerHTML = h;
+    }
+    function open(on) { menu.hidden = !on; pill.setAttribute("aria-expanded", on ? "true" : "false"); if (on) paintMenu(); }
+    pill.addEventListener("click", function (e) { e.stopPropagation(); open(menu.hidden); });
+    el.querySelectorAll(".sk-chb").forEach(function (b) { b.addEventListener("click", function () { var i = idx() + +b.getAttribute("data-n"); if (o.list[i]) { o.go(o.list[i][0]); setTimeout(paint, 60); } }); });
+    menu.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var t = e.target.closest("[data-to]"), w = e.target.closest("[data-wall]");
+      if (t) { open(false); o.go(t.getAttribute("data-to")); setTimeout(paint, 60); }
+      if (w) { var v = w.getAttribute("data-wall"); try { if (v) localStorage.setItem("studio-wall-" + (window.SK_PAGE || "site"), v); else localStorage.removeItem("studio-wall-" + (window.SK_PAGE || "site")); } catch (x) {} if (o.wall) o.wall(v ? "assets/" + v + ".jpg" : ""); paintMenu(); }
+    });
+    document.addEventListener("click", function () { if (!menu.hidden) open(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !menu.hidden) open(false); });
+    paint();
+    return { paint: paint };
+  };
 
   /* ---------- film modal ---------- */
   var fm;
@@ -674,7 +803,7 @@
       }, { passive: true });
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
-    kayla();
+    if (!window.SK_PAGE) kayla();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
     growFrames();
     focusSections();
     restLoops();
