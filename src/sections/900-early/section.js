@@ -90,14 +90,20 @@ var SFX = (function () {
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
+  function decode(n) { if (!ctx || !raw[n]) return; var c = ctx; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
-  function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
-  /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
-  ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
+  /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
+  function rebuild() {
+    var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
+    buf = {}; bed.reset(); Object.keys(raw).forEach(decode); if (playing) bedWant = true;   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
+  }
+  var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
+  function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -135,6 +141,7 @@ var SFX = (function () {
       },
       duck: function (on) { duckOn = !!on; to(level(), .3); },
       swell: function () { swellOn = true; to(level(), 1.2); clearTimeout(swellT); swellT = setTimeout(function () { swellOn = false; to(level(), 2.5); }, 4200); },
+      on: function () { return !!src; }, reset: function () { src = null; g = null; },
       stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
     };
   })();
@@ -532,6 +539,7 @@ function Pass(el, opts) {
     stop: function () { st.live = false; beamsRun(false); },
     land: function () { el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
+    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
       if ("mail" in d) q("mail").textContent = d.mail;
@@ -604,7 +612,7 @@ function setStep(n, quiet, fromHist) {
   next.disabled = !ready(n);
   if (q === "claude") askLoop(); else { loopTok++; stopStory(); AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
   sizeStage(); setTimeout(sizeStage, 400);
-  if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
+  if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); setTimeout(function () { if (SCENE[ORDER[at]] === "you" && !sheet.classList.contains("kb")) SK.guideTap(sheet.querySelector("[data-wl-pass1]") || sheet.querySelector(".wl-sc[data-sc=\"you\"] .pass"), { key: "studio-guide-pass", from: sheet.querySelector("[data-wl-kay]"), onPress: function () { pass1.spin(); } }); }, 2600); } else pass1.start(); } else pass1.stop();   /* the first time: Kayla's dot shows the pass can be pressed */
   if (SCENE[q] === "home") drawHome();
   if (!quiet && sheet.classList.contains("open")) KAY.line(LINE[q]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
@@ -953,23 +961,9 @@ function confirmLink() {
   });
 }
 
-/* ---------- the keyboard on a phone: the field stays in view (visualViewport), the bar steps aside while it is up ---------- */
+/* ---------- the keyboard on a phone (SK.keyboard): the bar steps aside only while the keyboard is really up ---------- */
 var KBD = !fine;
-function kbKeep() {
-  var a = document.activeElement; if (!a || !sheet.contains(a) || !a.matches("input, select")) return;
-  var vv = window.visualViewport, vh = vv ? vv.height : innerHeight, top = vv ? vv.offsetTop : 0, r = a.getBoundingClientRect();
-  var sc = sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"), want = top + Math.min(vh * .3, 150);
-  if (r.top < top + 64 || r.bottom > top + vh - 24) sc.scrollTop += r.top - want;
-}
-sheet.addEventListener("focusin", function (e) {
-  if (!KBD || !e.target.matches("input:not([type=checkbox]), select")) return;
-  sheet.classList.add("kb"); setTimeout(kbKeep, 320); setTimeout(kbKeep, 700);
-});
-sheet.addEventListener("focusout", function () {
-  if (!KBD) return;
-  setTimeout(function () { var a = document.activeElement; if (!(a && sheet.contains(a) && a.matches("input:not([type=checkbox]), select"))) sheet.classList.remove("kb"); }, 90);
-});
-if (window.visualViewport) visualViewport.addEventListener("resize", function () { if (sheet.classList.contains("kb")) kbKeep(); });
+if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"); } });
 
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */

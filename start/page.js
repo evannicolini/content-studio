@@ -947,6 +947,116 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   }
 })();
 
+/* ---------- SK.keyboard: is a phone's on-screen keyboard actually up? ----------
+   iOS keeps the field focused after the keyboard's Done (or the swipe down), so "focused" isn't "keyboard up". This watches the
+   visual viewport: the keyboard is up only while a field is focused AND the visible height is well short of the full height.
+   It sets .kb on the sheet (the bar steps aside), --kbh (room under the content so the field can rise above the keyboard; 0 the
+   moment it's down), --lvh (the tallest the screen has been: the wallpaper is pinned to it, so the keyboard never moves it), moves
+   the focused field into view before iOS pans the page, and undoes any pan iOS leaves behind. */
+(function () {
+  var SK = (window.SK = window.SK || {});
+  SK.keyboard = function (sheet, o) {
+    o = o || {};
+    var vv = window.visualViewport, h0 = function () { return vv ? vv.height : innerHeight; }, full = Math.max(h0(), innerHeight), on = false, root = document.documentElement;
+    root.style.setProperty("--lvh", Math.round(full) + "px");
+    var isField = function (a) { return a && sheet.contains(a) && a.matches && a.matches("input:not([type=checkbox]):not([type=radio]):not([type=button]), select, textarea"); };
+    function scroller() { return o.scroller ? o.scroller() : sheet; }
+    function keep(est) {   /* the field to about a fifth of the way down what's visible */
+      var a = document.activeElement; if (!isField(a)) return;
+      var vh = est ? full - est : h0(), top = vv ? vv.offsetTop : 0, r = a.getBoundingClientRect(), want = top + Math.min(vh * .22, 140);
+      if (r.top < top + 56 || r.bottom > top + vh - 20) { var sc = scroller(); if (sc) sc.scrollTop += r.top - want; }
+    }
+    function unpan() { if (window.scrollY || root.scrollTop || document.body.scrollTop) { window.scrollTo(0, 0); document.body.scrollTop = 0; } }
+    function check() {
+      var h = h0(), f = isField(document.activeElement);
+      if (!f && h > full) { full = h; root.style.setProperty("--lvh", Math.round(full) + "px"); }
+      var up = f && h < full - 150;
+      sheet.style.setProperty("--kbh", up ? Math.round(full - h) + "px" : "0px");
+      if (up !== on) { on = up; sheet.classList.toggle("kb", on); if (!on) unpan(); if (o.change) o.change(on); }
+      if (on) keep();
+    }
+    if (vv) { vv.addEventListener("resize", check); vv.addEventListener("scroll", function () { if (!on) unpan(); }); }
+    window.addEventListener("resize", check);
+    sheet.addEventListener("focusin", function (e) {
+      if (!isField(e.target)) return;
+      sheet.style.setProperty("--kbh", Math.round(full * .45) + "px");   /* room before the keyboard arrives, so the field can rise now */
+      keep(full * .45);
+      [60, 350, 800, 1400].forEach(function (t) { setTimeout(check, t); });
+    });
+    sheet.addEventListener("focusout", function () { [60, 350, 800].forEach(function (t) { setTimeout(check, t); }); });
+    window.addEventListener("orientationchange", function () { setTimeout(function () { full = Math.max(h0(), innerHeight); root.style.setProperty("--lvh", Math.round(full) + "px"); check(); }, 600); });
+    return { up: function () { return on; }, check: check };
+  };
+})();
+
+
+/* ---------- SK.audioKeep: sound that keeps working on an iPhone ----------
+   1. The page asks iOS for the "playback" audio session (navigator.audioSession, WebKit 16.4+) before any AudioContext exists, so
+      the ringer switch on silent doesn't mute Web Audio.
+   2. Where that API isn't there (Chrome on iOS, older Safari): on the first touch a tiny silent <audio> loop starts; a playing media
+      element puts the page in the same playback session, so the clicks, music and Kayla are heard with the switch on silent.
+   3. Coming back (another app, a locked phone, another tab) leaves the AudioContext "interrupted" or "suspended": on visible,
+      pageshow, focus and every tap it's resumed, and if iOS closed it, rebuilt by the page (o.rebuild) from the decoded sounds. */
+(function () {
+  var SK = (window.SK = window.SK || {});
+  try { if (navigator.audioSession && navigator.audioSession.type !== "playback") navigator.audioSession.type = "playback"; } catch (e) {}
+  var IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var keep = null;
+  function silentLoop() {
+    if (keep || !IOS || (navigator.audioSession && navigator.audioSession.type === "playback")) return;
+    var n = 4800, b = new ArrayBuffer(44 + n * 2), v = new DataView(b), w = function (o, t) { for (var i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+    w(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); w(8, "WAVE"); w(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 24000, true); v.setUint32(28, 48000, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, "data"); v.setUint32(40, n * 2, true);
+    keep = new Audio(URL.createObjectURL(new Blob([b], { type: "audio/wav" })));
+    keep.loop = true; keep.setAttribute("playsinline", ""); keep.setAttribute("x-webkit-airplay", "deny"); keep.preload = "auto";
+  }
+  SK.audioKeep = function (o) {
+    function wake() {
+      var c = o.ctx();
+      if (c && c.state === "closed" && o.rebuild) { o.rebuild(); c = o.ctx(); }
+      if (c && c.state !== "running") { try { var p = c.resume(); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+      if (IOS && !document.hidden) { silentLoop(); if (keep && keep.paused) { try { var q = keep.play(); if (q && q.catch) q.catch(function () {}); } catch (e) {} } }
+    }
+    ["touchend", "click", "keydown", "pointerdown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) wake(); else if (keep) keep.pause(); });
+    window.addEventListener("pageshow", wake); window.addEventListener("focus", wake);
+    return { wake: wake };
+  };
+})();
+
+
+/* ---------- SK.guideTap: Kayla's guide dot (the app tour's cursor: a white dot, a ring on each press, her name beside it) ----------
+   Once per browser (key): it glides in from Kayla's pill, "presses" the target, calls onPress (the pass spins once, showing it can be
+   pressed), and fades. Nothing with reduced motion. */
+(function () {
+  var SK = (window.SK = window.SK || {});
+  SK.guideTap = function (target, o) {
+    o = o || {};
+    if (SK.reduced || !target) return;
+    try { if (o.key && localStorage.getItem(o.key)) return; } catch (e) {}
+    var r = target.getBoundingClientRect(); if (!r.width || r.bottom < 0 || r.top > innerHeight) return;
+    try { if (o.key) localStorage.setItem(o.key, "1"); } catch (e) {}
+    var c = document.createElement("div"); c.className = "sk-cur"; c.setAttribute("aria-hidden", "true");
+    c.innerHTML = '<div class="in"><i class="dot"></i><i class="ring"></i><span class="tag"><span class="fc"><img src="assets/kayla.jpg" alt="" width="40" height="40"></span><span class="nm">Kayla</span></span></div>';
+    document.body.appendChild(c);
+    var from = o.from && o.from.getBoundingClientRect ? o.from.getBoundingClientRect() : { left: innerWidth - 60, top: innerHeight - 90, width: 40, height: 40 };
+    var at = function (x, y, ms) { c.style.transitionDuration = (ms || 0) + "ms"; c.style.transform = "translate(" + Math.round(x) + "px," + Math.round(y) + "px)"; };
+    at(from.left + from.width / 2, from.top + from.height / 2, 0);
+    requestAnimationFrame(function () {
+      c.classList.add("on");
+      setTimeout(function () {
+        var t = target.getBoundingClientRect(); at(t.left + t.width * .62, t.top + t.height * .55, 900);
+        setTimeout(function () {
+          c.classList.add("press"); if (o.onPress) o.onPress();
+          setTimeout(function () { c.classList.remove("press"); c.classList.remove("on"); setTimeout(function () { if (c.parentNode) c.parentNode.removeChild(c); }, 500); }, 1300);
+        }, 980);
+      }, 280);
+    });
+  };
+})();
+
+
+
 
 /* ===== 910-start ===== */
 ;(function () {
@@ -997,14 +1107,20 @@ var SFX = (function () {
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
+  function decode(n) { if (!ctx || !raw[n]) return; var c = ctx; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
-  function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
-  /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
-  ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
+  /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
+  function rebuild() {
+    var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
+    buf = {}; bed.reset(); Object.keys(raw).forEach(decode); if (playing) bedWant = true;   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
+  }
+  var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
+  function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -1042,6 +1158,7 @@ var SFX = (function () {
       },
       duck: function (on) { duckOn = !!on; to(level(), .3); },
       swell: function () { swellOn = true; to(level(), 1.2); clearTimeout(swellT); swellT = setTimeout(function () { swellOn = false; to(level(), 2.5); }, 4200); },
+      on: function () { return !!src; }, reset: function () { src = null; g = null; },
       stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
     };
   })();
@@ -1325,6 +1442,7 @@ function Pass(el, opts) {
     start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
     stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
+    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
@@ -1408,6 +1526,7 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
   });
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
+if (!fine) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });   /* the keyboard on a phone: the bar steps aside only while it's really up */
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
@@ -1988,6 +2107,7 @@ function showDone(has) {
     sheet.classList.add("done"); sheet.classList.remove("shown");
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
     pass2.enter(2100);
+    setTimeout(function () { if (sheet.classList.contains("done")) SK.guideTap($("[data-st-pass2]"), { key: "studio-guide-pass", from: $("[data-st-kay]"), onPress: function () { pass2.spin(); } }); }, 3400);   /* the first time: Kayla's dot shows the pass can be pressed */
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
     SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"]);
