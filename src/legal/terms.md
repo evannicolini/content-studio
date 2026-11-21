@@ -9,7 +9,7 @@
 
 ## 1. Who we are and what these Terms cover
 
-These Terms of Service ("**Terms**") are a contract between you and [COMPANY LEGAL NAME], a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"). They cover the Studio Mac app (the "**App**"), the website at askstudio.ai (the "**Site**"), our waitlist, our accounts and subscriptions, and any related services, updates and support (together, the "**Service**").
+These Terms of Service ("**Terms**") are a contract between you and Nicolini Productions LLC, a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"). They cover the Studio Mac app (the "**App**"), the website at askstudio.ai (the "**Site**"), our waitlist, our accounts and subscriptions, and any related services, updates and support (together, the "**Service**").
 
 You accept these Terms when you create an account, start a trial, join the waitlist, download or use the App, or otherwise use the Service. Our [Privacy Policy](privacy.md) explains how we handle personal information, and is part of these Terms. If you don't agree, don't use the Service.
 
@@ -179,7 +179,7 @@ We respect intellectual property rights and respond to valid notices under the D
 5. a statement that you believe in good faith that the use is not authorized by the copyright owner, its agent or the law;
 6. a statement, under penalty of perjury, that the information in your notice is accurate and that you are the owner or authorized to act for the owner.
 
-**Designated agent:** [DMCA AGENT NAME], [COMPANY LEGAL NAME], [MAILING ADDRESS]. Email: [DMCA EMAIL].
+**Designated agent:** [DMCA AGENT NAME], Nicolini Productions LLC. Email: [DMCA EMAIL].
 
 If your material was removed and you believe that was a mistake, you may send a counter-notice that meets 17 U.S.C. § 512(g)(3). We terminate the accounts of repeat infringers where appropriate. Knowingly false notices may result in liability for damages.
 
@@ -271,6 +271,5 @@ You agree to receive communications from us electronically, including legal noti
 
 ## 25. Contact
 
-[COMPANY LEGAL NAME] (Studio)
-[MAILING ADDRESS]
-Email: hello@askstudio.ai
+Nicolini Productions LLC (Studio)
+Contact: hello@askstudio.ai

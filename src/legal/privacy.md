@@ -16,7 +16,7 @@
 
 ## 1. Who we are
 
-This Privacy Policy explains how [COMPANY LEGAL NAME], a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"), collects, uses and shares personal information when you use the Studio Mac app, the website at askstudio.ai, our waitlist, and related services (the "**Service**"). We are the "controller" (or "business") for the information described here. Our [Terms of Service](terms.md) also apply.
+This Privacy Policy explains how Nicolini Productions LLC, a [STATE OF ORGANIZATION] company doing business as Studio ("**Studio**", "**we**", "**us**"), collects, uses and shares personal information when you use the Studio Mac app, the website at askstudio.ai, our waitlist, and related services (the "**Service**"). We are the "controller" (or "business") for the information described here. Our [Terms of Service](terms.md) also apply.
 
 ## 2. Information we collect
 
@@ -199,6 +199,5 @@ We may update this policy from time to time. The "Last updated" date shows the l
 
 ## 16. Contact
 
-[COMPANY LEGAL NAME] (Studio)
-[MAILING ADDRESS]
-Email: hello@askstudio.ai
+Nicolini Productions LLC (Studio)
+Contact: hello@askstudio.ai
