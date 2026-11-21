@@ -12,12 +12,12 @@
     {
       "binding": "DB",
       "database_name": "studio-waitlist",
-      "database_id": "PASTE_THE_ID_FROM_wrangler_d1_create_studio-waitlist",
+      "database_id": "870f0fc8-f344-4870-8155-0eca35c486e7",
       "migrations_dir": "migrations"
     }
   ],
   "vars": {
-    "ORIGINS": "https://evannicolini.github.io,http://127.0.0.1:*,http://localhost:*",
+    "ORIGINS": "https://evannicolini.github.io,https://askstudio.ai,https://www.askstudio.ai,http://127.0.0.1:*,http://localhost:*",
     "BOOST": "10",
     "BREVO_LIST_ID": ""
   }
