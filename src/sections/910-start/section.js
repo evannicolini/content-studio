@@ -267,7 +267,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -979,7 +979,7 @@ function open() {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome();
@@ -1004,6 +1004,7 @@ function intro() {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
+  if (SK.edges) SK.edges();
   sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}

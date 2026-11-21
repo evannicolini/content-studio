@@ -398,6 +398,33 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   };
 
 
+  /* ---------- the edges (iPhone): the page runs under the status bar and the home indicator (viewport-fit=cover, no theme-color).
+     What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
+     the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
+     sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
+  SK.edgeTint = function (src) {
+    if (!src) return;
+    var im = new Image(); im.onload = function () {
+      try {
+        var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
+        g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
+        var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
+        for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
+        var col = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
+        document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col);   /* the sheet's own base takes it too */
+      } catch (e) {}
+    };
+    im.src = src;
+  };
+  function edges() {
+    if (window.SK_PAGE) return;   /* the sheets set their own (SK.edgeTint) */
+    var hero = document.getElementById("hero"); if (!hero) return;
+    var root = document.documentElement, top = "#18436a", ink = "", on = null;
+    var set = function () { var near = window.scrollY < (hero.offsetHeight || innerHeight) * .6; if (near === on) return; on = near; root.style.backgroundColor = near ? top : ink; };
+    set(); window.addEventListener("scroll", set, { passive: true });
+    SK.edges = function () { on = null; set(); };   /* a sheet closed over the site: back to the site's edge */
+  }
+
   /* ---------- film modal ---------- */
   var fm;
   SK.film = function (x) {
@@ -681,6 +708,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
     kayla();
+    edges();
     growFrames();
     focusSections();
     restLoops();
@@ -4781,7 +4809,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -5487,7 +5515,7 @@ function open(src) {
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
   else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();
   if (CTOK) { wall("you"); confirmLink(); KAY.say(["confirm"]); }
@@ -5509,6 +5537,7 @@ function open(src) {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
+  if (SK.edges) SK.edges();
   sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
@@ -6023,7 +6052,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -6735,7 +6764,7 @@ function open() {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome();
@@ -6760,6 +6789,7 @@ function intro() {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
+  if (SK.edges) SK.edges();
   sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
