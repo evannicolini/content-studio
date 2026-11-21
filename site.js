@@ -5122,18 +5122,22 @@ function send(d) {
   if (local) { console.info("[early access] not connected yet (src/waitlist.json). Would send:", d); return SK.sleep(900).then(function () { return { ok: true, code: mine, first: d.first, position: 118 + Math.floor(Math.random() * 60), total: 412, referrals: 0, boost: 10 }; }); }
   return Promise.reject(new Error("not connected"));
 }
+/* the exact words a person agreed to: the box they ticked plus the terms beside the phone field */
+function smsWords(sel) { return sheet.querySelector(sel).textContent.trim() + ". " + sheet.querySelector("[data-wl-smstext]").textContent.trim(); }
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (ORDER[at] !== "you") { advance(); return; }
   if (go.classList.contains("busy")) return;
   var email = val("email"), phone = val("phone"), digits = phone.replace(/\D/g, ""), c = cc(), bad = [], msg = "";
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { bad.push("email"); msg = email ? "That email doesn't look quite right." : "Add your email."; }
-  if (digits.length < 6 || digits.length > 15) { bad.push("phone"); msg = bad.length > 1 ? "Add your email and phone number." : phone ? "That phone number looks too short." : "Add your phone number."; }
+  var nOk = form.elements.sms_notify.checked, mOk = form.elements.sms_marketing.checked;   /* the phone is optional, unless a text box is ticked */
+  if ((digits.length || nOk || mOk) && (digits.length < 6 || digits.length > 15)) { bad.push("phone"); msg = bad.length > 1 ? "Check your email and phone number." : phone ? "That phone number looks too short." : "Add your phone number for texts, or untick the boxes."; }
   mark(bad, msg);
   if (bad.length) { form.elements[bad[0]].focus(); return; }
   var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
   var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
-    sms_consent: !!form.elements.sms_ok.checked, sms_consent_text: sheet.querySelector("[data-wl-smstext]").textContent.trim(), sms_consent_version: "waitlist-sms-v1", terms_version: "waitlist-email-v1" };
+    sms_notify: nOk, sms_notify_text: nOk ? smsWords("[data-wl-smsn]") : "", sms_marketing: mOk, sms_marketing_text: mOk ? smsWords("[data-wl-smsm]") : "",
+    sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v1" };
   go.classList.add("busy"); SFX.play("send");
   send(d).then(function (j) {
     var rec = { first: d.first, last: d.last, code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, at: Date.now() };
@@ -5279,7 +5283,7 @@ function startOver() {
   try { localStorage.removeItem(KEY); } catch (e) {}
   rec = null; ans = { roles: [], brands: "", claude: "" }; loopTok++; pass2.stop();
   sheet.querySelectorAll(".wl-opt.sel").forEach(function (o) { o.classList.remove("sel"); o.setAttribute("aria-pressed", "false"); });
-  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_ok.checked = false; other.hidden = true;
+  inputs.forEach(function (i) { i.value = ""; }); form.elements.company.value = ""; form.elements.sms_notify.checked = false; form.elements.sms_marketing.checked = false; other.hidden = true;
   mark([], ""); sheet.querySelectorAll(".wl-err").forEach(function (e) { e.textContent = ""; });
   steps.forEach(function (s, i) { s.classList.remove("past"); s.classList.toggle("on", i === 0); });
   Object.keys(scenes).forEach(function (k) { scenes[k].classList.remove("past"); scenes[k].classList.toggle("on", k === SCENE[ORDER[0]]); });

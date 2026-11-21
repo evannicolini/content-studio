@@ -129,11 +129,20 @@ function readForm(b) {
   const list = Array.isArray(b.roles) ? b.roles : typeof b.roles === "string" ? b.roles.split(",") : [];
   const roles = [...new Set(list.map((r) => text(r, 60)).filter(Boolean))].slice(0, 12).join(", ");
   const phone = text(b.phone, 32), cc = String(typeof b.cc === "string" || typeof b.cc === "number" ? b.cc : "").replace(/\D/g, "").slice(0, 4);
-  return {
+  const f = {
     email, first, last, phone, cc, sms: e164(phone, cc), roles,
     brands: text(b.brands, 300), claude: text(b.claude, 120), source: text(b.source, 120), ref: cleanCode(b.ref),
-    smsOk: b.sms_consent === true && !!e164(phone, cc), smsText: text(b.sms_consent_text, 1000), smsVersion: text(b.sms_consent_version, 40), terms: text(b.terms_version, 40),
+    smsVersion: text(b.sms_consent_version, 40), terms: text(b.terms_version, 40),
   };
+  // Two separate opt-ins, each kept only with a number that can take texts. The one v1 box (sms_consent) covered both.
+  const can = !!e164(phone, cc), v1 = b.sms_consent === true;
+  f.notify = can && (b.sms_notify === true || v1);
+  f.marketing = can && (b.sms_marketing === true || v1);
+  f.notifyText = text(b.sms_notify_text, 1000) || (v1 ? text(b.sms_consent_text, 1000) : "");
+  f.marketingText = text(b.sms_marketing_text, 1000) || (v1 ? text(b.sms_consent_text, 1000) : "");
+  f.smsOk = f.notify || f.marketing;
+  f.smsText = v1 ? text(b.sms_consent_text, 1000) : [f.notify ? f.notifyText : "", f.marketing ? f.marketingText : ""].filter(Boolean).join(" | ");
+  return f;
 }
 
 async function join(request, env, ctx) {
@@ -165,10 +174,12 @@ async function join(request, env, ctx) {
       try {
         const r = await env.DB.prepare(
           `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at,
-             sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent, consent_ip, consent_country)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
+             sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent, consent_ip, consent_country,
+             sms_notify, sms_notify_at, sms_notify_text, sms_marketing, sms_marketing_at, sms_marketing_text)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
         ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t,
-          f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua, f.smsOk ? cip : null, f.smsOk ? ccountry : null).run();
+          f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua, f.smsOk ? cip : null, f.smsOk ? ccountry : null,
+          f.notify ? 1 : 0, f.notify ? t : null, f.notify ? f.notifyText : null, f.marketing ? 1 : 0, f.marketing ? t : null, f.marketing ? f.marketingText : null).run();
         if (r.meta.changes) added = await bySeq(env, r.meta.last_row_id);
         else raced = true;                                             // the same email landed a moment ago: update it below
       } catch (e) {
@@ -196,6 +207,8 @@ async function join(request, env, ctx) {
   // A new tick is recorded with its own time and words; an unticked box on a repeat sign-up is not an opt-out (STOP is).
   if (f.smsOk) await env.DB.prepare("UPDATE signups SET sms_consent = 1, sms_consent_at = ?, sms_consent_text = ?, sms_consent_version = ?, user_agent = ?, consent_ip = ?, consent_country = ? WHERE seq = ?")
     .bind(t, f.smsText, f.smsVersion, ua, cip, ccountry, row.seq).run();
+  if (f.notify) await env.DB.prepare("UPDATE signups SET sms_notify = 1, sms_notify_at = ?, sms_notify_text = ? WHERE seq = ?").bind(t, f.notifyText, row.seq).run();
+  if (f.marketing) await env.DB.prepare("UPDATE signups SET sms_marketing = 1, sms_marketing_at = ?, sms_marketing_text = ? WHERE seq = ?").bind(t, f.marketingText, row.seq).run();
   if (f.terms) await env.DB.prepare("UPDATE signups SET terms_version = ? WHERE seq = ?").bind(f.terms, row.seq).run();
   row = await bySeq(env, row.seq);
   later(ctx, afterJoin(env, row.seq, null));
@@ -245,6 +258,8 @@ async function pushContact(env, seq) {
     PHONE: row.sms || row.phone || "", SMS_CONSENT: !!row.sms_consent,
     SMS_CONSENT_AT: row.sms_consent_at ? new Date(row.sms_consent_at * 1000).toISOString() : "",
     SMS_CONSENT_TEXT: row.sms_consent ? (row.sms_consent_version ? "[" + row.sms_consent_version + "] " : "") + (row.sms_consent_text || "") : "",
+    SMS_NOTIFY: !!row.sms_notify, SMS_NOTIFY_AT: row.sms_notify_at ? new Date(row.sms_notify_at * 1000).toISOString() : "",
+    SMS_MARKETING: !!row.sms_marketing, SMS_MARKETING_AT: row.sms_marketing_at ? new Date(row.sms_marketing_at * 1000).toISOString() : "",
   };
   if (row.sms && row.sms_consent) attributes.SMS = row.sms;   // the SMS channel only for someone who ticked the box
   const body = { email: row.email, attributes, updateEnabled: true };
@@ -317,7 +332,8 @@ async function resync(url, env) {
 
 // Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
 const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
-  PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text" };
+  PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text",
+  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text" };
 async function brevoSetup(env) {
   if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
   const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
@@ -337,7 +353,7 @@ function csvCell(v) {
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
-const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "terms_version", "roles", "brands", "claude", "source",
+const COLUMNS = ["seq", "position", "front", "joined", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "sms_notify", "sms_notify_at", "sms_marketing", "sms_marketing_at", "consent_ip", "consent_country", "terms_version", "roles", "brands", "claude", "source",
   "code", "referred_by", "referrals", "ip", "brevo_synced", "brevo_error"];
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(

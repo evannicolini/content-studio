@@ -32,7 +32,7 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 @property --wl-o1 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o2 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o3 { syntax: "<number>"; inherits: false; initial-value: 1; }
-.wl-q > :not(.wl-opts):not(.wl-fields):not(.wl-other):not(.wl-count), .wl-f > span:first-child, .wl-tel > label, .wl-fly, .wl-sc > .p3 { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
+.wl-q > :not(.wl-opts):not(.wl-fields):not(.wl-other):not(.wl-count), .wl-f > span:first-child, .wl-tel > label, .wl-smsnote, .wl-fly, .wl-sc > .p3 { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
 /* the glass itself comes up 3x faster than the fade, so the clear-sky blend lasts a blink, then it is all frost */
 .wl-ref, .wl-count, .wl-opt, .wl-f input:not(.wl-hp), .wl-ccv, .wl-dock > *, .wl-sc > .wl-comp, .wl-appwin > *, .wl-cl2 > * { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
 
@@ -155,7 +155,10 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 .wl-sms .tx { font-size: 14.5px; line-height: 1.4; color: #fff; }
 .wl-sms .tx em { font-style: normal; color: var(--wl-l2); }
 .wl-sms small { display: block; margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--wl-l2); }
-.wl-sms a, .wl-legal a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .35); text-underline-offset: 3px; }
+.wl-smsnote { margin: 10px 0 0 4px; font-size: 12.5px; line-height: 1.5; color: var(--wl-l2); }
+.wl-smsbox { margin-top: 18px; display: grid; gap: 12px; }
+.wl-smsbox .wl-sms { margin-top: 0; }
+.wl-sms a, .wl-smsnote a, .wl-legal a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .35); text-underline-offset: 3px; }
 .wl-legal { margin-top: 14px; max-width: 34em; font-size: 13px; line-height: 1.5; color: var(--wl-l2); }
 .wl-fine { margin-top: 16px; max-width: 34em; font-size: 12.5px; line-height: 1.5; color: var(--wl-l3); text-wrap: pretty; }
 

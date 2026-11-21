@@ -320,7 +320,8 @@ test("Brevo: the contact, its attributes and the list; the referrer's count", as
     email: "person1@example.com", updateEnabled: true, listIds: [7],
     attributes: { FIRSTNAME: "First1", LASTNAME: "Last1", SMS: "+447700900123", ROLE: "Creator", BRANDS: "", CLAUDE: "", SOURCE: "test",
       REF_CODE: a.code, REFERRED_BY: "", REFERRALS: 0, POSITION: 1, PHONE: "+447700900123", SMS_CONSENT: true,
-      SMS_CONSENT_AT: c.body.attributes.SMS_CONSENT_AT, SMS_CONSENT_TEXT: "[waitlist-sms-v1] Text me" },
+      SMS_CONSENT_AT: c.body.attributes.SMS_CONSENT_AT, SMS_CONSENT_TEXT: "[waitlist-sms-v1] Text me",
+      SMS_NOTIFY: true, SMS_NOTIFY_AT: c.body.attributes.SMS_CONSENT_AT, SMS_MARKETING: true, SMS_MARKETING_AT: c.body.attributes.SMS_CONSENT_AT },
   });
   assert.match(c.body.attributes.SMS_CONSENT_AT, /^\d{4}-\d\d-\d\dT/);
   assert.equal(t.row("person1@example.com").brevo_synced, 1);
@@ -470,7 +471,7 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.match(r.headers.get("Content-Type"), /^text\/csv/);
   const lines = r.text.trim().split("\r\n");
   assert.equal(lines.length, 14);
-  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
+  assert.equal(lines[0], "seq,position,front,joined,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,sms_notify,sms_notify_at,sms_marketing,sms_marketing_at,consent_ip,consent_country,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
   const twelve = lines.find((l) => l.startsWith("12,"));
   assert.match(twelve, /^12,3,/, "seq 12 with one referral (score 2) is third");
   const thirteen = lines.find((l) => l.startsWith("13,"));
@@ -478,6 +479,32 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.ok(thirteen.includes(`'=HYPERLINK(""x"")`), "formulas are defused: " + thirteen);
   assert.ok(thirteen.includes(",+44 7700 900123,"), "phone numbers stay as they are");
   assert.ok(thirteen.includes("," + codes[11] + ","));
+});
+
+test("SMS: two separate opt-ins, each with its own time and words, and Brevo hears both", async () => {
+  const t = setup();
+  const NT = "Text me when my Studio invite is ready", MT = "Text me Studio news and offers";
+  await t.join(person(1, { phone: "4155550100", cc: "1", sms_notify: true, sms_notify_text: NT, sms_marketing: false, sms_marketing_text: MT, sms_consent_version: "waitlist-sms-v2" }), { headers: { "CF-IPCountry": "US", "User-Agent": "TestBrowser/1" } });
+  let r = t.row("person1@example.com");
+  assert.equal(r.sms_notify, 1); assert.equal(r.sms_notify_text, NT); assert.ok(r.sms_notify_at > 0);
+  assert.equal(r.sms_marketing, 0); assert.equal(r.sms_marketing_at, null); assert.equal(r.sms_marketing_text, null);
+  assert.equal(r.sms_consent, 1, "either one is an SMS consent"); assert.equal(r.sms_consent_text, NT); assert.equal(r.sms_consent_version, "waitlist-sms-v2");
+  assert.equal(r.consent_country, "US"); assert.equal(r.user_agent, "TestBrowser/1"); assert.ok(r.consent_ip);
+  let a = t.brevo.contacts.get("person1@example.com").attributes;
+  assert.equal(a.SMS_NOTIFY, true); assert.equal(a.SMS_MARKETING, false); assert.equal(a.SMS_MARKETING_AT, ""); assert.equal(a.SMS, "+14155550100");
+  await t.join(person(1, { phone: "4155550100", cc: "1", sms_marketing: true, sms_marketing_text: MT, sms_consent_version: "waitlist-sms-v2" }));
+  r = t.row("person1@example.com");
+  assert.equal(r.sms_notify, 1, "the earlier opt-in stays"); assert.equal(r.sms_marketing, 1); assert.equal(r.sms_marketing_text, MT);
+  a = t.brevo.contacts.get("person1@example.com").attributes;
+  assert.equal(a.SMS_MARKETING, true); assert.match(a.SMS_MARKETING_AT, /^\d{4}-/);
+
+  await t.join(person(2, { sms_notify: true, sms_marketing: true }));
+  r = t.row("person2@example.com");
+  assert.equal(r.sms_notify, 0, "no number, no SMS consent"); assert.equal(r.sms_marketing, 0); assert.equal(r.sms_consent, 0);
+  await t.join(person(3, { phone: "4155550102", cc: "1" }));
+  r = t.row("person3@example.com");
+  assert.equal(r.sms_notify + r.sms_marketing + r.sms_consent, 0, "a number with no box ticked is not a consent");
+  assert.equal(t.brevo.contacts.get("person3@example.com").attributes.SMS, undefined);
 });
 
 test("phone numbers become E.164 when they can", () => {

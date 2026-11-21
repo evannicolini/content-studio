@@ -79,7 +79,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=74a7ef94">
+<link rel="stylesheet" href="site.css?v=e36645e4">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1680,16 +1680,21 @@ set.</span></span></figure>
             <div class="wl-fields">
               <label class="wl-f wide"><span>Email</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="next" required maxlength="120"></span></label>
               <div class="wl-f wide wl-tel">
-                <label for="wl-phone">Phone <span class="wl-help">For texts, only if you opt in below.</span></label>
+                <label for="wl-phone">Phone <span class="wl-help">Optional. Only for texts you opt in to below.</span></label>
                 <div class="wl-telrow">
                   <span class="wl-box wl-cc"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><select name="cc" aria-label="Country code" autocomplete="tel-country-code"></select><span class="wl-ccv" aria-hidden="true">+1</span></span>
-                  <span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input id="wl-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="done" required maxlength="24"></span>
+                  <span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input id="wl-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="done" maxlength="24"></span>
                 </div>
+                <p class="wl-smsnote"><span data-wl-smstext>Message frequency varies. Message and data rates may apply. Reply STOP to cancel or HELP for help. Your mobile information will not be sold or shared with third parties.</span> <a href="terms/#sms-terms" target="_blank" rel="noopener">SMS Terms</a> · <a href="privacy/" target="_blank" rel="noopener">Privacy</a></p>
               </div>
               <input class="wl-hp" name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
             </div>
             <p class="wl-err" role="alert" aria-live="assertive"></p>
-            <label class="wl-sms"><input type="checkbox" name="sms_ok" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b>Text me Studio updates</b> <em>(optional)</em><small><span data-wl-smstext>By checking this box, I agree to receive recurring automated texts from Studio about the waitlist, launch and offers at the number above. Consent is not a condition of purchase. Up to 4 msgs/month. Msg &amp; data rates may apply. Reply STOP to opt out, HELP for help.</span> <a href="privacy/#sms-terms" target="_blank" rel="noopener">SMS Terms</a> · <a href="privacy/" target="_blank" rel="noopener">Privacy</a></small></span></label>
+            <!-- two separate opt-ins (the carriers' rule): never ticked for you, never required -->
+            <div class="wl-smsbox">
+              <label class="wl-sms"><input type="checkbox" name="sms_notify" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsn>Text me when my Studio invite is ready</b> <em>(optional)</em></span></label>
+              <label class="wl-sms"><input type="checkbox" name="sms_marketing" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsm>Text me Studio news and offers</b> <em>(optional)</em></span></label>
+            </div>
             <p class="wl-legal">By joining, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>, and to get emails from Studio about the waitlist and launch. Unsubscribe anytime.</p>
           </div>
         </div>
@@ -1829,6 +1834,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=74a7ef94"></script>
+<script src="site.js?v=e36645e4"></script>
 </body>
 </html>
