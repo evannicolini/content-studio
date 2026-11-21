@@ -89,7 +89,7 @@ def build():
 PAGES = [
     # slug, title, description, the sections whose CSS it needs, the section it shows
     ("early-access", "Get early access to Studio", "One prompt, and the idea in your head becomes a finished video. 14 days of everything, free, when your invite lands.", ["900-early"], "900-early", "#early-access", "assets/wl/name", "og-early-access", "Studio early access: your pass, on a lone tree at sunrise. Get early access to Studio."),
-    ("start", "Start free · Studio, on your Mac", "Sign in and Studio downloads. Make your first video before you pay a thing.", ["900-early", "910-start"], "910-start", "#signup", "assets/su/done", "og-start", "The Studio app on the orange dune: Good evening, and a launch commercial being asked for. Start free."),
+    ("start", "Start free · Studio, on your Mac", "Sign in, and Studio is ready for your Mac. Make your first video before you pay a thing.", ["900-early", "910-start"], "910-start", "#signup", "assets/su/done", "og-start", "The Studio app on the orange dune: Good evening, and a launch commercial being asked for. Start free."),
 ]
 
 

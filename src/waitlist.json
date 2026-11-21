@@ -4,5 +4,7 @@
   "brevo_form": "",
   "webhook": "",
   "count_offset": 1224,
+  "signup_open": false,
+  "_signup_open": "The public sign-up switch (lead + Evan's go). true: the site's Download buttons say Get Studio and go to askstudio.ai/start/ (the free sign-up: sign in, the questions, the download), and /start/ stops sending visitors to early access. The waitlist stays at /early-access/ and on the pricing band. On this Mac, ?open previews it switched on.",
   "_count_offset": "People who already asked for Studio but are not in the Worker yet (Custom Esignature users). Added to the live count and to every place shown. Set to 0 once they are imported."
 }

@@ -9,7 +9,8 @@ var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 var sheet = document.getElementById("signup");
 if (!sheet) return;
 var EMBED = window.parent !== window, PAYWALL0 = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
-if (!(local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {   /* not a live CTA yet: this Mac, ?review, or Studio's own window (?app#paywall) */
+var OPEN = !!(window.SK_WAITLIST && SK_WAITLIST.signup_open);   /* the public switch (src/waitlist.json signup_open) */
+if (!(OPEN || local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {   /* not open yet: this Mac, ?review, or Studio's own window (?app#paywall) */
   if (window.SK_PAGE === "start") { location.replace("early-access/" + location.search + "#early-access"); return; }   /* its own page (askstudio.ai/start/): until sign-up opens, early access is the way in */
   sheet.remove(); return;
 }
@@ -45,14 +46,20 @@ var SFX = (function () {
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
-  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
+  var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
+  function decode(n) { if (!ctx || !raw[n]) return; var c = ctx; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
-  function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
-  /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
-  ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
+  /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
+  function rebuild() {
+    var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
+    buf = {}; bed.reset(); Object.keys(raw).forEach(decode); if (playing) bedWant = true;   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
+  }
+  var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
+  function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -90,6 +97,7 @@ var SFX = (function () {
       },
       duck: function (on) { duckOn = !!on; to(level(), .3); },
       swell: function () { swellOn = true; to(level(), 1.2); clearTimeout(swellT); swellT = setTimeout(function () { swellOn = false; to(level(), 2.5); }, 4200); },
+      on: function () { return !!src; }, reset: function () { src = null; g = null; },
       stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
     };
   })();
@@ -383,6 +391,7 @@ function Pass(el, opts) {
     start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
     stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
+    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
@@ -467,6 +476,7 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
   });
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
+if (!fine) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });   /* the keyboard on a phone: the bar steps aside only while it's really up */
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
@@ -1078,6 +1088,7 @@ function showDone(has) {
     sheet.classList.add("done"); sheet.classList.remove("shown");
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
     pass2.enter(2100);
+    setTimeout(function () { if (sheet.classList.contains("done")) SK.guideTap($("[data-st-pass2]"), { key: "studio-guide-pass", from: $("[data-st-kay]"), onPress: function () { pass2.spin(); } }); }, 3400);   /* the first time: Kayla's dot shows the pass can be pressed */
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
     SFX.bed.swell(); KAY.say((me.thanks ? ["wl-dream-thanks"] : []).concat([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"])); me.thanks = false;

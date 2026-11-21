@@ -11,9 +11,9 @@
   position: fixed; inset: 0; z-index: 95; overflow: hidden; overflow: clip; color: var(--sand); opacity: 0; transition: opacity .45s var(--ease); }
 .wl[hidden] { display: none; }
 .wl.open { opacity: 1; }
-html.wl-open, html.wl-open body { overflow: hidden; }
+html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }   /* nothing behind the sheet scrolls, or rubber-bands */
 .wl .gx[hidden], .wl [hidden] { display: none !important; }
-.wl-bg { position: absolute; inset: 0; overflow: hidden; background: var(--edge, var(--vampire)); }   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
+.wl-bg { position: absolute; inset: 0 0 auto; height: var(--lvh, 100lvh); min-height: 100%; overflow: hidden; background: var(--edge, var(--vampire)); }   /* pinned to the tallest the screen has been: the keyboard never moves or resizes the wallpaper */   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
 /* a slow 3% push-in on every wallpaper; the next one crossfades in and starts its own */
 .wl-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; transform: scale(1); transition: transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl.open .wl-sky { transform: scale(1.03); }
@@ -139,8 +139,10 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 .wl-ty i { flex: none; width: 2px; height: 1.1em; margin-left: 2px; border-radius: 1px; background: #4aa3ff; animation: wl-blink 1.06s steps(1) infinite; }
 .wl-ty.still i { display: none; }
 .wl-box.filled .wl-ty { opacity: 0; }
-.wl input:-webkit-autofill, .wl input:-webkit-autofill:hover, .wl input:-webkit-autofill:focus, .wl input:-webkit-autofill:active, .wl input:autofill {
-  -webkit-text-fill-color: #fff !important; caret-color: #fff; -webkit-box-shadow: inset 0 0 0 100px #232c35, var(--v-rim) !important; box-shadow: inset 0 0 0 100px #232c35, var(--v-rim) !important; transition: background-color 99999s ease-out 0s, color 99999s ease-out 0s; }
+/* autofill (Safari, Chrome on iOS, Chrome): the glass stays glass. Two rules, so a browser that doesn't know one selector still gets the other */
+.wl input:-webkit-autofill, .wl input:-webkit-autofill:hover, .wl input:-webkit-autofill:focus, .wl input:-webkit-autofill:active, .wl select:-webkit-autofill {
+  -webkit-text-fill-color: #fff !important; caret-color: #fff; -webkit-box-shadow: inset 0 0 0 1000px #232c35 !important; box-shadow: inset 0 0 0 1000px #232c35 !important; background-clip: padding-box; transition: background-color 99999s ease-out 0s, color 99999s ease-out 0s; }
+.wl input:autofill { -webkit-text-fill-color: #fff !important; caret-color: #fff; box-shadow: inset 0 0 0 1000px #232c35 !important; transition: background-color 99999s ease-out 0s, color 99999s ease-out 0s; }
 .wl-f.bad { animation: wl-shake .4s var(--ease); }
 @keyframes wl-shake { 25% { transform: translateX(-5px); } 60% { transform: translateX(4px); } }
 .wl-telrow { display: flex; gap: 8px; }
@@ -397,7 +399,7 @@ html.wl-open, html.wl-open body { overflow: hidden; }
 .pass .row b { display: block; margin-top: calc(var(--w) * .018); font: 500 calc(var(--w) * .044) / 1 var(--mono); letter-spacing: .02em; }
 .pass .row b.s { font: 500 calc(var(--w) * .034) / 1.1 var(--sans); letter-spacing: 0; }
 .pass .cut { left: 0; right: 0; top: 78%; height: 1px; transform: translateZ(10px); background-image: linear-gradient(90deg, rgba(255, 255, 255, .34) 50%, transparent 0); background-size: 10px 1px; }
-.pass .bars { left: 7%; right: 7%; top: 83%; height: 9%; transform: translateZ(20px); display: flex; gap: 2px; }
+.pass .bars { left: 7%; right: 7%; top: 83%; height: 9%; transform: translateZ(20px); display: flex; gap: 2px; overflow: hidden; }
 .pass .bars i { flex: none; height: 100%; background: rgba(245, 243, 238, .86); border-radius: 1px; }
 .pass .back .what { left: 8%; right: 8%; top: 12%; transform: translateZ(40px); }
 .pass .back h4 { margin: calc(var(--w) * .026) 0 calc(var(--w) * .04); font: 300 calc(var(--w) * .06) / 1.06 var(--sans); letter-spacing: -.03em; }
@@ -504,7 +506,7 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-app { width: 28px; height: 28px; }
   .wl-app:not(.sm):not(.xs) svg { width: 28px; height: 28px; }
   .wl-in { display: block; padding: 70px 16px 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-  .wl-in::after { content: ""; display: block; height: 104px; }
+  .wl-in::after { content: ""; display: block; height: calc(104px + var(--kbh, 0px)); }   /* room for the bar; and, only while the keyboard is up, for it */
   /* the app, as on the site's phone hero: large, from the left margin, running off the right edge on purpose */
   .wl-stage { height: var(--stage-h, 300px); margin: 22px -16px 0 0; overflow: hidden; transform: none !important; -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent); mask-image: linear-gradient(180deg, #000 72%, transparent); transition: height .5s var(--ease), --wl-o1 .4s, margin .5s var(--ease); }
   .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { height: 0; --wl-o1: 0; margin-top: 0; }
@@ -540,6 +542,13 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-dwrap { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .wl-dstage { order: -1; min-height: 0; gap: 12px; padding: 10px 0 6px; }
   .wl-dstage .pass { --w: min(350px, 88vw); }
+  /* You're in, on a phone: the same fix as the compact pass. A slightly taller card, rows spaced, so "#1,392", the trial and the
+     friends never sit on the dashed line or the barcode (Evan's iPhone) */
+  .wl-dstage .pass { height: calc(var(--w) * .7); }
+  .wl-dstage .pass.big .who { top: 17%; }
+  .wl-dstage .pass.big .row { top: 51%; }
+  .wl-dstage .pass .cut { top: 80.5%; }
+  .wl-dstage .pass .bars { top: 85%; height: 8%; }
   .wl-dh { font-size: clamp(38px, 10.6vw, 52px); }
   .wl-dsub { font-size: 15.5px; }
   .wl-refbox { margin-top: 18px; padding: 16px 14px; border-radius: 24px; }
@@ -616,7 +625,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 
 /* ---------- typing on a phone: the bar steps aside so the field stays in view above the keyboard ---------- */
 .wl.kb .wl-dock { opacity: 0; pointer-events: none; transform: translateY(140%) !important; transition: opacity .2s, transform .3s var(--ease); }
-.wl.kb .wl-in::after { height: 60vh; }
 
 /* the SMS boxes sit inside the phone's field group: their hidden inputs never take the fields' glass (it showed over the words) */
 .wl .wl-sms .wl-cbx { position: absolute; left: 0; top: 50%; width: 22px; height: 22px; margin: -11px 0 0; padding: 0; border: 0; opacity: 0 !important; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; display: block; z-index: 2; }
@@ -962,10 +970,17 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
    top above the question; it folds away while the keyboard is up (.wl.kb), so the fields never sit under it ---------- */
 @media (max-width: 960px) {
   .wl[data-step="you"]:not(.done) .wl-in, .wl[data-step="check"]:not(.done) .wl-in { display: flex; flex-direction: column; }
-  .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { order: -1; flex: none; align-self: center; width: min(66vw, 280px); height: calc(min(66vw, 280px) * .62 + 26px); margin: 4px 0 10px; --wl-o1: 1; overflow: visible; -webkit-mask-image: none; mask-image: none; transition: height .45s var(--ease), margin .45s var(--ease), opacity .3s; }
+  .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { order: -1; flex: none; align-self: center; width: min(66vw, 280px); height: calc(min(66vw, 280px) * .7 + 26px); margin: 4px 0 10px; --wl-o1: 1; overflow: visible; -webkit-mask-image: none; mask-image: none; transition: height .45s var(--ease), margin .45s var(--ease), opacity .3s; }
   .wl[data-step="you"] .wl-fit, .wl[data-step="check"] .wl-fit { width: 100%; height: 100%; transform: none; }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .p3, .wl[data-step="check"] .wl-sc[data-sc="you"] .p3 { position: absolute; inset: 0; display: grid; place-items: center; perspective: 1100px; }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass { --w: min(66vw, 280px); }
+  /* compact, the labels sit at the browser's smallest type and grow taller than their slot: a slightly taller card, rows spaced
+     so the barcode never runs over "14 days, free" (Evan's iPhone) */
+  .wl[data-step="you"] .wl-sc[data-sc="you"] .pass, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass { height: calc(var(--w) * .7); }
+  .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .who, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .who { top: 20%; }
+  .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .row, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .row { top: 54%; }
+  .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .cut, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .cut { top: 80.5%; }
+  .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .bars, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .bars { top: 85%; height: 8%; }
   .wl.kb[data-step="you"] .wl-stage, .wl.kb[data-step="check"] .wl-stage { height: 0; margin: 0; opacity: 0; }
 }
 
@@ -996,7 +1011,7 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl:not(.done) .wl-in { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 68px); }
   .wl .wl-in::after { height: 14px; }
   .wl.kb .wl-in { bottom: 0; }
-  .wl.kb .wl-in::after { height: 60vh; }
+  .wl.kb .wl-in::after { height: calc(104px + var(--kbh, 0px)); }
 }
 
 /* You're in, the share buttons (Evan): icons only, smaller, all six on one line. The words stay for screen readers and as tooltips. */
@@ -1009,3 +1024,10 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 /* the dream interview: the app behind it steps back while they talk */
 .wl .wl-stage { transition: opacity .6s var(--ease), filter .6s var(--ease); }
 .wl[data-step="dream"] .wl-stage { opacity: .32; filter: blur(4px) saturate(.8); }
+/* phones: the steps and scenes that are hidden (absolute, invisible) don't stretch the scroll: it ends where what you see ends
+   (Evan's iPhone: a long empty run of wallpaper after the content) */
+@media (max-width: 960px) {
+  .wl-steps { overflow-y: clip; overflow-clip-margin: 24px; }
+  .wl-stage { overflow-y: clip; overflow-clip-margin: 24px; }
+  .wl[data-step="you"] .wl-sc:not([data-sc="you"]), .wl[data-step="check"] .wl-sc:not([data-sc="you"]) { display: none; }   /* there the stage shows only the pass (it overflows on purpose, so the hidden app can't hang below) */
+}
