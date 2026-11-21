@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Terms of Service · Studio</title>
+<meta name="description" content="The terms for using Studio, the Mac app and askstudio.ai: plans, the trial, cancelling, your content and AI output.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#090c11">
+<link rel="canonical" href="https://askstudio.ai/terms/">
+<meta property="og:title" content="Studio Terms of Service">
+<meta property="og:description" content="The terms for using Studio, the Mac app and askstudio.ai: plans, the trial, cancelling, your content and AI output.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/terms/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+/* Studio legal pages (terms/, privacy/). Built by build.py into each page. Same look as the site: dark page,
+   Hanken Grotesk light and tight, IBM Plex Mono labels, glass with a highlight on the edge, never a stroke. */
+:root {
+  --ink: #090c11;
+  --sand: #f5f3ee;
+  --sand-2: rgba(245, 243, 238, .74);
+  --sand-3: rgba(245, 243, 238, .46);
+  --sand-4: rgba(245, 243, 238, .24);
+  --glass: rgba(12, 19, 28, .46);
+  --blur: blur(30px) saturate(145%);
+  --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
+  --rim-soft: inset 1px 1px 1px -1px rgba(255, 255, 255, .42), inset -1px -1px 1px -1px rgba(255, 255, 255, .3);
+  --sans: "Hanken Grotesk", "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --gut: clamp(16px, 4vw, 56px);
+  --top: 104px;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--ink); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: var(--top); overflow-x: clip; }
+body { margin: 0; background: var(--ink); color: var(--sand-2); font: 400 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: clip; }
+::selection { background: rgba(255, 255, 255, .24); }
+svg { display: block; }
+h1, h2, h3, p, ol, ul, dl, dd, blockquote { margin: 0; padding: 0; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 6px; }
+.defs { position: absolute; width: 0; height: 0; }
+.label { display: inline-flex; align-items: center; gap: .7em; font: 500 11px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--sand-2); white-space: nowrap; }
+.label::before { content: "["; opacity: .55; }
+.label::after { content: "]"; opacity: .55; }
+
+/* ---------- header ---------- */
+.lg-nav { position: fixed; z-index: 60; top: 14px; left: 50%; transform: translateX(-50%); width: min(1180px, calc(100% - 28px)); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
+.brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; color: var(--sand); }
+.brand .mark { width: 28px; height: 28px; overflow: visible; }
+.lg-links { display: flex; align-items: center; gap: 4px; font: 500 14.5px/1 var(--sans); color: var(--sand-2); }
+.lg-links a { display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 999px; transition: color .2s, background-color .2s; }
+.lg-links a:hover { color: #fff; }
+.lg-links a[aria-current] { color: #fff; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); }
+.lg-links .home svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- the sky, faint, fading into the page ---------- */
+.sky { position: absolute; z-index: 0; inset: 0 0 auto; height: min(720px, 92vh); background: url(../assets/hero/sky.jpg) center 30% / cover no-repeat; opacity: .42; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); }
+.sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 12, 17, 0), rgba(9, 12, 17, .5) 62%, var(--ink)); }
+
+/* ---------- page ---------- */
+.lg { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin-inline: auto; padding: 0 var(--gut); }
+.lg-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 7vw, 96px); }
+.lg-head h1 { font: 300 clamp(46px, 7vw, 104px)/.98 var(--sans); letter-spacing: -.045em; color: var(--sand); text-wrap: balance; }
+.dates { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.dates div { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 14px; border-radius: 999px; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; background: rgba(255, 255, 255, .05); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim-soft); }
+.dates dt { color: var(--sand-3); }
+.dates dd { color: var(--sand); }
+
+.lg-grid { display: grid; grid-template-columns: 250px minmax(0, 68ch); justify-content: space-between; gap: 72px; align-items: start; padding-bottom: clamp(80px, 10vw, 140px); }
+@media (min-width: 1100px) { .lg-grid { grid-template-columns: 270px minmax(0, 68ch); justify-content: start; gap: clamp(72px, 9vw, 150px); } }
+
+/* ---------- contents ---------- */
+.toc { position: sticky; top: var(--top); max-height: calc(100vh - var(--top) - 24px); overflow: auto; overscroll-behavior: contain; scrollbar-width: none; margin-left: -12px; }
+.toc::-webkit-scrollbar { display: none; }
+.toc-pill { display: none; }
+.toc-list { list-style: none; display: flex; flex-direction: column; gap: 1px; padding-bottom: 8px; }
+.toc-list a { position: relative; display: grid; grid-template-columns: 26px 1fr; align-items: baseline; gap: 6px; padding: 7px 12px; border-radius: 12px; font: 400 14px/1.35 var(--sans); letter-spacing: -.005em; color: var(--sand-3); transition: color .25s var(--ease), background-color .25s var(--ease); }
+.toc-list a b { font: 500 10.5px/1 var(--mono); letter-spacing: .08em; color: var(--sand-4); transition: color .25s; }
+.toc-list a:hover { color: var(--sand); }
+.toc-list a.on { color: #fff; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
+.toc-list a.on b { color: var(--sand-2); }
+
+/* ---------- the document ---------- */
+.doc { min-width: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
+.doc > * + * { margin-top: 1.05em; }
+.doc strong { font-weight: 500; color: var(--sand); }
+.doc em { font-style: italic; }
+.doc a { color: var(--sand); text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .28); text-decoration-thickness: 1px; text-underline-offset: .22em; transition: text-decoration-color .2s; }
+.doc a:hover { text-decoration-color: rgba(255, 255, 255, .8); }
+.doc a.xref { color: inherit; }
+.doc h2 { position: relative; display: flex; flex-direction: column; gap: 16px; margin-top: clamp(68px, 7vw, 104px); margin-bottom: 26px; font: 300 clamp(30px, 2.9vw, 42px)/1.06 var(--sans); letter-spacing: -.035em; color: var(--sand); text-wrap: balance; }
+.doc > h2:first-child, .doc hr + h2 { margin-top: 0; }
+.doc h2 .n { font: 500 11px/1 var(--mono); letter-spacing: .22em; color: var(--sand-3); }
+.doc h2 .n::before { content: "[\2009"; opacity: .6; }
+.doc h2 .n::after { content: "\2009]"; opacity: .6; }
+.doc h2 .alias { position: absolute; top: 0; }
+.doc h3 { display: flex; align-items: baseline; gap: 12px; margin-top: 2.2em; margin-bottom: .2em; font: 500 19px/1.3 var(--sans); letter-spacing: -.015em; color: var(--sand); }
+.doc h3 .n, .doc p.clause > strong:first-child { font-feature-settings: "tnum"; }
+.doc h3 .n { font: 500 12px/1 var(--mono); letter-spacing: .06em; color: var(--sand-3); }
+.doc p.clause { }
+.doc p.caps { font-size: 14.5px; line-height: 1.72; letter-spacing: .012em; }
+.doc p.caps strong { font-weight: 500; }
+.doc hr { height: 0; border: 0; margin: 48px 0; }
+
+.doc ul, .doc ol { list-style: none; display: flex; flex-direction: column; gap: .55em; }
+.doc ul > li { position: relative; padding-left: 1.5em; }
+.doc ul > li::before { content: ""; position: absolute; left: .3em; top: .74em; width: 5px; height: 5px; border-radius: 50%; background: rgba(245, 243, 238, .42); }
+.doc ol { counter-reset: li; }
+.doc ol > li { position: relative; padding-left: 2.4em; counter-increment: li; }
+.doc ol > li::before { content: counter(li, decimal-leading-zero); position: absolute; left: 0; top: .5em; font: 500 11px/1 var(--mono); letter-spacing: .08em; color: var(--sand-3); }
+
+.doc .callout { position: relative; padding: 22px 26px; border-radius: 20px; font-size: 16px; line-height: 1.62; color: var(--sand); background: linear-gradient(135deg, rgba(191, 227, 255, .1), rgba(255, 255, 255, .025) 60%), var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
+.doc .callout > * + * { margin-top: .8em; }
+
+/* placeholders still to fill in: visible on purpose */
+mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; background: rgba(255, 184, 77, .14); padding: .22em .5em; border-radius: 6px; box-shadow: inset 1px 1px 1px -1px rgba(255, 214, 150, .7), inset -1px -1px 1px -1px rgba(255, 214, 150, .45); white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+
+/* tables: glass rows */
+.tbl { margin-top: 1.4em !important; margin-bottom: .4em; }
+.tbl table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 15px; line-height: 1.55; }
+.tbl th { padding: 0 18px 4px; font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); text-align: left; vertical-align: bottom; }
+.tbl td { padding: 15px 18px; vertical-align: top; background: rgba(255, 255, 255, .04); box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .55), inset 0 -1px 1px -1px rgba(255, 255, 255, .4); }
+.tbl td:first-child { border-radius: 14px 0 0 14px; color: var(--sand); font-weight: 500; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset 0 -1px 1px -1px rgba(255, 255, 255, .4); }
+.tbl td:last-child { border-radius: 0 14px 14px 0; box-shadow: inset 0 1px 1px -1px rgba(255, 255, 255, .55), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); }
+.tbl tbody tr { transition: background-color .2s; }
+.tbl tbody tr:hover td { background: rgba(255, 255, 255, .065); }
+.tbl.cols-3 td:first-child { width: 24%; }
+.tbl.cols-2 td:first-child { width: 42%; }
+
+/* ---------- footer ---------- */
+.lg-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; width: 100%; max-width: 1180px; margin-inline: auto; padding: 40px var(--gut) 72px; font-size: 14px; color: var(--sand-3); }
+.lg-foot .brand { font-size: 17px; }
+.lg-foot .brand .mark { width: 26px; height: 26px; }
+.lg-foot .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.lg-foot .links a:hover { color: var(--sand); }
+
+/* ---------- tablet and phone ---------- */
+@media (max-width: 960px) {
+  :root { --top: 142px; } /* the header plus the sticky Contents pill */
+  .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .toc { z-index: 40; top: 82px; max-height: none; overflow: visible; margin: 0 0 40px; justify-self: start; max-width: 100%; }
+  .toc-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 14px 0 18px; border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); font: 500 14px/1 var(--sans); color: var(--sand); white-space: nowrap; }
+  .toc-pill .k { font: 500 10.5px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--sand-3); }
+  .toc-pill .cur { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .toc-pill .cur:empty { display: none; }
+  .toc-pill svg { flex: none; width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .7; transition: transform .3s var(--ease); }
+  .toc.open .toc-pill svg { transform: rotate(180deg); }
+  .js .toc-list { position: absolute; left: 0; top: calc(100% + 8px); width: min(420px, calc(100vw - 2 * var(--gut))); max-height: min(62vh, 560px); overflow: auto; overscroll-behavior: contain; padding: 8px; border-radius: 20px; background: rgba(12, 19, 28, .72); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim), 0 24px 60px -20px rgba(0, 0, 0, .6); opacity: 0; transform: translateY(-6px) scale(.985); transform-origin: top left; visibility: hidden; transition: opacity .22s var(--ease), transform .3s var(--ease), visibility 0s .3s; }
+  .js .toc.open .toc-list { opacity: 1; transform: none; visibility: visible; transition: opacity .22s var(--ease), transform .3s var(--ease); }
+  .toc-list a { padding: 10px 12px; font-size: 15px; }
+}
+@media (max-width: 640px) {
+  :root { --top: 134px; }
+  body, .doc { font-size: 17px; }
+  .lg-nav { top: 10px; width: calc(100% - 20px); height: 54px; padding: 0 6px 0 14px; border-radius: 18px; gap: 8px; }
+  .brand { font-size: 16.5px; gap: 8px; }
+  .brand .mark { width: 25px; height: 25px; }
+  .lg-links { font-size: 13.5px; gap: 0; }
+  .lg-links a { padding: 0 10px; height: 38px; gap: 4px; }
+  .lg-links .long { display: none; }
+  .toc { top: 74px; }
+  .lg-head { gap: 18px; padding: 128px 0 48px; }
+  .dates div { height: 30px; padding: 0 12px; font-size: 10px; letter-spacing: .12em; }
+  .doc h2 { gap: 12px; margin-bottom: 20px; }
+  .doc .callout { padding: 18px 20px; border-radius: 18px; font-size: 15.5px; }
+  .doc ol > li { padding-left: 2.2em; }
+  /* tables become stacked glass cards */
+  .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; width: auto !important; }
+  .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .tbl table { border-spacing: 0; }
+  .tbl tr { margin-bottom: 8px; padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, .04); box-shadow: var(--rim-soft); }
+  .tbl td, .tbl td:first-child, .tbl td:last-child { padding: 0; background: none !important; box-shadow: none; border-radius: 0; }
+  .tbl td + td { margin-top: 10px; }
+  .tbl td + td::before { content: attr(data-th); display: block; margin-bottom: 3px; font: 500 10px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); }
+  .tbl td:first-child { font-size: 16px; }
+  .lg-foot { padding-bottom: 56px; }
+}
+@media (max-width: 370px) { .brand > span { display: none; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+
+</style>
+</head>
+<body>
+<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
+    <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
+    <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+  </defs>
+  <symbol id="studio-mark" viewBox="36 36 440 440">
+    <path fill="url(#mk-l)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-r)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </symbol>
+</svg>
+
+<header class="lg-nav">
+  <a class="brand" href="../" aria-label="Studio home"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <nav class="lg-links" aria-label="Legal">
+    <a href="../terms/" aria-current="page">Terms</a>
+    <a href="../privacy/">Privacy</a>
+    <a class="home" href="../"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg><span><span class="long">Back to </span>askstudio.ai</span></a>
+  </nav>
+</header>
+
+<div class="sky" aria-hidden="true"></div>
+
+<main class="lg" id="top">
+  <header class="lg-head">
+    <span class="label">Legal</span>
+    <h1>Terms of Service</h1>
+    <dl class="dates">
+<div><dt>Effective date</dt><dd>November 20, 2026</dd></div>
+<div><dt>Last updated</dt><dd>November 20, 2026</dd></div>
+    </dl>
+  </header>
+
+  <div class="lg-grid">
+    <aside class="toc" aria-label="Contents">
+      <button class="toc-pill" type="button" aria-expanded="false" aria-controls="toc-list"><span class="k">Contents</span><span class="cur" data-cur></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <ol class="toc-list" id="toc-list">
+<li><a href="#1-who-we-are-and-what-these-terms-cover"><b>1</b><span>Who we are and what these Terms cover</span></a></li>
+<li><a href="#2-eligibility"><b>2</b><span>Eligibility</span></a></li>
+<li><a href="#3-your-account-seats-and-devices"><b>3</b><span>Your account, seats and devices</span></a></li>
+<li><a href="#4-licence-to-use-studio"><b>4</b><span>Licence to use Studio</span></a></li>
+<li><a href="#5-subscriptions-trial-and-billing"><b>5</b><span>Subscriptions, trial and billing</span></a></li>
+<li><a href="#6-free-comp-and-referral-access"><b>6</b><span>Free, comp and referral access</span></a></li>
+<li><a href="#7-beta-and-early-access-features"><b>7</b><span>Beta and early-access features</span></a></li>
+<li><a href="#8-third-party-services-and-your-own-ai-accounts"><b>8</b><span>Third-party services and your own AI accounts</span></a></li>
+<li><a href="#9-your-content"><b>9</b><span>Your content</span></a></li>
+<li><a href="#10-ai-output"><b>10</b><span>AI output</span></a></li>
+<li><a href="#11-acceptable-use"><b>11</b><span>Acceptable use</span></a></li>
+<li><a href="#12-our-intellectual-property-feedback"><b>12</b><span>Our intellectual property; feedback</span></a></li>
+<li><a href="#13-copyright-complaints-dmca"><b>13</b><span>Copyright complaints (DMCA)</span></a></li>
+<li><a href="#14-suspension-and-termination"><b>14</b><span>Suspension and termination</span></a></li>
+<li><a href="#15-changes-to-the-service"><b>15</b><span>Changes to the Service</span></a></li>
+<li><a href="#16-disclaimers"><b>16</b><span>Disclaimers</span></a></li>
+<li><a href="#17-limitation-of-liability"><b>17</b><span>Limitation of liability</span></a></li>
+<li><a href="#18-indemnity"><b>18</b><span>Indemnity</span></a></li>
+<li><a href="#19-export-controls-and-sanctions"><b>19</b><span>Export controls and sanctions</span></a></li>
+<li><a href="#20-apple-macos-and-distribution"><b>20</b><span>Apple, macOS and distribution</span></a></li>
+<li><a href="#21-changes-to-these-terms"><b>21</b><span>Changes to these Terms</span></a></li>
+<li><a href="#22-disputes-arbitration-and-governing-law"><b>22</b><span>Disputes, arbitration and governing law</span></a></li>
+<li><a href="#23-electronic-communications-and-notices"><b>23</b><span>Electronic communications and notices</span></a></li>
+<li><a href="#24-general"><b>24</b><span>General</span></a></li>
+<li><a href="#25-contact"><b>25</b><span>Contact</span></a></li>
+      </ol>
+    </aside>
+
+    <article class="doc">
+<blockquote class="callout"><p><strong>Please read <a class="xref" href="#22-disputes-arbitration-and-governing-law">Section 22</a>.</strong> It requires most disputes to be resolved by individual binding arbitration rather than in court, and waives your right to a jury trial and to take part in a class action. You can opt out within 30 days (<a class="xref" href="#22-8">Section 22.8</a>).</p></blockquote>
+<hr>
+<h2 id="1-who-we-are-and-what-these-terms-cover"><span class="n">1</span><span class="t">Who we are and what these Terms cover</span></h2>
+<p>These Terms of Service ("<strong>Terms</strong>") are a contract between you and <mark class="ph">[COMPANY LEGAL NAME]</mark>, a <mark class="ph">[STATE OF ORGANIZATION]</mark> company doing business as Studio ("<strong>Studio</strong>", "<strong>we</strong>", "<strong>us</strong>"). They cover the Studio Mac app (the "<strong>App</strong>"), the website at askstudio.ai (the "<strong>Site</strong>"), our waitlist, our accounts and subscriptions, and any related services, updates and support (together, the "<strong>Service</strong>").</p>
+<p>You accept these Terms when you create an account, start a trial, join the waitlist, download or use the App, or otherwise use the Service. Our <a href="../privacy/">Privacy Policy</a> explains how we handle personal information, and is part of these Terms. If you don't agree, don't use the Service.</p>
+<p>If you use the Service for a company or other organization, you confirm that you are authorized to accept these Terms for it. "You" then means both you and that organization.</p>
+<h2 id="2-eligibility"><span class="n">2</span><span class="t">Eligibility</span></h2>
+<p>You must be at least 18 years old, or the age of majority where you live if that is higher, to use the Service. By using it, you confirm that you are. The Service is not directed to children, and we do not knowingly collect information from anyone under 18.</p>
+<p>You may not use the Service if you are barred from it under US law or the laws of your country, or if we have previously terminated your account.</p>
+<h2 id="3-your-account-seats-and-devices"><span class="n">3</span><span class="t">Your account, seats and devices</span></h2>
+<p id="3-1" class="clause"><strong>3.1 Account.</strong> You can sign in with Google, Apple or a one-time code sent to your email. Give us accurate information and keep it up to date. One person per login; don't share login credentials.</p>
+<p id="3-2" class="clause"><strong>3.2 Security.</strong> You are responsible for everything that happens under your account and on the Macs where you use Studio, including activity by anyone you let use them. Keep your email account, devices and connected third-party accounts secure. Tell us right away at hello@askstudio.ai if you think your account has been compromised.</p>
+<p id="3-3" class="clause"><strong>3.3 Seats and devices.</strong> Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on up to <strong>two (2) Macs</strong> at a time. We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.</p>
+<h2 id="4-licence-to-use-studio"><span class="n">4</span><span class="t">Licence to use Studio</span></h2>
+<p id="4-1" class="clause"><strong>4.1 Our licence to you.</strong> While your account is in good standing and you follow these Terms, we grant you a limited, non-exclusive, non-transferable, non-sublicensable, revocable licence to install and use the App on Macs you own or control, within your plan's seat and device limits, for your own internal business or personal purposes.</p>
+<p id="4-2" class="clause"><strong>4.2 Restrictions.</strong> You may not, and may not help anyone else to:</p>
+<ul><li>copy, modify or create derivative works of the App or Service, except as the law expressly allows;</li><li>reverse engineer, decompile, disassemble or try to extract source code, models, prompts or underlying logic, except to the extent applicable law forbids this restriction;</li><li>bypass, disable or tamper with licence keys, entitlement checks, device limits, trial limits, notarization or other security or usage controls;</li><li>sell, resell, rent, lease, sublicense, white-label, or offer the Service to third parties as a service bureau or as part of a competing product;</li><li>use the Service to build a competing product, or benchmark it for publication without our written consent;</li><li>access the Service by automated means outside the App's intended features, or interfere with our servers or other users.</li></ul>
+<p id="4-3" class="clause"><strong>4.3 Updates.</strong> The App may update itself automatically. Some updates may be required for the App to keep working. We may change, add or remove features over time (see <a class="xref" href="#15-changes-to-the-service">Section 15</a>).</p>
+<p id="4-4" class="clause"><strong>4.4 Reservation.</strong> The App is licensed, not sold. We and our licensors keep all rights not expressly granted to you.</p>
+<h2 id="5-subscriptions-trial-and-billing"><span class="n">5</span><span class="t">Subscriptions, trial and billing</span></h2>
+<p id="5-1" class="clause"><strong>5.1 Plans.</strong> Studio is sold as a monthly subscription. Current plans:</p>
+<div class="tbl cols-3"><table><thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">Seats</th></tr></thead><tbody><tr><td data-th="Plan">Creator</td><td data-th="Price">$99 per month</td><td data-th="Seats">1</td></tr><tr><td data-th="Plan">Pro</td><td data-th="Price">$199 per month</td><td data-th="Seats">3</td></tr><tr><td data-th="Plan">Unlimited</td><td data-th="Price">$299 per month</td><td data-th="Seats">10</td></tr></tbody></table></div>
+<p>Prices are in US dollars and exclude taxes. The Site and checkout show current plans and prices; if those differ from this table, the price shown at checkout when you subscribe applies.</p>
+<p id="5-2" class="clause"><strong>5.2 The "14 days for $1" trial.</strong> New subscribers may be offered a 14-day trial for a one-time fee of $1.00 (the "<strong>Trial Fee</strong>").</p>
+<ul><li>We charge the $1.00 Trial Fee when you start the trial.</li><li>Your trial lasts 14 days. <strong>Unless you cancel before your trial ends, on day 15 (14 days after you start) your subscription automatically converts to the plan you chose, and we charge that plan's full monthly price to your payment method.</strong> Checkout shows the exact renewal date.</li><li>One trial per person, household, payment method and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).</li><li>We email you a reminder before your trial converts. If the reminder doesn't arrive, that doesn't change your renewal date or your right to cancel.</li></ul>
+<p id="5-3" class="clause"><strong>5.3 Automatic renewal.</strong> <strong>Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.</strong> By starting a trial or subscription and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.</p>
+<p id="5-4" class="clause"><strong>5.4 How to cancel.</strong> You can cancel at any time, effective immediately for future renewals, by any of these methods:</p>
+<ul><li><strong>In the App:</strong> Settings → Billing → Cancel subscription;</li><li><strong>Online:</strong> the "Manage billing" link on your account page and in every receipt and billing email;</li><li><strong>By email:</strong> write to hello@askstudio.ai from your account email address. We process cancellation emails within one business day. Cancellations received before your renewal date are honoured even if we process them after that date.</li></ul>
+<p>Cancelling stops all future charges. <strong>You keep access until the end of the period you've already paid for (or the end of your trial), and then your subscription ends.</strong> We send a confirmation when you cancel. Deleting the App does not cancel your subscription.</p>
+<p id="5-5" class="clause"><strong>5.5 Refunds.</strong> <strong>The $1.00 Trial Fee and all subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.</strong> We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.</p>
+<p id="5-6" class="clause"><strong>5.6 Price changes.</strong> We may change plan prices. We'll give you at least <strong>30 days' notice</strong> by email before a new price applies to your subscription, and it will take effect only at your next renewal after the notice period. If you don't want to pay the new price, cancel before it takes effect. If you keep your subscription after it takes effect, you agree to the new price.</p>
+<p id="5-7" class="clause"><strong>5.7 Withdrawal rights (where applicable).</strong> If you are a consumer in a country (for example in the EU or UK) whose law gives you a right to withdraw from an online contract, you ask us to start providing the Service immediately when you subscribe. To the extent your law allows, you will pay for the Service you used before withdrawing, and you lose the right to withdraw once the Service has been fully provided for the current period.</p>
+<p id="5-8" class="clause"><strong>5.8 Taxes.</strong> Prices don't include sales tax, VAT, GST or similar taxes. You pay any taxes that apply, and we may collect them where the law requires.</p>
+<p id="5-9" class="clause"><strong>5.9 Failed payments and grace period.</strong> If a renewal payment fails, we (through Stripe) may retry it and ask you to update your payment method. <strong>You keep access for a 3-day grace period after the failed payment.</strong> If payment still hasn't succeeded when the grace period ends, we may suspend your access until it does, and may cancel the subscription if it stays unpaid. You authorize us to charge any updated payment method you provide, and any updated card details your card issuer supplies, for amounts due.</p>
+<p id="5-10" class="clause"><strong>5.10 Plan changes.</strong> Upgrades take effect immediately, and we charge a prorated amount for the rest of the current period. Downgrades take effect at your next renewal. If a downgrade leaves you with fewer seats or devices than you're using, you must remove the extras, or we will deactivate them.</p>
+<p id="5-11" class="clause"><strong>5.11 Chargebacks.</strong> If you think a charge is wrong, please contact us first at hello@askstudio.ai; we usually fix errors faster than a card dispute does. If you file a chargeback for a valid charge, we may suspend your account while the dispute is resolved.</p>
+<h2 id="6-free-comp-and-referral-access"><span class="n">6</span><span class="t">Free, comp and referral access</span></h2>
+<p>We may give free or complimentary ("<strong>comp</strong>") access, for example through friend invite links, referral rewards, promotions or partnerships. Comp access:</p>
+<ul><li>is offered at our sole discretion and may be limited in time, features, seats or devices;</li><li>may be changed, suspended or revoked at any time, with or without notice;</li><li>has no cash value and cannot be transferred, sold or exchanged;</li><li>never turns into a paid subscription unless you separately agree to pay through checkout.</li></ul>
+<p>We may cancel referral rewards or waitlist positions that come from fake accounts, self-referrals, bulk sign-ups or other gaming. Waitlist position and referral rank are estimates. They don't guarantee access, timing or any reward.</p>
+<h2 id="7-beta-and-early-access-features"><span class="n">7</span><span class="t">Beta and early-access features</span></h2>
+<p>Some features may be labelled beta, preview, experimental or early access, or may be offered before general release ("<strong>Beta Features</strong>"). Beta Features are provided <strong>as is</strong>, may be unreliable or incomplete, may change or disappear without notice, and are excluded from any commitment we make about the Service. Don't rely on them for anything critical. We may ask you to keep Beta Features and related information confidential.</p>
+<h2 id="8-third-party-services-and-your-own-ai-accounts"><span class="n">8</span><span class="t">Third-party services and your own AI accounts</span></h2>
+<p id="8-1" class="clause"><strong>8.1 How Studio works.</strong> Studio runs on top of <strong>your own</strong> accounts with third-party providers, for example Anthropic (Claude and Claude Code), ElevenLabs, Higgsfield, Artlist, Meta, Instagram, TikTok, X, YouTube, Google and Dropbox ("<strong>Third-Party Services</strong>"). Generations, edits, uploads, posts and ad campaigns run on those providers, under your accounts, using your credits, plans and quotas.</p>
+<p id="8-2" class="clause"><strong>8.2 You're responsible for those accounts.</strong> You alone are responsible for:</p>
+<ul><li>having and maintaining your own accounts with each Third-Party Service, and complying with their terms, usage policies, content rules, rate limits and age requirements (including Anthropic's terms and usage policies);</li><li><strong>all fees, credits, usage, overages and ad spend</strong> those providers charge you, including charges caused by actions you take or approve in Studio;</li><li>what you send to those providers and what they do with it under their own terms and privacy policies;</li><li>keeping their credentials secure.</li></ul>
+<p id="8-3" class="clause"><strong>8.3 Actions on your accounts.</strong> When you ask Studio to publish a post, schedule content, launch or change an ad, spend credits or take another action on a connected account, you authorize Studio to send that instruction on your behalf. <strong>Review every post, ad, budget and generation before you approve it.</strong> We are not responsible for content published, money spent, credits used or account actions taken through your connected accounts, including anything that results from AI-suggested plans or from a provider's own behaviour.</p>
+<p id="8-4" class="clause"><strong>8.4 No control, no endorsement.</strong> We don't control Third-Party Services and aren't responsible for their availability, accuracy, pricing, outputs, security, policy changes, account suspensions, or decisions to restrict or discontinue access. A provider may change or withdraw its API or terms at any time, which may limit what Studio can do. That isn't a breach of these Terms by us, and it doesn't entitle you to a refund.</p>
+<p id="8-5" class="clause"><strong>8.5 No affiliation.</strong> Studio is an independent product. Unless we say otherwise in writing, Studio is not affiliated with, endorsed by or sponsored by Anthropic, Apple, Google, Meta, TikTok, X, YouTube, ElevenLabs, Higgsfield, Artlist, Dropbox or any other provider. Their names and marks belong to their owners.</p>
+<h2 id="9-your-content"><span class="n">9</span><span class="t">Your content</span></h2>
+<p id="9-1" class="clause"><strong>9.1 You own your content.</strong> "<strong>Your Content</strong>" means everything you create, upload, import or store with Studio: footage, images, audio, music, scripts, prompts, brand assets, edits, and the outputs you generate (to the extent you have rights in them). As between you and us, <strong>you own Your Content</strong>. Most of Your Content is stored locally on your Mac, not on our servers.</p>
+<p id="9-2" class="clause"><strong>9.2 The licence you give us.</strong> You grant us a worldwide, non-exclusive, royalty-free licence to host, store, process, transmit and display Your Content <strong>only as needed to operate, secure, support and improve the Service for you</strong>, and as you direct (for example, sending a prompt to your connected provider). This licence ends when Your Content is deleted from our systems, except for copies in routine backups (which we delete on our normal schedule) and anything we must keep by law. We don't use Your Content to train AI models, and we don't sell it.</p>
+<p id="9-3" class="clause"><strong>9.3 Your responsibility for rights.</strong> You confirm that you own or have all rights, licences, consents and releases needed for Your Content and for how you use it, including:</p>
+<ul><li>footage, photos, music, sound effects, fonts and stock assets (and that you follow their licences, such as Artlist's);</li><li>the <strong>name, image, likeness and voice</strong> of every identifiable person in Your Content, including written consent for any voice clone, digital replica or AI likeness;</li><li>trademarks, logos and brand assets, including those of clients you create content for.</li></ul>
+<p id="9-4" class="clause"><strong>9.4 Backups.</strong> Because your workspace lives on your Mac, <strong>you are responsible for backing it up.</strong> We are not responsible for loss of local data, including loss caused by device failure, deleted files, App updates or uninstalling the App.</p>
+<h2 id="10-ai-output"><span class="n">10</span><span class="t">AI output</span></h2>
+<p>Studio uses AI models, mostly run by Third-Party Services under your accounts, to suggest plans, scripts, edits and other output ("<strong>Output</strong>"). AI is imperfect. You understand and agree that:</p>
+<ul><li><strong>Output may be inaccurate, incomplete, offensive, biased or unsuitable, and may resemble existing works or other users' output.</strong> We don't guarantee that Output is accurate, original, unique or fit for any purpose, or that it doesn't infringe anyone's rights.</li><li>Output may not be protectable by copyright, and other people may generate similar Output.</li><li><strong>You must review Output before you use, publish or rely on it</strong>, especially claims about products, health, money, law or real people. You are responsible for complying with advertising and endorsement laws (including FTC rules on disclosures and testimonials) and with platform rules on labelling AI-generated or altered content.</li><li>Output is not professional, legal, financial or medical advice.</li></ul>
+<h2 id="11-acceptable-use"><span class="n">11</span><span class="t">Acceptable use</span></h2>
+<p>You may not use the Service, or let anyone else use it, to create, upload, publish or promote anything that:</p>
+<ol><li>is illegal, or promotes illegal activity;</li><li>depicts a real person's likeness or voice without their consent, including <strong>deepfakes, non-consensual intimate imagery, or sexual content of any real person</strong>;</li><li>sexualizes minors or depicts child sexual abuse material in any form (we report this to the authorities);</li><li><strong>impersonates</strong> a person, brand or organization, or misrepresents your affiliation, including fake endorsements or testimonials;</li><li>infringes or misappropriates intellectual property, publicity, privacy or other rights;</li><li>is defamatory, harassing, hateful, threatening or violent, or incites violence;</li><li>is deceptive or fraudulent, including scams, fake reviews, misleading ads, election or civic misinformation, or undisclosed paid promotion;</li><li>is <strong>spam</strong>, including bulk unsolicited messages, engagement manipulation, fake accounts, or automation that breaks a platform's rules;</li><li>contains malware, or attacks, probes or overloads any system;</li><li><strong>circumvents licensing, seat or device limits, trials or payment</strong>, or shares, resells or redistributes access to the Service;</li><li>violates the terms or usage policies of any Third-Party Service you connect.</li></ol>
+<p>We may remove content we can access, disable features, or suspend or terminate accounts for any violation, and may report illegal activity to the authorities. We have no obligation to monitor Your Content, but we may review it if we're notified of, or suspect, a violation.</p>
+<h2 id="12-our-intellectual-property-feedback"><span class="n">12</span><span class="t">Our intellectual property; feedback</span></h2>
+<p id="12-1" class="clause"><strong>12.1 Ours.</strong> The Service, including the App, Site, software, design, templates, workflows, prompts we provide, documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.</p>
+<p id="12-2" class="clause"><strong>12.2 Feedback.</strong> If you send us ideas, suggestions or feedback, you give us a perpetual, irrevocable, worldwide, royalty-free licence to use them for any purpose without paying or crediting you. You aren't required to send feedback.</p>
+<h2 id="13-copyright-complaints-dmca"><span class="n">13</span><span class="t">Copyright complaints (DMCA)</span></h2>
+<p>We respect intellectual property rights and respond to valid notices under the Digital Millennium Copyright Act. If you believe material available through the Service infringes your copyright, send our designated agent a notice that includes:</p>
+<ol><li>your physical or electronic signature;</li><li>a description of the copyrighted work you claim is infringed;</li><li>a description of the material you claim is infringing and where it is located, in enough detail for us to find it;</li><li>your name, address, phone number and email;</li><li>a statement that you believe in good faith that the use is not authorized by the copyright owner, its agent or the law;</li><li>a statement, under penalty of perjury, that the information in your notice is accurate and that you are the owner or authorized to act for the owner.</li></ol>
+<p><strong>Designated agent:</strong> <mark class="ph">[DMCA AGENT NAME]</mark>, <mark class="ph">[COMPANY LEGAL NAME]</mark>, <mark class="ph">[MAILING ADDRESS]</mark>. Email: <mark class="ph">[DMCA EMAIL]</mark>.</p>
+<p>If your material was removed and you believe that was a mistake, you may send a counter-notice that meets 17 U.S.C. § 512(g)(3). We terminate the accounts of repeat infringers where appropriate. Knowingly false notices may result in liability for damages.</p>
+<h2 id="14-suspension-and-termination"><span class="n">14</span><span class="t">Suspension and termination</span></h2>
+<p id="14-1" class="clause"><strong>14.1 By you.</strong> You can stop using the Service at any time. To end a paid subscription, cancel as described in <a class="xref" href="#5-4">Section 5.4</a>. To delete your account, email hello@askstudio.ai or use the in-App option where available.</p>
+<p id="14-2" class="clause"><strong>14.2 By us.</strong> We may suspend or terminate your access, or any part of it, immediately and without notice, if we reasonably believe you violated these Terms, created risk or possible legal exposure for us or others, failed to pay, or engaged in fraud or abuse, or if we're required to by law. We may also stop offering the Service, or any plan, for any reason, with at least 30 days' notice to active subscribers. <strong>If we terminate your paid subscription for convenience (not because of your breach), we'll refund the prepaid fees for the unused part of your current billing period.</strong> No other refunds are due on termination.</p>
+<p id="14-3" class="clause"><strong>14.3 Effect.</strong> When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.</p>
+<h2 id="15-changes-to-the-service"><span class="n">15</span><span class="t">Changes to the Service</span></h2>
+<p>The Service changes over time. We may add, change or remove features, integrations, models, providers, limits and plans. If we make a change that materially reduces the core functionality of your paid plan, we'll tell you in advance where reasonably possible, and you can cancel. Your only remedy is to cancel before your next renewal.</p>
+<h2 id="16-disclaimers"><span class="n">16</span><span class="t">Disclaimers</span></h2>
+<p><strong>THE SERVICE, INCLUDING ALL OUTPUT, BETA FEATURES AND THIRD-PARTY SERVICES, IS PROVIDED "AS IS" AND "AS AVAILABLE." TO THE FULLEST EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS, IMPLIED OR STATUTORY, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, NON-INFRINGEMENT, ACCURACY AND QUIET ENJOYMENT, AND ANY WARRANTIES ARISING FROM COURSE OF DEALING OR USAGE OF TRADE.</strong> We don't warrant that the Service will be uninterrupted, secure, error-free or compatible with your Mac, macOS version or Third-Party Services, that data won't be lost, or that the Service will achieve any result, including reach, engagement, followers, sales or return on ad spend.</p>
+<p>Some jurisdictions don't allow certain warranties to be excluded, so some of the above may not apply to you.</p>
+<h2 id="17-limitation-of-liability"><span class="n">17</span><span class="t">Limitation of liability</span></h2>
+<p class="caps"><strong>TO THE FULLEST EXTENT PERMITTED BY LAW:</strong></p>
+<p class="caps"><strong>(a) NEITHER WE NOR OUR OFFICERS, EMPLOYEES, AGENTS, SUPPLIERS OR LICENSORS WILL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY OR PUNITIVE DAMAGES, OR FOR ANY LOSS OF PROFITS, REVENUE, BUSINESS, GOODWILL, DATA OR CONTENT, OR FOR THIRD-PARTY FEES, CREDITS OR AD SPEND, ARISING OUT OF OR RELATING TO THE SERVICE OR THESE TERMS, EVEN IF WE WERE ADVISED OF THE POSSIBILITY.</strong></p>
+<p class="caps"><strong>(b) OUR TOTAL LIABILITY FOR ALL CLAIMS ARISING OUT OF OR RELATING TO THE SERVICE OR THESE TERMS WILL NOT EXCEED THE GREATER OF (i) THE AMOUNTS YOU PAID US FOR THE SERVICE IN THE 12 MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM, OR (ii) US $100.</strong></p>
+<p class="caps"><strong>(c) THESE LIMITS APPLY TO EVERY THEORY OF LIABILITY (CONTRACT, TORT INCLUDING NEGLIGENCE, STATUTE OR OTHERWISE) AND EVEN IF A REMEDY FAILS OF ITS ESSENTIAL PURPOSE.</strong></p>
+<p>Nothing in these Terms limits liability that the law does not allow to be limited, such as liability for fraud, or for death or personal injury caused by negligence where that rule applies.</p>
+<h2 id="18-indemnity"><span class="n">18</span><span class="t">Indemnity</span></h2>
+<p>To the extent permitted by law, you will defend, indemnify and hold harmless Studio and its affiliates, officers, employees and agents from any claims, losses, damages, liabilities, costs and expenses (including reasonable legal fees) arising out of or relating to: (a) Your Content; (b) your use of the Service or Output; (c) your connected accounts and Third-Party Services, including content you publish and money you spend through them; (d) your breach of these Terms; or (e) your violation of any law or anyone else's rights, including intellectual property, publicity and privacy rights. We may take control of the defence of any claim at our own cost. You won't settle a claim that imposes obligations on us without our written consent.</p>
+<h2 id="19-export-controls-and-sanctions"><span class="n">19</span><span class="t">Export controls and sanctions</span></h2>
+<p>You must comply with US and other applicable export control and sanctions laws. You confirm that you are not located in, organized under the laws of, or ordinarily resident in a country or region subject to comprehensive US sanctions; that you are not on any US government restricted-party list; and that you won't use, export or re-export the Service in violation of those laws.</p>
+<h2 id="20-apple-macos-and-distribution"><span class="n">20</span><span class="t">Apple, macOS and distribution</span></h2>
+<p id="20-1" class="clause"><strong>20.1 Direct download.</strong> The App is distributed directly by Studio, outside the Mac App Store. Apple notarizes the App and may be involved in delivering macOS security checks. That doesn't make Apple a party to these Terms, and Apple isn't responsible for the App, its content, maintenance, support, warranty or any claims about it. Use the App only on Apple-branded computers running a supported version of macOS, and in line with Apple's terms for macOS.</p>
+<p id="20-2" class="clause"><strong>20.2 If we offer the App through the Mac App Store.</strong> If you get the App from Apple's Mac App Store, these Terms are between you and Studio only, not Apple; Apple's Usage Rules apply alongside these Terms; Apple has no obligation to provide maintenance or support; and, to the extent Apple's Licensed Application End User License Agreement requires, Apple and its subsidiaries are third-party beneficiaries of these Terms who may enforce them against you. Purchases made through Apple are billed, renewed, cancelled and refunded under Apple's rules.</p>
+<h2 id="21-changes-to-these-terms"><span class="n">21</span><span class="t">Changes to these Terms</span></h2>
+<p>We may update these Terms from time to time. If a change is material, we'll give you at least <strong>30 days' notice</strong> by email or in the App before it takes effect, unless the change is required by law or addresses new features or abuse, in which case it may take effect sooner. The "Last updated" date shows the current version. If you keep using the Service after a change takes effect, you accept the updated Terms. If you don't agree, stop using the Service and cancel before it takes effect. Changes to <a class="xref" href="#22-disputes-arbitration-and-governing-law">Section 22</a> won't apply to a dispute that either of us has already given notice of.</p>
+<h2 id="22-disputes-arbitration-and-governing-law"><span class="n">22</span><span class="t">Disputes, arbitration and governing law</span></h2>
+<p id="22-1" class="clause"><strong>22.1 Talk to us first.</strong> Before filing a claim, you agree to email hello@askstudio.ai with your name, account email, a description of the dispute and the relief you want. We'll do the same to your account email. We'll both try in good faith to resolve it informally for <strong>60 days</strong>. The deadline for filing any claim is paused during that time.</p>
+<p id="22-2" class="clause"><strong>22.2 Agreement to arbitrate.</strong> If we can't resolve it, <strong>you and Studio agree to resolve any dispute, claim or controversy arising out of or relating to these Terms or the Service (including whether this clause is enforceable) by final and binding individual arbitration</strong>, except as stated in <a class="xref" href="#22-4">Section 22.4</a>. <strong>YOU AND STUDIO WAIVE THE RIGHT TO A JURY TRIAL AND TO HAVE A JUDGE DECIDE THE DISPUTE.</strong></p>
+<p id="22-3" class="clause"><strong>22.3 Rules and fees.</strong> Arbitration will be administered by the American Arbitration Association ("<strong>AAA</strong>") under its Consumer Arbitration Rules (or its Commercial Arbitration Rules if you use the Service mainly for business), as modified by this Section, and will be governed by the Federal Arbitration Act. A single arbitrator will decide the dispute. Hearings may take place by video, by phone, on written submissions, or in the county where you live. Fees are paid as the AAA rules provide. If you show the arbitrator that the costs would be prohibitive compared with litigation, we will pay as much of them as the arbitrator considers necessary to prevent that. The arbitrator may award any relief available to an individual in court, but only to the individual party and only to the extent needed to resolve that party's individual claim.</p>
+<p id="22-4" class="clause"><strong>22.4 Exceptions.</strong> Either of us may: (a) bring an individual claim in small claims court, as long as it stays there and is not brought on a class basis; and (b) go to court for an injunction or other equitable relief to stop actual or threatened infringement, misuse or misappropriation of intellectual property, or circumvention of licensing or security controls.</p>
+<p id="22-5" class="clause"><strong>22.5 Class action waiver.</strong> <strong>YOU AND STUDIO MAY BRING CLAIMS AGAINST EACH OTHER ONLY IN AN INDIVIDUAL CAPACITY, AND NOT AS A PLAINTIFF OR CLASS MEMBER IN ANY CLASS, COLLECTIVE, CONSOLIDATED OR REPRESENTATIVE PROCEEDING.</strong> The arbitrator may not combine more than one person's claims.</p>
+<p id="22-6" class="clause"><strong>22.6 Mass filings.</strong> If 25 or more similar arbitration demands are filed against Studio by the same or coordinated counsel or organizations, they will be administered under the AAA's Mass Arbitration Supplementary Rules, and both parties agree they may be resolved in staged batches. Filing fees for later batches are due only when that batch is set for hearing. Deadlines for claims not yet heard are paused while the batches proceed.</p>
+<p id="22-7" class="clause"><strong>22.7 Severability.</strong> If the class action waiver is found unenforceable for any claim, that claim (and only that claim) must be severed and decided in court, after the arbitrable claims are decided. Any claim for public injunctive relief that cannot lawfully be arbitrated will be decided by a court after arbitration of all other claims. If any other part of <a class="xref" href="#22-disputes-arbitration-and-governing-law">Section 22</a> is found unenforceable, the rest still applies.</p>
+<p id="22-8" class="clause"><strong>22.8 30-day opt-out.</strong> <strong>You can opt out of this arbitration agreement by emailing hello@askstudio.ai, within 30 days of first accepting these Terms, with the subject "Arbitration Opt-Out", your name, your account email, and a clear statement that you opt out.</strong> Opting out doesn't affect any other part of these Terms.</p>
+<p id="22-9" class="clause"><strong>22.9 Governing law and courts.</strong> These Terms are governed by the laws of the State of <mark class="ph">[GOVERNING LAW STATE]</mark> and applicable US federal law, without regard to conflict-of-laws rules. For any dispute not subject to arbitration, you and Studio submit to the exclusive jurisdiction of the state and federal courts located in <mark class="ph">[GOVERNING LAW STATE / COUNTY]</mark>. The UN Convention on Contracts for the International Sale of Goods does not apply. If you are a consumer living in the EU or UK, you also keep the protection of the mandatory laws of your country, and may bring proceedings in your local courts where the law gives you that right.</p>
+<p id="22-10" class="clause"><strong>22.10 Time limit.</strong> To the extent permitted by law, any claim must be filed within one year after it arises, or it is permanently barred.</p>
+<h2 id="23-electronic-communications-and-notices"><span class="n">23</span><span class="t">Electronic communications and notices</span></h2>
+<p>You agree to receive communications from us electronically, including legal notices, receipts, renewal reminders and changes to these Terms. These satisfy any requirement that the communication be in writing. We send notices to your account email. Notices to us go to hello@askstudio.ai, with a copy to the mailing address in <a class="xref" href="#25-contact">Section 25</a> for legal notices.</p>
+<h2 id="24-general"><span class="n">24</span><span class="t">General</span></h2>
+<ul><li><strong>Entire agreement.</strong> These Terms, the Privacy Policy and any terms shown at checkout are the entire agreement between you and us about the Service, and replace any prior agreements on the subject.</li><li><strong>Assignment.</strong> You may not assign or transfer these Terms without our written consent. We may assign them in connection with a merger, acquisition, sale of assets or reorganization, or to an affiliate.</li><li><strong>Severability.</strong> Except as <a class="xref" href="#22-7">Section 22.7</a> provides, if any provision is found unenforceable, it will be enforced to the maximum extent possible, and the rest of these Terms stay in effect.</li><li><strong>No waiver.</strong> Not enforcing a provision is not a waiver of it.</li><li><strong>Force majeure.</strong> We aren't liable for delays or failures caused by events beyond our reasonable control, including outages or changes at Third-Party Services, hosting providers or payment processors, internet failures, natural disasters, war, strikes or government action.</li><li><strong>Relationship.</strong> Nothing in these Terms creates a partnership, joint venture, employment or agency relationship.</li><li><strong>No third-party beneficiaries,</strong> except as <a class="xref" href="#20-2">Section 20.2</a> provides.</li><li><strong>Headings and examples</strong> are for convenience. "Including" means "including without limitation."</li><li><strong>Language.</strong> The English version controls.</li></ul>
+<h2 id="25-contact"><span class="n">25</span><span class="t">Contact</span></h2>
+<p><mark class="ph">[COMPANY LEGAL NAME]</mark> (Studio)<br>
+<mark class="ph">[MAILING ADDRESS]</mark><br>
+Email: hello@askstudio.ai</p>
+    </article>
+  </div>
+</main>
+
+<footer class="lg-foot">
+  <a class="brand" href="../"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <div class="links"><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a><a href="mailto:hello@askstudio.ai">hello@askstudio.ai</a><a href="../">askstudio.ai</a></div>
+</footer>
+
+<script>
+/* Studio legal pages: the contents list follows the reader (current section highlighted), and on phones it folds into a pill. */
+(function () {
+  var toc = document.querySelector(".toc"), pill = toc && toc.querySelector(".toc-pill"), cur = toc && toc.querySelector("[data-cur]");
+  if (!toc) return;
+  var links = [].slice.call(toc.querySelectorAll(".toc-list a")), list = toc.querySelector(".toc-list");
+  var heads = links.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+  var on = -1, ticking = false;
+
+  function setOpen(v) {
+    toc.classList.toggle("open", v);
+    pill.setAttribute("aria-expanded", v ? "true" : "false");
+    if (v && on >= 0) { var a = links[on]; list.scrollTop = a.offsetTop - list.clientHeight / 2 + a.offsetHeight / 2; }
+  }
+  pill.addEventListener("click", function (e) { e.stopPropagation(); setOpen(!toc.classList.contains("open")); });
+  document.addEventListener("click", function (e) { if (!toc.contains(e.target)) setOpen(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && toc.classList.contains("open")) { setOpen(false); pill.focus(); } });
+  links.forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+  addEventListener("hashchange", function () { setOpen(false); });
+
+  function update() {
+    ticking = false;
+    var line = (parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 100) + 40, idx = -1;
+    for (var i = 0; i < heads.length; i++) { if (heads[i] && heads[i].getBoundingClientRect().top <= line) idx = i; else break; }
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) idx = heads.length - 1;
+    if (idx === on) return;
+    if (on >= 0) { links[on].classList.remove("on"); links[on].removeAttribute("aria-current"); }
+    on = idx;
+    if (cur) cur.textContent = on >= 0 ? links[on].querySelector("span").textContent : "";
+    if (on < 0) return;
+    var a = links[on];
+    a.classList.add("on");
+    a.setAttribute("aria-current", "location");
+    /* keep the highlighted entry in view inside the sticky list (desktop), without moving the page */
+    var box = getComputedStyle(toc).overflowY === "auto" ? toc : null;
+    if (box) {
+      var t = a.offsetTop, b = t + a.offsetHeight;
+      if (t < box.scrollTop + 40) box.scrollTop = t - 40;
+      else if (b > box.scrollTop + box.clientHeight - 40) box.scrollTop = b - box.clientHeight + 40;
+    }
+  }
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  update();
+})();
+
+</script>
+</body>
+</html>

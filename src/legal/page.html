@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{TITLE}} · Studio</title>
+<meta name="description" content="{{DESC}}">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#090c11">
+<link rel="canonical" href="https://askstudio.ai/{{PATH}}/">
+<meta property="og:title" content="Studio {{TITLE}}">
+<meta property="og:description" content="{{DESC}}">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://askstudio.ai/{{PATH}}/">
+<meta property="og:site_name" content="Studio">
+<meta property="og:image" content="https://askstudio.ai/assets/og-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../assets/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script>document.documentElement.classList.add("js");</script>
+<style>
+{{CSS}}
+</style>
+</head>
+<body>
+<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
+
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
+    <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
+    <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
+  </defs>
+  <symbol id="studio-mark" viewBox="36 36 440 440">
+    <path fill="url(#mk-l)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/>
+    <path fill="url(#mk-r)" stroke="url(#mk-e)" stroke-width="1" vector-effect="non-scaling-stroke" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/>
+    <path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/>
+  </symbol>
+</svg>
+
+<header class="lg-nav">
+  <a class="brand" href="../" aria-label="Studio home"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <nav class="lg-links" aria-label="Legal">
+    <a href="../terms/"{{CUR_TERMS}}>Terms</a>
+    <a href="../privacy/"{{CUR_PRIVACY}}>Privacy</a>
+    <a class="home" href="../"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3.5 5.5 8l4.5 4.5"/></svg><span><span class="long">Back to </span>askstudio.ai</span></a>
+  </nav>
+</header>
+
+<div class="sky" aria-hidden="true"></div>
+
+<main class="lg" id="top">
+  <header class="lg-head">
+    <span class="label">Legal</span>
+    <h1>{{TITLE}}</h1>
+    <dl class="dates">
+{{DATES}}
+    </dl>
+  </header>
+
+  <div class="lg-grid">
+    <aside class="toc" aria-label="Contents">
+      <button class="toc-pill" type="button" aria-expanded="false" aria-controls="toc-list"><span class="k">Contents</span><span class="cur" data-cur></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></button>
+      <ol class="toc-list" id="toc-list">
+{{TOC}}
+      </ol>
+    </aside>
+
+    <article class="doc">
+{{BODY}}
+    </article>
+  </div>
+</main>
+
+<footer class="lg-foot">
+  <a class="brand" href="../"><svg class="mark" aria-hidden="true"><use href="#studio-mark"/></svg><span>Studio</span></a>
+  <div class="links"><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a><a href="mailto:hello@askstudio.ai">hello@askstudio.ai</a><a href="../">askstudio.ai</a></div>
+</footer>
+
+<script>
+{{JS}}
+</script>
+</body>
+</html>

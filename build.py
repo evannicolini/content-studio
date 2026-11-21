@@ -11,13 +11,14 @@ Layout
     src/sections/NN-name/       section.html (required), section.css, section.js (each optional)
     assets/media/manifest.json  inlined as window.SK_MEDIA so sections can read what media exists
     pricing.py                  Studio's prices, from the app's published pricing.json; the build fails if the site could differ
+    src/legal/                  terms.md + privacy.md -> terms/index.html + privacy/index.html (legal.py: page.html, legal.css, legal.js)
 
 Each section.js is wrapped in its own function and only runs if its <section> is on the page.
 Nothing here needs a package: plain Python 3.
 """
 import hashlib, http.server, json, os, re, sys
 
-import pricing
+import legal, pricing
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
@@ -76,12 +77,13 @@ def build():
     open(os.path.join(ROOT, "site.css"), "w", encoding="utf-8").write(css_s)
     open(os.path.join(ROOT, "site.js"), "w", encoding="utf-8").write(js_s)
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(page)
+    legal.build(ROOT)  # askstudio.ai/terms and /privacy
     return names, ver
 
 
 class H(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path.split("?")[0] in ("/", "/index.html"):
+        if self.path.split("?")[0] in ("/", "/index.html", "/terms/", "/privacy/"):
             try:
                 build()
             except Exception as e:  # keep serving the last good build
