@@ -4516,9 +4516,15 @@ var KAY = (function () {
     invite: "Last thing. Where should we send your invite?", in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free.",
     share: "Want to move up the list? Share your link with three friends."
   };
-  var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {};
+  var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {};
   a.preload = "auto";
-  Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; }).catch(function () {}); });
+  Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  function wave(k) {
+    var p = peaks[k] || [], n = 34, out = "";
+    for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
+    kw.innerHTML = out;
+  }
+  a.addEventListener("timeupdate", function () { var bars = kw.children, f = a.duration ? a.currentTime / a.duration : 0; for (var i = 0; i < bars.length; i++) bars[i].classList.toggle("on", i / bars.length < f); });
   function words(k, all) {
     cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" ");
   }
@@ -4530,7 +4536,7 @@ var KAY = (function () {
     var my = ++tok;
     cur = queue.shift();
     if (!cur) { pill.classList.remove("talk"); return; }
-    words(cur, !SOUND);
+    words(cur, !SOUND); wave(cur);
     if (!SOUND) { pill.classList.remove("talk"); return; }
     a.src = "assets/audio/wl-" + cur + ".mp3";
     var p = a.play();
@@ -4561,12 +4567,13 @@ sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SF
 
 /* ---------- the sheet ---------- */
 var form = sheet.querySelector(".wl-form"), box = sheet.querySelector(".wl-steps"), steps = [].slice.call(sheet.querySelectorAll(".wl-q"));
+sheet.appendChild(sheet.querySelector(".wl-dock")); /* the bar and Kayla sit on the sheet, above both the questions and You're in (the submit button stays tied to the form) */
 var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite" };
-var SCENE = { name: "home", roles: "home", brands: "brands", claude: "claude", you: "you" };
-var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), kLabel = sheet.querySelector("[data-wl-k]"), scenes = {};
+var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you" }; /* question 3 opens Home's All brands menu */
+var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
 sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
-var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go"), fineP = sheet.querySelector("[data-wl-fine]");
+var back = sheet.querySelector("[data-wl-back]"), next = sheet.querySelector("[data-wl-next]"), go = sheet.querySelector(".wl-go");
 var sky = sheet.querySelector(".wl-sky"), fit = sheet.querySelector(".wl-fit"), stage = sheet.querySelector(".wl-stage");
 var sel = sheet.querySelector(".wl-cc select"), ccv = sheet.querySelector(".wl-ccv"), toastEl = sheet.querySelector("[data-wl-toast]");
 var other = sheet.querySelector("[data-wl-other]"), otherIn = form.elements.other;
@@ -4610,14 +4617,21 @@ var BRANDS = [
 function list(a) { return a.length < 2 ? (a[0] || "") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
 function article(w) { return /^[AEIOU]/i.test(w) ? "an" : "a"; }
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
+function brandList() {
+  var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, f = first();
+  return BRANDS.slice(0, n).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); });
+}
+function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 function drawHome(typing) {
   var f = first(), hi = sheet.querySelector("[data-wl-hi-home]");
-  hi.innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + "." + (typing ? "<i></i>" : "");
-  var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; }), forEl = sheet.querySelector("[data-wl-for]");
-  forEl.innerHTML = r.length ? "Made for " + article(r[0]) + " " + list(r.map(function (x) { return "<b>" + esc(x.toLowerCase()) + "</b>"; })) + "." : f ? "Studio's ready when you are." : "Tell Studio who you are.";
+  hi.innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + (typing ? "<i></i>" : "");
+  sheet.querySelector("[data-wl-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
+  sheet.querySelector("[data-wl-chips]").innerHTML = brandList().slice(0, 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; }).join("");
+  var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; });
+  sheet.querySelector("[data-wl-for]").textContent = r.length ? "For " + article(r[0]) + " " + list(r.map(function (x) { return x.toLowerCase(); })) : "Tell Studio who you are";
   var made = sheet.querySelector("[data-wl-made]"), have = [].slice.call(made.querySelectorAll(".wl-mc")).map(function (c) { return c.getAttribute("data-r"); });
   var want = ans.roles.slice(0, 4);
-  if (have.join("|") === want.join("|")) return;
+  if (have.join("|") === want.join("|") && made.children.length) return;
   var out = want.map(function (k, i) {
     var m = MADE[k], fresh = have.indexOf(k) < 0, t = k === "Something else" && val("other") ? val("other") : m[2];
     return '<span class="wl-mc' + (fresh ? " wl-in-a" : "") + '" data-r="' + esc(k) + '" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(t) + "</b></span></span>";
@@ -4626,54 +4640,69 @@ function drawHome(typing) {
   made.innerHTML = out.join("");
 }
 function drawBrands() {
-  var n = ans.brands === "4+" ? 5 : ans.brands === "2-3" ? 3 : 1, ul = sheet.querySelector("[data-wl-bl]"), f = first();
-  sheet.querySelector("[data-wl-bn]").textContent = ans.brands || "1";
-  var have = ul.querySelectorAll(".wl-br").length;
-  ul.innerHTML = BRANDS.slice(0, n).map(function (b, i) {
-    var name = i === 0 && f ? f + "'s brand" : b.n, mono = i === 0 ? (f ? f.charAt(0).toUpperCase() : "Y") : b.m;
-    var mark = b.img ? '<img src="' + b.img + '" alt="">' : esc(mono);
-    return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + Math.max(0, i - have) + '"><span class="wl-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + mark + '</span><span class="wl-bt"><b>' + esc(name) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
-  }).join("") + (n === 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
+  var bl = brandList(), ul = sheet.querySelector("[data-wl-bl]"), have = ul.querySelectorAll(".wl-br").length;
+  ul.innerHTML = bl.map(function (b, i) {
+    return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + Math.max(0, i - have) + '">' + mono(b) + '<span class="wl-bt"><b>' + esc(b.n) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
+  }).join("") + (bl.length === 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
+  sheet.querySelector("[data-wl-allb-t]").textContent = ans.brands ? (bl.length === 1 ? bl[0].n : "All brands · " + ans.brands) : "All brands";
+  drawHome();
 }
 function drawClaude() {
-  var chip = sheet.querySelector("[data-wl-chip]"), t = chip.querySelector("span"), c = ans.claude;
-  chip.classList.toggle("wait", c === "Free plan" || c === "Not yet");
-  t.textContent = c === "Pro or Max" ? "Claude connected. You're ready." : c === "Free plan" ? "Claude Pro unlocks Studio. One click." : c === "Not yet" ? "No problem. We'll set Claude up with you." : "Claude, connected in one click";
+  var k = ans.roles[0] || "Founder", m = MADE[k] || MADE.Founder;
+  sheet.querySelector("[data-wl-kind]").textContent = m[1] === "Film" ? "Launch film" : m[1];
 }
 /* the Claude scene, on a loop while it's showing: three clips are dragged in from your Mac, the composer lights up to take them,
    a request is typed and sent, and three cuts come back. Then they clear and it starts again. */
 var loopTok = 0;
+var VIDLINE = { "Business owner": "This week only. Come see us.", "Founder": "Your place for ambitious young founders", "Creator": "Same crew. Every morning.", "Video editor": "Take the long way.", "Social media manager": "The corner table. Saturdays.", "Marketer": "Made to be felt.", "Agency": "Every brand, its own voice.", "Something else": "If you can dream it, you can post it." };
 function claudeLoop() {
-  var my = ++loopTok, cl = sheet.querySelector(".wl-cl"), comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]");
-  var t = sheet.querySelector("[data-wl-type]"), res = sheet.querySelector("[data-wl-res]"), fly = sheet.querySelector("[data-wl-fly]");
+  var my = ++loopTok, sc = scenes.claude, comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]"), plan = sheet.querySelector("[data-wl-plan]");
+  var t = sheet.querySelector("[data-wl-type]"), fly = sheet.querySelector("[data-wl-fly]"), v01 = sheet.querySelector("[data-wl-v01]"), vid = sheet.querySelector("[data-wl-vid]");
+  var rows = [].slice.call(plan.querySelectorAll("li")), ft = sheet.querySelector("[data-wl-ft]"), slots = [].slice.call(plan.querySelectorAll(".slots em"));
   var w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== loopTok) throw 0; }); };
   (async function () {
     try {
       for (var round = 0; ; round++) {
         var picks = ans.roles.length ? ans.roles : ["Founder"], k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
-        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"];
-        comp.classList.remove("has", "work", "over", "tap"); t.textContent = ""; att.innerHTML = "";
-        /* the files, dragged in from the bottom left by a pointer */
+        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"], shots = ["coastal-highway", "surfing", "real-connections"];
+        comp.classList.remove("has", "work", "over", "tap"); t.textContent = ""; att.innerHTML = ""; plan.classList.remove("on"); v01.classList.remove("on");
+        rows.forEach(function (r) { r.classList.remove("ok", "run"); }); ft.innerHTML = ""; slots.forEach(function (e) { e.style.backgroundImage = ""; });
+        try { vid.pause(); } catch (e) {}
+        /* three clips, dragged in from the bottom left */
         fly.innerHTML = '<div class="stack">' + clips.map(function (s) { return '<span><img src="' + M + "selects/" + s + '.jpg" alt=""></span>'; }).join("") +
           '<b class="n">3</b><span class="ptr"><svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 1.5L10 19z"/></svg></span></div>';
-        var st = fly.firstChild, cb = comp.getBoundingClientRect(), wb = cl.getBoundingClientRect(), k2 = wb.width / cl.offsetWidth || 1;
-        var tx = (cb.left - wb.left) / k2 + 70, ty = (cb.top - wb.top) / k2 + 10;
-        st.style.transition = "none"; st.style.transform = "translate(-160px, 420px) rotate(-8deg)"; st.style.opacity = "0";
+        var st = fly.firstChild;
+        st.style.transition = "none"; st.style.transform = "translate(-180px, 640px) rotate(-8deg)"; st.style.opacity = "0";
         await w(500);
-        void st.offsetWidth; st.style.transition = ""; st.style.opacity = "1"; st.style.transform = "translate(" + (tx - 20) + "px, " + (ty + 6) + "px) rotate(-3deg)";
+        void st.offsetWidth; st.style.transition = ""; st.style.opacity = "1"; st.style.transform = "translate(330px, 30px) rotate(-3deg)";
         await w(800); comp.classList.add("over");
-        await w(450); st.style.opacity = "0"; st.style.transform = "translate(" + tx + "px, " + ty + "px) scale(.6)";
+        await w(500); st.style.opacity = "0"; st.style.transform = "translate(350px, 20px) scale(.6)";
         comp.classList.remove("over");
         att.innerHTML = clips.map(function (s, i) { return '<span style="--i:' + i + '"><img src="' + M + "selects/" + s + '.jpg" alt=""></span>'; }).join("") + "<b>3 clips</b>";
         await w(700); fly.innerHTML = "";
-        for (var i = 1; i <= text.length; i++) { t.textContent = text.slice(0, i); comp.classList.add("has"); await w(34 + Math.random() * 30); }
+        for (var i = 1; i <= text.length; i++) { t.textContent = text.slice(0, i); comp.classList.add("has"); await w(30 + Math.random() * 28); }
         await w(450); comp.classList.add("tap"); await w(160); comp.classList.remove("tap"); comp.classList.add("work");
-        await w(1400); comp.classList.remove("work");
-        res.innerHTML = clips.map(function (s, j) { return '<span class="wl-rc wl-in-a" style="--i:' + j + '"><span class="wl-mc"><img src="' + M + "selects/" + s + '.jpg" alt=""><i>v0' + (j + 1) + "</i><span><em>" + esc(film[1]) + "</em><b>" + (j ? "Version " + (j + 1) : esc(film[2])) + "</b></span></span></span>"; }).join("");
-        await w(3800);
-        res.querySelectorAll(".wl-rc").forEach(function (r, j) { r.classList.remove("wl-in-a"); r.style.setProperty("--i", j); r.classList.add("wl-out-a"); });
+        /* the plan builds itself, a row at a time */
+        await w(400); plan.classList.add("on");
+        for (var r = 0; r < rows.length; r++) {
+          rows[r].classList.add("run");
+          await w(r === 1 ? 500 : 600);
+          if (r === 1) ft.innerHTML = clips.map(function (s) { return '<span class="wl-in-a"><img src="' + M + "selects/" + s + '.jpg" alt=""></span>'; }).join("");
+          if (r === 2) slots.forEach(function (e, j) { e.style.backgroundImage = "url(" + M + "selects/" + shots[j] + ".jpg)"; });
+          rows[r].classList.remove("run"); rows[r].classList.add("ok");
+        }
+        comp.classList.remove("work");
+        /* v01 lands, and plays */
+        sheet.querySelector("[data-wl-v01t]").textContent = sheet.querySelector("[data-wl-kind]").textContent;
+        sheet.querySelector("[data-wl-vidline]").textContent = VIDLINE[k] || VIDLINE.Founder;
+        vid.poster = M + "selects/" + film[0] + ".jpg";
+        if (vid.getAttribute("src") !== M + "selects/" + film[0] + ".mp4") vid.src = M + "selects/" + film[0] + ".mp4";
+        try { vid.currentTime = 0; var pp = vid.play(); pp && pp.catch(function () {}); } catch (e) {}
+        v01.classList.add("on");
+        await w(5200);
+        plan.classList.remove("on"); v01.classList.remove("on");
         att.querySelectorAll("span").forEach(function (s) { s.classList.add("wl-out-a"); });
-        await w(650); res.innerHTML = "";
+        await w(700);
       }
     } catch (e) {}
   })();
@@ -4681,20 +4710,21 @@ function claudeLoop() {
 function sizeStage() {
   var r = stage.getBoundingClientRect();
   if (!r.width) return;
-  var s = Math.min(r.width / 640, (r.height || 520) / 520, 1.12);
-  fit.style.setProperty("--s", Math.max(.3, s).toFixed(3));
+  var mob = SK.mobile() || innerWidth <= 960;
+  var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22); /* desktop: as tall as the space allows, running off the right edge like the opening film */
+  fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
 
 /* ---------- the pass: a 3D object (see the CSS). Spins in once, follows the mouse or a finger, flips on a tap. ---------- */
 function passHTML(o) {
   var frost = '<img class="frost" src="' + (sky.getAttribute("src") || "assets/hero/sky.jpg") + '" alt="">';
-  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="tint"></div><div class="foil"></div><div class="sweep"></div></div>' +
+  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono">Early access · Invite</span></div>' +
     '<div class="lift who"><span class="mono dim">Invite for</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
     '<div class="lift row"><div><span class="mono dim" data-p="k1">No.</span><b data-p="no">····</b></div><div><span class="mono dim">Trial</span><b class="s">14 days, free</b></div><div><span class="mono dim" data-p="k3">For</span><b class="s" data-p="v3">Mac</b></div></div>' +
     '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
-    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="tint"></div><div class="foil"></div></div>' +
+    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
     '<div class="lift what"><span class="mono dim">What\'s waiting for you</span><h4>Your whole content team, on your Mac.</h4><ul><li><i></i>14 days of everything, free</li><li><i></i>Every feature, every brand</li><li><i></i>Claude does the work</li></ul></div>' +
     '<div class="lift sig"><span class="mono dim">See you inside</span><span class="mono" data-p="sig">Studio</span></div></div>';
@@ -4779,7 +4809,7 @@ function ready(n) {
 }
 function personal() {
   var f = first();
-  sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(/^[^.]*\.\s*/, "").replace(/, \{first\}/, ""); });
+  sheet.querySelectorAll("[data-wl-hi]").forEach(function (h) { var t = h.getAttribute("data-wl-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); });
 }
 function setStep(n, quiet) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1;
@@ -4797,13 +4827,13 @@ function setStep(n, quiet) {
   }
   at = n;
   sheet.setAttribute("data-step", q);
-  kLabel.textContent = "Step " + (n + 1) + " of " + ORDER.length;
   segs.forEach(function (s, i) { s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
-  back.hidden = n === 0;
+  back.disabled = n === 0;
   var last = q === "you";
-  next.hidden = last; go.hidden = !last; fineP.hidden = !last;
+  next.hidden = last; go.hidden = !last;
+  scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
-  if (SCENE[q] === "claude") claudeLoop(); else loopTok++;
+  if (SCENE[q] === "claude") { drawClaude(); claudeLoop(); } else loopTok++;
   if (SCENE[q] === "you") { drawPass(); pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
   if (!quiet && sheet.classList.contains("open")) KAY.say([LINE[q]]);
