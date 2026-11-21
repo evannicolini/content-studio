@@ -346,12 +346,13 @@
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
-          '<div class="ah-comp"><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
+          '<div class="ah-comp"><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
+          '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
           '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">11 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
           '<div class="ah-row">' +
-            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn">20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip">' +
+            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
               rv.map(function (x) { return '<span class="ah-vt"><img src="' + M + x[0] + '.jpg" alt=""><span class="ah-st"><i class="ah-dot"></i>' + x[1] + "</span></span>"; }).join("") + "</div></section>" +
             '<section class="ah-w"><header class="ah-wh"><b>Post next</b><span class="ah-ws">Studio\'s picks</span><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-strip" data-ah-pk>' +
               pk.map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; }).join("") + "</div></section>" +
@@ -361,14 +362,29 @@
           '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
         "</div>" +
       "</div></div>";
-    var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]");
+    var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
-      name: function (n) { hello.textContent = greet + (n ? ", " + n : ""); },
+      name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
+      /* Post next, made for who you are: [{ img, kicker, title, fresh }] lead the strip, labelled; label replaces "Studio's picks" */
+      picks: function (items, label) {
+        pkWs.textContent = label || "Studio's picks";
+        var tiles = (items || []).map(function (x, i) { return '<span class="ah-vt ah-mf' + (x.fresh ? " wl-in-a" : "") + '" style="--i:' + i + '"><img src="' + esc(x.img) + '" alt=""><span class="ah-bl">' + MARK + '</span><span class="ah-mfl"><em>' + esc(x.kicker) + "</em><b>" + esc(x.title) + "</b></span></span>"; });
+        pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
+      },
       brands: function (list) {
         chips.innerHTML = (list || []).map(function (b) { return '<span class="ah-chip"><span class="ah-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>" + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
-      typeAsk: function (t) { ask.textContent = t; }
+      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
+      attach: function (imgs) { host.querySelector("[data-ah-att]").innerHTML = (imgs || []).map(function (u, i) { return '<span class="wl-in-a" style="--i:' + i + '"><img src="' + esc(u) + '" alt=""></span>'; }).join("") + (imgs && imgs.length ? "<b>" + imgs.length + " clips</b>" : ""); },
+      sending: function (on) { host.querySelector(".ah-comp").classList.toggle("send", !!on); },
+      working: function (on, title, status) { var wk = host.querySelector("[data-ah-wk]"); wk.hidden = !on; if (title) host.querySelector("[data-ah-wkt]").textContent = title; if (status) host.querySelector("[data-ah-wks]").textContent = status; },
+      review: function (item) {
+        var rv = host.querySelector("[data-ah-rv]"), old = rv.querySelector(".ah-new"); if (old) old.remove();
+        if (!item) return;
+        var t = document.createElement("span"); t.className = "ah-vt ah-new"; t.innerHTML = '<img src="' + esc(item.img) + '" alt=""><span class="ah-st"><i class="ah-dot"></i>Review v01</span><span class="ah-mfl"><em>' + esc(item.kicker) + "</em><b>" + esc(item.title) + "</b></span>";
+        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "21";
+      }
     };
     ctl.name(o.name || "");
     ctl.brands(o.brands || [{ n: "Your brand", m: "Y", bg: "linear-gradient(140deg, #DFEAE8, #536878)", ink: "#05090A" }, { n: "Halden", m: "H", bg: "linear-gradient(140deg, #536878, #0E191E)" }, { n: "Northwind", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)" }]);

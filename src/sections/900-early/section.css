@@ -738,3 +738,44 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-dg { margin-top: auto; font: 500 9px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--s3); }
 .ah-dg.on { margin-top: 5px; color: #d9c2ff; }
 .ah-fill { margin-top: 5px; font-size: 10.5px; color: var(--s2); }
+
+.ah-caret { display: inline-block; width: 3px; height: .8em; margin-left: 4px; vertical-align: -.04em; border-radius: 1px; background: #4aa3ff; animation: wl-blink 1.06s steps(1) infinite; }
+.ah-mf::before { content: ""; position: absolute; inset: 42% 0 0; z-index: 1; background: linear-gradient(180deg, transparent, rgba(5, 9, 10, .82)); }
+.ah-mfl { position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 2; }
+.ah-mfl em { display: block; font: 500 8.5px/1 var(--mono); font-style: normal; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .78); }
+.ah-mfl b { display: block; margin-top: 4px; font: 500 12.5px/1.15 var(--sans); letter-spacing: -.01em; }
+
+/* ---------- the app on the stage is the real Studio Home (kit.js SK.appHome), at its own 1440 x 900 ---------- */
+.wl-fit { width: 1440px; height: 900px; margin-top: -450px; }
+.wl-appwin.wl-real { inset: 0; display: block; }
+.wl-ah { position: absolute; inset: 0; }
+.wl-real .wl-menu { left: 12px; top: 104px; z-index: 5; }
+/* the Claude scene keeps its own drawing, larger in the bigger frame; the pass too */
+.wl-sc[data-sc="claude"] { transform-origin: 0 0; }
+.wl-sc[data-sc="claude"].on { transform: scale(1.32); }
+.wl-sc[data-sc="claude"]:not(.on) { transform: translateX(110px) scale(1.28); }
+.wl-sc[data-sc="you"] .pass { --w: 760px; }
+@media (max-width: 960px) { .wl-sc[data-sc="claude"].on { transform: scale(1.32); } }
+
+/* Ask Studio at work (the Claude step on the real Home): clips attached, the request typing, Working now, the cut landing in To review */
+.ah-att { display: flex; align-items: flex-end; gap: 7px; }
+.ah-att:not(:empty) { margin-bottom: 12px; }
+.ah-att span { width: 44px; height: 58px; border-radius: 10px; overflow: hidden; box-shadow: var(--v-rim); }
+.ah-att img { width: 100%; height: 100%; object-fit: cover; }
+.ah-att b { margin-left: 4px; font: 500 10.5px/1 var(--mono); letter-spacing: .08em; color: rgba(245, 243, 238, .6); }
+.ah-comp { transition: box-shadow .3s, transform .3s var(--ease); }
+.ah-comp.live { box-shadow: var(--v-rim-on), 0 0 0 1px rgba(74, 163, 255, .35), 0 0 34px -10px rgba(74, 163, 255, .55); }
+.ah-comp.live .ah-cq { color: #fff; }
+.ah-comp.send .ah-send { background: var(--pearl); color: #05090A; transform: scale(.88); transition: transform .2s, background-color .2s; }
+.ah-wk { display: flex; align-items: center; gap: 12px; height: 56px; padding: 0 10px 0 18px; border-radius: 24px; font-size: 14px; background: var(--ag); -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); box-shadow: var(--v-rim); animation: wl-pop .6s var(--ease) both; }
+.ah-wk > b:first-child { font: 600 15px/1 var(--sans); }
+.ah-card { display: inline-flex; align-items: center; gap: 9px; height: 40px; padding: 0 14px 0 12px; border-radius: 14px; background: var(--v-g); box-shadow: var(--v-rim); font-size: 13px; }
+.ah-card .ah-mk { width: 14px; height: 14px; }
+.ah-card em { font: 500 10px/1 var(--mono); font-style: normal; letter-spacing: .06em; color: rgba(245, 243, 238, .6); }
+.ah-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .2); border-top-color: #fff; animation: wl-spin .9s linear infinite; }
+.ah-new { animation: ah-land .9s cubic-bezier(.2, 1.2, .3, 1) both; box-shadow: 0 0 0 2px rgba(191, 227, 255, .55), 0 18px 34px -16px rgba(0, 0, 0, .7); }
+.ah-new::before { content: ""; position: absolute; inset: 42% 0 0; z-index: 1; background: linear-gradient(180deg, transparent, rgba(5, 9, 10, .82)); }
+@keyframes ah-land { from { opacity: 0; transform: translateY(26px) scale(.86); } }
+/* phones: the 1440 frame sits at the top left of the stage (the desktop centring doesn't apply) */
+@media (max-width: 960px) { .wl-fit, .wl[data-step="claude"] .wl-fit { margin-top: 0; top: 0; } }
+@media (min-width: 961px) { .wl[data-step="claude"] .wl-fit { top: 50%; margin-top: -450px; transform-origin: 0 50%; } }   /* step 4 is the real Home now, centred like the rest */

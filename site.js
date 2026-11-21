@@ -352,12 +352,13 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
-          '<div class="ah-comp"><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
+          '<div class="ah-comp"><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
+          '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
           '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">11 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
           '<div class="ah-row">' +
-            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn">20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip">' +
+            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
               rv.map(function (x) { return '<span class="ah-vt"><img src="' + M + x[0] + '.jpg" alt=""><span class="ah-st"><i class="ah-dot"></i>' + x[1] + "</span></span>"; }).join("") + "</div></section>" +
             '<section class="ah-w"><header class="ah-wh"><b>Post next</b><span class="ah-ws">Studio\'s picks</span><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-strip" data-ah-pk>' +
               pk.map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; }).join("") + "</div></section>" +
@@ -367,14 +368,29 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
           '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
         "</div>" +
       "</div></div>";
-    var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]");
+    var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
-      name: function (n) { hello.textContent = greet + (n ? ", " + n : ""); },
+      name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
+      /* Post next, made for who you are: [{ img, kicker, title, fresh }] lead the strip, labelled; label replaces "Studio's picks" */
+      picks: function (items, label) {
+        pkWs.textContent = label || "Studio's picks";
+        var tiles = (items || []).map(function (x, i) { return '<span class="ah-vt ah-mf' + (x.fresh ? " wl-in-a" : "") + '" style="--i:' + i + '"><img src="' + esc(x.img) + '" alt=""><span class="ah-bl">' + MARK + '</span><span class="ah-mfl"><em>' + esc(x.kicker) + "</em><b>" + esc(x.title) + "</b></span></span>"; });
+        pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
+      },
       brands: function (list) {
         chips.innerHTML = (list || []).map(function (b) { return '<span class="ah-chip"><span class="ah-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>" + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
-      typeAsk: function (t) { ask.textContent = t; }
+      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
+      attach: function (imgs) { host.querySelector("[data-ah-att]").innerHTML = (imgs || []).map(function (u, i) { return '<span class="wl-in-a" style="--i:' + i + '"><img src="' + esc(u) + '" alt=""></span>'; }).join("") + (imgs && imgs.length ? "<b>" + imgs.length + " clips</b>" : ""); },
+      sending: function (on) { host.querySelector(".ah-comp").classList.toggle("send", !!on); },
+      working: function (on, title, status) { var wk = host.querySelector("[data-ah-wk]"); wk.hidden = !on; if (title) host.querySelector("[data-ah-wkt]").textContent = title; if (status) host.querySelector("[data-ah-wks]").textContent = status; },
+      review: function (item) {
+        var rv = host.querySelector("[data-ah-rv]"), old = rv.querySelector(".ah-new"); if (old) old.remove();
+        if (!item) return;
+        var t = document.createElement("span"); t.className = "ah-vt ah-new"; t.innerHTML = '<img src="' + esc(item.img) + '" alt=""><span class="ah-st"><i class="ah-dot"></i>Review v01</span><span class="ah-mfl"><em>' + esc(item.kicker) + "</em><b>" + esc(item.title) + "</b></span>";
+        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "21";
+      }
     };
     ctl.name(o.name || "");
     ctl.brands(o.brands || [{ n: "Your brand", m: "Y", bg: "linear-gradient(140deg, #DFEAE8, #536878)", ink: "#05090A" }, { n: "Halden", m: "H", bg: "linear-gradient(140deg, #536878, #0E191E)" }, { n: "Northwind", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)" }]);
@@ -4775,7 +4791,7 @@ function wall(k) {
   });
 }
 var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite", check: "confirm" };
-var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you", check: "you" };
+var SCENE = { name: "home", roles: "home", brands: "home", claude: "home", you: "you", check: "you" };   /* step 4 plays on the real Home (askLoop) */
 WALL.check = WALL.you; /* question 3 opens Home's All brands menu */
 var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
 sheet.querySelectorAll(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
@@ -4837,29 +4853,26 @@ function brandList() {
   return BRANDS.slice(0, n).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); });
 }
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
+/* the real Studio Home (kit.js SK.appHome): your name in the greeting, your brands as chips, and Post next made for who you are */
+var AH = SK.appHome(sheet.querySelector("[data-wl-ah]"), { brands: [] }), ahHave = "";
 function drawHome(typing) {
-  var f = first(), hi = sheet.querySelector("[data-wl-hi-home]");
-  hi.innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + (typing ? "<i></i>" : "");
-  sheet.querySelector("[data-wl-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
-  sheet.querySelector("[data-wl-chips]").innerHTML = brandList().slice(0, 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; }).join("");
+  var f = first();
+  AH.name(f, typing);
+  AH.brands(brandList().slice(0, 3).map(function (b) { return { n: b.n, m: b.m || (b.n || "Y").charAt(0), bg: b.bg, ink: b.ink }; }));
   var r = ans.roles.map(function (x) { return x === "Something else" && val("other") ? val("other") : x; });
-  sheet.querySelector("[data-wl-for]").textContent = r.length ? "For " + article(r[0]) + " " + list(r.map(function (x) { return x.toLowerCase(); })) : "Tell Studio who you are";
-  var made = sheet.querySelector("[data-wl-made]"), have = [].slice.call(made.querySelectorAll(".wl-mc")).map(function (c) { return c.getAttribute("data-r"); });
-  var want = ans.roles.slice(0, 4);
-  if (have.join("|") === want.join("|") && made.children.length) return;
-  var out = want.map(function (k, i) {
-    var m = MADE[k], fresh = have.indexOf(k) < 0, t = k === "Something else" && val("other") ? val("other") : m[2];
-    return '<span class="wl-mc' + (fresh ? " wl-in-a" : "") + '" data-r="' + esc(k) + '" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(t) + "</b></span></span>";
-  });
-  for (var i = want.length; i < 4; i++) out.push('<span class="wl-ph"></span>');
-  made.innerHTML = out.join("");
+  var want = ans.roles.slice(0, 4), key = want.join("|") + "#" + val("other");
+  if (key === ahHave) return;
+  var fresh = want.filter(function (k) { return ahHave.split("#")[0].split("|").indexOf(k) < 0; });
+  ahHave = key;
+  AH.picks(want.map(function (k) { var m = MADE[k]; return { img: M + "selects/" + m[0] + ".jpg", kicker: m[1], title: k === "Something else" && val("other") ? val("other") : m[2], fresh: fresh.indexOf(k) > -1 }; }),
+    r.length ? "For " + article(r[0]) + " " + list(r.map(function (x) { return x.toLowerCase(); })) : "Studio's picks");
 }
 function drawBrands() {
   var bl = brandList(), ul = sheet.querySelector("[data-wl-bl]"), have = ul.querySelectorAll(".wl-br").length;
   ul.innerHTML = bl.map(function (b, i) {
     return '<li class="wl-br' + (i === 0 ? " on" : "") + (i >= have ? " wl-in-a" : "") + '" style="--i:' + Math.max(0, i - have) + '">' + mono(b) + '<span class="wl-bt"><b>' + esc(b.n) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
   }).join("") + (bl.length === 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
-  sheet.querySelector("[data-wl-allb-t]").textContent = ans.brands ? (bl.length === 1 ? bl[0].n : "All brands · " + ans.brands) : "All brands";
+  AH.allBrands(ans.brands ? (bl.length === 1 ? bl[0].n : "All brands · " + ans.brands) : "All brands");
   drawHome();
 }
 function drawClaude() {
@@ -4870,6 +4883,30 @@ function drawClaude() {
    a request is typed and sent, and three cuts come back. Then they clear and it starts again. */
 var loopTok = 0;
 var VIDLINE = { "Business owner": "This week only. Come see us.", "Founder": "Your place for ambitious young founders", "Creator": "Same crew. Every morning.", "Video editor": "Take the long way.", "Social media manager": "The corner table. Saturdays.", "Marketer": "Made to be felt.", "Agency": "Every brand, its own voice.", "Something else": "If you can dream it, you can post it." };
+/* step 4, on the real Home: three of your clips drop into Ask Studio, the request types itself and goes, Studio works (Working now),
+   and the finished cut lands at the front of To review as v01. Then it clears and runs again with your next role. */
+function askLoop() {
+  var my = ++loopTok, w = function (ms) { return SK.sleep(SK.reduced ? 0 : ms).then(function () { if (my !== loopTok) throw 0; }); };
+  (async function () {
+    try {
+      for (var round = 0; ; round++) {
+        var picks = ans.roles.length ? ans.roles : ["Founder"], k = picks[round % picks.length], text = PROMPT[k] || PROMPT.Founder, film = MADE[k] || MADE.Founder;
+        var clips = [film[0], (MADE[picks[(round + 1) % picks.length]] || MADE.Creator)[0], "golf"].map(function (x) { return M + "selects/" + x + ".jpg"; });
+        AH.review(null); AH.working(false); AH.sending(false); AH.attach([]); AH.typeAsk("", true);
+        await w(500); AH.attach(clips); SFX.play("tick", { gain: .6 });
+        await w(700);
+        for (var i = 1; i <= text.length; i++) { AH.typeAsk(text.slice(0, i), true); if (i % 3 === 0) SFX.play("key", { gain: .5 }); await w(34 + Math.random() * 30); }
+        await w(500); AH.sending(true); SFX.play("send", { gain: .5 });
+        await w(320); AH.sending(false); AH.typeAsk("", false); AH.attach([]);
+        AH.working(true, "Studio · " + (film[1] === "Film" ? "Launch film" : film[1]), "Cutting 3 clips…");
+        await w(1500); AH.working(true, null, "Music, captions, your brand…");
+        await w(1500); AH.working(false);
+        AH.review({ img: M + "selects/" + film[0] + ".jpg", kicker: film[1], title: film[2] }); SFX.play("land", { gain: .5 });
+        await w(4200);
+      }
+    } catch (e) {}
+  })();
+}
 function claudeLoop() {
   var my = ++loopTok, sc = scenes.claude, comp = sheet.querySelector("[data-wl-comp]"), att = sheet.querySelector("[data-wl-att]"), plan = sheet.querySelector("[data-wl-plan]");
   var t = sheet.querySelector("[data-wl-type]"), fly = sheet.querySelector("[data-wl-fly]"), v01 = sheet.querySelector("[data-wl-v01]"), vid = sheet.querySelector("[data-wl-vid]");
@@ -4927,19 +4964,14 @@ function sizeStage() {
   if (!r.width && !(SK.mobile() || innerWidth <= 960)) return;
   var mob = SK.mobile() || innerWidth <= 960;
   if (mob) {
-    var sm = Math.max(.5, Math.min(.68, innerWidth * 1.5 / 980));
-    stage.style.setProperty("--stage-h", Math.round(Math.min(360, 540 * sm)) + "px");
+    var sm = Math.max(.38, Math.min(.5, innerWidth * 1.55 / 1440));
+    stage.style.setProperty("--stage-h", Math.round(Math.min(370, 760 * sm)) + "px");
     fit.style.setProperty("--s", sm.toFixed(3));
     return;
   }
-  var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22); /* desktop: as tall as the space allows, running off the right edge like the opening film */
+  var s = Math.min((r.height || 900) / 880, (r.width + 220) / 1440, 1.45); /* desktop: the app at its own 1440 x 900, as tall as the space allows, running off the right edge like the opening film */
   /* the Claude scene is taller than the rest (the composer, then the plan and the v01 film): it fits whole, inside the stage, clear of
      the captions and the bar, from the top down */
-  if (!mob && sheet.getAttribute("data-step") === "claude") {
-    var v = sheet.querySelector("[data-wl-v01]"), pl = sheet.querySelector("[data-wl-plan]");
-    var H = 186 + Math.max(v ? v.offsetHeight : 0, pl ? pl.offsetHeight : 0, 494), W = 940;
-    s = Math.min(s, (r.height - 24) / H, (r.width - 64) / W, 1.1);   /* and a margin on the right */
-  }
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
@@ -5069,7 +5101,7 @@ function setStep(n, quiet, fromHist) {
   go.disabled = q === "check" && !ready(n);
   scenes.home.classList.toggle("menu", q === "brands");
   next.disabled = !ready(n);
-  if (SCENE[q] === "claude") { drawClaude(); claudeLoop(); } else loopTok++;
+  if (q === "claude") askLoop(); else { loopTok++; AH.typeAsk("Post my newest videos on every channel this week"); AH.attach([]); AH.working(false); AH.review(null); AH.sending(false); }
   sizeStage(); setTimeout(sizeStage, 400);
   if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
@@ -5467,7 +5499,7 @@ function open(src) {
   }
   else {
     wall(ORDER[at]); want(ORDER[at + 1]); personal(); reveal(steps[at]);
-    if (SCENE[ORDER[at]] === "claude") claudeLoop();
+    if (ORDER[at] === "claude") askLoop();
     if (SCENE[ORDER[at]] === "you") pass1.start();
     drawHome();
     KAY.say(at === 0 ? ["intro"] : [LINE[ORDER[at]]]);
@@ -5641,7 +5673,7 @@ async function story(r, mode) {
   if (storyBusy) return; storyBusy = true;
   try {
     var url = link(r), W = 1080, Hh = 1920, cv = document.createElement("canvas"); cv.width = W; cv.height = Hh;
-    var g = cv.getContext("2d"), sky0 = await img("assets/wl/in-m.jpg"), ui = await img("assets/wl/story-ui.webp"), mark = await img("assets/studio-mark.png");
+    var g = cv.getContext("2d"), sky0 = await img("assets/wl/in-m.jpg"), ui = await img("assets/wl/story-ui.webp"), mark = await img("assets/email/studio-lockup.png");   /* the crisp white lockup, never the glass mark */
     try { await document.fonts.ready; } catch (e) {}
     var F = "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", MO = "'IBM Plex Mono', Menlo, monospace";
     /* the sky, and a blurred copy of it for the glass */
@@ -5653,7 +5685,7 @@ async function story(r, mode) {
     var gr = g.createLinearGradient(0, 0, 0, Hh); gr.addColorStop(0, "rgba(5,9,10,.34)"); gr.addColorStop(.38, "rgba(5,9,10,.06)"); gr.addColorStop(1, "rgba(5,9,10,.42)"); g.fillStyle = gr; g.fillRect(0, 0, W, Hh);
     /* the app: large, from the left margin, off the right edge */
     if (ui) {
-      var us = 1.32, uw = ui.width / 2 * us, uh = ui.height / 2 * us, ux = 84, uy = 1330;
+      var uw = 1560, uh = Math.round(uw * ui.height / ui.width), ux = 84, uy = 1196;   /* the real Home, large, off the right edge */
       var m = document.createElement("canvas"); m.width = W; m.height = Hh; var mg = m.getContext("2d");
       mg.drawImage(fr, 0, 0); mg.globalCompositeOperation = "destination-in"; mg.drawImage(ui, ux, uy, uw, uh);
       g.drawImage(m, 0, 0); g.drawImage(ui, ux, uy, uw, uh);
@@ -5661,12 +5693,12 @@ async function story(r, mode) {
     }
     /* the words */
     g.fillStyle = "#fff"; g.textAlign = "left"; g.textBaseline = "alphabetic";
-    if (mark) g.drawImage(mark, 84, 132, 60, 60);
-    g.font = "600 50px " + F; g.fillText("Studio", 160, 178);
+    if (mark) g.drawImage(mark, 84, 120, 236, Math.round(236 * mark.height / mark.width));
     g.font = "300 112px " + F; g.fillText("I'm on the list.", 80, 380);
-    g.fillStyle = "rgba(245,243,238,.82)"; g.font = "400 42px " + F; g.fillText("One prompt. A finished video.", 84, 456);
+    g.fillStyle = "rgba(245,243,238,.82)"; g.font = "400 42px " + F; g.fillText("One prompt. A finished video.", 84, 450);
+    g.fillStyle = "#fff"; g.font = "400 34px " + MO; g.fillText("askstudio.ai", 84, 510);
     /* the pass: glass over the sky, tilted a little */
-    var pw = 880, ph = Math.round(pw * .62), px = (W - pw) / 2, py = 560;
+    var pw = 880, ph = Math.round(pw * .62), px = (W - pw) / 2, py = 590;
     g.save(); g.translate(W / 2, py + ph / 2); g.rotate(-.045); g.translate(-W / 2, -(py + ph / 2));
     g.shadowColor = "rgba(0,0,0,.45)"; g.shadowBlur = 90; g.shadowOffsetY = 40; rr(g, px, py, pw, ph, 58); g.fillStyle = "rgba(14,19,28,.5)"; g.fill(); g.shadowColor = "transparent";
     g.save(); rr(g, px, py, pw, ph, 58); g.clip(); g.drawImage(fr, 0, 0);
@@ -5674,8 +5706,7 @@ async function story(r, mode) {
     g.fillStyle = "rgba(14,19,28,.6)"; g.fillRect(px, py, pw, ph); g.fillStyle = pg; g.fillRect(px, py, pw, ph); g.restore();
     rr(g, px + 1, py + 1, pw - 2, ph - 2, 57); g.strokeStyle = "rgba(255,255,255,.42)"; g.lineWidth = 2; g.stroke();
     var L = px + 62;
-    if (mark) g.drawImage(mark, L, py + 50, 40, 40);
-    g.fillStyle = "#fff"; g.font = "600 34px " + F; g.fillText("Studio", L + 52, py + 82);
+    if (mark) g.drawImage(mark, L, py + 50, 150, Math.round(150 * mark.height / mark.width));
     g.textAlign = "right"; g.fillStyle = "rgba(245,243,238,.78)"; g.font = "500 21px " + MO; g.fillText("EARLY ACCESS · INVITE", px + pw - 62, py + 80); g.textAlign = "left";
     g.fillStyle = "rgba(245,243,238,.55)"; g.font = "500 20px " + MO; g.fillText("INVITE FOR", L, py + 158);
     g.fillStyle = "#fff"; g.font = "300 84px " + F; g.fillText(((r.first || "") + " " + (r.last || "")).trim() || "You", L, py + 242);
@@ -5686,8 +5717,7 @@ async function story(r, mode) {
     g.fillStyle = "rgba(245,243,238,.86)"; for (var bx = L, k = 7; bx < px + pw - 62; k = (k * 16807) % 2147483647) { var bw = 2 + (k % 4) * 2.2; g.fillRect(bx, py + 452, bw, 46); bx += bw + 6; }
     g.restore();
     /* the address */
-    g.textAlign = "left"; g.fillStyle = "#fff"; g.font = "500 44px " + F; g.fillText("Get early access", 84, 1222);
-    g.fillStyle = "rgba(245,243,238,.82)"; g.font = "400 36px " + MO; g.fillText("askstudio.ai", 84, 1276);
+    g.textAlign = "left";
     var blob = await new Promise(function (res) { cv.toBlob(res, "image/png"); });
     if (!blob) return;
     var file = new File([blob], "studio-pass.png", { type: "image/png" });
