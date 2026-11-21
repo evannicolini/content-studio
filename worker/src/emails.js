@@ -24,7 +24,7 @@ function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, mi
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:6px auto 0;"><tr><td align="center" bgcolor="${C.sand}" style="border-radius:999px;background:${C.sand};">
 <a href="${esc(button.href)}" style="display:inline-block;padding:17px 34px;font-family:${FONT};font-size:16px;line-height:20px;font-weight:600;letter-spacing:-0.1px;color:${C.jet};text-decoration:none;border-radius:999px;">${esc(button.label)}&nbsp;&nbsp;&rarr;</a>
 </td></tr></table>
-<img src="${esc(site + "/assets/email/beam-glow.png")}" width="300" height="21" alt="" style="display:block;margin:0 auto;width:300px;height:21px;border:0;">` : "";
+<table role="presentation" width="300" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;width:300px;"><tr><td width="300" height="21" background="${esc(site + "/assets/email/beam-glow.png")}" style="width:300px;height:21px;line-height:21px;font-size:0;background-image:url('${esc(site + "/assets/email/beam-glow.png")}');background-repeat:no-repeat;background-size:300px 21px;background-position:center top;">&nbsp;</td></tr></table>` : "";
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="x-apple-disable-message-reformatting"><meta name="color-scheme" content="dark"><meta name="supported-color-schemes" content="dark"><title>${esc(title)}</title>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
