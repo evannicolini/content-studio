@@ -69,7 +69,7 @@
 .st-per button em { margin-left: 6px; font-style: normal; font: 500 10px/1 var(--mono); letter-spacing: .08em; color: #8fd6a3; }
 .st-per button[aria-checked="true"] em { color: #2c7a45; }
 .st-per i { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 4px; width: var(--w, 50%); border-radius: 999px; background: var(--pearl); transform: translateX(var(--x, 0)); transition: transform .45s var(--ease), width .45s var(--ease); }
-.st-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.st-plans { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .st-plan { position: relative; display: flex; flex-direction: column; gap: 4px; min-width: 0; padding: 16px 16px 14px; border-radius: 22px; text-align: left; color: #fff; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); transition: background-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease); }
 .st-plan:hover { background: rgba(var(--tint), .6); }
 .st-plan:active { transform: scale(.98); }
@@ -262,3 +262,48 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-pchip button { display: grid; place-items: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .12); color: #fff; cursor: pointer; }
 .st-pchip button:hover { background: rgba(255, 255, 255, .22); }
 .st-pchip svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* ---------- the real Studio Home on the stage (kit.js SK.appHome): 1440 x 900, scaled by sizeStage ---------- */
+.st .wl-fit { width: 1440px; height: 900px; margin-top: -450px; }
+.st .st-app { inset: 0; display: block; }
+.st .st-ah { position: absolute; inset: 0; }
+.st .st-app .wl-menu { left: 12px; top: 104px; z-index: 5; }
+
+/* ---------- the plans, big, after the website's pricing table: the price large, Kayla's "Why Pro?", the table's rows ---------- */
+.st .wl-in { transition: grid-template-columns .7s var(--ease), --wl-o0 .5s var(--ease), transform .7s var(--ease); }
+.st[data-step="plan"] .wl-in { grid-template-columns: minmax(0, calc(880px * var(--uz, 1))) minmax(0, 1fr); }
+.st[data-step="plan"] .wl-stage { transform: translateX(60px); }
+.st-plan { padding: 20px 20px 16px; border-radius: 26px; gap: 6px; cursor: pointer; }
+.st-plan .nm { font-size: 19px; }
+.st-plan .pr { margin-top: 10px; font: 300 52px/1 var(--sans); letter-spacing: -.045em; }
+.st-plan .pr small { font-size: 14px; }
+.st-plan .bl { font-size: 12.5px; }
+.st-why { display: flex; align-items: center; gap: 9px; height: 46px; margin-top: 12px; padding: 0 12px 0 6px; border-radius: 16px; cursor: pointer; background: rgba(255, 255, 255, .06); box-shadow: var(--v-rim); transition: background-color .2s; }
+.st-why:hover { background: rgba(255, 255, 255, .1); }
+.st-why img { width: 34px; height: 34px; border-radius: 11px; object-fit: cover; object-position: 50% 20%; flex: none; }
+.st-why .pl { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; flex: none; background: rgba(255, 255, 255, .14); box-shadow: var(--v-rim); }
+.st-why .pl svg { width: 11px; height: 11px; fill: #fff; stroke: none; opacity: 1; margin: 0; }
+.st-why .pl .pa, .st-why.on .pl svg:first-child { display: none; }
+.st-why.on .pl .pa { display: block; }
+.st-why em { font: 500 13px/1 var(--sans); font-style: normal; white-space: nowrap; }
+.st-why .wv { flex: 1; min-width: 0; display: flex; align-items: center; gap: 2px; height: 20px; }
+.st-why .wv i { flex: 1; min-width: 1px; border-radius: 1px; background: rgba(255, 255, 255, .3); transition: background-color .12s; }
+.st-why .wv i.on { background: #fff; }
+.st-feats { max-height: 186px; overflow-y: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent); mask-image: linear-gradient(180deg, #000 82%, transparent); }
+.st-feats::-webkit-scrollbar { display: none; }
+.st-plan li { font-size: 13px; }
+/* a chosen plan: the app's glass, brighter, with the beam (never flat pearl) */
+.st-plan.sel { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .07)), rgba(var(--tint), .44); box-shadow: var(--v-rim-on), 0 18px 40px -20px rgba(0, 0, 0, .5); }
+.st-plan.sel .pr small, .st-plan.sel .bl, .st-plan.sel li { color: var(--wl-l2); }
+.st-plan.sel ul { border-top-color: rgba(255, 255, 255, .12); }
+.st-plan.sel::after { background: var(--pearl) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%2305090A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
+.st-plan.sel .tag { color: var(--vampire); background: linear-gradient(120deg, var(--platinum), var(--celadon)); }
+/* big screens (5K and up): the words, the bar and You're in grow with the screen; the app is already scaled by the stage */
+.st .wl-in { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
+.st .wl-left, .st .wl-top, .st .wl-dock, .st .wl-done .wl-dl { zoom: var(--uz, 1); }
+.st .wl-dwrap { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
+.st .wl-dstage .pass { --w: min(calc(640px * var(--uz, 1)), 44vw); }
+@media (max-width: 960px) { .st[data-step="plan"] .wl-in { grid-template-columns: none; } .st[data-step="plan"] .wl-stage { transform: none; } .st-feats { max-height: none; } }
+.st[data-step="plan"] [data-st-line] { display: none; }   /* desktop: the heading and the cards already say it */
+@media (max-height: 940px) and (min-width: 961px) { .st-feats { max-height: 118px; } .st-plan .pr { font-size: 46px; } .st[data-step="plan"] .wl-qh { font-size: clamp(38px, 3.6vw, 56px); } }
+@media (max-width: 960px) { .st[data-step="plan"] [data-st-line] { display: block; } }

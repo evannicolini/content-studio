@@ -91,9 +91,10 @@ function startsShort() { return starts().toLocaleDateString("en-US", { month: "s
 function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
 var PLANS = [
-  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand", 1], ["Full edits with takes and reviews", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Run any edit as a Meta ad", 0]] },
-  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Creator", 1]] },
-  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Pro", 1]] }
+  /* the rows of the website's pricing table (160-pricing), so the two always agree */
+  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
 ];
 function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
 function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
@@ -112,28 +113,14 @@ function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" 
 function brandList(n) { var f = first(); return BRANDS.slice(0, Math.min(5, n)).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); }); }
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
+var AH = SK.appHome($("[data-st-ah]"), {});
 function drawHome(typing) {
-  var f = first(), pl = planOf(me.plan), signed = !!(me.session || me.paid || me.invite && me.invite.done);
-  $("[data-st-hi-home]").innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + (typing ? "<i></i>" : "");
-  $("[data-st-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
-  $("[data-st-state]").textContent = signed ? "Signed in · " + (me.email || "you") : me.email ? "Signing in · " + me.email : "Not signed in";
-  var n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
-  /* the plan shows as chips on Home (its brands, then "+ more" and the seats), never as an open menu over the card */
-  var shown = brandList(n).slice(0, n > 3 ? 2 : 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; });
-  if (n > 3) shown.push('<span class="wl-chip more">+ more</span>');
-  if (ORDER[at] === "plan" || ORDER[at] === "pay") shown.push('<span class="wl-chip seats"><span class="av">' + new Array(Math.min(3, pl.people) + 1).join("<i></i>") + "</span>" + pl.people + (pl.people === 1 ? " person" : " people") + "</span>");
-  $("[data-st-chips]").innerHTML = shown.join("");
-  $("[data-st-av]").textContent = (f || "Y").charAt(0).toUpperCase();
-  $("[data-st-mename]").textContent = f ? (me.first || val("first")) : "You";
-  $("[data-st-meplan]").textContent = me.invite ? "Pro · on " + ((me.invite.from || "a friend").split(/\s+/)[0]) : signed ? pl.name + " · 14-day trial" : me.email ? "Checking your email…" : "Not signed in yet";
-  $("[data-st-me]").classList.toggle("in", signed);
-  $("[data-st-for]").textContent = signed ? "Made for " + (f || "you") : "Ready when you are";
-  var made = $("[data-st-made]");
-  if (!made.children.length || made._signed !== signed) {
-    made._signed = signed;
-    made.innerHTML = signed ? MADE.map(function (m, i) { return '<span class="wl-mc wl-in-a" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(m[2]) + "</b></span></span>"; }).join("")
-      : '<span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span>';
-  }
+  var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
+  AH.name(f);
+  var bl = brandList(Math.max(n, 3)).slice(0, n > 3 ? 3 : Math.max(n, 3)).map(function (b, i) { return { n: b.n, m: b.m || "Y", bg: b.bg, ink: b.ink }; });
+  if (n > 3) bl.push({ n: "+ " + (pl.brands > 5 ? "every brand" : (pl.brands - 3) + " more"), m: "+", bg: "rgba(255,255,255,.12)" });
+  AH.brands(bl);
+  AH.allBrands(n === 1 ? (f ? f + "'s brand" : "Your brand") : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands);
 }
 function drawPlanStage() {
   var pl = planOf(me.plan), bl = brandList(pl.brands), ul = $("[data-st-bl]");
@@ -143,20 +130,25 @@ function drawPlanStage() {
   $("[data-st-menuh]").textContent = "Studio " + pl.name + " · " + (pl.brands > 5 ? "every brand" : pl.brands + (pl.brands === 1 ? " brand" : " brands"));
   var av = ""; for (var i = 0; i < Math.min(3, pl.people); i++) av += "<i></i>"; if (pl.people > 3) av += '<i class="more">+' + (pl.people - 3) + "</i>";
   $("[data-st-seats]").innerHTML = "<span>" + av + "</span>" + pl.people + (pl.people === 1 ? " person" : " people");
-  $("[data-st-allb]").textContent = pl.brands === 1 ? bl[0].n : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands;
   drawHome();
 }
 function sizeStage() {
+  var uz = innerWidth >= 1800 && innerHeight >= 1000 ? Math.min(1.6, innerWidth / 1600, innerHeight / 920) : 1;
+  sheet.style.setProperty("--uz", uz.toFixed(3));
   var r = stage.getBoundingClientRect(); if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
-  var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22);
+  /* the app at its own 1440 x 900: as tall as the space allows (up to 5K), running off the right edge like the opening film */
+  var s = mob ? Math.min(r.width / 1440, 220 / 900) : Math.min((r.height || 900) / 860, (r.width + 300) / 1440, 1.75);
+  if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);   /* the plans take the room; the app stays tall and runs off the edge */
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
 
 /* ---------- a wallpaper per step, decoded ahead and crossfaded (as in early access) ---------- */
-var WALL = { "in": PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
-[["code", "you"], ["plan", "brands"], ["pay", "claude"], ["done", "in"]].forEach(function (k) { WALL[k[0]] = "assets/wl/" + k[1] + (PHONE ? "-m" : "") + ".jpg"; });
+/* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
+   Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
+var WALL = {};
+["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = "assets/su/" + k + (PHONE ? "-m" : "") + ".jpg"; });
 var wallCache = {}, wallTok = 0, wallNow = "";
 function want(k) {
   var u = WALL[k]; if (!u) return Promise.resolve("");
@@ -471,17 +463,46 @@ var plansEl = $("[data-st-plans]"), perEl = $("[data-st-per]");
 var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>', DASH = '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>';
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
-    return '<button type="button" class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" aria-pressed="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
+    return '<div class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" role="radio" tabindex="0" aria-checked="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
       '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
-      "<ul>" + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></button>";
+      '<span class="st-why" data-why="' + p.id + '" role="button" tabindex="0" aria-label="Why ' + esc(p.name) + '? Kayla explains"><img src="assets/kayla.jpg" alt=""><span class="pl"><svg viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><em>Why ' + esc(p.name) + '?</em><span class="wv" data-wv></span></span>' +
+      '<ul class="st-feats">' + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></div>";
   }).join("");
+  plansEl.querySelectorAll(".st-why").forEach(function (w) {
+    var go = function (e) { e.preventDefault(); e.stopPropagation(); why(w); };
+    w.addEventListener("click", go); w.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") go(e); });
+    wave(w);
+  });
   plansEl.querySelectorAll(".st-plan").forEach(function (b) {
+    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); b.click(); } });
     b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); me.notrial = null; drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); pwHead(); });
   });
   line();
 }
+/* "Why Creator / Pro / Unlimited?": Kayla's clips from the pricing section (assets/audio/kayla-why-*.mp3), one at a time, the bars filling */
+var whyA = new Audio(), whyOn = null, WHYP = {};
+whyA.preload = "none";
+function wave(w) {
+  var id = w.getAttribute("data-why"), box = w.querySelector("[data-wv]");
+  var draw = function (p) { var o = ""; for (var i = 0; i < 28; i++) { var v = p.length ? p[Math.floor(i * p.length / 28)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); o += '<i style="height:' + Math.max(14, Math.round(v * 100)) + '%"></i>'; } box.innerHTML = o; };
+  if (WHYP[id]) return draw(WHYP[id]);
+  draw([]); fetch("assets/audio/kayla-why-" + id + ".json").then(function (r) { return r.json(); }).then(function (j) { WHYP[id] = j.peaks || []; draw(WHYP[id]); }).catch(function () {});
+}
+function why(w) {
+  var id = w.getAttribute("data-why");
+  if (whyOn === w && !whyA.paused) { whyA.pause(); return; }
+  plansEl.querySelectorAll(".st-why.on").forEach(function (x) { x.classList.remove("on"); });
+  whyOn = w; w.classList.add("on");
+  if (typeof KAY !== "undefined" && KAY.stop) KAY.stop();
+  whyA.src = "assets/audio/kayla-why-" + id + ".mp3"; whyA.currentTime = 0;
+  var p = whyA.play(); if (p && p.catch) p.catch(function () { w.classList.remove("on"); });
+}
+whyA.addEventListener("timeupdate", function () { if (!whyOn) return; var f = whyA.duration ? whyA.currentTime / whyA.duration : 0, b = whyOn.querySelectorAll("[data-wv] i"); for (var i = 0; i < b.length; i++) b[i].classList.toggle("on", i / b.length < f); });
+whyA.addEventListener("play", function () { if (whyOn) whyOn.classList.add("on"); if (SFX.bed && SFX.bed.duck) SFX.bed.duck(true); });
+whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("on"); if (SFX.bed && SFX.bed.duck) SFX.bed.duck(false); });
+whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."

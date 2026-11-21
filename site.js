@@ -298,6 +298,90 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     }
   };
 
+  /* ---------- the real Studio Home, drawn at the app's own size (1440 x 900) for the sign-ups' stage (900-early, 910-start).
+     Taken from the app (Studio_App web/vista home.js, home.css, shell.css): the full nav with its counts, the greeting, Ask Studio
+     (Studio x Claude, mic, send), the brand chips, Set up your Studio, To review, Post next, Crushing it and Going out. Real stills
+     from the selects. SK.appHome(host, { name, brand }) -> { name(n), brands(list), typeAsk(text) }. CSS: .ah in 900-early. ---------- */
+  SK.appHome = function (host, o) {
+    o = o || {};
+    var M = "assets/media/selects/", esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var I = {
+      home: '<path d="M2.5 7.5 8 3l5.5 4.5V13H2.5z"/>', aes: '<circle cx="8" cy="8" r="5.5"/><circle cx="6" cy="6.5" r=".9"/><circle cx="9.8" cy="6" r=".9"/><circle cx="10.5" cy="9.5" r=".9"/>',
+      edits: '<rect x="2" y="3.5" width="12" height="9" rx="2"/><path d="M7 6.3v3.4L9.8 8z"/>', con: '<path d="M8 2a4.2 4.2 0 0 0-2.4 7.7V11h4.8V9.7A4.2 4.2 0 0 0 8 2zM6.2 13.5h3.6"/>',
+      lib: '<path d="M8 2.2l1.7 3.6 3.9.5-2.9 2.7.7 3.9L8 11l-3.4 1.9.7-3.9-2.9-2.7 3.9-.5z"/>', soc: '<rect x="2" y="2" width="12" height="12" rx="3.5"/><circle cx="8" cy="8" r="2.8"/>',
+      ads: '<path d="M5 5.5c-1.6 0-2.6 1.3-2.6 2.6S3.4 10.5 5 10.5c2.2 0 3.6-5 6-5 1.6 0 2.6 1.2 2.6 2.5S12.6 10.5 11 10.5C8.6 10.5 7.2 5.5 5 5.5z"/>',
+      lab: '<path d="M6 2.5h4M6.8 2.5v4L3.2 12.6a1 1 0 0 0 .9 1.4h7.8a1 1 0 0 0 .9-1.4L9.2 6.5v-4"/>', cre: '<circle cx="6" cy="5.5" r="2.3"/><path d="M2 13.2c.5-2.3 2.1-3.6 4-3.6s3.5 1.3 4 3.6M10.6 3.4a2.2 2.2 0 0 1 0 4.3M12 9.8c1 .5 1.7 1.6 2 3.2"/>',
+      kit: '<rect x="2.5" y="2.5" width="11" height="11" rx="3"/><path d="M2.5 9.5 6 6.5l3 2.5 1.8-1.4 2.7 2.4"/>', ui: '<rect x="4.5" y="1.8" width="7" height="12.4" rx="2"/><path d="M7 12h2"/>',
+      ref: '<path d="M4 2.5h8v11l-4-2.8-4 2.8z"/>', mus: '<path d="M6 12.2V3.6l7-1.4v8.6M6 12.2a1.7 1.7 0 1 1-3.4 0 1.7 1.7 0 0 1 3.4 0zM13 10.8a1.7 1.7 0 1 1-3.4 0 1.7 1.7 0 0 1 3.4 0z"/>',
+      plus: '<path d="M8 3v10M3 8h10"/>', plug: '<path d="M5.5 2v3.5M10.5 2v3.5M3.5 5.5h9V8a4.5 4.5 0 0 1-9 0zM8 12.5V14"/>', set: '<circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1"/>',
+      dl: '<path d="M8 3v7M4.8 7 8 10.2 11.2 7M3.5 13h9"/>', mic: '<rect x="6" y="2" width="4" height="7.5" rx="2"/><path d="M3.8 7.8a4.2 4.2 0 0 0 8.4 0M8 12v2"/>', up: '<path d="M8 13V3M3.6 7.4 8 3l4.4 4.4"/>',
+      chk: '<path d="M3.5 8.4l2.8 2.8 6.2-6.4"/>', l: '<path d="M10 3.5 5.5 8l4.5 4.5"/>', r: '<path d="M6 3.5 10.5 8 6 12.5"/>', cal: '<rect x="2.5" y="3.5" width="11" height="10" rx="2.5"/><path d="M2.5 6.8h11M5.5 2v3M10.5 2v3"/>',
+      eye: '<path d="M1.8 8S4 3.8 8 3.8 14.2 8 14.2 8 12 12.2 8 12.2 1.8 8 1.8 8z"/><circle cx="8" cy="8" r="2"/>', full: '<path d="M2.5 6V2.5H6M10 2.5h3.5V6M13.5 10v3.5H10M6 13.5H2.5V10"/>', car: '<path d="M4.5 6.5 8 10l3.5-3.5"/>',
+      pin: '<path d="M9.5 2.5l4 4-2 .8-2.6 2.6.2 2.6-1 1-2.3-2.3L3 14l-.5-.5 2.8-2.8L3 8.4l1-1 2.6.2 2.6-2.6z"/>', grid: '<path d="M2.5 2.5h4.5v4.5H2.5zM9 2.5h4.5v4.5H9zM2.5 9h4.5v4.5H2.5zM9 9h4.5v4.5H9z"/>'
+    };
+    var sv = function (k) { return '<svg viewBox="0 0 16 16" aria-hidden="true">' + I[k] + "</svg>"; };
+    var ni = function (k, t, n, on) { return '<p class="ah-ni' + (on ? " on" : "") + '">' + sv(k) + "<span>" + t + "</span>" + (n != null ? "<em>" + n + "</em>" : "") + "</p>"; };
+    var MARK = '<svg class="ah-mk" viewBox="36 36 440 440" aria-hidden="true"><use href="#studio-mark"/></svg>';
+    var CLA = '<svg class="ah-cl" aria-hidden="true"><use href="#claude"/></svg>';
+    var IG = '<i class="ah-p ig"></i>', TT = '<i class="ah-p tt"></i>', YT = '<i class="ah-p yt"></i>', LI = '<i class="ah-p li"></i>';
+    var now = new Date(), DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+    var hour = now.getHours(), greet = hour < 5 ? "Good evening" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    var date = now.toLocaleDateString("en-US", { weekday: "long" }) + " · " + now.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+    var rv = [["dinner-toast", "Review v02"], ["coffee-friend-arrives", "Review v04"], ["cofounder-whiteboard", "Review v03"], ["surfing", "Review v01"]];
+    var pk = ["run-club", "coastal-highway", "investor-intro", "tennis-forehand", "yacht", "golf", "house-party", "beach-volleyball"];
+    var cr = [["court-dap", "202× avg", "1,210 views", YT + IG], ["get-together", "142× avg", "75,755 views", IG + TT], ["mountain-biking", "33× avg", "17,530 views", IG]];
+    var cal = "", sched = { 2: "private-jet", 5: "real-connections", 9: "race-track" };
+    for (var d = 0; d < 14; d++) {
+      var dt = new Date(now.getTime() + d * 864e5), s = sched[d];
+      cal += '<div class="ah-dc' + (d === 0 ? " today" : "") + '"><p class="ah-dlb"><span>' + (d === 0 ? "Today" : DAYS[dt.getDay()]) + "</span><span>" + dt.getDate() + "</span></p>" +
+        (s ? '<div class="ah-dps"><img src="' + M + s + '.jpg" alt=""><i class="ah-dot sc"></i></div><p class="ah-dg on">Scheduled</p>' : '<p class="ah-dg">Gap</p><p class="ah-fill">+ Fill</p>') + "</div>";
+    }
+    host.innerHTML =
+      '<div class="ah">' +
+      '<aside class="ah-sb">' +
+        '<p class="ah-sbh">' + MARK + "<span>Studio</span>" + sv("pin") + "</p>" +
+        '<p class="ah-allb">' + sv("grid") + '<span data-ah-allb>All brands</span>' + sv("car") + "</p>" +
+        ni("home", "Home", null, true) +
+        '<p class="ah-ng">Create</p>' + ni("aes", "Aesthetic", 482) + ni("edits", "Full edits", 180) + ni("con", "Concepts", 79) + ni("lib", "AI Library", 460) +
+        '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 18) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 23) + ni("cre", "Creators", 441) +
+        '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
+        '<div class="ah-sbf">' + ni("plus", "Build a tab") +
+        '<p class="ah-ask"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
+        ni("plug", "Integrations") + '<p class="ah-upd">' + sv("dl") + "<span>Update</span><em>0.1.85</em></p>" + ni("set", "Settings") + "</div>" +
+      "</aside>" +
+      '<div class="ah-main">' +
+        '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
+        '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
+          '<div class="ah-comp"><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
+          '<div class="ah-chips" data-ah-chips></div></div>' +
+        '<div class="ah-band">' +
+          '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">11 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
+          '<div class="ah-row">' +
+            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn">20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip">' +
+              rv.map(function (x) { return '<span class="ah-vt"><img src="' + M + x[0] + '.jpg" alt=""><span class="ah-st"><i class="ah-dot"></i>' + x[1] + "</span></span>"; }).join("") + "</div></section>" +
+            '<section class="ah-w"><header class="ah-wh"><b>Post next</b><span class="ah-ws">Studio\'s picks</span><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-strip" data-ah-pk>' +
+              pk.map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; }).join("") + "</div></section>" +
+            '<section class="ah-w"><header class="ah-wh"><b>Crushing it</b><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-crl">' +
+              cr.map(function (x) { return '<div class="ah-crr"><img src="' + M + x[0] + '.jpg" alt=""><div class="ah-crb"><p class="ah-crx">' + x[3] + "<span>" + x[1] + '</span></p><p class="ah-crn">' + x[2] + '</p></div><b class="ah-ad"><i class="ah-p mt"></i>Create</b></div>'; }).join("") + "</div></section>" +
+          "</div>" +
+          '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
+        "</div>" +
+      "</div></div>";
+    var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]");
+    var ctl = {
+      name: function (n) { hello.textContent = greet + (n ? ", " + n : ""); },
+      brands: function (list) {
+        chips.innerHTML = (list || []).map(function (b) { return '<span class="ah-chip"><span class="ah-bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>" + esc(b.n) + "</span>"; }).join("");
+      },
+      allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
+      typeAsk: function (t) { ask.textContent = t; }
+    };
+    ctl.name(o.name || "");
+    ctl.brands(o.brands || [{ n: "Your brand", m: "Y", bg: "linear-gradient(140deg, #DFEAE8, #536878)", ink: "#05090A" }, { n: "Halden", m: "H", bg: "linear-gradient(140deg, #536878, #0E191E)" }, { n: "Northwind", m: "N", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)" }]);
+    return ctl;
+  };
+
+
   /* ---------- film modal ---------- */
   var fm;
   SK.film = function (x) {
@@ -5719,9 +5803,10 @@ function startsShort() { return starts().toLocaleDateString("en-US", { month: "s
 function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
 var PLANS = [
-  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand", 1], ["Full edits with takes and reviews", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Run any edit as a Meta ad", 0]] },
-  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Creator", 1]] },
-  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Pro", 1]] }
+  /* the rows of the website's pricing table (160-pricing), so the two always agree */
+  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
 ];
 function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
 function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
@@ -5740,28 +5825,14 @@ function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" 
 function brandList(n) { var f = first(); return BRANDS.slice(0, Math.min(5, n)).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); }); }
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
+var AH = SK.appHome($("[data-st-ah]"), {});
 function drawHome(typing) {
-  var f = first(), pl = planOf(me.plan), signed = !!(me.session || me.paid || me.invite && me.invite.done);
-  $("[data-st-hi-home]").innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + (typing ? "<i></i>" : "");
-  $("[data-st-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
-  $("[data-st-state]").textContent = signed ? "Signed in · " + (me.email || "you") : me.email ? "Signing in · " + me.email : "Not signed in";
-  var n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
-  /* the plan shows as chips on Home (its brands, then "+ more" and the seats), never as an open menu over the card */
-  var shown = brandList(n).slice(0, n > 3 ? 2 : 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; });
-  if (n > 3) shown.push('<span class="wl-chip more">+ more</span>');
-  if (ORDER[at] === "plan" || ORDER[at] === "pay") shown.push('<span class="wl-chip seats"><span class="av">' + new Array(Math.min(3, pl.people) + 1).join("<i></i>") + "</span>" + pl.people + (pl.people === 1 ? " person" : " people") + "</span>");
-  $("[data-st-chips]").innerHTML = shown.join("");
-  $("[data-st-av]").textContent = (f || "Y").charAt(0).toUpperCase();
-  $("[data-st-mename]").textContent = f ? (me.first || val("first")) : "You";
-  $("[data-st-meplan]").textContent = me.invite ? "Pro · on " + ((me.invite.from || "a friend").split(/\s+/)[0]) : signed ? pl.name + " · 14-day trial" : me.email ? "Checking your email…" : "Not signed in yet";
-  $("[data-st-me]").classList.toggle("in", signed);
-  $("[data-st-for]").textContent = signed ? "Made for " + (f || "you") : "Ready when you are";
-  var made = $("[data-st-made]");
-  if (!made.children.length || made._signed !== signed) {
-    made._signed = signed;
-    made.innerHTML = signed ? MADE.map(function (m, i) { return '<span class="wl-mc wl-in-a" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(m[2]) + "</b></span></span>"; }).join("")
-      : '<span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span>';
-  }
+  var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
+  AH.name(f);
+  var bl = brandList(Math.max(n, 3)).slice(0, n > 3 ? 3 : Math.max(n, 3)).map(function (b, i) { return { n: b.n, m: b.m || "Y", bg: b.bg, ink: b.ink }; });
+  if (n > 3) bl.push({ n: "+ " + (pl.brands > 5 ? "every brand" : (pl.brands - 3) + " more"), m: "+", bg: "rgba(255,255,255,.12)" });
+  AH.brands(bl);
+  AH.allBrands(n === 1 ? (f ? f + "'s brand" : "Your brand") : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands);
 }
 function drawPlanStage() {
   var pl = planOf(me.plan), bl = brandList(pl.brands), ul = $("[data-st-bl]");
@@ -5771,20 +5842,25 @@ function drawPlanStage() {
   $("[data-st-menuh]").textContent = "Studio " + pl.name + " · " + (pl.brands > 5 ? "every brand" : pl.brands + (pl.brands === 1 ? " brand" : " brands"));
   var av = ""; for (var i = 0; i < Math.min(3, pl.people); i++) av += "<i></i>"; if (pl.people > 3) av += '<i class="more">+' + (pl.people - 3) + "</i>";
   $("[data-st-seats]").innerHTML = "<span>" + av + "</span>" + pl.people + (pl.people === 1 ? " person" : " people");
-  $("[data-st-allb]").textContent = pl.brands === 1 ? bl[0].n : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands;
   drawHome();
 }
 function sizeStage() {
+  var uz = innerWidth >= 1800 && innerHeight >= 1000 ? Math.min(1.6, innerWidth / 1600, innerHeight / 920) : 1;
+  sheet.style.setProperty("--uz", uz.toFixed(3));
   var r = stage.getBoundingClientRect(); if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
-  var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22);
+  /* the app at its own 1440 x 900: as tall as the space allows (up to 5K), running off the right edge like the opening film */
+  var s = mob ? Math.min(r.width / 1440, 220 / 900) : Math.min((r.height || 900) / 860, (r.width + 300) / 1440, 1.75);
+  if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);   /* the plans take the room; the app stays tall and runs off the edge */
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
 
 /* ---------- a wallpaper per step, decoded ahead and crossfaded (as in early access) ---------- */
-var WALL = { "in": PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
-[["code", "you"], ["plan", "brands"], ["pay", "claude"], ["done", "in"]].forEach(function (k) { WALL[k[0]] = "assets/wl/" + k[1] + (PHONE ? "-m" : "") + ".jpg"; });
+/* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
+   Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
+var WALL = {};
+["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = "assets/su/" + k + (PHONE ? "-m" : "") + ".jpg"; });
 var wallCache = {}, wallTok = 0, wallNow = "";
 function want(k) {
   var u = WALL[k]; if (!u) return Promise.resolve("");
@@ -6099,17 +6175,46 @@ var plansEl = $("[data-st-plans]"), perEl = $("[data-st-per]");
 var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>', DASH = '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>';
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
-    return '<button type="button" class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" aria-pressed="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
+    return '<div class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" role="radio" tabindex="0" aria-checked="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
       '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
-      "<ul>" + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></button>";
+      '<span class="st-why" data-why="' + p.id + '" role="button" tabindex="0" aria-label="Why ' + esc(p.name) + '? Kayla explains"><img src="assets/kayla.jpg" alt=""><span class="pl"><svg viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><em>Why ' + esc(p.name) + '?</em><span class="wv" data-wv></span></span>' +
+      '<ul class="st-feats">' + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></div>";
   }).join("");
+  plansEl.querySelectorAll(".st-why").forEach(function (w) {
+    var go = function (e) { e.preventDefault(); e.stopPropagation(); why(w); };
+    w.addEventListener("click", go); w.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") go(e); });
+    wave(w);
+  });
   plansEl.querySelectorAll(".st-plan").forEach(function (b) {
+    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); b.click(); } });
     b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); me.notrial = null; drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); pwHead(); });
   });
   line();
 }
+/* "Why Creator / Pro / Unlimited?": Kayla's clips from the pricing section (assets/audio/kayla-why-*.mp3), one at a time, the bars filling */
+var whyA = new Audio(), whyOn = null, WHYP = {};
+whyA.preload = "none";
+function wave(w) {
+  var id = w.getAttribute("data-why"), box = w.querySelector("[data-wv]");
+  var draw = function (p) { var o = ""; for (var i = 0; i < 28; i++) { var v = p.length ? p[Math.floor(i * p.length / 28)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); o += '<i style="height:' + Math.max(14, Math.round(v * 100)) + '%"></i>'; } box.innerHTML = o; };
+  if (WHYP[id]) return draw(WHYP[id]);
+  draw([]); fetch("assets/audio/kayla-why-" + id + ".json").then(function (r) { return r.json(); }).then(function (j) { WHYP[id] = j.peaks || []; draw(WHYP[id]); }).catch(function () {});
+}
+function why(w) {
+  var id = w.getAttribute("data-why");
+  if (whyOn === w && !whyA.paused) { whyA.pause(); return; }
+  plansEl.querySelectorAll(".st-why.on").forEach(function (x) { x.classList.remove("on"); });
+  whyOn = w; w.classList.add("on");
+  if (typeof KAY !== "undefined" && KAY.stop) KAY.stop();
+  whyA.src = "assets/audio/kayla-why-" + id + ".mp3"; whyA.currentTime = 0;
+  var p = whyA.play(); if (p && p.catch) p.catch(function () { w.classList.remove("on"); });
+}
+whyA.addEventListener("timeupdate", function () { if (!whyOn) return; var f = whyA.duration ? whyA.currentTime / whyA.duration : 0, b = whyOn.querySelectorAll("[data-wv] i"); for (var i = 0; i < b.length; i++) b[i].classList.toggle("on", i / b.length < f); });
+whyA.addEventListener("play", function () { if (whyOn) whyOn.classList.add("on"); if (SFX.bed && SFX.bed.duck) SFX.bed.duck(true); });
+whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("on"); if (SFX.bed && SFX.bed.duck) SFX.bed.duck(false); });
+whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
