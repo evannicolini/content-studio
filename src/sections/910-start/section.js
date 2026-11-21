@@ -58,7 +58,7 @@ sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.cl
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
-var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null };
+var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null, promo: null };
 var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
 /* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
@@ -84,6 +84,12 @@ function err(msg) { var e = stepEl(ORDER[at]).querySelector(".wl-err"); if (e) e
 /* plans: the site's own prices (pricing.py checks them against the app's pricing.json), people from the contract */
 var P = window.SK_PRICES || {}, NOW = new Date(), RENEW = new Date(NOW.getTime() + 14 * 864e5);
 var renew = RENEW.toLocaleDateString("en-US", { month: "short", day: "numeric" }), renewLong = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+/* a friends' code makes the first month free: the plan starts a calendar month from today instead of in 14 days */
+var MONTH = (function () { var d = new Date(NOW); d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); return d; })();
+function starts() { return me.promo ? MONTH : RENEW; }
+function startsShort() { return starts().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
+function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
 var PLANS = [
   { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand", 1], ["Full edits with takes and reviews", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Run any edit as a Meta ad", 0]] },
   { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Creator", 1]] },
@@ -239,7 +245,7 @@ function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
     : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
-    : { kind: pl.name + " · Trial", name: nm, mail: me.email || "", no: pl.name, trial: "14 days · $1", k3: "Renews", v3: renew, sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
+    : { kind: pl.name + " · Trial", name: nm, mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
 
 /* ---------- the word reveal and the self-typing examples (as in early access) ---------- */
@@ -478,11 +484,13 @@ function drawPlans() {
 }
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
-  $("[data-st-line]").innerHTML = "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
+  $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
+    : "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
 }
 perEl.querySelectorAll("button").forEach(function (b) {
   b.addEventListener("click", function () {
     me.period = b.getAttribute("data-per");
+    if (me.period === "year" && me.promo) { setPromo(null); toast("Codes work on monthly plans. Your code was taken off."); }
     perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x === b ? "true" : "false"); });
     slidePer(); drawPlans(); pwHead();
   });
@@ -519,6 +527,7 @@ var APPEARANCE = {
 };
 /* the checkout words (Studio legal, consent copy b, checkout-v1): the real price and the real renewal date, never "in 14 days" */
 var RENEW_FULL = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }), CONSENT = "checkout-v1";
+var MONTH_FULL = MONTH.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 function seats(pl) { return pl.people + (pl.people === 1 ? " seat · up to 2 Macs" : " seats · up to 2 Macs each"); }
 function priceWord(pl) { return me.period === "year" ? then(pl.id, "year").replace("/yr", "/year") : price(pl.id, "month") + "/month"; }
 var agree = form.elements.renew_ok, agreeL = $("[data-st-agree]");
@@ -526,21 +535,44 @@ function payStep() {
   var pl = planOf(me.plan), pw = priceWord(pl), per = me.period === "year" ? "year" : "month", bare = pw.replace(/\/(month|year)$/, "");
   $("[data-st-sname]").textContent = "Studio " + pl.name;
   $("[data-st-seats2]").textContent = seats(pl);
-  $("[data-st-sprice]").textContent = pw;
-  $("[data-st-sdate]").textContent = RENEW_FULL;
+   /* the price and date live in the today row, written below */
   $("[data-st-then]").textContent = "Then " + bare + " a " + per + ".";
-  $("[data-st-agree-t]").textContent = "I agree that after my 14-day trial for $1, Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + RENEW_FULL + " and every " + per + " after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + RENEW_FULL + ", I won't be charged " + bare + ".";
-  $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>. The $1 trial fee isn't refundable. By paying, you agree to the <a href=\"terms/\" target=\"_blank\" rel=\"noopener\">Terms</a> and <a href=\"privacy/\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>.";
-  $("[data-st-go-t]").textContent = PAYWALL ? "Start for $1" : "Start 14 days for $1";
+  var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
+  if (me.promo) {   /* the friends' code (checkout-promo-v1): $0 today, the first charge a month from today */
+    $("[data-st-payh]").textContent = "Your first month is free.";
+    $("[data-st-today]").innerHTML = "<b>$0 today</b> for your first month. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(MONTH_FULL) + "</b>, until you cancel.";
+    $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + MONTH_FULL + " and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + MONTH_FULL + ", I won't be charged.";
+    $("[data-st-under]").innerHTML = "You pay $0 today. From " + esc(MONTH_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>." + legal;
+    $("[data-st-go-t]").textContent = PAYWALL ? "Start for $0" : "Start my free month";
+  } else {
+    $("[data-st-payh]").textContent = "14 days for $1.";
+    $("[data-st-today]").innerHTML = "<b>$1 today</b> for a 14-day trial. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(RENEW_FULL) + "</b>, until you cancel.";
+    $("[data-st-agree-t]").textContent = "I agree that after my 14-day trial for $1, Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + RENEW_FULL + " and every " + per + " after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + RENEW_FULL + ", I won't be charged " + bare + ".";
+    $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>. The $1 trial fee isn't refundable." + legal;
+    $("[data-st-go-t]").textContent = PAYWALL ? "Start for $1" : "Start 14 days for $1";
+  }
+  drawPromo();
   agree.checked = false; go.classList.add("off");   /* the terms just changed (or are new): ask again */
   reveal(stepEl("pay"));
-  if (peMounted) return;
+  mountCard();
+}
+/* the card form: a $1 subscription, or with a code a setup (the card is kept, nothing is charged today). Stripe can't change that
+   mode on a live form, so a change of mode draws a new one. */
+var peMode = "", pe = null;
+function mountCard() {
+  var mode = me.promo ? "setup" : "subscription";
+  if (peMounted && peMode === mode) return;
   var pk = MOCK ? DEMO_PK : CFG.stripe;
   if (!pk) { $("[data-st-pe]").innerHTML = '<p class="wl-fine">The card form opens once the payment key is set.</p>'; return; }
+  if (pe) { try { pe.destroy(); } catch (x) {} pe = null; peMounted = false; elements = null; $("[data-st-pe]").innerHTML = '<div class="st-load"><i></i><i></i><i></i></div>'; }
+  peMode = mode;
   loadStripe().then(function () {
+    if (peMode !== mode || peMounted) return;
     stripe = stripe || Stripe(pk);
-    elements = stripe.elements({ mode: "subscription", amount: 100, currency: "usd", paymentMethodTypes: ["card"], appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] });
-    var pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto" } });
+    var opts = { mode: mode, currency: "usd", paymentMethodTypes: ["card"], appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] };
+    if (mode === "subscription") opts.amount = 100;
+    elements = stripe.elements(opts);
+    pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto" } });
     var host = $("[data-st-pe]");
     pe.on("ready", function () { var l = host.querySelector(".st-load"); if (l) l.remove(); });
     pe.on("focus", function () { host.closest(".st-card").classList.add("focus"); }); pe.on("blur", function () { host.closest(".st-card").classList.remove("focus"); });
@@ -572,6 +604,33 @@ function paid(c) {
   showDone();
 }
 $("[data-st-change]").addEventListener("click", function () { setStep(ORDER.indexOf("plan")); });
+
+/* ---------- a friends' code: "Have a code?" opens one field; an accepted code becomes a chip with ✕ ---------- */
+var pfield = $("[data-st-pfield]"), pin = form.elements.promo, applyB = $("[data-st-apply]");
+function drawPromo() {
+  $("[data-st-havecode]").hidden = !!me.promo || !pfield.hidden;
+  $("[data-st-pchip]").hidden = !me.promo;
+  if (me.promo) { pfield.hidden = true; $("[data-st-pchip-t]").textContent = me.promo.code + " · " + me.promo.label; }
+}
+function setPromo(p) {
+  me.promo = p; line(); drawPass(pass1);
+  if (ORDER[at] === "pay") payStep(); else drawPromo();
+}
+$("[data-st-havecode]").addEventListener("click", function () { pfield.hidden = false; drawPromo(); setTimeout(function () { pin.focus(); }, 30); });
+function applyCode() {
+  var code = (pin.value || "").trim().toUpperCase().replace(/\s+/g, "");
+  if (!code) { pin.focus(); return; }
+  if (me.period === "year") { err("Codes work on monthly plans. Switch to monthly to use it."); return; }
+  applyB.classList.add("busy"); err(""); pfield.classList.remove("bad");
+  promoCheck(code).then(function (j) {
+    SFX.play("land"); pin.value = ""; setPromo({ code: j.code || code, months: j.months || 1, label: j.label || "First month free" });
+    toast((j.code || code) + " applied. Your first month is free.");
+  }, function (x) { void pfield.offsetWidth; pfield.classList.add("bad"); SFX.play("tick"); err(say(x)); }).then(function () { applyB.classList.remove("busy"); });
+}
+applyB.addEventListener("click", applyCode);
+pin.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
+pin.addEventListener("input", function () { pfield.classList.remove("bad"); });
+$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast("Code removed. Back to 14 days for $1."); });
 agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 
 /* ---------- the server and Supabase (or, on this Mac, a stand-in that answers the same way) ---------- */
@@ -582,7 +641,8 @@ function say(x) {
   return ({ bad_token: "Your sign-in ran out. Sign in again.", bad_refresh_token: "Sign in again.", bad_handoff: "Sign in again.", sales_off: "Studio is not on sale yet.", test_mode_only: "Studio is not on sale yet.",
     no_such_plan: "That plan is not on sale.", too_many: "Too many tries. Wait a little, then try again.", stripe: "Checkout could not open just now. Try again in a moment.", checkout_off: "Checkout could not open just now. Try again in a moment.",
     handoff_off: "Checkout could not open just now. Try again in a moment.", net: "No internet connection. Check it, then try again.", wait: "Wait a minute, then send a new code.", bad_code: "That code isn't right. Check the email, or send a new one.",
-    expired_code: "That code ran out. Send a new one." })[c] || "That didn't go through. Try again in a moment.";
+    expired_code: "That code ran out. Send a new one.", promo_invalid: "That code isn't valid. Check it and try again.", promo_month_only: "Codes work on monthly plans. Switch to monthly to use it.",
+    promo_elements_only: "That code can't be used here. Try again in a moment.", promo_used: (x && x.message && x.message !== c ? x.message : "") || "That code can't be used on this account. It may be used up, or it's for first-time customers." })[c] || "That didn't go through. Try again in a moment.";
 }
 var sb = null;
 function supa() {
@@ -627,11 +687,16 @@ function handoff() {
   var s = me.session; me.session = { access_token: s.access_token };   /* the refresh token is the app's now: never used here again */
   return slowly(api("/web/handoff", { access_token: s.access_token, refresh_token: s.refresh_token }), "Getting Studio ready");
 }
+function promoCheck(code) {
+  if (MOCK) return wait(600).then(function () { if (code !== "STUDIOK7") throw E("promo_invalid"); return { ok: true, code: "STUDIOK7", months: 1, label: "First month free" }; });
+  return api("/web/promo", { code: code, period: me.period });
+}
 function checkout() {
   if (MOCK) return wait(1200).then(function () { return { mock: true }; });
-  var pl = planOf(me.plan);
-  return api("/web/checkout", { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements",
-    consent: { version: CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: RENEW.toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } }).then(function (c) {
+  var pl = planOf(me.plan), body = { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements",
+    consent: { version: me.promo ? "checkout-promo-v1" : CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: starts().toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } };
+  if (me.promo) body.promo = me.promo.code;
+  return api("/web/checkout", body).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
   });
@@ -690,6 +755,7 @@ function showDone(has) {
   if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
+    : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
     : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
