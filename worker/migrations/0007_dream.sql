@@ -32,3 +32,5 @@ CREATE TABLE dream_parts (
 );
 CREATE INDEX dream_parts_dream ON dream_parts (dream, t0);
 ALTER TABLE signups ADD COLUMN dream_id TEXT;
+-- voice resting: Workers AI said no (the free plan's daily allowance is used up, or it's busy). Until then the page asks them to type.
+CREATE TABLE dream_flags (k TEXT PRIMARY KEY, until INTEGER NOT NULL);

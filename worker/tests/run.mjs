@@ -903,6 +903,18 @@ test("dream: a repair keeps only the words centred in its stretch, and a broken 
   assert.equal(bad.status, 502); const after = (await t.call("POST", "/dream/start", { body: { kind: "waitlist", id: d.id } })).json;
   assert.ok(!after.text.includes("native code") && after.parts.length === 2, "nothing was saved for it; the page tries again");
 });
+test("dream: when Workers AI is out (the free plan's daily allowance), voice rests and the page is told to let them type", async () => {
+  const t = setup();
+  t.env.AI = { run: async () => { throw new Error("4006: you have used up your daily free allocation of 10,000 neurons"); } };
+  const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
+  assert.equal(d.voice, true, "voice is on until the service says no");
+  const r = await t.call("POST", `/dream/chunk?id=${d.id}&t0=0&t1=4`, { raw: tone(4), headers: { "Content-Type": "application/octet-stream" } });
+  assert.equal(r.status, 503); assert.equal(r.json.code, "voice_resting");
+  const again = await t.call("POST", "/dream/start", { body: { kind: "waitlist", id: d.id } });
+  assert.equal(again.json.voice, false, "the page opens in typing mode while voice rests");
+  const typed = await t.call("POST", "/dream/finish", { body: { id: d.id, text: "Typed, because voice was resting." } });
+  assert.equal(typed.json.text, "Typed, because voice was resting.", "typing still saves");
+});
 for (const { name, fn } of tests) {
   console.error = () => {};                     // the Worker logs Brevo failures; the tests cause them on purpose
   try {

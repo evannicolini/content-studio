@@ -101,9 +101,13 @@ export function dreamApi(h) {
     await refresh(env, (await getDream(env, d.id)) || d);   // the row as it is now (an edit may have landed meanwhile)
     return r.meta.last_row_id;
   }
+  // voice resting: Workers AI refused (the daily allowance on the free plan, or rate limits). Typing still works, and nothing is lost.
+  const resting = (e) => /4006|daily free allocation|neurons|429|rate.?limit|capacity/i.test(String((e && e.message) || e));
+  async function rest(env, minutes) { await env.DB.prepare("INSERT INTO dream_flags (k, until) VALUES ('voice', ?) ON CONFLICT(k) DO UPDATE SET until = excluded.until").bind(now() + minutes * 60).run().catch(() => {}); }
+  async function voiceOk(env) { const r = await env.DB.prepare("SELECT until FROM dream_flags WHERE k = 'voice'").first().catch(() => null); return !(r && r.until > now()); }
   async function view(env, d, extra = {}) {
     const { parts, text: t } = await refresh(env, d);
-    return json({ ok: true, id: d.id, kind: d.kind, status: d.status, text: t, words: wordsOf(t), edited: d.edited, seen: seenOf(d), parts, audio_s: d.audio_s, nudged: !!d.nudged, limit: LIMIT, ...extra });
+    return json({ ok: true, id: d.id, kind: d.kind, status: d.status, text: t, words: wordsOf(t), edited: d.edited, seen: seenOf(d), parts, audio_s: d.audio_s, nudged: !!d.nudged, limit: LIMIT, voice: !!env.AI && (await voiceOk(env)), ...extra });
   }
   async function readJson(request, max = 16384) {
     const raw = await request.text(); if (raw.length > max) return null;
@@ -150,7 +154,7 @@ export function dreamApi(h) {
       const r = await env.AI.run(NOVA, { encoding: "linear16", sample_rate: String(SR), language: "en", interim_results: "true", punctuate: "true", smart_format: "true", endpointing: "300" }, { websocket: true });
       nova = r && r.webSocket; if (!nova) throw new Error("no socket (" + (r && r.status) + ")");
       nova.accept();
-    } catch (e) { console.error("nova", String(e && e.message || e).slice(0, 200)); return fail("Listening is busy. Try again.", 503); }
+    } catch (e) { console.error("nova", String(e && e.message || e).slice(0, 200)); if (resting(e)) await rest(env, 20); return fail("Listening is busy. Try again.", 503); }
 
     const pair = new WebSocketPair(), client = pair[0], ws = pair[1];
     ws.accept();
@@ -226,7 +230,9 @@ export function dreamApi(h) {
       const i0 = Math.floor((s0 - t0) * SR) * 2, i1 = Math.min(buf.byteLength, Math.ceil((s1 - t0) * SR) * 2), slice = buf.subarray(i0, i1);
       let words = "";
       if (loud(buf.subarray(Math.floor((a - t0) * SR) * 2, Math.min(buf.byteLength, Math.ceil((b - t0) * SR) * 2))) > 0.004) {   // quieter is the room, not a voice
-        const r = await env.AI.run(WHISPER, { audio: b64(wav(slice)), language: "en", condition_on_previous_text: false });
+        let r;
+        try { r = await env.AI.run(WHISPER, { audio: b64(wav(slice)), language: "en", condition_on_previous_text: false }); }
+        catch (e) { if (resting(e)) { await rest(env, 20); return json({ ok: false, error: "Voice is resting right now.", code: "voice_resting" }, 503); } throw e; }
         if (!r || typeof r !== "object" || typeof r.text !== "string") { console.error("whisper gave", r && r.constructor && r.constructor.name); return fail("Couldn't transcribe that just now. It will be tried again.", 502); }
         const segs = (Array.isArray(r.segments) ? r.segments : []).filter((g) => !(g.no_speech_prob > 0.6));
         const TOL = 0.15, inside = (t) => t >= a - TOL && t < b + TOL;   // at a seam, a word heard twice beats a word lost (join() drops an exact repeat)

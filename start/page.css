@@ -467,6 +467,29 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .sk-cur .tag .fc { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
 .sk-cur .tag .fc img { width: 100%; height: 100%; object-fit: cover; }
 
+/* the dream interview on a big screen (≥ 961px): the centrepiece. A larger glass card centred over the stage, the app further back */
+.wl-dstg { display: none; }
+@media (min-width: 961px) {
+  .wl-dstg { display: grid; place-items: center; grid-column: 2; grid-row: 1; align-self: center; justify-self: center; width: min(720px, 100%); z-index: 4; opacity: 0; transform: translateY(18px) scale(.98); pointer-events: none; transition: opacity .6s var(--ease), transform .7s var(--ease); }
+  .wl[data-step="dream"] .wl-dstg { opacity: 1; transform: none; pointer-events: auto; }
+  .wl[data-step="dream"] .wl-stage { opacity: .16 !important; filter: blur(10px) saturate(.7) !important; }
+  .wl-dstg .ivw { width: 100%; margin: 0; }
+  .wl-dstg .ivw-card { padding: 24px 28px 20px; border-radius: 34px; }
+  .wl-dstg .ivw-kay { width: 64px; height: 64px; }
+  .wl-dstg .ivw-kw { right: -44px; height: 22px; }
+  .wl-dstg .ivw-kay.talk + .ivw-who { margin-left: 50px; }
+  .wl-dstg .ivw-who b { font-size: 17px; } .wl-dstg .ivw-who em { font-size: 14px; }
+  .wl-dstg .ivw-say { min-height: 180px; max-height: clamp(180px, calc(100vh - 470px), 420px); margin-top: 18px; }
+  .wl-dstg .ivw-words, .wl-dstg .ivw-ph { font-size: clamp(24px, 2vw, 30px); line-height: 1.34; }
+  .wl-dstg .ivw-edit { font-size: 20px; min-height: 200px; max-height: clamp(200px, calc(100vh - 440px), 440px); }
+  .wl-dstg .ivw-mic { width: 80px; height: 80px; }
+  .wl-dstg .ivw-mi { width: 28px; height: 28px; } .wl-dstg .ivw-sq { width: 20px; height: 20px; }
+  .wl-dstg .ivw-time { font-size: 15px; }
+  .wl-dstg .ivw-done { height: 52px; padding: 0 22px; font-size: 16px; }
+  .wl-dstg .ivw-tap { border-radius: 34px; }
+  .wl-dstg .ivw-tapb { height: 72px; font-size: 21px; }
+}
+
 
 /* ===== 900-early ===== */
 /* Early access: the full-screen sign-up (section.js), laid out like the app's opening film: the question big on the left, the live

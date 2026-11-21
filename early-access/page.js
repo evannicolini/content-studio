@@ -1218,7 +1218,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var RING = 2 * Math.PI * 29; ring.style.strokeDasharray = RING.toFixed(2);
 
     /* ---------------- what we know ---------------- */
-    var st = "idle", id = null, parts = [], edited = null, seen = [], nudged = false, final = null, prior = null;
+    var st = "idle", id = null, parts = [], edited = null, seen = [], nudged = false, final = null, prior = null, voice = true;
     var clock = 0, startAt = 0;          /* the answer's audio clock: seconds heard in all (across reloads) */
     var frames = [];                     /* { t0, pcm } not yet covered by a saved phrase: memory only */
     var interim = { t0: 0, text: "" }, ws = null, wsBase = 0, wsOpen = false, wsTries = 0, chunkMode = false, liveOn = false;
@@ -1236,10 +1236,10 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     /* ---------------- the server ---------------- */
     function post(path, body, raw) {
       return fetch(api + path, raw ? { method: "POST", headers: { "Content-Type": "application/octet-stream" }, body: body } : { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
-        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) { var e = new Error(j.error || "http" + r.status); e.status = r.status; throw e; } return j; }); });
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok || !j.ok) { var e = new Error(j.error || "http" + r.status); e.status = r.status; e.code = j.code; throw e; } return j; }); });
     }
     function take(j) {   /* the server's view of the answer */
-      id = j.id; parts = j.parts || []; if (j.edited != null) edited = j.edited; seen = j.seen || seen; nudged = nudged || !!j.nudged;
+      id = j.id; parts = j.parts || []; if (j.voice === false) voice = false; if (j.edited != null) edited = j.edited; seen = j.seen || seen; nudged = nudged || !!j.nudged;
       clock = Math.max(clock, j.audio_s || 0, maxT());
       if (j.status === "final") final = { text: j.text, words: j.words };
       mirror();
@@ -1371,7 +1371,8 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         prune(); paintWords(); saved("ok", "Saved"); schedule(30);
       }, function (e) {
         pumping = false; failN++;
-        if (e.status === 409) { frames = []; return; }   /* already finished elsewhere */
+        if (e.status === 409) { frames = []; return; }
+        if (e.code === "voice_resting") { voice = false; if (st === "listening") resting(); }   /* already finished elsewhere */
         offline = true; saved("off", "Offline. Every word stays on this page until you're back.");
         schedule(Math.min(4000, 600 * Math.pow(1.5, failN)));   /* back online: caught up within a few seconds */
       });
@@ -1399,8 +1400,13 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       return best && bestE < 250 ? best : s0;   /* wait for a pause (about -42 dBFS) */
     }
 
+    function resting() {   /* the transcription service is out for now: stop listening and type; everything typed saves as before */
+      if (st === "listening") { liveOn = false; mic.close(); duck(false); frames = []; }
+      toTyping("resting");
+    }
     function listen() {
       if (clock >= LIMIT) { toTyping("limit"); return; }
+      if (!voice) { toTyping("resting"); return; }
       tap.hidden = true; setState("listening"); interim = { t0: clock, text: "" }; userEdited = false;
       if (edited != null || edit.value) { /* keep talking after an edit: what they say next is appended */ }
       startAt = clock; liveOn = true; chunkMode = false; wsTries = 0;
@@ -1484,7 +1490,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     }
     function toTyping(why) {
       setState("typing"); tap.hidden = true; edit.hidden = false; edit.value = textNow();
-      noteOn(why === "denied" ? "No mic? No problem. Type it here, it saves as you go." : why === "nomic" ? "This browser can't hear you, so type it here. It saves as you go." : why === "limit" ? "Saved. Add anything else by typing, or continue." : "Type it here. It saves as you go.");
+      noteOn(why === "resting" ? "Voice is resting right now, so type it here instead. It saves as you go." : why === "denied" ? "No mic? No problem. Type it here, it saves as you go." : why === "nomic" ? "This browser can't hear you, so type it here. It saves as you go." : why === "limit" ? "Saved. Add anything else by typing, or continue." : "Type it here. It saves as you go.");
       setTimeout(function () { try { edit.focus({ preventScroll: false }); edit.scrollIntoView({ block: "center", behavior: "smooth" }); } catch (e) {} }, 60);
       changed();
     }
@@ -1545,6 +1551,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         if (hasText) { toReview(); paintWords(true); say("back"); return; }
         say("ask").then(function () {
           if (st !== "asking") return;
+          if (!voice) { toTyping("resting"); return; }
           permission().then(function (p) { if (st !== "asking") return; if (p === "granted") listen(); else if (p === "denied") toTyping("denied"); else { setState("permission"); tap.hidden = false; } });
         });
       });
@@ -2341,6 +2348,12 @@ var IV = SK.interview({
   sfx: function (n) { SFX.play(n, { gain: n === "ask" ? .8 : 1 }); }, duck: function (on) { SFX.bed.duck(on); },
   onChange: function () { if (ORDER[at] === "dream") next.disabled = !ready(at); }
 });
+/* a big screen: the card is the centrepiece, centred over the stage; a phone: under the question. The same card moves (nothing resets) */
+(function () {
+  var card = sheet.querySelector("[data-wl-dream]").firstChild, big = sheet.querySelector("[data-dream-stage]"), step = sheet.querySelector("[data-wl-dream]"), mq = matchMedia("(min-width: 961px)");
+  function place() { var to = mq.matches ? big : step; if (card.parentNode !== to) to.appendChild(card); }
+  place(); if (mq.addEventListener) mq.addEventListener("change", place); else mq.addListener(place);
+})();
 function dreamNext() {
   if (busy) return; busy = true;
   IV.next().then(function (r) {

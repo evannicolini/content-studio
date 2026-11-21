@@ -746,6 +746,12 @@ var IV = SK.interview({
   sfx: function (n) { SFX.play(n, { gain: n === "ask" ? .8 : 1 }); }, duck: function (on) { SFX.bed.duck(on); },
   onChange: function () { if (ORDER[at] === "dream") next.disabled = !ready(at); }
 });
+/* a big screen: the card is the centrepiece, centred over the stage; a phone: under the question. The same card moves (nothing resets) */
+(function () {
+  var card = sheet.querySelector("[data-wl-dream]").firstChild, big = sheet.querySelector("[data-dream-stage]"), step = sheet.querySelector("[data-wl-dream]"), mq = matchMedia("(min-width: 961px)");
+  function place() { var to = mq.matches ? big : step; if (card.parentNode !== to) to.appendChild(card); }
+  place(); if (mq.addEventListener) mq.addEventListener("change", place); else mq.addListener(place);
+})();
 function dreamNext() {
   if (busy) return; busy = true;
   IV.next().then(function (r) {
