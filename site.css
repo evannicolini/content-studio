@@ -4305,6 +4305,7 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 /* phones: the 1440 frame sits at the top left of the stage (the desktop centring doesn't apply) */
 @media (max-width: 960px) { .wl-fit, .wl[data-step="claude"] .wl-fit { margin-top: 0; top: 0; } }
 @media (min-width: 961px) { .wl[data-step="claude"] .wl-fit { top: 50%; margin-top: -450px; transform-origin: 0 50%; } }   /* step 4 is the real Home now, centred like the rest */
+.ah [hidden] { display: none !important; }
 
 
 /* ===== 910-start ===== */

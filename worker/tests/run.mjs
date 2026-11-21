@@ -539,7 +539,7 @@ test("confirm: a new sign-up is saved, emailed a code, and has no place until it
   assert.deepEqual(mail.body.to, [{ email: "person1@example.com", name: "First1 Last1" }]);
   assert.ok(mail.html.includes(mail.code.slice(0, 3) + " " + mail.code.slice(3)), "the code is in the HTML");
   assert.ok(mail.html.includes("https://askstudio.ai/?confirm=" + mail.token + "#early-access"), "one link, straight to the site");
-  assert.ok(!/<script|https?:\/\/(?!askstudio\.ai)/i.test(mail.html), "no scripts, and nothing from any host but askstudio.ai");
+  assert.ok(!/<script|https?:\/\/(?!askstudio\.ai|fonts\.googleapis\.com\/css2)/i.test(mail.html), "no scripts; nothing from any host but askstudio.ai (and the Hanken Grotesk stylesheet)");
   assert.ok(/<img[^>]+src="https:\/\/askstudio\.ai\/assets\/email\/hero-confirm\.jpg"[^>]+alt="[^"]+"/.test(mail.html), "the hero is ours, with alt text");
   assert.ok(Buffer.byteLength(mail.html) < 102 * 1024 * .5, "well under Gmail's clip");
   const r = t.row("person1@example.com");
