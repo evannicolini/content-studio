@@ -1,0 +1,719 @@
+/* Start: the website sign-up, 14 days for $1 (section.html). The early-access sheet's design, step for step:
+   1 sign in (Google, Apple, or email), 2 the email code, 3 the plan, 4 pay $1 inside the page (Stripe's Payment Element, in our glass),
+   then You're in: the pass, the download starts by itself, Open Studio. A friend's invite (?i=CODE#signup) skips the plan and the card.
+   The contract with the licence server (App & releases): scratchpad/accounts/WEB-SIGNUP.md.
+   Off on the live site: it opens only on this Mac, or with ?review. On this Mac it runs on a stand-in (no account, no charge) unless
+   ?live is in the address; Stripe's own test card (4242 4242 4242 4242) goes through the stand-in too. */
+var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
+var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+var sheet = document.getElementById("signup");
+if (!sheet) return;
+if (!(local || Q.has("review"))) { sheet.remove(); return; }   /* sales are off: never on the live site */
+var LIVE = !local || Q.has("live"), MOCK = !LIVE;
+var CFG = {
+  worker: "https://studio-licence.studio-licence.workers.dev",
+  supabase: "https://nxbnmwxyocbqcjwzxtxi.supabase.co", supakey: "sb_publishable_LRI7yb4xTKyN5VehjqxQuQ_vuSVY7Hk",   /* public keys, made for browsers */
+  stripe: Q.get("pk") || "", oauth: Q.has("oauth")
+};
+var DEMO_PK = "pk_test_TYooMQauvdEDq54NiTphI7jx";   /* Stripe's public demo key: draws the real card form on the stand-in */
+var html = document.documentElement, HASH = "#signup", DEEP = /^#signup(&|$)/;
+var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+var M = "assets/media/", fine = matchMedia("(pointer: fine)").matches, PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
+var $ = function (s) { return sheet.querySelector(s); }, $$ = function (s) { return [].slice.call(sheet.querySelectorAll(s)); };
+var INV = (Q.get("i") || H.get("i") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 24);
+if (MOCK) $("[data-st-mode]").hidden = false;
+
+/* ---------- sound: the app's own takes, as in early access; the same speaker setting ---------- */
+var SOUND = true;
+try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
+var SFX = (function () {
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
+  var GAIN = { click: .5, tick: .16, key: .26, move: .38, send: .6, land: .45, done: .5 };
+  function wake() {
+    if (!AC || ctx) { if (ctx && ctx.state === "suspended") ctx.resume(); return; }
+    try { ctx = new AC(); } catch (e) { return; }
+    Object.keys(GAIN).forEach(function (n) { fetch("assets/sfx/" + n + ".wav").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); });
+  }
+  function play(n, o) {
+    o = o || {};
+    if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
+    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0;
+    if (gap && last[n] && now - last[n] < gap) return;
+    last[n] = now;
+    var s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
+    g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
+    if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
+    s.connect(g); s.start();
+  }
+  return { wake: wake, play: play };
+})();
+var sndB = $("[data-st-snd]");
+function setSound(on) { SOUND = on; sndB.setAttribute("aria-pressed", on ? "true" : "false"); sndB.setAttribute("aria-label", on ? "Sound on" : "Sound off"); try { localStorage.setItem("studio-wl-sound", on ? "on" : "off"); } catch (e) {} }
+setSound(SOUND);
+sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
+sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".st-way, .st-plan, button, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.closest && e.target.closest(".st-way, .st-plan, button, a")) SFX.play("click"); });
+sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
+
+/* ---------- what we know ---------- */
+var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null };
+var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
+sheet.appendChild($(".wl-dock"));
+var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = INV ? ["in", "code"] : ORDER_ALL.slice();
+var SCENE = { "in": "home", code: "home", plan: "home", pay: "pass" };
+var segs = $$("[data-st-seg] i"), scenes = {};
+$$(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
+var back = $("[data-st-back]"), next = $("[data-st-next]"), go = $(".wl-go"), sky = $(".wl-sky"), fit = $(".wl-fit"), stage = $(".wl-stage"), toastEl = $("[data-st-toast]");
+var at = 0, busy = false, pushed = false, lastFocus = null;
+function toast(t) { toastEl.textContent = t; toastEl.classList.add("on"); clearTimeout(toastEl._t); toastEl._t = setTimeout(function () { toastEl.classList.remove("on"); }, 2600); }
+function val(n) { return (form.elements[n].value || "").trim(); }
+function first() { return (me.first || val("first")).split(/\s+/)[0] || ""; }
+function stepEl(q) { return steps.filter(function (s) { return s.getAttribute("data-q") === q; })[0]; }
+function err(msg) { var e = stepEl(ORDER[at]).querySelector(".wl-err"); if (e) e.textContent = msg || ""; }
+
+/* plans: the site's own prices (pricing.py checks them against the app's pricing.json), people from the contract */
+var P = window.SK_PRICES || {}, NOW = new Date(), RENEW = new Date(NOW.getTime() + 14 * 864e5);
+var renew = RENEW.toLocaleDateString("en-US", { month: "short", day: "numeric" }), renewLong = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+var PLANS = [
+  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand", 1], ["Full edits with takes and reviews", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Run any edit as a Meta ad", 0]] },
+  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Creator", 1]] },
+  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Everything in Pro", 1]] }
+];
+function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
+function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
+function then(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "").replace(/^Billed\s*/, "").replace(/\s*yearly$/, "/yr") || price(id, per) + "/mo" : price(id, per) + "/mo"; }
+function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[0] || PLANS[1]; }
+
+/* ---------- the stage: the app, signing you in ---------- */
+var BRANDS = [
+  { n: "Your brand", s: "Brand kit ready", bg: "linear-gradient(140deg, #DFEAE8, #BBC9C7 50%, #536878)", ink: "#05090A", sw: ["#05090A", "#0E191E", "#BBC9C7", "#DFEAE8"] },
+  { n: "MIRRA", s: "14 posts this week", img: "assets/hero/brand-mirra.png", sw: ["#05090A", "#536878", "#B4B9BA", "#E5E4E2"] },
+  { n: "Custom Esignature", s: "3 ads running", img: "assets/hero/brand-ces.png", sw: ["#0E191E", "#536878", "#BACCD0", "#DFEAE8"] },
+  { n: "Halden", s: "Running gear", m: "h", bg: "linear-gradient(140deg, #2B2B2B, #0A0A0A)", ink: "#E6EAE3", sw: ["#0A0A0A", "#2B2B2B", "#BED2C3", "#E6EAE3"] },
+  { n: "Northline", s: "Coffee roasters", m: "N", bg: "linear-gradient(140deg, #536878, #0E191E)", ink: "#E5E4E2", sw: ["#0E191E", "#536878", "#BBC9C7", "#E5E4E2"] }
+];
+function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
+function brandList(n) { var f = first(); return BRANDS.slice(0, Math.min(5, n)).map(function (b, i) { return Object.assign({}, b, i === 0 ? { n: f ? f + "'s brand" : "Your brand", m: f ? f.charAt(0).toUpperCase() : "Y" } : {}); }); }
+function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
+var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
+function drawHome(typing) {
+  var f = first(), pl = planOf(me.plan), signed = !!(me.session || me.paid || me.invite && me.invite.done);
+  $("[data-st-hi-home]").innerHTML = esc(greet()) + (f ? ", <b>" + esc(f) + "</b>" : "") + (typing ? "<i></i>" : "");
+  $("[data-st-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
+  $("[data-st-state]").textContent = signed ? "Signed in · " + (me.email || "you") : me.email ? "Signing in · " + me.email : "Not signed in";
+  var n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
+  $("[data-st-chips]").innerHTML = brandList(n).slice(0, 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; }).join("");
+  $("[data-st-av]").textContent = (f || "Y").charAt(0).toUpperCase();
+  $("[data-st-mename]").textContent = f ? (me.first || val("first")) : "You";
+  $("[data-st-meplan]").textContent = me.invite ? "Pro · on " + ((me.invite.from || "a friend").split(/\s+/)[0]) : signed ? pl.name + " · 14-day trial" : me.email ? "Checking your email…" : "Not signed in yet";
+  $("[data-st-me]").classList.toggle("in", signed);
+  $("[data-st-for]").textContent = signed ? "Made for " + (f || "you") : "Ready when you are";
+  var made = $("[data-st-made]");
+  if (!made.children.length || made._signed !== signed) {
+    made._signed = signed;
+    made.innerHTML = signed ? MADE.map(function (m, i) { return '<span class="wl-mc wl-in-a" style="--i:' + i + '"><img src="' + M + "selects/" + m[0] + '.jpg" alt=""><i>v01</i><span><em>' + esc(m[1]) + "</em><b>" + esc(m[2]) + "</b></span></span>"; }).join("")
+      : '<span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span><span class="wl-ph"></span>';
+  }
+}
+function drawPlanStage() {
+  var pl = planOf(me.plan), bl = brandList(pl.brands), ul = $("[data-st-bl]");
+  ul.innerHTML = bl.map(function (b, i) {
+    return '<li class="wl-br wl-in-a' + (i === 0 ? " on" : "") + '" style="--i:' + i + '">' + mono(b) + '<span class="wl-bt"><b>' + esc(b.n) + "</b><span>" + esc(b.s) + '</span></span><span class="wl-sw">' + b.sw.map(function (c) { return '<i style="background:' + c + '"></i>'; }).join("") + "</span></li>";
+  }).join("") + (pl.brands > 5 ? '<li class="wl-more wl-in-a" style="--i:5">And every brand you run</li>' : "");
+  $("[data-st-menuh]").textContent = "Studio " + pl.name + " · " + (pl.brands > 5 ? "every brand" : pl.brands + (pl.brands === 1 ? " brand" : " brands"));
+  var av = ""; for (var i = 0; i < Math.min(3, pl.people); i++) av += "<i></i>"; if (pl.people > 3) av += '<i class="more">+' + (pl.people - 3) + "</i>";
+  $("[data-st-seats]").innerHTML = "<span>" + av + "</span>" + pl.people + (pl.people === 1 ? " person" : " people");
+  $("[data-st-allb]").textContent = pl.brands === 1 ? bl[0].n : "All brands · " + (pl.brands > 5 ? "every brand" : pl.brands);
+  drawHome();
+}
+function sizeStage() {
+  var r = stage.getBoundingClientRect(); if (!r.width) return;
+  var mob = SK.mobile() || innerWidth <= 960;
+  var s = mob ? Math.min(r.width / 980, 220 / 680) : Math.min((r.height || 680) / 660, (r.width + 150) / 980, 1.22);
+  fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
+}
+window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
+
+/* ---------- a wallpaper per step, decoded ahead and crossfaded (as in early access) ---------- */
+var WALL = { "in": PHONE ? "assets/hero/sky-m.jpg" : "assets/hero/sky.jpg" };
+[["code", "you"], ["plan", "brands"], ["pay", "claude"], ["done", "in"]].forEach(function (k) { WALL[k[0]] = "assets/wl/" + k[1] + (PHONE ? "-m" : "") + ".jpg"; });
+var wallCache = {}, wallTok = 0, wallNow = "";
+function want(k) {
+  var u = WALL[k]; if (!u) return Promise.resolve("");
+  if (!wallCache[u]) { var i = new Image(); i.decoding = "async"; i.src = u; wallCache[u] = (i.decode ? i.decode() : new Promise(function (r) { i.onload = r; })).then(function () { return u; }, function () { return u; }); }
+  return wallCache[u];
+}
+function wall(k) {
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  want(k).then(function () {
+    if (tok !== wallTok) return;
+    var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
+    requestAnimationFrame(function () { requestAnimationFrame(function () { nx.classList.add("in"); }); });
+    setTimeout(function () { if (tok !== wallTok) return; $$(".wl-sky").forEach(function (o) { if (o !== nx && o !== sky) o.remove(); }); }, 1400);
+    $$(".pass .frost").forEach(function (f) { f.src = u; });
+  });
+}
+
+/* ---------- the pass (the same 3D object as early access, written for a member) ---------- */
+function passHTML() {
+  var frost = '<img class="frost" src="' + (sky.getAttribute("src") || "assets/hero/sky.jpg") + '" alt="">';
+  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+    '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono" data-p="kind">Pro · Trial</span></div>' +
+    '<div class="lift who"><span class="mono dim">Member</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
+    '<div class="lift row"><div><span class="mono dim">Plan</span><b data-p="no">Pro</b></div><div><span class="mono dim">Trial</span><b class="s" data-p="trial">14 days · $1</b></div><div><span class="mono dim" data-p="k3">Renews</span><b class="s" data-p="v3">' + esc(renew) + "</b></div></div>" +
+    '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
+    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+    '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
+    '<div class="lift what"><span class="mono dim">What\'s yours</span><h4>Your whole content team, on your Mac.</h4><ul data-p="list"><li><i></i>Every feature, from day one</li><li><i></i>Claude does the work</li><li><i></i>Cancel anytime before day 14</li></ul></div>' +
+    '<div class="lift sig"><span class="mono dim">See you inside</span><span class="mono" data-p="sig">Studio</span></div></div>';
+}
+function bars(el, seed) {
+  var s = 0, out = "", x = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0; s = s || 7;
+  while (x < 96) { s = (s * 16807) % 2147483647; var w = .35 + (s % 4) * .3; out += '<i style="width:' + w.toFixed(2) + '%"></i>'; x += w + .7; }
+  el.innerHTML = out;
+}
+function Pass(el, opts) {
+  opts = opts || {};
+  el.innerHTML = passHTML();
+  var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
+  var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  function frame(now) {
+    if (!st.live) return;
+    if (el.offsetParent) {
+      if (st.intro) {
+        var t = Math.min(1, (now - st.intro.t0) / st.intro.ms), e = easeOut(t);
+        st.ry = lerp(st.intro.ry0, 0, easeIO(t)) + st.flip; st.z = lerp(-900, 0, e); st.s = lerp(.62, 1, e); st.rx = lerp(26, 0, e);
+        if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
+      } else {
+        var k = st.drag ? .35 : .09;
+        if (!fine && !st.drag) { st.try_ = Math.sin(now / 1600) * 9; st.trx = Math.cos(now / 2100) * 5; }
+        st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
+      }
+      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
+      var ny = ((st.ry % 360) + 540) % 360 - 180;
+      el.style.setProperty("--mx", (.5 + ny / 90 * .5).toFixed(3)); el.style.setProperty("--my", (.35 - st.rx / 40).toFixed(3));
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener("pointermove", function (e) {
+    if (!st.live) return;
+    if (st.drag) { st.try_ = st.drag.ry0 + (e.clientX - st.drag.x) * .45; st.trx = Math.max(-25, Math.min(25, st.drag.rx0 - (e.clientY - st.drag.y) * .3)); if (Math.abs(e.clientX - st.drag.x) > 6) st.drag.moved = true; return; }
+    if (!fine || st.intro) return;
+    var r = el.getBoundingClientRect(), x = (e.clientX - (r.left + r.width / 2)) / innerWidth, y = (e.clientY - (r.top + r.height / 2)) / innerHeight;
+    st.try_ = Math.max(-22, Math.min(22, x * 40)); st.trx = Math.max(-16, Math.min(16, -y * 30));
+  });
+  el.addEventListener("pointerdown", function (e) { st.drag = { x: e.clientX, y: e.clientY, ry0: st.try_, rx0: st.trx, moved: false }; });
+  function up() { if (!st.drag) return; var d = st.drag; st.drag = null; if (!d.moved) { st.flip += 180; SFX.play("move", { gain: .8 }); } else st.flip += Math.round(st.try_ / 180) * 180; st.try_ = 0; st.trx = 0; }
+  window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+  el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
+  el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
+  var q = function (k) { return el.querySelector('[data-p="' + k + '"]'); };
+  return {
+    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } },
+    stop: function () { st.live = false; },
+    enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
+    set: function (d) {
+      ["kind", "mail", "no", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
+      if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
+      if ("list" in d) q("list").innerHTML = d.list.map(function (t) { return "<li><i></i>" + esc(t) + "</li>"; }).join("");
+      if ("seed" in d) bars(q("bars"), d.seed || "studio");
+    }
+  };
+}
+var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { onLanded: function () { SFX.play("land"); } });
+function drawPass(p) {
+  var pl = planOf(me.plan), nm = (me.first || val("first") || "").trim();
+  p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
+    : { kind: pl.name + " · Trial", name: nm, mail: me.email || "", no: pl.name, trial: "14 days · $1", k3: "Renews", v3: renew, sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
+}
+
+/* ---------- the word reveal and the self-typing examples (as in early access) ---------- */
+function words(el, n) {
+  var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), list = [], t;
+  while ((t = w.nextNode())) if (!(t.parentNode.classList && t.parentNode.classList.contains("wl-bw")) && t.nodeValue.trim()) list.push(t);
+  list.forEach(function (node) {
+    var frag = document.createDocumentFragment();
+    node.nodeValue.split(/(\s+)/).forEach(function (bit) { if (!bit) return; if (/^\s+$/.test(bit)) { frag.appendChild(document.createTextNode(bit)); return; } var sp = document.createElement("span"); sp.className = "wl-bw"; sp.textContent = bit; frag.appendChild(sp); });
+    node.parentNode.replaceChild(frag, node);
+  });
+  el.querySelectorAll(".wl-bw").forEach(function (sp) { sp.style.setProperty("--n", n++); });
+  return n;
+}
+function reveal(step) {
+  if (SK.reduced) return;
+  var n = 0; step.querySelectorAll(".wl-qh, .wl-qs").forEach(function (el) { n = words(el, n); });
+  step.classList.add("w0"); void step.offsetWidth;
+  requestAnimationFrame(function () { step.classList.remove("w0"); });
+}
+var TY = { first: "Evan", email: "you@studio.com" }, tyTok = 0;
+form.querySelectorAll("input[name]").forEach(function (inp) {
+  var t = TY[inp.name], bx = inp.closest(".wl-box"); if (!t || !bx) return;
+  var o = document.createElement("span"); o.className = "wl-ty still"; o.setAttribute("aria-hidden", "true"); o.innerHTML = "<span></span><i></i>"; bx.appendChild(o);
+  inp.setAttribute("aria-placeholder", t);
+  var sync = function () { bx.classList.toggle("filled", !!inp.value); };
+  inp.addEventListener("input", sync); inp.addEventListener("change", sync);
+  inp.addEventListener("focus", function () { o.classList.add("still"); });
+  inp._ty = o; sync();
+});
+function typeFields() {
+  var tok = ++tyTok, list = [].slice.call(form.querySelectorAll("[data-st-mail] input")).filter(function (i) { return i._ty && !i.value; });
+  list.forEach(function (i) { i._ty.classList.add("still"); i._ty.firstChild.textContent = SK.reduced ? TY[i.name] : ""; });
+  if (SK.reduced) return;
+  var k = 0;
+  (function nextField() {
+    var inp = list[k++]; if (!inp) return;
+    var o = inp._ty, t = TY[inp.name], n = 0; o.classList.toggle("still", inp === document.activeElement);
+    (function tick() {
+      if (tok !== tyTok) return;
+      if (n >= t.length) { o.firstChild.textContent = t; if (list[k]) o.classList.add("still"); return setTimeout(nextField, 120); }
+      o.firstChild.textContent = t.slice(0, ++n); setTimeout(tick, 46 + Math.random() * 50);
+    })();
+  })();
+}
+$$(".wl-box").forEach(function (b) { var fb = b.querySelector(".wl-fb"); b.addEventListener("focusin", function () { fb.setAttribute("data-active", ""); }); b.addEventListener("focusout", function () { if (!b.closest(".wl-f.bad")) fb.removeAttribute("data-active"); }); });
+
+/* ---------- moving between steps ---------- */
+function personal() { var f = first(); $$("[data-st-hi]").forEach(function (h) { var t = h.getAttribute("data-st-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); }); }
+function ready() {
+  var q = ORDER[at];
+  if (q === "in") return !$("[data-st-mail]").hidden && !!val("first") && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("email"));
+  if (q === "code") return code().length === 6;
+  if (q === "plan") return !!me.plan;
+  return true;
+}
+function setStep(n, quiet) {
+  var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
+  personal();
+  if (cur !== nx) {
+    var h0 = box.offsetHeight;
+    cur.classList.remove("on"); cur.classList.toggle("past", n > at);
+    nx.classList.remove("past"); nx.classList.add("on"); reveal(nx);
+    var h1 = nx.offsetHeight;
+    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
+    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
+    if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
+    if (!quiet) SFX.play("move", { pan: dir * .3 });
+  }
+  at = n;
+  sheet.setAttribute("data-step", q);
+  if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
+  segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
+  $$("[data-st-k]").forEach(function (k) { var i = ORDER.indexOf(k.closest(".wl-q").getAttribute("data-q")); k.textContent = (me.invite ? "Invite · " : "Start · ") + (i + 1) + " of " + ORDER.length; });
+  back.disabled = n === 0;
+  var last = q === "pay";
+  next.hidden = last; go.hidden = !last;
+  $("[data-st-next-t]").textContent = q === "in" ? ($("[data-st-mail]").hidden ? "Continue" : "Send my code") : q === "code" ? "Verify" : "Continue";
+  next.disabled = !ready();
+  scenes.home.classList.toggle("menu", q === "plan");
+  if (q === "plan") drawPlanStage(); else drawHome();
+  if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
+  if (q === "pay") payStep();
+  if (!quiet) focusStep(SK.reduced ? 0 : 420);
+}
+function focusStep(delay) {
+  setTimeout(function () {
+    if (!sheet.classList.contains("open") || sheet.classList.contains("done")) return;
+    var q = ORDER[at], t = q === "in" ? ($("[data-st-mail]").hidden ? null : form.elements[val("first") ? "email" : "first"]) : q === "code" ? otp[Math.min(5, code().length)] : q === "plan" ? $(".st-plan.sel") : null;
+    if (t && !(SK.mobile() && t.tagName === "INPUT")) t.focus({ preventScroll: true });
+  }, delay);
+}
+back.addEventListener("click", function () {
+  if (busy) return;
+  var q = ORDER[at];
+  if (q === "plan" && me.session) { toast("You're signed in as " + me.email + "."); return; }
+  if (at > 0) setStep(at - 1);
+});
+next.addEventListener("click", function () { advance(); });
+function advance() {
+  if (busy) return;
+  var q = ORDER[at];
+  if (q === "in") return startEmail();
+  if (q === "code") return verify();
+  if (!ready()) return;
+  setStep(at + 1);
+}
+
+/* ---------- step 1: the ways in ---------- */
+var mailBox = $("[data-st-mail]"), emailWay = sheet.querySelector('[data-way="email"]');
+$$(".st-way").forEach(function (b) {
+  var way = b.getAttribute("data-way");
+  if ((way === "google" || way === "apple") && LIVE && !CFG.oauth) { b.disabled = true; b.querySelector(".soon").hidden = false; }
+  b.addEventListener("click", function () {
+    err("");
+    if (way === "email") {
+      var on = mailBox.hidden; mailBox.hidden = !on; b.setAttribute("aria-expanded", on ? "true" : "false");
+      box.style.height = ""; setStep(at, true);
+      if (on) { typeFields(); setTimeout(function () { form.elements.first.focus(); }, 80); }
+      return;
+    }
+    oauth(way, b);
+  });
+});
+form.elements.first.addEventListener("input", function () { drawHome(true); clearTimeout(this._t); this._t = setTimeout(function () { drawHome(); }, 900); personal(); next.disabled = !ready(); });
+form.elements.email.addEventListener("input", function () { next.disabled = !ready(); });
+[form.elements.first, form.elements.email].forEach(function (inp) {
+  inp.addEventListener("keydown", function (e) { if (e.key !== "Enter") return; e.preventDefault(); if (inp.name === "first") form.elements.email.focus(); else startEmail(); });
+});
+function markBad(names, msg) {
+  $$(".wl-f.bad").forEach(function (f) { f.classList.remove("bad"); });
+  names.forEach(function (n) { var f = form.elements[n].closest(".wl-f"); void f.offsetWidth; f.classList.add("bad"); f.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); });
+  err(msg);
+}
+function startEmail() {
+  if (mailBox.hidden) { emailWay.click(); return; }
+  var f = val("first"), e = val("email"), bad = [];
+  if (!f) bad.push("first");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e)) bad.push("email");
+  if (bad.length) { markBad(bad, bad.length === 2 ? "Add your first name and email." : bad[0] === "first" ? "Add your first name." : e ? "That email doesn't look quite right." : "Add your email."); form.elements[bad[0]].focus(); return; }
+  markBad([], "");
+  busy = true; next.classList.add("busy"); SFX.play("send");
+  me.first = f; me.email = e.toLowerCase();
+  sendCode().then(function () {
+    $("[data-st-to]").textContent = me.email;
+    clearOtp(); resendIn(30);
+    setStep(at + 1);
+  }, function (x) { err(say(x)); }).then(function () { busy = false; next.classList.remove("busy"); });
+}
+
+/* ---------- step 2: six boxes; typing, paste and the phone's autofill all fill them ---------- */
+var otp = $$("[data-st-otp] input"), otpBox = $("[data-st-otp]");
+function code() { return otp.map(function (i) { return i.value; }).join("").replace(/\D/g, ""); }
+function clearOtp() { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otpBox.classList.remove("bad", "ok", "busy"); }
+function fill(from, digits) {
+  digits = digits.replace(/\D/g, "").slice(0, 6 - from);
+  for (var k = 0; k < digits.length; k++) { otp[from + k].value = digits[k]; otp[from + k].classList.add("has"); }
+  var nx = Math.min(5, from + digits.length);
+  otp[nx].focus();
+  next.disabled = !ready(); otpBox.classList.remove("bad"); err("");
+  if (code().length === 6) setTimeout(verify, 180);
+}
+otp.forEach(function (inp, i) {
+  inp.addEventListener("input", function () {
+    var v = inp.value.replace(/\D/g, "");
+    if (v.length > 1) { inp.value = ""; fill(i, v); return; }   /* autofill or a fast paste puts the whole code in one box */
+    inp.value = v; inp.classList.toggle("has", !!v);
+    if (v && i < 5) otp[i + 1].focus();
+    next.disabled = !ready(); otpBox.classList.remove("bad"); err("");
+    if (code().length === 6) setTimeout(verify, 180);
+  });
+  inp.addEventListener("keydown", function (e) {
+    if (e.key === "Backspace" && !inp.value && i > 0) { e.preventDefault(); otp[i - 1].value = ""; otp[i - 1].classList.remove("has"); otp[i - 1].focus(); next.disabled = true; }
+    else if (e.key === "ArrowLeft" && i > 0) { e.preventDefault(); otp[i - 1].focus(); }
+    else if (e.key === "ArrowRight" && i < 5) { e.preventDefault(); otp[i + 1].focus(); }
+    else if (e.key === "Enter") { e.preventDefault(); verify(); }
+  });
+  inp.addEventListener("paste", function (e) { var t = (e.clipboardData || window.clipboardData).getData("text") || ""; if (/\d/.test(t)) { e.preventDefault(); fill(0, t); } });
+  inp.addEventListener("focus", function () { setTimeout(function () { try { inp.select(); } catch (x) {} }, 0); });
+});
+var resendB = $("[data-st-resend]"), waitEl = $("[data-st-wait]"), resendT = 0;
+function resendIn(s) {
+  clearInterval(resendT); resendB.disabled = true; waitEl.textContent = "in " + s + "s";
+  resendT = setInterval(function () { s--; if (s <= 0) { clearInterval(resendT); resendB.disabled = false; waitEl.textContent = ""; } else waitEl.textContent = "in " + s + "s"; }, 1000);
+}
+resendB.addEventListener("click", function () { if (resendB.disabled) return; err(""); sendCode().then(function () { toast("A new code is on its way to " + me.email + "."); clearOtp(); otp[0].focus(); resendIn(30); }, function (x) { err(say(x)); }); });
+$("[data-st-other]").addEventListener("click", function () { clearOtp(); setStep(0); setTimeout(function () { form.elements.email.focus(); form.elements.email.select(); }, 450); });
+function verify() {
+  if (busy || code().length !== 6) return;
+  busy = true; otpBox.classList.add("busy"); next.classList.add("busy");
+  checkCode(code()).then(function (session) {
+    otpBox.classList.remove("busy"); otpBox.classList.add("ok"); SFX.play("land");
+    me.session = session;
+    return signedIn();
+  }).catch(function (x) {
+    otpBox.classList.remove("busy"); otpBox.classList.add("bad"); err(say(x)); SFX.play("tick");
+    setTimeout(function () { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otp[0].focus(); next.disabled = true; }, 650);
+  }).then(function () { busy = false; next.classList.remove("busy"); });
+}
+
+/* signed in: hand the session to the server for the Mac app at once, then the plan (or, for an invite, redeem it) */
+function signedIn() {
+  drawHome();
+  if (me.invite) return redeem().then(function (r) { me.hand = r; me.invite.done = true; showDone(); });
+  return handoff().then(function (h) {
+    me.hand = h;
+    if (ORDER[at] !== "plan") setTimeout(function () { setStep(ORDER.indexOf("plan")); }, 420);
+  }, function (x) {
+    if (x && x.state === "has_plan") { me.hand = x; showDone("has"); return; }
+    if (x && /sales_off|test_mode_only/.test(x.code || "")) { err("Studio is not on sale yet. Join the waitlist and we'll tell you first."); return; }
+    throw x;
+  });
+}
+
+/* ---------- step 3: the plan ---------- */
+var plansEl = $("[data-st-plans]"), perEl = $("[data-st-per]");
+var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>', DASH = '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>';
+function drawPlans() {
+  plansEl.innerHTML = PLANS.map(function (p) {
+    return '<button type="button" class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" aria-pressed="' + (p.id === me.plan) + '">' +
+      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
+      '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
+      '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
+      "<ul>" + p.feats.map(function (f) { return '<li class="' + (f[1] ? "" : "off") + '">' + (f[1] ? TICK : DASH) + esc(f[0]) + "</li>"; }).join("") + "</ul></button>";
+  }).join("");
+  plansEl.querySelectorAll(".st-plan").forEach(function (b) {
+    b.addEventListener("click", function () { me.plan = b.getAttribute("data-plan"); drawPlans(); drawPlanStage(); next.disabled = !ready(); line(); });
+  });
+  line();
+}
+function line() {
+  var pl = planOf(me.plan), t = then(pl.id, me.period);
+  $("[data-st-line]").innerHTML = "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
+}
+perEl.querySelectorAll("button").forEach(function (b) {
+  b.addEventListener("click", function () {
+    me.period = b.getAttribute("data-per");
+    perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x === b ? "true" : "false"); });
+    slidePer(); drawPlans();
+  });
+});
+function slidePer() { var on = perEl.querySelector('[aria-checked="true"]'); if (!on || !on.offsetWidth) return; perEl.style.setProperty("--w", on.offsetWidth + "px"); perEl.style.setProperty("--x", (on.offsetLeft - 4) + "px"); }
+$("[data-st-save]").textContent = "Save " + ((P.save || 20)) + "%";
+
+/* ---------- step 4: $1, inside the page. Stripe's Payment Element in our glass (the Appearance API), never a redirect ---------- */
+var stripe = null, elements = null, peMounted = false, stripeP = null;
+function loadStripe() {
+  if (stripeP) return stripeP;
+  stripeP = new Promise(function (res, rej) {
+    if (window.Stripe) return res();
+    var s = document.createElement("script"); s.src = "https://js.stripe.com/v3/"; s.onload = res; s.onerror = function () { rej(new Error("net")); }; document.head.appendChild(s);
+  });
+  return stripeP;
+}
+var APPEARANCE = {
+  theme: "night", labels: "above",
+  variables: { fontFamily: "'Hanken Grotesk', 'Helvetica Neue', Helvetica, sans-serif", fontSizeBase: "15px", colorPrimary: "#4aa3ff", colorBackground: "#121923", colorText: "#f5f3ee", colorTextSecondary: "rgba(245, 243, 238, 0.66)", colorTextPlaceholder: "rgba(245, 243, 238, 0.36)", colorDanger: "#ffb08a", borderRadius: "14px", spacingUnit: "3px", gridRowSpacing: "10px", gridColumnSpacing: "10px", tabSpacing: "8px" },
+  rules: {
+    ".Label": { fontFamily: "'IBM Plex Mono', ui-monospace, Menlo, monospace", fontSize: "10.5px", fontWeight: "500", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(245, 243, 238, 0.82)", marginBottom: "6px" },
+    ".Input": { backgroundColor: "rgba(255, 255, 255, 0.07)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5), inset 0 8px 16px -10px rgba(0, 0, 0, 0.42)", padding: "12px 14px", fontSize: "16px" },
+    ".Input:focus": { boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.9), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.7), 0 0 0 1px rgba(74, 163, 255, 0.55), 0 0 24px -6px rgba(74, 163, 255, 0.55)" },
+    ".Input--invalid": { boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(255, 150, 110, 0.6)" },
+    ".Tab": { backgroundColor: "rgba(255, 255, 255, 0.06)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5)" },
+    ".Tab--selected": { backgroundColor: "#eef1ef", color: "#05090a", boxShadow: "none" }, ".Tab--selected .TabIcon": { fill: "#05090a" }, ".Tab--selected .TabLabel": { color: "#05090a" },
+    ".Block": { backgroundColor: "rgba(255, 255, 255, 0.05)", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.5)", border: "none" },
+    ".Error": { fontSize: "13px" }
+  }
+};
+function payStep() {
+  var pl = planOf(me.plan), t = then(pl.id, me.period);
+  $("[data-st-sname]").textContent = "Studio " + pl.name + (me.period === "year" ? " · yearly" : "");
+  $("[data-st-from-d]").textContent = "From " + renew;
+  $("[data-st-from-p]").textContent = t;
+  var thenEl = $("[data-st-then]"); thenEl.textContent = "Then " + t.replace("/mo", " a month").replace("/yr", " a year") + ".";
+  $("[data-st-cancel]").textContent = "Cancel anytime before " + renewLong + " and you won't be charged again.";
+  $("[data-st-go-t]").textContent = "Start my 14 days · $1";
+  reveal(stepEl("pay"));
+  if (peMounted) return;
+  var pk = MOCK ? DEMO_PK : CFG.stripe;
+  if (!pk) { $("[data-st-pe]").innerHTML = '<p class="wl-fine">The card form opens once the payment key is set.</p>'; return; }
+  loadStripe().then(function () {
+    stripe = stripe || Stripe(pk);
+    elements = stripe.elements({ mode: "subscription", amount: 100, currency: "usd", appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] });
+    var pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto" } });
+    var host = $("[data-st-pe]");
+    pe.on("ready", function () { var l = host.querySelector(".st-load"); if (l) l.remove(); });
+    pe.on("focus", function () { host.closest(".st-card").classList.add("focus"); }); pe.on("blur", function () { host.closest(".st-card").classList.remove("focus"); });
+    pe.on("change", function (e) { if (e.error) err(e.error.message); else err(""); });
+    pe.mount(host); peMounted = true;
+  }, function () { err("No internet connection. Check it, then try again."); });
+}
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  if (ORDER[at] !== "pay") { advance(); return; }
+  if (go.classList.contains("busy")) return;
+  if (!elements) { if (MOCK) return paid({ mock: true }); err("The card form hasn't loaded. Check your connection."); return; }
+  go.classList.add("busy"); SFX.play("send"); err("");
+  elements.submit().then(function (r) {
+    if (r.error) throw { human: r.error.message };
+    return checkout();
+  }).then(function (c) {
+    if (c.mock) return c;
+    var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + "?review&paid=1" + HASH }, redirect: "if_required" };
+    return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return c; });
+  }).then(paid, function (x) { err(say(x)); }).then(function () { go.classList.remove("busy"); });
+});
+function paid(c) {
+  me.paid = c || {};
+  var d = c && c.download ? c : me.hand || {};
+  me.hand = Object.assign({}, me.hand, { download: d.download || (me.hand && me.hand.download), open: d.open || (me.hand && me.hand.open) });
+  showDone();
+}
+$("[data-st-change]").addEventListener("click", function () { setStep(ORDER.indexOf("plan")); });
+
+/* ---------- the server and Supabase (or, on this Mac, a stand-in that answers the same way) ---------- */
+function E(code, human, extra) { var e = new Error(code); e.code = code; e.human = human; return Object.assign(e, extra || {}); }
+function say(x) {
+  if (x && x.human) return x.human;
+  var c = x && (x.code || x.error || x.message) || "";
+  return ({ bad_token: "Your sign-in ran out. Sign in again.", bad_refresh_token: "Sign in again.", bad_handoff: "Sign in again.", sales_off: "Studio is not on sale yet.", test_mode_only: "Studio is not on sale yet.",
+    no_such_plan: "That plan is not on sale.", too_many: "Too many tries. Wait a little, then try again.", stripe: "Checkout could not open just now. Try again in a moment.", checkout_off: "Checkout could not open just now. Try again in a moment.",
+    handoff_off: "Checkout could not open just now. Try again in a moment.", net: "No internet connection. Check it, then try again.", wait: "Wait a minute, then send a new code.", bad_code: "That code isn't right. Check the email, or send a new one.",
+    expired_code: "That code ran out. Send a new one." })[c] || "That didn't go through. Try again in a moment.";
+}
+var sb = null;
+function supa() {
+  if (sb) return Promise.resolve(sb);
+  return new Promise(function (res, rej) {
+    var s = document.createElement("script"); s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js";
+    s.onload = function () { sb = window.supabase.createClient(CFG.supabase, CFG.supakey, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: true, flowType: "implicit" } }); res(sb); };
+    s.onerror = function () { rej(E("net")); }; document.head.appendChild(s);
+  });
+}
+function api(path, body) {
+  return fetch(CFG.worker + path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {}).then(function (r) {
+    return r.json().catch(function () { return {}; }).then(function (j) { if (r.ok) return j; throw E(j.error || j.state || "http" + r.status, null, Object.assign({ status: r.status }, j)); });
+  }, function () { throw E("net"); });
+}
+var wait = function (ms) { return SK.sleep(SK.reduced ? 0 : ms); };
+function sendCode() {
+  if (MOCK) return wait(700);
+  return supa().then(function (c) { return c.auth.signInWithOtp({ email: me.email, options: { shouldCreateUser: true, data: { first_name: me.first } } }); }).then(function (r) { if (r.error) throw E(r.error.status === 429 ? "wait" : "send", r.error.status === 429 ? null : r.error.message); });
+}
+function checkCode(token) {
+  if (MOCK) return wait(800).then(function () { if (token === "000000") throw E("bad_code"); return { access_token: "mock", refresh_token: "mock" }; });
+  return supa().then(function (c) { return c.auth.verifyOtp({ email: me.email, token: token, type: "email" }); }).then(function (r) { if (r.error || !r.data || !r.data.session) throw E(/expired/i.test(r.error && r.error.message || "") ? "expired_code" : "bad_code"); return r.data.session; });
+}
+function oauth(way, b) {
+  if (MOCK) {
+    b.classList.add("busy"); SFX.play("send");
+    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
+  }
+  return supa().then(function (c) { return c.auth.signInWithOAuth({ provider: way, options: { redirectTo: location.origin + location.pathname + location.search + HASH } }); });
+}
+function handoff() {
+  if (MOCK) return wait(400).then(function () { return { code: "STANDIN", download: "#download", open: "studio://handoff?code=STANDIN", expires_in: 3600 }; });
+  var s = me.session; me.session = { access_token: s.access_token };   /* the refresh token is the app's now: never used here again */
+  return api("/web/handoff", { access_token: s.access_token, refresh_token: s.refresh_token });
+}
+function checkout() {
+  if (MOCK) return wait(1200).then(function () { return { mock: true }; });
+  return api("/web/checkout", { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements" }).then(function (c) {
+    if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
+    return c;
+  });
+}
+function lookup(code) {
+  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Evan Nicolini", name: "", plan: "pro" }; });
+  return api("/web/invite?code=" + encodeURIComponent(code)).catch(function (x) { if (x.status === 404) return { state: "unknown" }; throw x; });
+}
+function redeem() {
+  if (MOCK) return wait(700).then(function () { return { code: "STANDIN", download: "#download", open: "studio://handoff?code=STANDIN", account: { role: "friend", plan: "pro" } }; });
+  var s = me.session; me.session = { access_token: s.access_token };
+  return api("/web/invite/redeem", { access_token: s.access_token, refresh_token: s.refresh_token, code: INV }).catch(function (x) {
+    throw E(x.code, { invite_joined: "This invite was already used. Ask the person who sent it for a new one.", invite_used: "This invite was already used. Ask the person who sent it for a new one.", invite_revoked: "This invite was taken back. Ask the person who sent it for a new one.", invite_expired: "This invite ran out. Ask the person who sent it for a new one.", invite_unknown: "This invite is not one we know. Check the link, or ask for a new one." }[x.code] || null);
+  });
+}
+
+/* ---------- a friend's invite: no plan, no card ---------- */
+function setInvite(inv) {
+  me.invite = inv; var f = (inv.from || "").split(/\s+/)[0];
+  var fromP = $("[data-st-from]"); fromP.hidden = false;
+  $("[data-st-fi]").textContent = (f || "S").charAt(0).toUpperCase();
+  $("[data-st-badge]").textContent = "Invite";
+  var h = $("[data-st-in-h]"), s = $("[data-st-in-s]");
+  if (inv.state !== "open") {
+    var why = { joined: "This invite was already used.", revoked: "This invite was taken back.", expired: "This invite ran out.", unknown: "This invite is not one we know." }[inv.state] || "This invite can't be used.";
+    $("[data-st-ft]").textContent = why;
+    h.innerHTML = esc(why.replace(/\.$/, "")) + "<span>Ask for a new one.</span>";
+    s.textContent = inv.state === "unknown" ? "Check the link, or ask the person who sent it for a new one." : "Ask the person who sent it for a new one.";
+    $("[data-st-ways]").hidden = true; $(".st-fine").hidden = true; next.hidden = true;
+    return;
+  }
+  $("[data-st-ft]").textContent = (f ? f + " invited you" : "You're invited") + (inv.name ? ". For " + inv.name + "." : ".");
+  h.innerHTML = esc(f ? f + " invited you." : "You're invited.") + "<span>Studio Pro, on us.</span>";
+  s.textContent = "No card, no plan. Sign in and Studio downloads.";
+  ORDER = ["in", "code"]; setStep(at, true);
+}
+
+/* ---------- You're in ---------- */
+var doneEl = $("[data-st-done]");
+function showDone(has) {
+  var f = first() || "there", pl = planOf(me.plan), h = me.hand || {};
+  wall("done");
+  $("[data-st-dk]").textContent = has ? "You have Studio" : me.invite ? "You're in" : "Trial started";
+  $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
+  $("[data-st-dsub2]").textContent = "Studio is downloading.";
+  $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
+    : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
+    : "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before.";
+  var open = $("[data-st-open]"), dl = $("[data-st-dl]");
+  open.href = h.open || "studio://"; dl.href = h.download || "#";
+  drawPass(pass2);
+  pass1.stop();
+  if (!sheet.classList.contains("done")) {
+    sheet.classList.add("done"); sheet.classList.remove("shown");
+    sheet.scrollTop = 0; doneEl.scrollTop = 0;
+    pass2.enter(2100);
+    setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
+    SFX.play("done");
+    setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
+    setTimeout(download, 1800);   /* the download starts by itself */
+  }
+}
+function download() {
+  var u = me.hand && me.hand.download;
+  if (!u || u === "#download" || MOCK) { toast("Downloading Studio (stand-in)."); return; }
+  var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
+}
+$("[data-st-dl]").addEventListener("click", function (e) { e.preventDefault(); download(); });
+$("[data-st-open]").addEventListener("click", function (e) { if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); } });
+
+/* ---------- open / close ---------- */
+function open() {
+  if (sheet.classList.contains("open")) return;
+  lastFocus = document.activeElement;
+  if (!sky.getAttribute("src")) { sky.src = WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  SFX.wake();
+  sheet.hidden = false; sheet.scrollTop = 0;
+  html.classList.add("wl-open");
+  if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
+  if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
+  requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  wallNow = sky.getAttribute("src");
+  wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal(); reveal(stepEl(ORDER[at]));
+  drawHome();
+  focusStep(SK.reduced ? 0 : 560);
+}
+function hide() {
+  if (!sheet.classList.contains("open")) return;
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop();
+  setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
+  if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+}
+function close() {
+  if (pushed) { pushed = false; history.back(); return; }
+  hide();
+  if (DEEP.test(location.hash)) try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+}
+window.addEventListener("popstate", function () { if (DEEP.test(location.hash)) open(); else { pushed = false; hide(); } });
+window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)) open(); });
+document.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-start], a[href='" + HASH + "']"); if (!t || sheet.contains(t)) return; e.preventDefault(); open(); });
+$("[data-st-close]").addEventListener("click", close);
+sheet.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { e.preventDefault(); close(); return; }
+  if (e.key !== "Tab") return;
+  var f = [].slice.call(sheet.querySelectorAll("button, input, a[href], [tabindex='0']")).filter(function (x) { return !x.disabled && x.offsetParent !== null && getComputedStyle(x).visibility !== "hidden"; });
+  if (!f.length) return;
+  var i = f.indexOf(document.activeElement);
+  if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+});
+
+/* Restart (this Mac only): back to the first step, nothing kept */
+var restartB = $("[data-st-restart]");
+restartB.hidden = !local;
+restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
+
+/* first paint */
+drawPlans(); drawHome(); setStep(0, true);
+if (INV) lookup(INV).then(setInvite, function () { setInvite({ state: "open", from: "" }); });
+/* back from Google/Apple (the session is in the address), or from a bank's 3-D Secure page (?paid=1) */
+if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { return c.auth.getSession(); }).then(function (r) {
+  var s = r && r.data && r.data.session; if (!s) return;
+  var u = s.user || {}, md = u.user_metadata || {};
+  me.session = s; me.email = u.email || ""; me.first = (md.given_name || md.first_name || md.full_name || md.name || "").split(/\s+/)[0];
+  try { history.replaceState(null, "", location.pathname + location.search + HASH); } catch (e) {}
+  open(); signedIn().catch(function (x) { err(say(x)); });
+});
+if (Q.has("paid") && Q.get("redirect_status") === "succeeded") { open(); paid({}); }
+if (DEEP.test(location.hash)) setTimeout(open, SK.reduced ? 0 : 250);
