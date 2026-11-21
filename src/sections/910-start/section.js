@@ -112,7 +112,11 @@ function drawHome(typing) {
   $("[data-st-date]").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }).replace(",", " ·");
   $("[data-st-state]").textContent = signed ? "Signed in · " + (me.email || "you") : me.email ? "Signing in · " + me.email : "Not signed in";
   var n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
-  $("[data-st-chips]").innerHTML = brandList(n).slice(0, 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; }).join("");
+  /* the plan shows as chips on Home (its brands, then "+ more" and the seats), never as an open menu over the card */
+  var shown = brandList(n).slice(0, n > 3 ? 2 : 3).map(function (b) { return '<span class="wl-chip">' + mono(b) + esc(b.n) + "</span>"; });
+  if (n > 3) shown.push('<span class="wl-chip more">+ more</span>');
+  if (ORDER[at] === "plan" || ORDER[at] === "pay") shown.push('<span class="wl-chip seats"><span class="av">' + new Array(Math.min(3, pl.people) + 1).join("<i></i>") + "</span>" + pl.people + (pl.people === 1 ? " person" : " people") + "</span>");
+  $("[data-st-chips]").innerHTML = shown.join("");
   $("[data-st-av]").textContent = (f || "Y").charAt(0).toUpperCase();
   $("[data-st-mename]").textContent = f ? (me.first || val("first")) : "You";
   $("[data-st-meplan]").textContent = me.invite ? "Pro · on " + ((me.invite.from || "a friend").split(/\s+/)[0]) : signed ? pl.name + " · 14-day trial" : me.email ? "Checking your email…" : "Not signed in yet";
@@ -133,7 +137,7 @@ function drawPlanStage() {
   $("[data-st-menuh]").textContent = "Studio " + pl.name + " · " + (pl.brands > 5 ? "every brand" : pl.brands + (pl.brands === 1 ? " brand" : " brands"));
   var av = ""; for (var i = 0; i < Math.min(3, pl.people); i++) av += "<i></i>"; if (pl.people > 3) av += '<i class="more">+' + (pl.people - 3) + "</i>";
   $("[data-st-seats]").innerHTML = "<span>" + av + "</span>" + pl.people + (pl.people === 1 ? " person" : " people");
-  $("[data-st-allb]").textContent = pl.brands === 1 ? bl[0].n : "All brands · " + (pl.brands > 5 ? "every brand" : pl.brands);
+  $("[data-st-allb]").textContent = pl.brands === 1 ? bl[0].n : pl.brands > 5 ? "Every brand" : "All brands · " + pl.brands;
   drawHome();
 }
 function sizeStage() {
@@ -316,7 +320,7 @@ function setStep(n, quiet) {
   next.hidden = last; go.hidden = !last;
   $("[data-st-next-t]").textContent = q === "in" ? ($("[data-st-mail]").hidden ? "Continue" : "Send my code") : q === "code" ? "Verify" : "Continue";
   next.disabled = !ready();
-  scenes.home.classList.toggle("menu", q === "plan");
+  scenes.home.classList.remove("menu");
   $("[data-st-look]").hidden = !(PAYWALL && q === "plan");
   if (q === "plan") drawPlanStage(); else drawHome();
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();

@@ -233,3 +233,13 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-look { height: 46px; padding: 0 18px; border-radius: 999px; font: 500 14px/1 var(--sans); color: var(--wl-l2); background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); align-self: center; }
 .st-look:hover { color: #fff; background: rgba(var(--tint), .62); }
 .wl.st.embed [data-st-snd] { display: none; }
+
+/* the plan on Home: chips that wrap, never clipped */
+.wl.st .wl-chips { flex-wrap: wrap; row-gap: 8px; }
+.wl-chip.more { color: var(--wl-l2); }
+.wl-chip.seats .av { display: inline-flex; margin-right: 8px; }
+.wl-chip.seats .av i { width: 18px; height: 18px; margin-right: -5px; border-radius: 50%; box-shadow: 0 0 0 1.5px rgba(var(--tint), .9); background: linear-gradient(140deg, var(--platinum), var(--slate)); }
+.wl-chip.seats .av i:nth-child(2) { background: linear-gradient(140deg, var(--celadon), var(--chinese)); }
+.wl-chip.seats .av i:nth-child(3) { background: linear-gradient(140deg, var(--jet), #2a3a44); }
+.wl-chip.more { padding: 0 14px; }
+.wl-chip.seats { padding: 0 14px 0 10px; }
