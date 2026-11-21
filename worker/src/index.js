@@ -487,7 +487,7 @@ async function resync(url, env) {
 // Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
 const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
   PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text",
-  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean", FIRST_MAKE: "text" };
+  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean", FIRST_MAKE: "text", DREAM: "text", DREAM_AT: "text" };   // DREAM / DREAM_AT: the dream interview's answer (Evan's yes, 2026-11-21)
 async function brevoSetup(env) {
   if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
   const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
