@@ -91,7 +91,7 @@ var SFX = (function () {
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
+  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   function play(n, o) {
     o = o || {};
@@ -148,9 +148,9 @@ var KAY = (function () {
     /* her answers to a pick (single-choice steps): they cut in, and the last pick wins */
     b1: "One brand. All in. Love that.", b2: "Two or three. Studio keeps every one of them looking like itself.", b4: "Four or more? You're exactly who we built this for.",
     cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it.",
-    check: "Almost there. I just sent a code to your email. Pop it in here... and your spot is yours."
+    confirm: "Check your email. I just sent you a code... pop it in here to lock in your spot."
   };
-  var UNRECORDED = { check: 1 };   /* no voice file yet: she shows the words and stays quiet (drop it from here once wl-check.mp3 is in) */
+  var UNRECORDED = {};   /* a line with no voice file yet: she shows the words and stays quiet */
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
@@ -275,7 +275,7 @@ function wall(k) {
     sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = u; });
   });
 }
-var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite", check: "check" };
+var LINE = { name: "name", roles: "roles", brands: "brands", claude: "claude", you: "invite", check: "confirm" };
 var SCENE = { name: "home", roles: "home", brands: "home", claude: "claude", you: "you", check: "you" };
 WALL.check = WALL.you; /* question 3 opens Home's All brands menu */
 var segs = [].slice.call(sheet.querySelectorAll(".wl-seg i")), scenes = {};
@@ -881,12 +881,12 @@ function open(src) {
   wallNow = sky.getAttribute("src");
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();
-  if (CTOK) { wall("you"); confirmLink(); KAY.say(["check"]); }
+  if (CTOK) { wall("you"); confirmLink(); KAY.say(["confirm"]); }
   else if (j) showDone(j, true);
   else if (pend && at === 0) {   /* signed up on this device and the code is still waiting: back to it */
     form.elements.first.value = pend.first || ""; form.elements.last.value = pend.last || ""; form.elements.email.value = pend.email;
     sheet.querySelector("[data-wl-cmail]").textContent = pend.email;
-    setStep(ORDER.indexOf("check"), true); wall("you"); pass1.start(); resendIn(0); KAY.say(["check"]); focusStep(SK.reduced ? 0 : 560);
+    setStep(ORDER.indexOf("check"), true); wall("you"); pass1.start(); resendIn(0); KAY.say(["confirm"]); focusStep(SK.reduced ? 0 : 560);
   }
   else {
     wall(ORDER[at]); want(ORDER[at + 1]); personal(); reveal(steps[at]);
