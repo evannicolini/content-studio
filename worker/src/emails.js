@@ -18,7 +18,7 @@ const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&":
 const one = (v, max = 80) => String(v == null ? "" : v).replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 
 // The designed frame: hero, then the glass card (a solid colour, so no client turns it white), then the footer.
-function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, middle = "", button, fine, site = SITE }) {
+function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, middle = "", button, fine, footer = "", site = SITE }) {
   const btn = button ? `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 4px;"><tr><td align="center" bgcolor="${C.pearl}" style="border-radius:999px;background:${C.pearl};">
 <a href="${esc(button.href)}" style="display:block;padding:17px 24px;font-family:${FONT};font-size:16px;line-height:20px;font-weight:600;color:${C.jet};text-decoration:none;border-radius:999px;">${esc(button.label)}</a>
@@ -32,7 +32,7 @@ function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, mi
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${C.night}" style="background:${C.night};">
 <tr><td align="center" style="padding:32px 12px 40px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
-<tr><td style="padding:0 4px 18px;font-family:${MONO};font-size:12px;line-height:16px;letter-spacing:4px;text-transform:uppercase;color:${C.soft};">Studio</td></tr>
+<tr><td style="padding:0 4px 20px;"><img src="${esc(site + "/assets/email/studio-lockup.png")}" width="120" height="34" alt="Studio" style="display:block;width:120px;height:34px;border:0;font-family:${FONT};font-size:22px;line-height:34px;font-weight:600;color:${C.ink};"></td></tr>
 <tr><td bgcolor="${C.card}" style="background:${C.card};border:1px solid ${C.rim};border-radius:28px;overflow:hidden;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
 ${hero ? `<tr><td bgcolor="#2A3E48" style="background:#2A3E48;border-radius:27px 27px 0 0;overflow:hidden;line-height:0;font-size:0;">
@@ -44,7 +44,7 @@ ${kicker ? `<div style="font-family:${MONO};font-size:11px;line-height:14px;lett
 ${middle}${btn}
 ${fine ? `<p style="margin:26px 0 0;font-size:13px;line-height:20px;color:${C.dim};">${fine}</p>` : ""}
 </td></tr></table></td></tr>
-<tr><td align="center" style="padding:22px 12px 0;font-family:${FONT};font-size:12px;line-height:18px;color:${C.dim};">Studio &middot; <a href="${SITE}" style="color:${C.dim};text-decoration:none;">askstudio.ai</a><br>Nicolini Productions LLC</td></tr>
+<tr><td align="center" style="padding:22px 12px 0;font-family:${FONT};font-size:12px;line-height:18px;color:${C.dim};">Studio &middot; <a href="${SITE}" style="color:${C.dim};text-decoration:none;">askstudio.ai</a><br>Nicolini Productions LLC${footer}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
@@ -82,10 +82,13 @@ export function youreInEmail(first, place, refLink) {
 }
 
 // 3. Your invite is here (held for launch): the access link, and 14 days free.
-export function inviteEmail(first, accessLink) {
+// It goes to the waitlist (a list), so its footer carries the unsubscribe link and the company's postal address (CAN-SPAM).
+// unsubscribe defaults to Brevo's own tag; address must be the real mailing address before it is sent.
+export function inviteEmail(first, accessLink, { unsubscribe = "{{ unsubscribe }}", address = "[MAILING ADDRESS]" } = {}) {
   const name = one(first), subject = "Your Studio invite is here";
   const text = [(name ? name + ", your" : "Your") + " invite to Studio is here.", "", "Your 14 days of everything, free, start when you open it.", "",
-    "Open your invite:", accessLink, "", "This link is just for you.", "", "Studio", "askstudio.ai"].join("\n");
+    "Open your invite:", accessLink, "", "This link is just for you.", "", "Studio", "askstudio.ai", "Nicolini Productions LLC, " + address, "",
+    "You're getting this because you joined the Studio waitlist. Unsubscribe: " + unsubscribe].join("\n");
   const pass = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;"><tr>
 <td bgcolor="${C.well}" style="background:${C.well};border:1px solid ${C.rim};border-radius:20px;padding:20px 22px;font-family:${FONT};">
 <div style="font-family:${MONO};font-size:10px;line-height:14px;letter-spacing:3px;text-transform:uppercase;color:${C.soft};">Early access &middot; Invite</div>
@@ -100,6 +103,7 @@ export function inviteEmail(first, accessLink) {
     intro: "Your invite is here. Open it to start your 14 days of everything, free. One prompt, and the idea in your head becomes a finished video.",
     middle: pass, button: { label: "Open my invite", href: accessLink },
     fine: "This link is just for you. Questions? Reply to this email.",
+    footer: `<br>${esc(address)}<br><br>You're getting this because you joined the Studio waitlist.<br><a href="${esc(unsubscribe)}" style="color:${C.dim};text-decoration:underline;">Unsubscribe</a>`,
   });
   return { subject, html, text };
 }
@@ -118,7 +122,7 @@ export function welcomeEmail(first, downloadLink) {
     kicker: "Welcome", headline: name ? "Welcome to Studio, " + esc(name) + "." : "Welcome to Studio.",
     intro: "Studio is yours to try. Download it, and make your first video before you pay anything.",
     middle: list, button: { label: "Download Studio for Mac", href: downloadLink },
-    fine: "If the download didn't start, use the button above. Questions? Reply to this email.",
+    fine: "Questions? Just reply to this email.",
   });
   return { subject, html, text };
 }

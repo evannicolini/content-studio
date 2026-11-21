@@ -493,6 +493,17 @@ async function brevoCheck(env) {
   });
 }
 
+// What Brevo did with the emails to one address (sent, delivered, bounced…), newest first. Reads only.
+async function mailEvents(url, env) {
+  if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
+  const email = text(url.searchParams.get("email"), 300).toLowerCase();
+  if (!EMAIL.test(email)) return fail("Add ?email=.");
+  const res = await fetch(BREVO + "/smtp/statistics/events?limit=20&sort=desc&email=" + encodeURIComponent(email), { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });
+  if (!res.ok) return fail("Brevo said " + res.status + ".", 502);
+  const j = await res.json();
+  return json({ ok: true, events: (j.events || []).map((e) => ({ event: e.event, date: e.date, subject: e.subject, from: e.from, reason: e.reason || "" })) });
+}
+
 function csvCell(v) {
   let s = v === null || v === undefined ? "" : String(v);
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
@@ -536,6 +547,7 @@ async function route(request, url, env, ctx) {
     if (path === "/admin/export.csv" && m === "GET") return await exportCsv(env);
     if (path === "/admin/brevo-setup" && m === "POST") return await brevoSetup(env);
     if (path === "/admin/brevo-check" && m === "GET") return await brevoCheck(env);
+    if (path === "/admin/mail-events" && m === "GET") return await mailEvents(url, env);
   }
   return fail("Not found.", 404);
 }
