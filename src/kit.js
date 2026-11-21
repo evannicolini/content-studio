@@ -333,7 +333,7 @@
     }
     host.innerHTML =
       '<div class="ah">' +
-      '<aside class="ah-sb">' +
+      '<aside class="ah-sb" data-frost>' +
         '<p class="ah-sbh">' + MARK + "<span>Studio</span>" + sv("pin") + "</p>" +
         '<p class="ah-allb">' + sv("grid") + '<span data-ah-allb>All brands</span>' + sv("car") + "</p>" +
         ni("home", "Home", null, true) +
@@ -344,7 +344,7 @@
         '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
-      '<div class="ah-main">' +
+      '<div class="ah-main" data-frost>' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
           '<div class="ah-comp"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-drop">Drop to add to Studio</span><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
@@ -369,11 +369,14 @@
         "</div>" +
       "</div>" +
       /* Ask Studio, the chat that slides in from the right */
-      '<aside class="ah-ap" aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
+      '<aside class="ah-ap" data-frost aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
         '<div class="ah-apc">' + BEAM + '<span>Reply to Studio…</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></aside>" +
       /* the footage you drag in */
       '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
       "</div>";
+    /* the composer's beam moves only while a request is being typed; Ask Studio's while its panel is open (each moving beam costs a style pass a frame) */
+    var cbs = host.querySelectorAll(".ah-cb"); for (var ci = 0; ci < cbs.length; ci++) cbs[ci].setAttribute("data-paused", "");
+    var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
       name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
@@ -387,7 +390,7 @@
         chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
-      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
+      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); beamRun(".ah-comp > .ah-cb", !!caret); },
       attach: function (imgs) { host.querySelector("[data-ah-att]").innerHTML = (imgs || []).map(function (u, i) { return '<span class="wl-in-a" style="--i:' + i + '"><img src="' + esc(u) + '" alt=""></span>'; }).join("") + (imgs && imgs.length ? "<b>" + imgs.length + " clips</b>" : ""); },
       sending: function (on) { host.querySelector(".ah-comp").classList.toggle("send", !!on); },
       working: function (on, title, status) { var wk = host.querySelector("[data-ah-wk]"); wk.hidden = !on; if (title) host.querySelector("[data-ah-wkt]").textContent = title; if (status) host.querySelector("[data-ah-wks]").textContent = status; },
@@ -413,7 +416,7 @@
     };
     /* the app runs off the right edge of the screen: the editor and Ask Studio keep to the part you can see (--cut, app pixels) */
     var fitCut = function () { var r = root.getBoundingClientRect(), k = r.width / 1440 || 1, vis = (window.innerWidth - r.left) / k; root.style.setProperty("--cut", Math.max(0, Math.round(1440 - vis + 28)) + "px"); };
-    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
+    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
     ctl.clip = function (u, i) { trk("v").insertAdjacentHTML("beforeend", '<i class="ah-tc wl-in-a" style="--i:0;flex:' + (i === 1 ? 1.5 : 1) + '"><img src="' + esc(u) + '" alt=""></i>'); host.querySelector("[data-ed-pv]").src = u; };
     ctl.music = function () { var w = ""; for (var i = 0; i < 90; i++) w += '<b style="height:' + Math.round(22 + 70 * Math.abs(Math.sin(i * .37) * Math.cos(i * .11))) + '%"></b>'; trk("m").innerHTML = '<i class="ah-tw">' + w + "</i>"; };
     ctl.captions = function (lines) { trk("c").innerHTML = lines.map(function (t, i) { return '<i class="ah-tcp wl-in-a" style="--i:' + i + '">' + esc(t) + "</i>"; }).join(""); };
@@ -421,7 +424,7 @@
     ctl.title = function (t) { host.querySelector(".ah-edt b").textContent = t; };
     ctl.caption = function (t) { host.querySelector("[data-ed-cap]").textContent = t; };
     ctl.play = function (on) { root.classList.toggle("ed-play", !!on); if (on) host.querySelector("[data-ed-v]").textContent = "v01 · Ready to review"; };
-    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
+    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); beamRun(".ah-apc > .ah-cb", !!on); beamRun(".ah-ask > .ah-cb", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
     ctl.msg = function (who, html, imgs) {   /* who: "you" | "studio" | "step" (a line that turns from a spinner to a tick) */
       var m = document.createElement("div"); m.className = "ah-m " + who + " wl-in-a";
       m.innerHTML = who === "studio" ? '<span class="ah-av">' + MARK + "</span><p>" + html + "</p>" : who === "step" ? '<i class="ah-spin"></i><span>' + html + "</span>" :
@@ -505,12 +508,38 @@
     set(); window.addEventListener("scroll", set, { passive: true });
   }
 
+  /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
+     wallpaper (assets/.../*-frost.jpg, 360 px, blurred) as its background, lined up with where the wallpaper sits on the screen, under
+     its tint and rim. iPhone's WebKit draws no live backdrop blur inside a masked or faded box, and it costs a phone far less than a
+     live 30 px blur. SK.frost(src) on a wallpaper change; it re-aligns on resize and while things move (SK.frost.nudge()). ---------- */
+  SK.frost = (function () {
+    var src = "", t = 0, until = 0;
+    function place() {
+      var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
+      var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
+      var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i], r = el.getBoundingClientRect(); if (!r.width || !el.offsetWidth) continue;
+        var k = r.width / el.offsetWidth;
+        el.style.setProperty("--fz-img", 'url("' + src + '")');
+        el.style.setProperty("--fz-w", (dw / k).toFixed(1) + "px"); el.style.setProperty("--fz-h", (dh / k).toFixed(1) + "px");
+        el.style.setProperty("--fz-x", ((dx - r.left) / k).toFixed(1) + "px"); el.style.setProperty("--fz-y", ((dy - r.top) / k).toFixed(1) + "px");
+      }
+    }
+    function loop() { place(); if (performance.now() < until) t = requestAnimationFrame(loop); else t = 0; }
+    function nudge(ms) { until = Math.max(until, performance.now() + (ms || 1800)); if (!t) t = requestAnimationFrame(loop); }
+    window.addEventListener("resize", function () { nudge(400); });
+    var f = function (wall) { if (!wall) return; src = new URL(wall.replace(/(-m)?\.jpg$/, function (m, mm) { return (mm || "") + "-frost.jpg"; }), document.baseURI).href;   /* absolute: a url() in a custom property resolves against the stylesheet that uses it */ var im = new Image(); im.src = src; nudge(2600); };
+    f.nudge = nudge; f.place = place;
+    return f;
+  })();
+
   /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
      Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
      code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
      SK.chapters({ list: [[id, name]], now: () => id, go: (id) => {}, walls: true, wall: (src or "") => {}, wallDefault: "Orange dune" })
      SK.wallPick() is the background picked here ("" = the page's own). ---------- */
-  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Big Sur"], ["wl/claude", "Alpine lake"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
+  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Dune grass"], ["wl/claude", "Coast pine"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
   SK.wallPick = function () { try { return localStorage.getItem("studio-wall-" + (window.SK_PAGE || "site")) || ""; } catch (e) { return ""; } };
   SK.chapters = function (o) {
     var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };

@@ -339,7 +339,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     }
     host.innerHTML =
       '<div class="ah">' +
-      '<aside class="ah-sb">' +
+      '<aside class="ah-sb" data-frost>' +
         '<p class="ah-sbh">' + MARK + "<span>Studio</span>" + sv("pin") + "</p>" +
         '<p class="ah-allb">' + sv("grid") + '<span data-ah-allb>All brands</span>' + sv("car") + "</p>" +
         ni("home", "Home", null, true) +
@@ -350,7 +350,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
-      '<div class="ah-main">' +
+      '<div class="ah-main" data-frost>' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
         '<div class="ah-hi"><p class="ah-date">' + esc(date) + '</p><p class="ah-hello" data-ah-hello>' + greet + '</p><p class="ah-line">Today is a good day to make something great.</p>' +
           '<div class="ah-comp"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-drop">Drop to add to Studio</span><div class="ah-att" data-ah-att></div><p class="ah-cq"><span data-ah-ask>Post my newest videos on every channel this week</span><i></i></p><div class="ah-crow"><span class="ah-lk">' + MARK + "Studio <em>×</em> " + CLA + 'Claude</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></div>" +
@@ -375,11 +375,14 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         "</div>" +
       "</div>" +
       /* Ask Studio, the chat that slides in from the right */
-      '<aside class="ah-ap" aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
+      '<aside class="ah-ap" data-frost aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
         '<div class="ah-apc">' + BEAM + '<span>Reply to Studio…</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></aside>" +
       /* the footage you drag in */
       '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
       "</div>";
+    /* the composer's beam moves only while a request is being typed; Ask Studio's while its panel is open (each moving beam costs a style pass a frame) */
+    var cbs = host.querySelectorAll(".ah-cb"); for (var ci = 0; ci < cbs.length; ci++) cbs[ci].setAttribute("data-paused", "");
+    var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
       name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
@@ -393,7 +396,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
-      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
+      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); beamRun(".ah-comp > .ah-cb", !!caret); },
       attach: function (imgs) { host.querySelector("[data-ah-att]").innerHTML = (imgs || []).map(function (u, i) { return '<span class="wl-in-a" style="--i:' + i + '"><img src="' + esc(u) + '" alt=""></span>'; }).join("") + (imgs && imgs.length ? "<b>" + imgs.length + " clips</b>" : ""); },
       sending: function (on) { host.querySelector(".ah-comp").classList.toggle("send", !!on); },
       working: function (on, title, status) { var wk = host.querySelector("[data-ah-wk]"); wk.hidden = !on; if (title) host.querySelector("[data-ah-wkt]").textContent = title; if (status) host.querySelector("[data-ah-wks]").textContent = status; },
@@ -419,7 +422,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     };
     /* the app runs off the right edge of the screen: the editor and Ask Studio keep to the part you can see (--cut, app pixels) */
     var fitCut = function () { var r = root.getBoundingClientRect(), k = r.width / 1440 || 1, vis = (window.innerWidth - r.left) / k; root.style.setProperty("--cut", Math.max(0, Math.round(1440 - vis + 28)) + "px"); };
-    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
+    ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
     ctl.clip = function (u, i) { trk("v").insertAdjacentHTML("beforeend", '<i class="ah-tc wl-in-a" style="--i:0;flex:' + (i === 1 ? 1.5 : 1) + '"><img src="' + esc(u) + '" alt=""></i>'); host.querySelector("[data-ed-pv]").src = u; };
     ctl.music = function () { var w = ""; for (var i = 0; i < 90; i++) w += '<b style="height:' + Math.round(22 + 70 * Math.abs(Math.sin(i * .37) * Math.cos(i * .11))) + '%"></b>'; trk("m").innerHTML = '<i class="ah-tw">' + w + "</i>"; };
     ctl.captions = function (lines) { trk("c").innerHTML = lines.map(function (t, i) { return '<i class="ah-tcp wl-in-a" style="--i:' + i + '">' + esc(t) + "</i>"; }).join(""); };
@@ -427,7 +430,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     ctl.title = function (t) { host.querySelector(".ah-edt b").textContent = t; };
     ctl.caption = function (t) { host.querySelector("[data-ed-cap]").textContent = t; };
     ctl.play = function (on) { root.classList.toggle("ed-play", !!on); if (on) host.querySelector("[data-ed-v]").textContent = "v01 · Ready to review"; };
-    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
+    ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); beamRun(".ah-apc > .ah-cb", !!on); beamRun(".ah-ask > .ah-cb", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
     ctl.msg = function (who, html, imgs) {   /* who: "you" | "studio" | "step" (a line that turns from a spinner to a tick) */
       var m = document.createElement("div"); m.className = "ah-m " + who + " wl-in-a";
       m.innerHTML = who === "studio" ? '<span class="ah-av">' + MARK + "</span><p>" + html + "</p>" : who === "step" ? '<i class="ah-spin"></i><span>' + html + "</span>" :
@@ -511,12 +514,38 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     set(); window.addEventListener("scroll", set, { passive: true });
   }
 
+  /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
+     wallpaper (assets/.../*-frost.jpg, 360 px, blurred) as its background, lined up with where the wallpaper sits on the screen, under
+     its tint and rim. iPhone's WebKit draws no live backdrop blur inside a masked or faded box, and it costs a phone far less than a
+     live 30 px blur. SK.frost(src) on a wallpaper change; it re-aligns on resize and while things move (SK.frost.nudge()). ---------- */
+  SK.frost = (function () {
+    var src = "", t = 0, until = 0;
+    function place() {
+      var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
+      var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
+      var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i], r = el.getBoundingClientRect(); if (!r.width || !el.offsetWidth) continue;
+        var k = r.width / el.offsetWidth;
+        el.style.setProperty("--fz-img", 'url("' + src + '")');
+        el.style.setProperty("--fz-w", (dw / k).toFixed(1) + "px"); el.style.setProperty("--fz-h", (dh / k).toFixed(1) + "px");
+        el.style.setProperty("--fz-x", ((dx - r.left) / k).toFixed(1) + "px"); el.style.setProperty("--fz-y", ((dy - r.top) / k).toFixed(1) + "px");
+      }
+    }
+    function loop() { place(); if (performance.now() < until) t = requestAnimationFrame(loop); else t = 0; }
+    function nudge(ms) { until = Math.max(until, performance.now() + (ms || 1800)); if (!t) t = requestAnimationFrame(loop); }
+    window.addEventListener("resize", function () { nudge(400); });
+    var f = function (wall) { if (!wall) return; src = new URL(wall.replace(/(-m)?\.jpg$/, function (m, mm) { return (mm || "") + "-frost.jpg"; }), document.baseURI).href;   /* absolute: a url() in a custom property resolves against the stylesheet that uses it */ var im = new Image(); im.src = src; nudge(2600); };
+    f.nudge = nudge; f.place = place;
+    return f;
+  })();
+
   /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
      Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
      code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
      SK.chapters({ list: [[id, name]], now: () => id, go: (id) => {}, walls: true, wall: (src or "") => {}, wallDefault: "Orange dune" })
      SK.wallPick() is the background picked here ("" = the page's own). ---------- */
-  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Big Sur"], ["wl/claude", "Alpine lake"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
+  SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Dune grass"], ["wl/claude", "Coast pine"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
   SK.wallPick = function () { try { return localStorage.getItem("studio-wall-" + (window.SK_PAGE || "site")) || ""; } catch (e) { return ""; } };
   SK.chapters = function (o) {
     var esc = function (t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
@@ -954,7 +983,8 @@ var SFX = (function () {
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
+  var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
@@ -962,6 +992,8 @@ var SFX = (function () {
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
+  /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
+  ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -1008,7 +1040,7 @@ var SFX = (function () {
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
-    "su-in": "Welcome to Studio. Let's get it on your Mac. It's free to start.",
+    "su-in": "Hey, welcome to Studio. One prompt... and the idea in your head becomes a finished video. Let's get it on your Mac. It's free to start, so just tell me your name and your email.",
     "su-code": "Check your email. I just sent you a six-digit code.",
     "su-ok": "Okay, got it. You're in.",
     "su-done": "Studio is downloading. Open it, and make your first video before you pay a thing.",
@@ -1085,8 +1117,9 @@ function setSound(on) {
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
-sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".st-way, .st-plan, button, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
-sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(".st-way, .st-plan, button, a")) SFX.play("click"); });
+var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
+sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
@@ -1194,25 +1227,26 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u); SK.frost(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
     requestAnimationFrame(function () { requestAnimationFrame(function () { nx.classList.add("in"); }); });
     setTimeout(function () { if (tok !== wallTok) return; $$(".wl-sky").forEach(function (o) { if (o !== nx && o !== sky) o.remove(); }); }, 1400);
-    $$(".pass .frost").forEach(function (f) { f.src = u; });
+    $$(".pass .frost").forEach(function (f) { f.src = frostOf(u); });
   });
 }
+function frostOf(u) { return String(u).replace(/(-frost)?\.jpg$/, "-frost.jpg"); }   /* the pre-blurred wallpaper for the pass's glass (no live blur in its 3D card) */
 
 /* ---------- the pass (the same 3D object as early access, written for a member) ---------- */
 function passHTML() {
-  var frost = '<img class="frost" src="' + (sky.getAttribute("src") || "assets/hero/sky.jpg") + '" alt="">';
-  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+  var frost = '<img class="frost" src="' + frostOf(sky.getAttribute("src") || WALL["in"]) + '" alt="">';
+  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono" data-p="kind">Pro · Trial</span></div>' +
     '<div class="lift who"><span class="mono dim">Member</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
     '<div class="lift row"><div><span class="mono dim">Plan</span><b data-p="no">Pro</b></div><div><span class="mono dim" data-p="tk">Trial</span><b class="s" data-p="trial">14 days · $1</b></div><div><span class="mono dim" data-p="k3">Renews</span><b class="s" data-p="v3">' + esc(renew) + "</b></div></div>" +
     '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
-    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
     '<div class="lift what"><span class="mono dim">What\'s yours</span><h4>Your whole content team, on your Mac.</h4><ul data-p="list"><li><i></i>Every feature, from day one</li><li><i></i>Claude does the work</li><li><i></i>Cancel anytime before day 14</li></ul></div>' +
     '<div class="lift sig"><span class="mono dim">See you inside</span><span class="mono" data-p="sig">Studio</span></div></div>';
@@ -1227,21 +1261,27 @@ function Pass(el, opts) {
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
     if (!st.live) return;
-    if (el.offsetParent) {
+    if (fr++ % 20 === 0) vis = !!el.offsetParent;   /* a layout read 3 times a second, not 60 */
+    if (vis) {
       if (st.intro) {
         var t = Math.min(1, (now - st.intro.t0) / st.intro.ms), e = easeOut(t);
         st.ry = lerp(st.intro.ry0, 0, easeIO(t)) + st.flip; st.z = lerp(-900, 0, e); st.s = lerp(.62, 1, e); st.rx = lerp(26, 0, e);
         if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
       } else {
         var k = st.drag ? .35 : .09;
-        if (!fine && !st.drag) { st.try_ = Math.sin(now / 1600) * 9; st.trx = Math.cos(now / 2100) * 5; }
+        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
       el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
-      var ny = ((st.ry % 360) + 540) % 360 - 180;
-      el.style.setProperty("--mx", (.5 + ny / 90 * .5).toFixed(3)); el.style.setProperty("--my", (.35 - st.rx / 40).toFixed(3));
+      var ny = ((st.ry % 360) + 540) % 360 - 180, mx = .5 + ny / 90 * .5, my = .35 - st.rx / 40;
+      if (Math.abs(mx - lastMx) > .004 || Math.abs(my - lastMy) > .004) {
+        lastMx = mx; lastMy = my;
+        foils.forEach(function (f) { f.style.setProperty("--mx", mx.toFixed(3)); f.style.setProperty("--my", my.toFixed(3)); });
+        specs.forEach(function (sp) { sp.style.transform = "translate3d(" + ((1 - mx) * 160 - 80).toFixed(1) + "%, 0, 0) skewX(-14deg)"; });
+      }
     }
     requestAnimationFrame(frame);
   }
@@ -1258,9 +1298,12 @@ function Pass(el, opts) {
   el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
   el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
   var q = function (k) { return el.querySelector('[data-p="' + k + '"]'); };
+  /* the pass's beam moves only while the pass is on screen */
+  function beamsRun(on) { el.querySelectorAll(".pbeam").forEach(function (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); }); }
+  beamsRun(false);
   return {
-    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } },
-    stop: function () { st.live = false; },
+    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
+    stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
@@ -1335,7 +1378,14 @@ function ready() {
 }
 var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
 /* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
-function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+function beamsOn() {   /* the fields of the step on screen carry the composer's beam: still, and moving only in the field you're typing in (21 always-moving beams made it hot and glitchy) */
+  sheet.querySelectorAll(".wl-fb").forEach(function (fb) {
+    var here = !!fb.closest(".wl-q.on"), typing = fb.parentNode.contains(document.activeElement), bad = !!fb.closest(".wl-f.bad");
+    if (here || bad) fb.setAttribute("data-active", ""); else fb.removeAttribute("data-active");
+    if (here && !typing && !bad) fb.setAttribute("data-paused", ""); else fb.removeAttribute("data-paused");
+  });
+}
+sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
@@ -1351,7 +1401,7 @@ function setStep(n, quiet, ack) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n; setTimeout(beamsOn, 40);
+  at = n; setTimeout(beamsOn, 40); SK.frost.nudge(1600);   /* the scenes slide: the frost follows them */
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -1907,14 +1957,14 @@ function open() {
   if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
-  if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = frostOf(sky.getAttribute("src")); }); }
   SFX.wake(); if (SFX.live()) SFX.bed.start();
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");

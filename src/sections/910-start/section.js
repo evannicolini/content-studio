@@ -37,7 +37,8 @@ var SFX = (function () {
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
+  var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
@@ -45,6 +46,8 @@ var SFX = (function () {
   load("bed", "assets/audio/bed-tides.mp3");
   VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
+  /* iPhone: Safari only lets a page start sound when a finger lifts (or on click), so it is unlocked there too, on every touch */
+  ["touchend", "click", "keydown"].forEach(function (t) { document.addEventListener(t, wake, { capture: true, passive: true }); });
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -91,7 +94,7 @@ var SFX = (function () {
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
-    "su-in": "Welcome to Studio. Let's get it on your Mac. It's free to start.",
+    "su-in": "Hey, welcome to Studio. One prompt... and the idea in your head becomes a finished video. Let's get it on your Mac. It's free to start, so just tell me your name and your email.",
     "su-code": "Check your email. I just sent you a six-digit code.",
     "su-ok": "Okay, got it. You're in.",
     "su-done": "Studio is downloading. Open it, and make your first video before you pay a thing.",
@@ -168,8 +171,9 @@ function setSound(on) {
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
-sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".st-way, .st-plan, button, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
-sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(".st-way, .st-plan, button, a")) SFX.play("click"); });
+var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
+sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
@@ -277,25 +281,26 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u); SK.frost(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
     requestAnimationFrame(function () { requestAnimationFrame(function () { nx.classList.add("in"); }); });
     setTimeout(function () { if (tok !== wallTok) return; $$(".wl-sky").forEach(function (o) { if (o !== nx && o !== sky) o.remove(); }); }, 1400);
-    $$(".pass .frost").forEach(function (f) { f.src = u; });
+    $$(".pass .frost").forEach(function (f) { f.src = frostOf(u); });
   });
 }
+function frostOf(u) { return String(u).replace(/(-frost)?\.jpg$/, "-frost.jpg"); }   /* the pre-blurred wallpaper for the pass's glass (no live blur in its 3D card) */
 
 /* ---------- the pass (the same 3D object as early access, written for a member) ---------- */
 function passHTML() {
-  var frost = '<img class="frost" src="' + (sky.getAttribute("src") || "assets/hero/sky.jpg") + '" alt="">';
-  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+  var frost = '<img class="frost" src="' + frostOf(sky.getAttribute("src") || WALL["in"]) + '" alt="">';
+  return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono" data-p="kind">Pro · Trial</span></div>' +
     '<div class="lift who"><span class="mono dim">Member</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
     '<div class="lift row"><div><span class="mono dim">Plan</span><b data-p="no">Pro</b></div><div><span class="mono dim" data-p="tk">Trial</span><b class="s" data-p="trial">14 days · $1</b></div><div><span class="mono dim" data-p="k3">Renews</span><b class="s" data-p="v3">' + esc(renew) + "</b></div></div>" +
     '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
-    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
+    '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
     '<div class="lift what"><span class="mono dim">What\'s yours</span><h4>Your whole content team, on your Mac.</h4><ul data-p="list"><li><i></i>Every feature, from day one</li><li><i></i>Claude does the work</li><li><i></i>Cancel anytime before day 14</li></ul></div>' +
     '<div class="lift sig"><span class="mono dim">See you inside</span><span class="mono" data-p="sig">Studio</span></div></div>';
@@ -310,21 +315,27 @@ function Pass(el, opts) {
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+  var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
     if (!st.live) return;
-    if (el.offsetParent) {
+    if (fr++ % 20 === 0) vis = !!el.offsetParent;   /* a layout read 3 times a second, not 60 */
+    if (vis) {
       if (st.intro) {
         var t = Math.min(1, (now - st.intro.t0) / st.intro.ms), e = easeOut(t);
         st.ry = lerp(st.intro.ry0, 0, easeIO(t)) + st.flip; st.z = lerp(-900, 0, e); st.s = lerp(.62, 1, e); st.rx = lerp(26, 0, e);
         if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
       } else {
         var k = st.drag ? .35 : .09;
-        if (!fine && !st.drag) { st.try_ = Math.sin(now / 1600) * 9; st.trx = Math.cos(now / 2100) * 5; }
+        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
       el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
-      var ny = ((st.ry % 360) + 540) % 360 - 180;
-      el.style.setProperty("--mx", (.5 + ny / 90 * .5).toFixed(3)); el.style.setProperty("--my", (.35 - st.rx / 40).toFixed(3));
+      var ny = ((st.ry % 360) + 540) % 360 - 180, mx = .5 + ny / 90 * .5, my = .35 - st.rx / 40;
+      if (Math.abs(mx - lastMx) > .004 || Math.abs(my - lastMy) > .004) {
+        lastMx = mx; lastMy = my;
+        foils.forEach(function (f) { f.style.setProperty("--mx", mx.toFixed(3)); f.style.setProperty("--my", my.toFixed(3)); });
+        specs.forEach(function (sp) { sp.style.transform = "translate3d(" + ((1 - mx) * 160 - 80).toFixed(1) + "%, 0, 0) skewX(-14deg)"; });
+      }
     }
     requestAnimationFrame(frame);
   }
@@ -341,9 +352,12 @@ function Pass(el, opts) {
   el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
   el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
   var q = function (k) { return el.querySelector('[data-p="' + k + '"]'); };
+  /* the pass's beam moves only while the pass is on screen */
+  function beamsRun(on) { el.querySelectorAll(".pbeam").forEach(function (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); }); }
+  beamsRun(false);
   return {
-    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } },
-    stop: function () { st.live = false; },
+    start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
+    stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
@@ -418,7 +432,14 @@ function ready() {
 }
 var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
 /* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
-function beamsOn() { sheet.querySelectorAll(".wl-fb").forEach(function (fb) { fb.setAttribute("data-active", ""); }); }
+function beamsOn() {   /* the fields of the step on screen carry the composer's beam: still, and moving only in the field you're typing in (21 always-moving beams made it hot and glitchy) */
+  sheet.querySelectorAll(".wl-fb").forEach(function (fb) {
+    var here = !!fb.closest(".wl-q.on"), typing = fb.parentNode.contains(document.activeElement), bad = !!fb.closest(".wl-f.bad");
+    if (here || bad) fb.setAttribute("data-active", ""); else fb.removeAttribute("data-active");
+    if (here && !typing && !bad) fb.setAttribute("data-paused", ""); else fb.removeAttribute("data-paused");
+  });
+}
+sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
@@ -434,7 +455,7 @@ function setStep(n, quiet, ack) {
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n; setTimeout(beamsOn, 40);
+  at = n; setTimeout(beamsOn, 40); SK.frost.nudge(1600);   /* the scenes slide: the frost follows them */
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -990,14 +1011,14 @@ function open() {
   if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
-  if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = frostOf(sky.getAttribute("src")); }); }
   SFX.wake(); if (SFX.live()) SFX.bed.start();
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
