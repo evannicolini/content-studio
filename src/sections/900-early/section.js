@@ -83,10 +83,14 @@ var SFX = (function () {
   /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
      are fetched and decoded right away, so the first click can play her at once */
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
-  var GAIN = { click: .5, tick: .16, key: .26, move: .38, send: .6, land: .45, done: .5 };
+  /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
+     scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
+  var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
+  var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
-  Object.keys(GAIN).forEach(function (n) { load(n, "assets/sfx/" + n + ".wav"); });
+  Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
+  load("bed", "assets/audio/bed-tides.mp3");
   load("vo:intro", "assets/audio/wl-intro.mp3");
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   function play(n, o) {
@@ -109,7 +113,25 @@ var SFX = (function () {
     return { dur: b.duration, at: function () { return Math.max(0, ctx.currentTime - t0); }, stop: function () { stopped = true; try { s.stop(); } catch (e) {} } };
   }
   function live() { var ua = navigator.userActivation; return !!ctx && (ctx.state === "running" || !ua || ua.isActive); }   /* a click or key is happening now (or already happened) */
-  return { wake: wake, play: play, voice: voice, live: live, has: function (k) { return !!buf["vo:" + k]; } };
+  /* the music bed (Theatre of Delays, "Tides", a seamless 97 s loop at about -24 LUFS): it fades in on the first click, sits about
+     10 dB lower while Kayla talks (300 ms ramps), swells a little on You're in, and fades out when the sheet closes */
+  var bed = (function () {
+    var src = null, g = null, duckOn = false, swellT = 0, swellOn = false, BASE = .9;
+    function level() { return BASE * (duckOn ? .316 : 1) * (swellOn ? 1.45 : 1); }
+    function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
+    return {
+      start: function () {
+        if (!SOUND || !ctx || !buf.bed || src) return;
+        g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
+        src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
+        to(level(), 1.5);
+      },
+      duck: function (on) { duckOn = !!on; to(level(), .3); },
+      swell: function () { swellOn = true; to(level(), 1.2); clearTimeout(swellT); swellT = setTimeout(function () { swellOn = false; to(level(), 2.5); }, 4200); },
+      stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
+    };
+  })();
+  return { wake: wake, play: play, voice: voice, live: live, bed: bed, has: function (k) { return !!buf["vo:" + k]; } };
 })();
 
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
@@ -143,7 +165,7 @@ var KAY = (function () {
     var my = ++tok;
     if (vo) { vo.stop(); vo = null; }
     cur = queue.shift();
-    if (!cur) { pill.classList.remove("talk"); return; }
+    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
     words(cur, !SOUND); wave(cur);
     if (!SOUND) { pill.classList.remove("talk"); return; }
     a.pause();
@@ -151,7 +173,7 @@ var KAY = (function () {
     if (SFX.has(cur) && SFX.live()) {
       vo = SFX.voice(cur, function () { ended(my); });
       if (vo) {
-        pill.classList.add("talk"); pill.classList.remove("ask"); reveal(cur, my);
+        pill.classList.add("talk"); pill.classList.remove("ask"); reveal(cur, my); SFX.bed.duck(true);
         (function tick() { if (my !== tok || !vo) return; bars(vo.at() / vo.dur); requestAnimationFrame(tick); })();
         return;
       }
@@ -159,17 +181,17 @@ var KAY = (function () {
     if (SFX.has(cur) && !SFX.live()) { block(my); return; }   /* a link opened with no click: she waits for the first tap or key */
     a.src = "assets/audio/wl-" + cur + ".mp3";
     var p = a.play();
-    pill.classList.add("talk"); pill.classList.remove("ask");
+    pill.classList.add("talk"); pill.classList.remove("ask"); SFX.bed.duck(true);
     reveal(cur, my);
     if (p && p.catch) p.catch(function () { block(my); });
   }
   function block(my) { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); }
   a.addEventListener("ended", function () { ended(tok); });
   function say(keys) { queue = [].concat(keys); a.pause(); next(); }
-  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); }
+  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); }
   pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
   /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
-  function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); say([cur].concat(queue)); } }
+  function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
   sheet.addEventListener("pointerdown", unblock, true);
   sheet.addEventListener("keydown", unblock, true);
   return { say: say, stop: stop, text: function (k) { return LINES[k]; } };
@@ -178,13 +200,14 @@ var sndB = sheet.querySelector("[data-wl-snd]");
 function setSound(on) {
   SOUND = on; sndB.setAttribute("aria-pressed", on ? "true" : "false"); sndB.setAttribute("aria-label", on ? "Sound on" : "Sound off");
   try { localStorage.setItem("studio-wl-sound", on ? "on" : "off"); } catch (e) {}
-  if (!on) KAY.stop();
+  if (!on) { KAY.stop(); SFX.bed.stop(.4); } else if (sheet.classList.contains("open")) SFX.bed.start();
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
 /* the pointer: a soft tick on hover (mouse only), a click on press; a key for every few letters typed */
-sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".wl-opt, button, .wl-sh, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
-sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.closest && e.target.closest(".wl-opt, button, .wl-sh, a")) SFX.play("click"); });
+var HIT = ".wl-opt, button, .wl-sh, a, input:not(.wl-hp), select, label.wl-sms, .wl-kay, .pass";
+sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- the sheet ---------- */
@@ -714,7 +737,7 @@ function open(src) {
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL.name; sheet.querySelectorAll(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
-  SFX.wake();
+  SFX.wake(); if (SFX.live()) SFX.bed.start();
   var j = joined();
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
@@ -736,7 +759,7 @@ function open(src) {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); loopTok++; KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -815,7 +838,7 @@ function showDone(r, quiet) {
     var dh = sheet.querySelector(".wl-dh");
     if (!SK.reduced) { var n = 0; dh.querySelectorAll("span").forEach(function (sp) { if (!sp.closest(".wl-roll")) n = words(sp, n); }); doneEl.classList.add("w0"); void doneEl.offsetWidth; setTimeout(function () { doneEl.classList.remove("w0"); }, 500); }
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
-    SFX.play("done");
+    SFX.bed.swell();
     KAY.say(["in", "share"]);
   }
   if (!quiet) setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
