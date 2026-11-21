@@ -474,7 +474,8 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .ea-ic { width: 16px; height: 16px; flex: none; fill: currentColor; }
 
 /* ---------- the floating Get early access: bottom right, or centred when Kayla's pill is closed. Phones: beside Kayla. ---------- */
-.ea-float { position: fixed; z-index: 71; right: max(clamp(14px, 1.8vw, 24px), env(safe-area-inset-right)); bottom: max(clamp(12px, 1.8vw, 24px), env(safe-area-inset-bottom)); height: 56px; padding: 0 10px 0 22px; transform: translate3d(0, 0, 0); transition: transform .6s var(--ease), opacity .45s var(--ease), right .5s var(--ease); }
+.ea-float { position: fixed; z-index: 71; right: max(clamp(14px, 1.8vw, 24px), env(safe-area-inset-right)); bottom: max(clamp(12px, 1.8vw, 24px), env(safe-area-inset-bottom)); height: 56px; padding: 0 8px 0 22px; transform: translate3d(0, 0, 0); transition: transform .6s var(--ease), opacity .45s var(--ease), right .5s var(--ease); }
+.ea-float .go { margin-right: 0; }
 .ea-float.away { transform: translate3d(0, 150%, 0); opacity: 0; pointer-events: none; }
 html.kp-off .ea-float { right: 50%; transform: translate3d(50%, 0, 0); }
 html.kp-off .ea-float.away { transform: translate3d(50%, 150%, 0); }

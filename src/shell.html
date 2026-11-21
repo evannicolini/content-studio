@@ -28,10 +28,6 @@
 <!-- Hero intro (src/sections/010-hero): the nav is part of the hero's opening, so it starts hidden and arrives with the button and
      the composer. The classes go on here, before any stylesheet, so the nav is never painted first; the hero's section.js takes
      them off again (after 7 s they come off by themselves if that script never runs). Not with reduced motion. -->
-<!-- Enter site (src/sections/010-hero): on the first visit of a browser session the page holds still at the top until the visitor
-     presses Enter. The hold goes on here, on the first frame, before anything can be scrolled: no wheel, touch, scroll keys,
-     restored scroll or anchor jump moves it. The hero's section.js lifts it on Enter (window.__hxRelease), or at once when there is
-     no gate (already entered this session, an invite= link, an #early-access link); after 12 s it lifts by itself if that script never runs. -->
 <!-- The waitlist and the sign-up are pages of their own now (build.py PAGES): an old #early-access / #signup / #paywall link goes
      straight there, before anything of this page loads, with its ?ref= / ?confirm= / ?pass= kept. -->
 <script>(function (l) {
@@ -41,46 +37,6 @@
   var extra = (m[2] || "").replace(/^[?&]/, ""), q = l.search + (extra ? (l.search ? "&" : "?") + extra : "");
   l.replace((m[1] === "signup" || m[1] === "paywall" ? "start/" : "early-access/") + q + "#" + (m[1] === "early" ? "early-access" : m[1]));
 })(location);</script>
-<style>html.hx-hold, html.hx-hold body { overflow: hidden; overflow-anchor: none; overscroll-behavior: none; } html.hx-hold { scrollbar-gutter: stable; }</style>
-<script>(function (r, w) {
-  var hold = true;
-  try { hold = sessionStorage.getItem("studio-entered") !== "1"; } catch (e) {}
-  if (/[#&]invite=|^#early(-access)?(&|$)/.test(location.hash)) hold = false; /* invite links, and the early access sign-up link */
-  w.__hxRelease = function () {};
-  if (!hold) return;
-  var KEYS = { " ": 1, Spacebar: 1, PageUp: 1, PageDown: 1, Home: 1, End: 1, ArrowUp: 1, ArrowDown: 1, ArrowLeft: 1, ArrowRight: 1 }, o = { passive: false, capture: true };
-  function top() { if (w.scrollY || w.scrollX) { r.style.scrollBehavior = "auto"; w.scrollTo(0, 0); r.style.scrollBehavior = ""; } }
-  function stop(e) { if (e.cancelable) e.preventDefault(); }
-  function touch(e) { if (e.touches && e.touches.length > 1) return; stop(e); } /* pinch zoom stays */
-  function key(e) {
-    if (!KEYS[e.key] || e.metaKey || e.ctrlKey || e.altKey) return;
-    var t = e.target, tag = t && t.tagName;
-    if ((e.key === " " || e.key === "Spacebar") && (tag === "BUTTON" || tag === "A")) return; /* Space presses the focused Enter button */
-    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || (t && t.isContentEditable)) return;
-    stop(e);
-  }
-  try { if ("scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
-  r.classList.add("hx-hold");
-  w.addEventListener("wheel", stop, o);
-  w.addEventListener("touchmove", touch, o);
-  w.addEventListener("keydown", key, o);
-  w.addEventListener("scroll", top, true);
-  document.addEventListener("DOMContentLoaded", top);
-  w.addEventListener("load", top);
-  top();
-  var safe = setTimeout(function () { w.__hxRelease(); }, 12000);
-  w.__hxHoldSafe = function () { clearTimeout(safe); };
-  w.__hxRelease = function () {
-    w.__hxRelease = function () {};
-    clearTimeout(safe);
-    w.removeEventListener("wheel", stop, o);
-    w.removeEventListener("touchmove", touch, o);
-    w.removeEventListener("keydown", key, o);
-    w.removeEventListener("scroll", top, true);
-    r.classList.remove("hx-hold");
-    try { history.scrollRestoration = "auto"; } catch (e) {}
-  };
-})(document.documentElement, window);</script>
 <script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

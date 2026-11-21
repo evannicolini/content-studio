@@ -1204,40 +1204,7 @@ window.addEventListener("resize", function () { requestAnimationFrame(syncGlass)
 window.addEventListener("load", function () { glassFor(5200); });
 glassFor(5200);
 
-/* ---------- Enter site: the first visit in a browser session holds the intro once the words are sharp, until the visitor enters.
-   "Enter site" plays Kayla's intro inside the click (that click is what lets Chrome and Safari play sound); "Enter without sound" just
-   goes on. Later visits in the session keep the plain intro and the start-on-first-click fallback (kit.js). ---------- */
-var gate = hero.querySelector(".hx-gate"), GATE_KEY = "studio-entered", needGate = false;
-try { needGate = !!gate && sessionStorage.getItem(GATE_KEY) !== "1"; } catch (e) { needGate = !!gate; }
-if (/[#&]invite=|^#early(-access)?(&|$)/.test(location.hash)) needGate = false; /* a link sent from a phone: straight to the download; the early access link: straight to the sign-up */
-if (needGate) { SK.holdSound = true; window.__hxHoldSafe && window.__hxHoldSafe(); } /* the page has held still since the first frame (shell.html) */
-else if (window.__hxRelease) window.__hxRelease();
-function showGate(next) {
-  html.classList.add("hx-hold");
-  if (SK.reduced) hero.classList.add("hold");
-  gate.hidden = false;
-  requestAnimationFrame(function () { gate.classList.add("on"); var b = gate.querySelector(".hx-enter"); b && b.focus({ preventScroll: true, focusVisible: false }); });
-  var done = false;
-  gate.querySelectorAll("[data-enter]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (done) return; done = true;
-      if (b.getAttribute("data-enter") === "sound") {
-        if (SK.kaylaOn) SK.kaylaOn(); /* asked for sound: she comes back even if closed on an earlier visit */
-        var a = SK.kayla && SK.kayla.audio;
-        if (a && a.paused) { try { a.currentTime = 0; } catch (e) {} var q = a.play(); q && q.catch(function () {}); }
-      }
-      try { sessionStorage.setItem(GATE_KEY, "1"); } catch (e) {}
-      gate.classList.remove("on");
-      setTimeout(function () { gate.hidden = true; }, SK.reduced ? 0 : 600);
-      if (window.__hxRelease) window.__hxRelease(); else html.classList.remove("hx-hold"); /* scrolling works again, from the top */
-      hero.classList.remove("hold");
-      hero.classList.add("quick"); html.classList.add("hx-quick"); /* after Enter the reveal runs quicker: the visitor has already waited on the gate */
-      next();
-    });
-  });
-}
-
-if (SK.reduced) { settled(); if (needGate) showGate(function () {}); return; }
+if (SK.reduced) { settled(); return; }
 
 /* in view: the loop runs. Out of view: timers stop, CSS animations pause (.off), and it picks up at the next prompt on return. */
 SK.onView(hero, function () {
@@ -1258,7 +1225,6 @@ function intro() {
   Promise.race([ready, SK.sleep(1200)]).then(function () {
     fit();
     setTimeout(function () { hero.classList.remove("w0"); }, 120);
-    if (needGate) { setTimeout(function () { showGate(function () { rise(0); }); }, 1300); return; }
     rise(1500);
   });
 }
@@ -1268,7 +1234,7 @@ function rise(d) {
 }
 /* the opening state was put on before the first paint (shell.html, section.html). If it is not there (the 7 s safety net already
    showed the hero because this script was slow to arrive), there is no intro to play: just start the prompts. */
-if (!hero.classList.contains("pre")) { settled(); if (needGate) showGate(function () { setTimeout(begin, 600); }); else setTimeout(begin, 900); }
+if (!hero.classList.contains("pre")) { settled(); setTimeout(begin, 900); }
 else if (document.visibilityState === "hidden") document.addEventListener("visibilitychange", function once() { if (document.visibilityState !== "visible") return; document.removeEventListener("visibilitychange", once); intro(); });
 else intro();
 
