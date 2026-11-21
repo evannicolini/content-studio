@@ -341,7 +341,7 @@
         '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
         '<p class="ah-ask"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
-        ni("plug", "Integrations") + '<p class="ah-upd">' + sv("dl") + "<span>Update</span><em>0.1.85</em></p>" + ni("set", "Settings") + "</div>" +
+        ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +

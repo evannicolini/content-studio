@@ -347,7 +347,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
         '<p class="ah-ask"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
-        ni("plug", "Integrations") + '<p class="ah-upd">' + sv("dl") + "<span>Update</span><em>0.1.85</em></p>" + ni("set", "Settings") + "</div>" +
+        ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
       "</aside>" +
       '<div class="ah-main">' +
         '<div class="ah-top"><p class="ah-coord">37.6800° N · 97.7600° W · ELEV 1324 M</p><span class="ah-tools"><b class="ah-tl">' + sv("l") + '</b><b class="ah-wp"><img src="assets/su/dune-chip.jpg" alt="">Orange dune, blue sky' + sv("car") + '</b><b class="ah-tl">' + sv("r") + '</b><b class="ah-wp f">' + sv("eye") + 'Focus</b><b class="ah-tl sq">' + sv("full") + "</b></span></div>" +
@@ -5741,7 +5741,7 @@ var SOUND = true;
 try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
 /* Kayla's sign-up lines that are recorded (assets/audio/<key>.mp3 + .json). Add a key here when its file lands; the rest stay silent.
    su-in su-code su-ok su-done pw-plan pw-ok pw-pay pw-promo pw-notrial pw-done */
-var VO = [];
+var VO = ["su-in", "su-code", "su-ok", "su-done", "pw-plan", "pw-ok", "pw-pay", "pw-promo", "pw-notrial", "pw-done"];
 var SFX = (function () {
   /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
      are fetched and decoded right away, so the first click can play her at once */
@@ -5995,7 +5995,7 @@ function passHTML() {
   return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono" data-p="kind">Pro · Trial</span></div>' +
     '<div class="lift who"><span class="mono dim">Member</span><div class="name" data-p="name"></div><div class="mail" data-p="mail"></div></div>' +
-    '<div class="lift row"><div><span class="mono dim">Plan</span><b data-p="no">Pro</b></div><div><span class="mono dim">Trial</span><b class="s" data-p="trial">14 days · $1</b></div><div><span class="mono dim" data-p="k3">Renews</span><b class="s" data-p="v3">' + esc(renew) + "</b></div></div>" +
+    '<div class="lift row"><div><span class="mono dim">Plan</span><b data-p="no">Pro</b></div><div><span class="mono dim" data-p="tk">Trial</span><b class="s" data-p="trial">14 days · $1</b></div><div><span class="mono dim" data-p="k3">Renews</span><b class="s" data-p="v3">' + esc(renew) + "</b></div></div>" +
     '<div class="lift cut"></div><div class="lift bars" data-p="bars"></div></div>' +
     '<div class="side back"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
     '<svg class="lift big" viewBox="36 36 440 440"><use href="#studio-mark"/></svg>' +
@@ -6048,7 +6048,7 @@ function Pass(el, opts) {
     stop: function () { st.live = false; },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
     set: function (d) {
-      ["kind", "mail", "no", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
+      ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
       if ("list" in d) q("list").innerHTML = d.list.map(function (t) { return "<li><i></i>" + esc(t) + "</li>"; }).join("");
       if ("seed" in d) bars(q("bars"), d.seed || "studio");
@@ -6060,7 +6060,8 @@ function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
     : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
-    : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
+    : paidStart() ? { kind: pl.name + " · " + (me.period === "year" ? "Yearly" : "Monthly"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, tk: "Price", trial: me.notrial.price + "/" + (me.period === "year" ? "yr" : "mo"), k3: "Renews", v3: renewsShort(), sig: "Studio " + pl.name, seed: (nm + me.email) || "studio" }
+    : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), tk: "Trial", name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
 
 /* ---------- the word reveal and the self-typing examples (as in early access) ---------- */
@@ -6177,7 +6178,7 @@ function advance() {
 var mailBox = $("[data-st-mail]"), emailWay = sheet.querySelector('[data-way="email"]');
 $$(".st-way").forEach(function (b) {
   var way = b.getAttribute("data-way");
-  if ((way === "google" || way === "apple") && LIVE && !CFG.oauth) { b.disabled = true; b.querySelector(".soon").hidden = false; }
+  if ((way === "google" || way === "apple") && !CFG.oauth) { b.disabled = true; b.querySelector(".soon").hidden = false; }   /* not wired to Supabase OAuth yet: a quiet "Soon", never a button that fails (?oauth turns them on) */
   b.addEventListener("click", function () {
     err("");
     if (way === "email") {
@@ -6451,6 +6452,7 @@ form.addEventListener("submit", function (e) {
   }).then(function (c) {
     if (c.mock) return c;
     try { sessionStorage.setItem("studio-checkout", JSON.stringify({ subscription: c.subscription, handoff: me.hand && me.hand.code, first: me.first, email: me.email, plan: me.plan, period: me.period })); } catch (e) {}
+    if (c.renews_at) { var ra = typeof c.renews_at === "number" ? new Date(c.renews_at < 1e12 ? c.renews_at * 1000 : c.renews_at) : new Date(c.renews_at); if (!isNaN(ra)) me.renewsAt = ra; }
     var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + (local ? "?live&paid=1" : "?review&paid=1") + HASH }, redirect: "if_required" };
     return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return status(c.subscription); });
   }).then(paid, function (x) {
@@ -6585,6 +6587,11 @@ function status(sub) {
   return slowly(once(), "Confirming");
 }
 /* no trial for this account or card: the full price, the card form redrawn for it, the words changed, and the box asked again */
+/* a paid start (no trial): the pass and Unlocked show the price and the next charge, from the server's renews_at */
+function paidStart() { return !!(me.notrial && !me.promo); }
+function renewsDate() { if (me.renewsAt) return me.renewsAt; var d = new Date(NOW); if (me.period === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d; }
+function renewsShort() { return renewsDate().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
+function renewsLong() { return renewsDate().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function noTrial(x) {
   var pl = planOf(me.plan), raw = x && x.price != null ? x.price : price(pl.id, me.period), num = parseFloat(String(raw).replace(/[^0-9.]/g, "")) || 0;
   if (me.period === "year" && !(x && x.price != null)) num = parseFloat(String(then(pl.id, "year")).replace(/[^0-9.]/g, "")) || num;
@@ -6638,6 +6645,7 @@ function showDone(has) {
   if (PAYWALL) { $("[data-st-dhi]").textContent = f ? "You're all set, " + f + "." : "You're all set."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
+    : PAYWALL && paidStart() ? "You're on Studio " + pl.name + ". Your next charge is " + me.notrial.price + " on " + renewsLong() + "."
     : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
     : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
