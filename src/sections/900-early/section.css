@@ -1051,7 +1051,7 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .wl-story-b { justify-content: flex-start; padding-left: 6px; }
 .wl-story-b .th { flex: none; width: 24px; height: 40px; border-radius: 6px; overflow: hidden; background: linear-gradient(160deg, rgba(255, 255, 255, .25), rgba(255, 255, 255, .06)); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22); }
 .wl-story-b .th img { width: 100%; height: 100%; object-fit: cover; }
-.wl-more { position: absolute; right: 0; top: calc(100% + 8px); z-index: 6; min-width: 210px; padding: 6px; border-radius: 18px; background: rgba(var(--tint), .8); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim), 0 24px 60px -20px rgba(0, 0, 0, .6); }
+.wl-more { position: absolute; right: 0; bottom: calc(100% + 8px); z-index: 6; min-width: 210px; padding: 6px; border-radius: 18px; background: rgba(14, 19, 28, .94); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim), 0 24px 60px -20px rgba(0, 0, 0, .6); }
 .wl-more[hidden] { display: none; }
 .wl-more a { display: flex; align-items: center; gap: 10px; padding: 11px 12px; border-radius: 12px; font: 500 14px/1.2 var(--sans) !important; letter-spacing: 0 !important; text-transform: none !important; text-decoration: none !important; color: #fff !important; }
 .wl-more a:hover { background: rgba(255, 255, 255, .08); }
