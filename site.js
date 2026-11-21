@@ -5873,7 +5873,7 @@ function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
     : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
-    : { kind: pl.name + " · Trial", name: nm, mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
+    : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
 
 /* ---------- the word reveal and the self-typing examples (as in early access) ---------- */
@@ -6241,7 +6241,7 @@ function drawPromo() {
   if (me.promo) { pfield.hidden = true; $("[data-st-pchip-t]").textContent = me.promo.code + " · " + me.promo.label; }
 }
 function setPromo(p) {
-  me.promo = p; line(); drawPass(pass1);
+  me.promo = p; line(); drawPass(pass1); pwHead();
   if (ORDER[at] === "pay") payStep(); else drawPromo();
 }
 $("[data-st-havecode]").addEventListener("click", function () { pfield.hidden = false; drawPromo(); setTimeout(function () { pin.focus(); }, 30); });
@@ -6496,8 +6496,9 @@ var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", ge
 function pwHead() {
   if (!PAYWALL) return;
   var pl = planOf(me.plan), pq = stepEl("plan"), head = PW.mode === "locked" ? (HEADS[PW.action] || "Keep making with Studio.") : "Keep your Studio.";
-  pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>14 days for $1, then " + esc(then(pl.id, me.period)) + ".</span>";
-  pq.querySelector(".wl-qs").textContent = "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
+  pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>" + (me.promo ? "Your first month is free, then " : "14 days for $1, then ") + esc(then(pl.id, me.period)) + ".</span>";
+  pq.querySelector(".wl-qs").textContent = me.promo ? "Cancel anytime before " + startsLong() + " and you won't be charged. Your plan starts " + startsLong() + "."
+    : "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
   $("[data-st-look]").textContent = PW.mode === "locked" ? "Not now" : "Look around first";
 }
 function paywall(o) {
@@ -6505,7 +6506,7 @@ function paywall(o) {
   PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] ? o.action : "";
   if (o.plan && planOf(o.plan).id === o.plan) me.plan = o.plan;
   if (o.period === "year" || o.period === "month") me.period = o.period;
-  me.first = (o.first || "").split(/\s+/)[0]; me.email = o.email || ""; me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
+  me.first = String(o.first || o.first_name || o.given_name || o.name || o.full_name || "").trim().split(/\s+/)[0]; me.email = o.email || "";   /* Studio sends first; the other names are taken too */ me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
   $("[data-st-badge]").textContent = "Unlock";
   perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
   drawPlans(); slidePer(); pwHead();
