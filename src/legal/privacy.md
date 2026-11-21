@@ -112,6 +112,8 @@ We share personal information only as described here.
 - **in a business transfer**: in a merger, acquisition, financing, reorganization or sale of assets, subject to this policy's protections;
 - **in aggregate or de-identified form** that can't reasonably identify you. We don't try to re-identify it.
 
+All the above categories exclude text messaging originator opt-in data and consent; this information won't be shared with any third parties.
+
 ## 8. How long we keep information
 
 | Data | How long |
@@ -165,15 +167,15 @@ This section is for residents of California and other US states with consumer pr
 
 These terms apply if you opt in to text messages from Studio.
 
-- **Program:** Studio Updates. Texts about your waitlist status, invites, launch news and occasional offers. Messages may be sent using automated technology.
-- **Consent:** we text you only if you've checked the SMS consent box. **Consent is not a condition of any purchase.** You confirm that you are the subscriber or customary user of the number you provide.
-- **Frequency:** recurring. Up to 4 messages per month.
+- **Who we are:** Studio, by Nicolini Productions LLC. Texts come from Studio's registered SMS number, shown in your confirmation text.
+- **What the texts are:** account notifications (for example, when your Studio invite is ready) if you check "Text me when my Studio invite is ready", and news and offers about Studio if you check "Text me Studio news and offers". Each is a separate, optional choice. Messages may be sent using automated technology.
+- **Consent:** we text you only if you've checked an SMS consent box. **Consent is not a condition of any purchase.** You confirm that you are the subscriber or customary user of the number you provide.
+- **Frequency:** message frequency varies, up to 4 messages per month.
 - **Cost:** **Message and data rates may apply.** Check with your mobile carrier.
 - **Opt out:** **Reply STOP** to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email hello@askstudio.ai.
-- **Help:** **Reply HELP** for help, or email hello@askstudio.ai.
-- **Sender:** Studio's registered SMS number, shown in your confirmation text.
-- **Carriers** are not liable for delayed or undelivered messages.
-- **Privacy:** we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. **We do not share or sell your mobile number or SMS opt-in data to third parties or affiliates for their marketing or promotional purposes.**
+- **Help:** **Reply HELP** for help, or contact support at hello@askstudio.ai.
+- **Carriers are not liable for any delayed or undelivered messages.**
+- **Privacy:** we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. **Your mobile information will not be sold or shared with third parties.** Text messaging originator opt-in data and consent are never shared with any third parties. See our Privacy Policy (this page).
 - **Quiet hours:** we aim to send texts only between 8 a.m. and 8 p.m. in your local time.
 
 ## 12. Security

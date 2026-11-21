@@ -273,3 +273,18 @@ You agree to receive communications from us electronically, including legal noti
 
 Nicolini Productions LLC (Studio)
 Contact: hello@askstudio.ai
+
+## 26. SMS terms
+
+These terms apply if you opt in to text messages from Studio.
+
+- **Who we are:** Studio, by Nicolini Productions LLC. Texts come from Studio's registered SMS number, shown in your confirmation text.
+- **What the texts are:** account notifications (for example, when your Studio invite is ready) if you check "Text me when my Studio invite is ready", and news and offers about Studio if you check "Text me Studio news and offers". Each is a separate, optional choice. Messages may be sent using automated technology.
+- **Consent:** we text you only if you've checked an SMS consent box. **Consent is not a condition of any purchase.** You confirm that you are the subscriber or customary user of the number you provide.
+- **Frequency:** message frequency varies, up to 4 messages per month.
+- **Cost:** **Message and data rates may apply.** Check with your mobile carrier.
+- **Opt out:** **Reply STOP** to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email hello@askstudio.ai.
+- **Help:** **Reply HELP** for help, or contact support at hello@askstudio.ai.
+- **Carriers are not liable for any delayed or undelivered messages.**
+- **Privacy:** we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. **Your mobile information will not be sold or shared with third parties.** Text messaging originator opt-in data and consent are never shared with any third parties. See our [Privacy Policy](privacy.md).
+- **Quiet hours:** we aim to send texts only between 8 a.m. and 8 p.m. in your local time.
