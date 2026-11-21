@@ -41,6 +41,8 @@ This Privacy Policy explains how Nicolini Productions LLC, a California company 
 | Referral | Your referral code, who referred you, how many people you referred, your waitlist position and referral rank |
 | Email engagement | Whether our emails were delivered, opened or clicked (through Brevo) |
 
+**Consent records.** When you agree to auto-renewal at checkout, or to receive texts from us, we record the IP address you agreed from, the country it points to, your browser (its user agent), the exact wording shown to you, and the date and time you agreed. We keep these records as proof of your consent, for the periods in Section 8.
+
 **2.3 Information from others**
 
 - **Google or Apple**, if you sign in with them: your name, email and account identifier. With Apple, you may get a private relay email instead.
