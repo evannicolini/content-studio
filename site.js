@@ -5644,7 +5644,7 @@ var CFG = {
   stripe: Q.get("pk") || "", oauth: Q.has("oauth")
 };
 var DEMO_PK = "pk_test_TYooMQauvdEDq54NiTphI7jx";   /* Stripe's public demo key: draws the real card form on the stand-in */
-var html = document.documentElement, HASH = "#signup", DEEP = /^#signup(&|$)/;
+var html = document.documentElement, HASH = /^#paywall/.test(location.hash) ? "#paywall" : "#signup", DEEP = /^#(signup|paywall)(&|$)/;
 var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 var M = "assets/media/", fine = matchMedia("(pointer: fine)").matches, PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
 var $ = function (s) { return sheet.querySelector(s); }, $$ = function (s) { return [].slice.call(sheet.querySelectorAll(s)); };
@@ -5689,6 +5689,12 @@ var me = { first: "", email: "", session: null, hand: null, plan: "pro", period:
 var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
 var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = INV ? ["in", "code"] : ORDER_ALL.slice();
+/* the in-app paywall ("Unlock it: 14 days for $1"): only the plan and the pay steps, for someone already signed in to Studio.
+   Studio opens #paywall in its own window and calls window.StudioPaywall.open({ token, first, email, handoff }) with the session it
+   has; on this Mac #paywall alone opens it on the stand-in. When it's paid, it calls window.webkit.messageHandlers.studio (if there)
+   with { unlocked: true, plan, period }, and its button goes back to Studio. */
+var PAYWALL = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
+if (PAYWALL) { ORDER = ["plan", "pay"]; sheet.classList.add("paywall"); }
 var SCENE = { "in": "home", code: "home", plan: "home", pay: "pass" };
 var segs = $$("[data-st-seg] i"), scenes = {};
 $$(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
@@ -5928,7 +5934,7 @@ function setStep(n, quiet) {
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
-  $$("[data-st-k]").forEach(function (k) { var i = ORDER.indexOf(k.closest(".wl-q").getAttribute("data-q")); k.textContent = (me.invite ? "Invite · " : "Start · ") + (i + 1) + " of " + ORDER.length; });
+  $$("[data-st-k]").forEach(function (k) { var i = ORDER.indexOf(k.closest(".wl-q").getAttribute("data-q")); k.textContent = (PAYWALL ? "Unlock · " : me.invite ? "Invite · " : "Start · ") + (i + 1) + " of " + ORDER.length; });
   back.disabled = n === 0;
   var last = q === "pay";
   next.hidden = last; go.hidden = !last;
@@ -6008,13 +6014,15 @@ function startEmail() {
 /* ---------- step 2: six boxes; typing, paste and the phone's autofill all fill them ---------- */
 var otp = $$("[data-st-otp] input"), otpBox = $("[data-st-otp]");
 function code() { return otp.map(function (i) { return i.value; }).join("").replace(/\D/g, ""); }
-function clearOtp() { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otpBox.classList.remove("bad", "ok", "busy"); }
+var otpBeam = $(".st-otpb");
+function badOtp(on) { otpBox.classList.toggle("bad", on); if (on) otpBeam.setAttribute("data-active", ""); else otpBeam.removeAttribute("data-active"); }
+function clearOtp() { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otpBox.classList.remove("ok", "busy"); badOtp(false); }
 function fill(from, digits) {
   digits = digits.replace(/\D/g, "").slice(0, 6 - from);
   for (var k = 0; k < digits.length; k++) { otp[from + k].value = digits[k]; otp[from + k].classList.add("has"); }
   var nx = Math.min(5, from + digits.length);
   otp[nx].focus();
-  next.disabled = !ready(); otpBox.classList.remove("bad"); err("");
+  next.disabled = !ready(); badOtp(false); err("");
   if (code().length === 6) setTimeout(verify, 180);
 }
 otp.forEach(function (inp, i) {
@@ -6023,7 +6031,7 @@ otp.forEach(function (inp, i) {
     if (v.length > 1) { inp.value = ""; fill(i, v); return; }   /* autofill or a fast paste puts the whole code in one box */
     inp.value = v; inp.classList.toggle("has", !!v);
     if (v && i < 5) otp[i + 1].focus();
-    next.disabled = !ready(); otpBox.classList.remove("bad"); err("");
+    next.disabled = !ready(); badOtp(false); err("");
     if (code().length === 6) setTimeout(verify, 180);
   });
   inp.addEventListener("keydown", function (e) {
@@ -6050,7 +6058,7 @@ function verify() {
     me.session = session;
     return signedIn();
   }).catch(function (x) {
-    otpBox.classList.remove("busy"); otpBox.classList.add("bad"); err(say(x)); SFX.play("tick");
+    otpBox.classList.remove("busy"); badOtp(true); err(say(x)); SFX.play("tick");
     setTimeout(function () { otp.forEach(function (i) { i.value = ""; i.classList.remove("has"); }); otp[0].focus(); next.disabled = true; }, 650);
   }).then(function () { busy = false; next.classList.remove("busy"); });
 }
@@ -6074,7 +6082,7 @@ var plansEl = $("[data-st-plans]"), perEl = $("[data-st-per]");
 var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>', DASH = '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>';
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
-    return '<button type="button" class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" aria-pressed="' + (p.id === me.plan) + '">' +
+    return '<button type="button" class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" aria-pressed="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
       '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
@@ -6148,7 +6156,7 @@ function payStep() {
   if (!pk) { $("[data-st-pe]").innerHTML = '<p class="wl-fine">The card form opens once the payment key is set.</p>'; return; }
   loadStripe().then(function () {
     stripe = stripe || Stripe(pk);
-    elements = stripe.elements({ mode: "subscription", amount: 100, currency: "usd", appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] });
+    elements = stripe.elements({ mode: "subscription", amount: 100, currency: "usd", paymentMethodTypes: ["card"], appearance: APPEARANCE, fonts: [{ cssSrc: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" }] });
     var pe = elements.create("payment", { layout: { type: "tabs" }, defaultValues: { billingDetails: { email: me.email, name: me.first } }, terms: { card: "never" }, wallets: { applePay: "auto", googlePay: "auto" } });
     var host = $("[data-st-pe]");
     pe.on("ready", function () { var l = host.querySelector(".st-load"); if (l) l.remove(); });
@@ -6285,9 +6293,10 @@ var doneEl = $("[data-st-done]");
 function showDone(has) {
   var f = first() || "there", pl = planOf(me.plan), h = me.hand || {};
   wall("done");
-  $("[data-st-dk]").textContent = has ? "You have Studio" : me.invite ? "You're in" : "Trial started";
+  $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : me.invite ? "You're in" : "Trial started";
   $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
-  $("[data-st-dsub2]").textContent = "Studio is downloading.";
+  $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : "Studio is downloading.";
+  if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = "Back to your export"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
     : "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before.";
@@ -6302,7 +6311,8 @@ function showDone(has) {
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("done");
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
-    setTimeout(download, 1800);   /* the download starts by itself */
+    if (PAYWALL) { try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
+    else setTimeout(download, 1800);   /* the download starts by itself */
   }
 }
 function download() {
@@ -6311,7 +6321,10 @@ function download() {
   var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
 }
 $("[data-st-dl]").addEventListener("click", function (e) { e.preventDefault(); download(); });
-$("[data-st-open]").addEventListener("click", function (e) { if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); } });
+$("[data-st-open]").addEventListener("click", function (e) {
+  if (PAYWALL) { e.preventDefault(); try { window.webkit.messageHandlers.studio.postMessage({ close: true }); } catch (x) { close(); } return; }
+  if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); }
+});
 
 /* ---------- open / close ---------- */
 function open() {
@@ -6333,7 +6346,7 @@ function open() {
 /* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  if (introDone || SK.reduced) { introDone = true; introEl.hidden = true; return Promise.resolve(); }
+  if (introDone || SK.reduced || PAYWALL) { introDone = true; introEl.hidden = true; return Promise.resolve(); }
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {
@@ -6379,8 +6392,22 @@ restartB.addEventListener("click", function () { location.href = location.pathna
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
 if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
 
+function paywall(o) {
+  o = o || {};
+  me.first = (o.first || "").split(/\s+/)[0]; me.email = o.email || ""; me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
+  $("[data-st-badge]").textContent = "Unlock";
+  var pq = stepEl("plan");
+  pq.querySelector(".wl-qh").innerHTML = "Unlock it.<span>14 days for $1.</span>";
+  pq.querySelector(".wl-qs").textContent = "Keep exporting with Studio. Pick a plan, and cancel anytime before day 14.";
+  if (MOCK && !me.first) { me.first = "Evan"; me.email = "evan@studio.com"; }
+  steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
+  at = 0; setStep(0, true); drawPlanStage();
+}
+window.StudioPaywall = { open: function (o) { paywall(o); open(); } };
+
 /* first paint */
 drawPlans(); drawHome(); setStep(0, true);
+if (PAYWALL) paywall({});
 if (INV) lookup(INV).then(setInvite, function () { setInvite({ state: "open", from: "" }); });
 /* back from Google/Apple (the session is in the address), or from a bank's 3-D Secure page (?paid=1) */
 if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { return c.auth.getSession(); }).then(function (r) {

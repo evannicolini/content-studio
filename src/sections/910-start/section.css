@@ -118,8 +118,6 @@
 .st-under { max-width: 460px; margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--wl-l2); text-wrap: pretty; }
 mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); color: #f6dca5; background: rgba(242, 213, 155, .14); }
 .wl.st .wl-go.off { filter: saturate(.4) brightness(.78); }
-.wl.st[data-step="pay"] .wl-left { max-height: calc(100vh - 104px - 118px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding-bottom: 36px; }
-.wl.st[data-step="pay"] .wl-left::-webkit-scrollbar { display: none; }
 
 /* the stage: who's signed in, and what the plan unlocks */
 .st-me { position: absolute; left: 12px; right: 12px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 16px; background: var(--v-g); box-shadow: var(--v-rim); transition: background-color .4s; }
@@ -173,3 +171,47 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 }
 
 .st .wl-toast { white-space: nowrap; max-width: calc(100vw - 32px); }
+
+
+/* ---------- selected = brighter glass, the inner rim and the border beam; never a solid white fill (Evan's rule) ---------- */
+.st-sb { position: absolute !important; inset: 0; z-index: 0; border-radius: inherit !important; pointer-events: none; opacity: 0; transition: opacity .35s var(--ease); --beam-strength: 1.15; }
+.st-sb::after, .st-sb::before, .st-sb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
+.st-way > :not(.st-sb), .st-plan > :not(.st-sb) { position: relative; z-index: 1; }
+.st-way.em[aria-expanded="true"], .st-plan.sel { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .17), rgba(255, 255, 255, .07)), rgba(var(--tint), .5); box-shadow: var(--v-rim-on); }
+.st-way.em[aria-expanded="true"] > .st-sb, .st-plan.sel > .st-sb { opacity: 1; }
+.st-way.em[aria-expanded="true"] .ic { background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim); }
+.st-plan.sel .pr small, .st-plan.sel .bl, .st-plan.sel li { color: var(--wl-l2); }
+.st-plan.sel ul { border-top-color: rgba(255, 255, 255, .14); }
+.st-plan.sel::after { box-shadow: var(--v-rim-on); background: rgba(255, 255, 255, .16) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; z-index: 1; }
+.st-plan .tag, .st-plan.sel .tag { color: #fff; background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim); }
+.st-per button[aria-checked="true"] { color: #fff; }
+.st-per button[aria-checked="true"] em { color: #8fd6a3; }
+.st-per i { background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .09)); box-shadow: var(--v-rim-on); }
+.st-otp input.has { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .17), rgba(255, 255, 255, .08)), rgba(var(--tint), .45); box-shadow: var(--v-rim-on); }
+.st-otp.ok input { color: #fff; background: linear-gradient(180deg, rgba(190, 210, 195, .26), rgba(190, 210, 195, .1)), rgba(var(--tint), .45); box-shadow: var(--v-rim-on), 0 0 26px -8px rgba(143, 214, 163, .6); transform: scale(.96); }
+.st .wl-sms .wl-cbx:checked + .bx { box-shadow: var(--v-rim-on); background: rgba(255, 255, 255, .18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat; }
+.st-how b { color: #fff; background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim); }
+
+/* a wrong code: the glass stays, an auburn beam runs round the boxes (the waitlist's error) */
+.st-otp { position: relative; }
+.st-otpb { position: absolute !important; inset: -7px -8px; z-index: 0; border-radius: 24px !important; pointer-events: none; opacity: 0; transition: opacity .3s; filter: hue-rotate(165deg) saturate(1.6) brightness(1.05); --beam-strength: 1.6; }
+.st-otpb::after, .st-otpb::before, .st-otpb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
+.st-otp.bad .st-otpb { opacity: 1; }
+.st-otp > input, .st-otp > i { position: relative; z-index: 1; }
+.st-otp.bad input { box-shadow: var(--v-rim); }
+
+/* the pay step fits: headline and summary hold still, the card, the box and the line scroll inside on a short screen */
+.wl.st[data-step="pay"] .wl-qh { font-size: clamp(32px, 3vw, 48px); }
+.st-sum .r span b { color: #fff; font-weight: 500; }
+.st-sum .r:last-child { padding: 8px 0; line-height: 1.45; }
+@media (min-width: 961px) {
+  .wl.st[data-step="pay"] .wl-left { height: calc(100vh - 104px - 116px); max-height: none; overflow: visible; padding-bottom: 0; display: flex; flex-direction: column; }
+  .wl.st[data-step="pay"] .wl-form { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .wl.st[data-step="pay"] .wl-steps { flex: 1; min-height: 0; height: auto !important; }
+  .wl.st[data-step="pay"] .wl-q[data-q="pay"].on { height: 100%; display: flex; flex-direction: column; }
+  .st-pscroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin: 0 -10px; padding: 0 10px 12px; }
+  .st-pscroll::-webkit-scrollbar { display: none; }
+}
+
+/* the in-app paywall: the same plan and pay, opened from Studio when someone exports */
+.wl.st.paywall .st-how, .wl.st.paywall .st-dl { display: none; }
