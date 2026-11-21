@@ -490,19 +490,30 @@ var APPEARANCE = {
     ".Input:focus": { boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.9), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.7), 0 0 0 1px rgba(74, 163, 255, 0.55), 0 0 24px -6px rgba(74, 163, 255, 0.55)" },
     ".Input--invalid": { boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), 0 0 0 1px rgba(255, 150, 110, 0.6)" },
     ".Tab": { backgroundColor: "rgba(255, 255, 255, 0.06)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5)" },
-    ".Tab--selected": { backgroundColor: "#eef1ef", color: "#05090a", boxShadow: "none" }, ".Tab--selected .TabIcon": { fill: "#05090a" }, ".Tab--selected .TabLabel": { color: "#05090a" },
+    ".Tab--selected": { backgroundColor: "rgba(255, 255, 255, 0.13)", color: "#ffffff", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.95), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.75), inset 2px 2px 5px -2px rgba(196, 214, 238, 0.62), inset -2px -2px 5px -2px rgba(242, 226, 220, 0.62)" },
+    ".Tab--selected .TabIcon": { fill: "#ffffff" }, ".Tab--selected .TabLabel": { color: "#ffffff" }, ".Tab:hover": { backgroundColor: "rgba(255, 255, 255, 0.1)" },
+    ".CheckboxInput": { backgroundColor: "rgba(255, 255, 255, 0.07)", border: "none", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.6), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.5)" },
+    ".PickerItem": { backgroundColor: "rgba(255, 255, 255, 0.06)", border: "none" },
     ".Block": { backgroundColor: "rgba(255, 255, 255, 0.05)", boxShadow: "inset 1px 1px 1px -1px rgba(255, 255, 255, 0.5)", border: "none" },
     ".Error": { fontSize: "13px" }
   }
 };
+/* the checkout words (Studio legal, consent copy b, checkout-v1): the real price and the real renewal date, never "in 14 days" */
+var RENEW_FULL = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }), CONSENT = "checkout-v1";
+function seats(pl) { return pl.people + (pl.people === 1 ? " seat · up to 2 Macs" : " seats · up to 2 Macs each"); }
+function priceWord(pl) { return me.period === "year" ? then(pl.id, "year").replace("/yr", "/year") : price(pl.id, "month") + "/month"; }
+var agree = form.elements.renew_ok, agreeL = $("[data-st-agree]");
 function payStep() {
-  var pl = planOf(me.plan), t = then(pl.id, me.period);
-  $("[data-st-sname]").textContent = "Studio " + pl.name + (me.period === "year" ? " · yearly" : "");
-  $("[data-st-from-d]").textContent = "From " + renew;
-  $("[data-st-from-p]").textContent = t;
-  var thenEl = $("[data-st-then]"); thenEl.textContent = "Then " + t.replace("/mo", " a month").replace("/yr", " a year") + ".";
-  $("[data-st-cancel]").textContent = "Cancel anytime before " + renewLong + " and you won't be charged again.";
-  $("[data-st-go-t]").textContent = "Start my 14 days · $1";
+  var pl = planOf(me.plan), pw = priceWord(pl), per = me.period === "year" ? "year" : "month", bare = pw.replace(/\/(month|year)$/, "");
+  $("[data-st-sname]").textContent = "Studio " + pl.name;
+  $("[data-st-seats2]").textContent = seats(pl);
+  $("[data-st-sprice]").textContent = pw;
+  $("[data-st-sdate]").textContent = RENEW_FULL;
+  $("[data-st-then]").textContent = "Then " + bare + " a " + per + ".";
+  $("[data-st-agree-t]").textContent = "I agree that after my 14-day trial for $1, Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + RENEW_FULL + " and every " + per + " after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + RENEW_FULL + ", I won't be charged " + bare + ".";
+  $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>. The $1 trial fee isn't refundable. By paying, you agree to the <a href=\"terms/\" target=\"_blank\" rel=\"noopener\">Terms</a> and <a href=\"privacy/\" target=\"_blank\" rel=\"noopener\">Privacy Policy</a>.";
+  $("[data-st-go-t]").textContent = "Start 14 days for $1";
+  agree.checked = false; go.classList.add("off");   /* the terms just changed (or are new): ask again */
   reveal(stepEl("pay"));
   if (peMounted) return;
   var pk = MOCK ? DEMO_PK : CFG.stripe;
@@ -522,6 +533,7 @@ form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (ORDER[at] !== "pay") { advance(); return; }
   if (go.classList.contains("busy")) return;
+  if (!agree.checked) { err("Please check the box to confirm the renewal terms."); agreeL.classList.remove("bad"); void agreeL.offsetWidth; agreeL.classList.add("bad"); SFX.play("tick"); return; }
   if (!elements) { if (MOCK) return paid({ mock: true }); err("The card form hasn't loaded. Check your connection."); return; }
   go.classList.add("busy"); SFX.play("send"); err("");
   elements.submit().then(function (r) {
@@ -540,6 +552,7 @@ function paid(c) {
   showDone();
 }
 $("[data-st-change]").addEventListener("click", function () { setStep(ORDER.indexOf("plan")); });
+agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 
 /* ---------- the server and Supabase (or, on this Mac, a stand-in that answers the same way) ---------- */
 function E(code, human, extra) { var e = new Error(code); e.code = code; e.human = human; return Object.assign(e, extra || {}); }
@@ -588,7 +601,9 @@ function handoff() {
 }
 function checkout() {
   if (MOCK) return wait(1200).then(function () { return { mock: true }; });
-  return api("/web/checkout", { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements" }).then(function (c) {
+  var pl = planOf(me.plan);
+  return api("/web/checkout", { token: me.session.access_token, plan: me.plan, period: me.period, handoff: me.hand && me.hand.code, ui: "elements",
+    consent: { version: CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: RENEW.toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } }).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
   });
@@ -617,10 +632,11 @@ function setInvite(inv) {
     $("[data-st-ft]").textContent = why;
     h.innerHTML = esc(why.replace(/\.$/, "")) + "<span>Ask for a new one.</span>";
     s.textContent = inv.state === "unknown" ? "Check the link, or ask the person who sent it for a new one." : "Ask the person who sent it for a new one.";
-    $("[data-st-ways]").hidden = true; $(".st-fine").hidden = true; next.hidden = true;
+    $("[data-st-ways]").hidden = true; $("[data-st-fine]").hidden = true; next.hidden = true;
     return;
   }
   $("[data-st-ft]").textContent = (f ? f + " invited you" : "You're invited") + (inv.name ? ". For " + inv.name + "." : ".");
+  $("[data-st-fine]").innerHTML = esc(f ? f + " invited you to Studio." : "You're invited to Studio.") + ' By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>. Free invite access is up to Studio and can change or end at any time.';
   h.innerHTML = esc(f ? f + " invited you." : "You're invited.") + "<span>Studio Pro, on us.</span>";
   s.textContent = "No card, no plan. Sign in and Studio downloads.";
   ORDER = ["in", "code"]; setStep(at, true);
@@ -671,9 +687,27 @@ function open() {
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
   wallNow = sky.getAttribute("src");
-  wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal(); reveal(stepEl(ORDER[at]));
+  wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
+  intro().then(function () { reveal(stepEl(ORDER[at])); });
   drawHome();
   focusStep(SK.reduced ? 0 : 560);
+}
+/* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
+var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
+function intro() {
+  if (introDone || SK.reduced) { introDone = true; introEl.hidden = true; return Promise.resolve(); }
+  introDone = true; sheet.classList.add("intro");
+  logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
+  return logoP.then(function () {
+    if (!window.StudioLogo) return;
+    var el = $("[data-st-logo]"), skip = false;
+    introEl.addEventListener("pointerdown", function () { skip = true; }, { once: true });
+    SFX.play("land", { gain: .6 });
+    return Promise.race([StudioLogo.play(el, { mode: "lockup", ink: "#ffffff", width: "100%", height: "100%" }), new Promise(function (r) { (function w() { skip ? r() : setTimeout(w, 80); })(); })]).then(function () { return SK.sleep(skip ? 0 : 350); });
+  }).then(function () {
+    sheet.classList.remove("intro"); introEl.classList.add("out");
+    setTimeout(function () { introEl.hidden = true; }, 900);
+  });
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
@@ -703,6 +737,9 @@ sheet.addEventListener("keydown", function (e) {
 var restartB = $("[data-st-restart]");
 restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
+
+/* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
+if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
 
 /* first paint */
 drawPlans(); drawHome(); setStep(0, true);

@@ -79,7 +79,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=72bfc2ae">
+<link rel="stylesheet" href="site.css?v=ba7879bb">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1835,6 +1835,7 @@ set.</span></span></figure>
      The friend-invite version skips the plan and the card. Opened by #signup; off on the live site until sales open (section.js). -->
 <div class="wl st" id="signup" role="dialog" aria-modal="true" aria-labelledby="st-h" hidden>
   <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
+  <div class="st-intro" data-st-intro aria-hidden="true"><div class="lg" data-st-logo></div></div>
   <div class="wl-top">
     <span class="wl-brand"><span class="wl-app"><svg aria-hidden="true"><use href="#studio-mark"/></svg></span>Studio<em data-st-badge>Free trial</em></span>
     <div class="wl-tr">
@@ -1868,7 +1869,7 @@ set.</span></span></figure>
               <label class="wl-f"><span>Email</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" enterkeyhint="send" maxlength="254"></span></label>
             </div>
             <p class="wl-err" role="alert" aria-live="assertive"></p>
-            <p class="wl-fine st-fine">By continuing, you agree to Studio's Terms of Service and Privacy Policy.</p>
+            <p class="st-fine" data-st-fine>By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
           </div>
 
           <!-- 2: the email code -->
@@ -1899,19 +1900,19 @@ set.</span></span></figure>
             <p class="st-line" data-st-line></p>
           </div>
 
-          <!-- 4: pay $1, inside the page -->
+          <!-- 4: pay $1, inside the page (consent copy b: summary, the renewal box, the line under the button) -->
           <div class="wl-q" data-q="pay" role="group" aria-labelledby="st-q-pay">
             <p class="wl-k" data-st-k>Start · 4 of 4</p>
             <h3 class="wl-qh" id="st-q-pay">14 days for $1.<span data-st-then>Then $199 a month.</span></h3>
-            <p class="wl-qs" data-st-cancel>Cancel anytime before day 14 and you won't be charged again.</p>
             <div class="st-sum" data-st-sum>
-              <div class="r"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><b data-st-sname>Studio Pro</b><button type="button" class="st-link" data-st-change>Change</button></div>
-              <div class="r"><span>Today</span><b>$1.00</b></div>
-              <div class="r dim"><span data-st-from-d>From Dec 4</span><b data-st-from-p>$199/mo</b></div>
+              <div class="r"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><span><b data-st-sname>Studio Pro</b> · <span data-st-seats2>3 seats · up to 2 Macs each</span></span><button type="button" class="st-link" data-st-change>Change</button></div>
+              <div class="r"><span><b>$1 today</b> for a 14-day trial.</span></div>
+              <div class="r"><span>Then <b data-st-sprice>$199/month</b> plus tax, starting <b data-st-sdate>December 4, 2026</b>, until you cancel.</span></div>
             </div>
             <div class="st-card"><span class="wl-fb st-cb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><div class="st-pe" data-st-pe><div class="st-load"><i></i><i></i><i></i></div></div></div>
+            <label class="wl-sms st-agree" data-st-agree><input type="checkbox" name="renew_ok" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><small data-st-agree-t>I agree that after my 14-day trial for $1, Studio Pro renews automatically at $199/month plus tax, starting December 4, 2026 and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before December 4, 2026, I won't be charged $199.</small></span></label>
             <p class="wl-err" role="alert" aria-live="assertive"></p>
-            <p class="wl-fine st-secure"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2M3.5 7h9v6.5h-9z"/></svg>Paid securely with Stripe. Studio never sees your card.</p>
+            <p class="st-under" data-st-under></p>
           </div>
         </div>
 
@@ -1921,7 +1922,7 @@ set.</span></span></figure>
             <button type="button" class="wl-back" data-st-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
             <span class="wl-seg" aria-hidden="true" data-st-seg><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
             <button type="button" class="wl-next" data-st-next data-gx disabled><span data-st-next-t>Continue</span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
-            <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Start my 14 days · $1</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
+            <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Start 14 days for $1</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
           </div>
         </div>
       </form>
@@ -2018,6 +2019,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=72bfc2ae"></script>
+<script src="site.js?v=ba7879bb"></script>
 </body>
 </html>

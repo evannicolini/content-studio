@@ -2,7 +2,8 @@
    the bar, the stage, the pass. Only what is new is here, prefix st-. */
 
 /* the glass fades as a leaf, like the early-access options (900-early explains why: a fading parent cuts glass off from the sky) */
-.st .wl-q > :is(.st-ways, .st-plans, .st-otp) { opacity: 1 !important; }   /* holders of glass: their glass fades itself */
+.st .wl-q > :is(.st-ways, .st-plans, .st-otp) { opacity: 1 !important; }
+.st-agree .bx { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }   /* holders of glass: their glass fades itself */
 .st-way, .st-plan, .st-otp input, .st-sum, .st-card, .st-per, .st-me { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
 .st-or, .st-link, .st-links .dot { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
 
@@ -28,11 +29,20 @@
 .st-or::before, .st-or::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .22), rgba(255, 255, 255, 0)); }
 .st-mail { margin-top: 16px; max-width: 460px; }
 .st-mail:not([hidden]) { animation: wl-rise .5s var(--ease) both; }
-.st-fine { margin-top: 14px; }
+.st-fine { max-width: 460px; margin-top: 14px; text-align: center; font-size: 13px; line-height: 1.5; color: var(--wl-l2); text-wrap: pretty; }
+.st-fine a, .st-under a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .35); text-underline-offset: 3px; }
+
+/* the logo opens it */
+.st-intro { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%, rgba(5, 9, 10, .35), rgba(5, 9, 10, .78) 70%); -webkit-backdrop-filter: blur(24px) saturate(130%); backdrop-filter: blur(24px) saturate(130%); transition: opacity .85s var(--ease), -webkit-backdrop-filter .85s var(--ease), backdrop-filter .85s var(--ease); }
+.st-intro .lg { width: min(640px, 78vw); aspect-ratio: 2187 / 1230; transition: transform .9s var(--ease), filter .9s var(--ease), opacity .7s var(--ease); }
+.st-intro .lg svg { width: 100%; height: 100%; display: block; }
+.st-intro.out { opacity: 0; pointer-events: none; -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0); }
+.st-intro.out .lg { transform: scale(.92) translateY(-12px); filter: blur(10px); opacity: 0; }
+.wl.st.intro .wl-left, .wl.st.intro .wl-stage, .wl.st.intro .wl-dock { --wl-o1: 0; }
 .wl.st[data-step="in"] .wl-qs { max-width: 26em; }
 .wl.st[data-step="pay"] .wl-qh { font-size: clamp(36px, 3.6vw, 58px); }
 .wl.st[data-step="pay"] .wl-qs { margin: 12px 0 16px; }
-.wl.st[data-step="pay"] .wl-in { padding-top: 84px; }
+.wl.st[data-step="pay"] .wl-in { align-items: start; padding-top: 104px; }
 
 /* 2: six glass boxes */
 .st-otp { display: flex; align-items: center; gap: 10px; }
@@ -100,6 +110,16 @@
 .st-load i:first-child { flex: 2; }
 .st-secure { display: flex; align-items: center; gap: 8px; }
 .st-secure svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; flex: none; }
+
+/* checkout consent: the renewal box (unticked; Pay waits for it) and the line under the button */
+.st-agree { margin-top: 12px; max-width: 460px; }
+.st-agree .tx small { margin-top: 2px; font-size: 13px; line-height: 1.5; color: rgba(245, 243, 238, .9); }
+.st-agree.bad .bx { animation: wl-shake .4s var(--ease); box-shadow: var(--v-rim), 0 0 0 1px rgba(255, 150, 110, .7), 0 0 22px -6px rgba(255, 140, 90, .6); }
+.st-under { max-width: 460px; margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--wl-l2); text-wrap: pretty; }
+mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); color: #f6dca5; background: rgba(242, 213, 155, .14); }
+.wl.st .wl-go.off { filter: saturate(.4) brightness(.78); }
+.wl.st[data-step="pay"] .wl-left { max-height: calc(100vh - 104px - 118px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding-bottom: 36px; }
+.wl.st[data-step="pay"] .wl-left::-webkit-scrollbar { display: none; }
 
 /* the stage: who's signed in, and what the plan unlocks */
 .st-me { position: absolute; left: 12px; right: 12px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 16px; background: var(--v-g); box-shadow: var(--v-rim); transition: background-color .4s; }
