@@ -4583,3 +4583,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 @media (max-width: 960px) { .st .wl-kay { display: none !important; } }
 
 .st-name { margin: 0 0 12px; max-width: 460px; }
+/* checkout: the pass large and whole, in the part of the stage you can see */
+.st .wl-sc[data-sc="pass"] .p3 { position: absolute; left: 0; top: 0; bottom: 0; right: auto; width: 920px; }
+.st .wl-sc[data-sc="pass"] .pass { --w: 640px; }
