@@ -869,8 +869,8 @@ test("dream: edits and typing are saved; a late phrase is appended, never lost; 
   assert.equal((await t.call("POST", "/dream/save", { body: { id: d.id, edited: "changed" } })).status, 409, "a finished answer stays as it is");
   assert.equal((await t.call("POST", `/dream/chunk?id=${d.id}&t0=11&t1=13`, { raw: tone(2) })).status, 409);
 });
-test("dream: the waitlist answer joins the sign-up by email, reaches Brevo only once DREAM exists, and is in the CSV", async () => {
-  const t = setup({ BREVO_DREAM: "1" }); withAI(t);
+test("dream: the waitlist answer joins the sign-up by email, reaches Brevo (DREAM, DREAM_AT), and is in the CSV", async () => {
+  const t = setup(); withAI(t);
   const { json: d } = await t.call("POST", "/dream/start", { body: { kind: "waitlist" } });
   await t.call("POST", "/dream/save", { body: { id: d.id, edited: "Launch films, every week, that feel like us." } });
   await t.call("POST", "/dream/finish", { body: { id: d.id, text: "Launch films, every week, that feel like us." } });
@@ -884,10 +884,9 @@ test("dream: the waitlist answer joins the sign-up by email, reaches Brevo only 
   assert.equal(s.json.prior, "Launch films, every week, that feel like us.", "the sign-up can start from what they said on the waitlist");
   const csv = await t.call("GET", "/admin/dreams.csv", { headers: { Authorization: "Bearer " + ADMIN } });
   assert.equal(csv.status, 200); assert.ok(csv.text.includes("jo@example.com") && csv.text.includes('"Launch films, every week, that feel like us."'));
-  const off = setup(); withAI(off);
-  const { json: d2 } = await off.call("POST", "/dream/start", { body: { kind: "waitlist" } });
-  await off.call("POST", "/dream/finish", { body: { id: d2.id, text: "x y z" } }); await off.join({ first: "Al", last: "B", email: "al@example.com", dream: d2.id });
-  assert.ok(!off.brevo.calls.some((c) => c.body && c.body.attributes && "DREAM" in c.body.attributes), "no DREAM before the field exists");
+  const blank = setup(); withAI(blank);
+  const { json: d2 } = await blank.call("POST", "/dream/start", { body: { kind: "waitlist" } }); await blank.join({ first: "Al", last: "B", email: "al@example.com", dream: d2.id });
+  assert.ok(!blank.brevo.calls.some((c) => c.body && c.body.attributes && "DREAM" in c.body.attributes), "an unfinished, empty answer never reaches Brevo");
 });
 test("dream: a repair keeps only the words centred in its stretch, and a broken model answer is retried, never saved", async () => {
   const t = setup();

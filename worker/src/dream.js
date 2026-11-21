@@ -15,7 +15,7 @@
 //   GET  /dream/listen  ?id=&base=  WebSocket. In: binary PCM16 16 kHz mono, and {"type":"stop"}. Out: ready, interim, final, limit, closed, error
 //   POST /dream/chunk   ?id=&t0=&t1=  body: raw PCM16 16 kHz mono (≤ 30 s) → the phrases it added
 //   POST /dream/save    { id, edited, seen, nudged }
-//   POST /dream/finish  { id, text, seen, nudged, access_token? }  → final; Brevo DREAM / DREAM_AT once the fields exist
+//   POST /dream/finish  { id, text, seen, nudged, access_token? }  → final; Brevo DREAM / DREAM_AT
 //   GET  /admin/dreams.csv
 export const LIMIT = 180;          // the page's limit: 3:00 of listening
 export const CAP = 215;            // the server's own hard stop (a little room for the round after the nudge)
@@ -278,9 +278,9 @@ export function dreamApi(h) {
     return json({ ok: true, id: out.id, text: t, words: wordsOf(t), seconds: r3(out.audio_s), nudged: !!out.nudged, at: new Date(out.done_at * 1000).toISOString() });
   }
 
-  // Brevo DREAM + DREAM_AT, once Evan has said yes to the fields (env BREVO_DREAM = "1")
+  // Brevo DREAM + DREAM_AT (the fields exist: /admin/brevo-setup, Evan's yes 2026-11-21)
   async function pushDream(env, d) {
-    if (env.BREVO_DREAM !== "1" || !env.BREVO_API_KEY || !d.email || !d.text) return false;
+    if (!env.BREVO_API_KEY || !d.email || !d.text) return false;
     const r = await brevo(env, "POST", "/contacts", { email: d.email, attributes: { DREAM: d.text.slice(0, 5000), DREAM_AT: new Date((d.done_at || now()) * 1000).toISOString() }, updateEnabled: true });
     return r.ok;
   }
