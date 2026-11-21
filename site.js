@@ -501,7 +501,8 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
         var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
         for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
-        document.documentElement.style.backgroundColor = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
+        var col = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
+        document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col);   /* the sheet's own base takes it too */
       } catch (e) {}
     };
     im.src = src;
@@ -512,6 +513,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var root = document.documentElement, top = "#18436a", ink = "", on = null;
     var set = function () { var near = window.scrollY < (hero.offsetHeight || innerHeight) * .6; if (near === on) return; on = near; root.style.backgroundColor = near ? top : ink; };
     set(); window.addEventListener("scroll", set, { passive: true });
+    SK.edges = function () { on = null; set(); };   /* a sheet closed over the site: back to the site's edge */
   }
 
   /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
@@ -5717,6 +5719,7 @@ function open(src) {
 function leave() { KAY.stop(); SFX.bed.stop(); var r = ""; try { r = document.referrer && new URL(document.referrer).origin === location.origin && !/early-access|\/start/.test(document.referrer) ? document.referrer : ""; } catch (e) {} location.href = r || "./"; }
 function hide() {
   if (!sheet.classList.contains("open")) return;
+  if (SK.edges) SK.edges();
   sheet.classList.remove("open"); html.classList.remove("wl-open", "wl-still"); clearTimeout(stillT); if (SK.hush) SK.hush(false); loopTok++; stopStory(); KAY.stop(); SFX.bed.stop(); pass1.stop(); pass2.stop(); clearInterval(countT);
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
@@ -7029,6 +7032,7 @@ function intro() {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
+  if (SK.edges) SK.edges();
   sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}

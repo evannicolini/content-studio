@@ -3542,7 +3542,7 @@ button.pd-btn:active { transform: scale(.98); }
 .wl.open { opacity: 1; }
 html.wl-open, html.wl-open body { overflow: hidden; }
 .wl .gx[hidden], .wl [hidden] { display: none !important; }
-.wl-bg { position: absolute; inset: 0; overflow: hidden; background: transparent; }   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
+.wl-bg { position: absolute; inset: 0; overflow: hidden; background: var(--edge, var(--vampire)); }   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
 /* a slow 3% push-in on every wallpaper; the next one crossfades in and starts its own */
 .wl-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; transform: scale(1); transition: transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl.open .wl-sky { transform: scale(1.03); }
