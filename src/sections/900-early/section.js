@@ -91,7 +91,7 @@ var SFX = (function () {
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  load("vo:intro", "assets/audio/wl-intro.mp3");
+  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
   function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   function play(n, o) {
     o = o || {};
@@ -137,14 +137,19 @@ var SFX = (function () {
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
-    intro: "Welcome to Studio. Let's get you on the early access list, it only takes a minute. First things first... what should I call you?",
-    name: "First things first. What should I call you?",
-    roles: "Nice to meet you. So, what do you do? Pick everything that fits.", brands: "And how many brands are you making content for?",
-    claude: "Studio runs on Claude. If you don't use it yet, that's totally fine. We'll help you set it up later.",
-    invite: "Last thing. Where should we send your invite?", in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free.",
-    share: "Want to skip the line? Get three friends on the list, and you all move up to the front."
+    intro: "Welcome to Studio. The best work of your life is still ahead of you... and it starts right here. So, what should I call you?",
+    name: "First things first... what should I call you?",
+    roles: "Nice to meet you. So, what do you do? Pick everything that fits, and Studio shapes itself around you.",
+    brands: "And how many brands are you making content for? Each one gets its own look, its own voice, its own library.",
+    claude: "Studio runs on Claude. Do you use it yet? If not, that's totally fine. We'll set it up together.",
+    invite: "Last thing. Where should we send your invite? Add your number too, if you'd like a text the moment it's ready.",
+    in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free. I can't wait to see what you make.",
+    share: "Want to skip the line? Get three friends on the list... and you all move to the front. Together.",
+    /* her answers to a pick (single-choice steps): they cut in, and the last pick wins */
+    b1: "One brand. All in. Love that.", b2: "Two or three. Studio keeps every one of them looking like itself.", b4: "Four or more? You're exactly who we built this for.",
+    cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it."
   };
-  var LEAD = { intro: 0 };   /* the intro has no lead-in silence; the other clips start 0.6 s in */
+  var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
   Object.keys(LINES).forEach(function (k) { fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
@@ -157,14 +162,15 @@ var KAY = (function () {
   a.addEventListener("timeupdate", function () { bars(a.duration ? a.currentTime / a.duration : 0); });
   function words(k, all) { cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" "); }
   function reveal(k, my) {
-    var spans = cap.querySelectorAll("span"), lead = k in LEAD ? LEAD[k] * 1000 : 600, d = Math.max(1.2, (dur[k] || 6) - (k in LEAD ? .6 : 3)) * 1000, step = d / Math.max(1, spans.length);
-    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, lead + i * step); });
+    var spans = cap.querySelectorAll("span"), d = Math.max(1, (dur[k] || 5) - .4) * 1000, step = d / Math.max(1, spans.length);   /* the clips start on the first word */
+    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, 60 + i * step); });
   }
   function ended(my) { if (my === tok) setTimeout(next, 250); }
   function next() {
     var my = ++tok;
     if (vo) { vo.stop(); vo = null; }
     cur = queue.shift();
+    reacting = !!(cur && REACT[cur]);
     if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
     words(cur, !SOUND); wave(cur);
     if (!SOUND) { pill.classList.remove("talk"); return; }
@@ -194,7 +200,10 @@ var KAY = (function () {
   function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
   sheet.addEventListener("pointerdown", unblock, true);
   sheet.addEventListener("keydown", unblock, true);
-  return { say: say, stop: stop, text: function (k) { return LINES[k]; } };
+  /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
+  function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
+  function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
+  return { say: say, stop: stop, react: react, line: line, text: function (k) { return LINES[k]; } };
 })();
 var sndB = sheet.querySelector("[data-wl-snd]");
 function setSound(on) {
@@ -543,7 +552,7 @@ function setStep(n, quiet) {
   sizeStage(); setTimeout(sizeStage, 400);
   if (SCENE[q] === "you") { drawPass(); if (!pass1.shown) { pass1.shown = true; pass1.enter(1500); } else pass1.start(); } else pass1.stop();
   if (SCENE[q] === "home") drawHome();
-  if (!quiet && sheet.classList.contains("open")) KAY.say([LINE[q]]);
+  if (!quiet && sheet.classList.contains("open")) KAY.line(LINE[q]);
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
   setTimeout(function () { typeStep(); }, quiet ? 0 : 520);
 }
@@ -633,6 +642,8 @@ steps.forEach(function (s, n) {
       } else {
         s.querySelectorAll(".wl-opt").forEach(function (x) { x.classList.toggle("sel", x === o); x.setAttribute("aria-pressed", x === o ? "true" : "false"); });
         ans[q] = v;
+        var rk = { brands: { "1": "b1", "2-3": "b2", "4+": "b4" }, claude: { "Pro or Max": "cpro", "Free plan": "cfree", "Not yet": "cno" } }[q];
+        if (rk && rk[v]) KAY.react(rk[v]);
       }
       next.disabled = !ready(at);
       if (q === "roles") drawHome(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
