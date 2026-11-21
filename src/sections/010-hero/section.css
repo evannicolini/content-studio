@@ -412,3 +412,6 @@
    and placed by section.js (syncGlass) so it lines up with the sky behind it. Same look in every browser, nothing to flicker. */
 #hero { --gb-img: url("assets/hero/sky-blur.jpg"); }
 @media (max-width: 700px) and (max-aspect-ratio: 3/4) { #hero { --gb-img: url("assets/hero/sky-m-blur.jpg"); } }
+/* iPhone, edge to edge: the sky runs under the status bar; the words start below it (the nav moved down by the same inset) */
+@media (max-width: 860px) { #hero .hx-in { margin-top: calc(env(safe-area-inset-top) - 6px); } }
+@supports not (top: env(safe-area-inset-top)) { #hero .hx-in { margin-top: 0; } }

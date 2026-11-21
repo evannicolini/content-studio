@@ -480,6 +480,31 @@
     return { stop: function () { tok.on = false; ctl.editor(false); ctl.panel(false); } };
   };
 
+  /* ---------- the edges (iPhone): the page runs under the status bar and the home indicator (viewport-fit=cover, no theme-color).
+     What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
+     the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
+     sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
+  SK.edgeTint = function (src) {
+    if (!src) return;
+    var im = new Image(); im.onload = function () {
+      try {
+        var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
+        g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
+        var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
+        for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
+        document.documentElement.style.backgroundColor = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
+      } catch (e) {}
+    };
+    im.src = src;
+  };
+  function edges() {
+    if (window.SK_PAGE) return;   /* the sheets set their own (SK.edgeTint) */
+    var hero = document.getElementById("hero"); if (!hero) return;
+    var root = document.documentElement, top = "#18436a", ink = "", on = null;
+    var set = function () { var near = window.scrollY < (hero.offsetHeight || innerHeight) * .6; if (near === on) return; on = near; root.style.backgroundColor = near ? top : ink; };
+    set(); window.addEventListener("scroll", set, { passive: true });
+  }
+
   /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
      Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
      code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
@@ -803,7 +828,8 @@
       }, { passive: true });
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
-    if (!window.SK_PAGE) kayla();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
+    if (!window.SK_PAGE) kayla();
+    edges();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
     growFrames();
     focusSections();
     restLoops();

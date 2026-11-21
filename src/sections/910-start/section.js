@@ -277,7 +277,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -997,7 +997,7 @@ function open() {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
@@ -1052,7 +1052,7 @@ restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
-if (local && !EMBED) {
+if (local && !EMBED && window.SK_PAGE) {
   var CH = [["in", "Sign in"], ["code", "Email code"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
   var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
   var chGo = function (id) {

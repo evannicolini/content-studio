@@ -486,6 +486,31 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return { stop: function () { tok.on = false; ctl.editor(false); ctl.panel(false); } };
   };
 
+  /* ---------- the edges (iPhone): the page runs under the status bar and the home indicator (viewport-fit=cover, no theme-color).
+     What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
+     the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
+     sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
+  SK.edgeTint = function (src) {
+    if (!src) return;
+    var im = new Image(); im.onload = function () {
+      try {
+        var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
+        g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
+        var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
+        for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
+        document.documentElement.style.backgroundColor = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
+      } catch (e) {}
+    };
+    im.src = src;
+  };
+  function edges() {
+    if (window.SK_PAGE) return;   /* the sheets set their own (SK.edgeTint) */
+    var hero = document.getElementById("hero"); if (!hero) return;
+    var root = document.documentElement, top = "#18436a", ink = "", on = null;
+    var set = function () { var near = window.scrollY < (hero.offsetHeight || innerHeight) * .6; if (near === on) return; on = near; root.style.backgroundColor = near ? top : ink; };
+    set(); window.addEventListener("scroll", set, { passive: true });
+  }
+
   /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
      Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
      code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
@@ -809,7 +834,8 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       }, { passive: true });
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
-    if (!window.SK_PAGE) kayla();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
+    if (!window.SK_PAGE) kayla();
+    edges();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
     growFrames();
     focusSections();
     restLoops();
@@ -4914,7 +4940,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -5609,7 +5635,7 @@ function open(src) {
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
   else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();
   if (CTOK) { wall("you"); confirmLink(); KAY.say(["confirm"]); }
@@ -5789,7 +5815,7 @@ restartB.hidden = !(local || Q.has("review"));   /* review only: never on the li
 restartB.addEventListener("click", startOver);
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code) ---------- */
-if (local) {
+if (local && window.SK_PAGE) {
   var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
   var chGo = function (id) {
     if (sheet.classList.contains("done")) startOver();
@@ -6179,7 +6205,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL["in"]; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -6899,7 +6925,7 @@ function open() {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
@@ -6954,7 +6980,7 @@ restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
-if (local && !EMBED) {
+if (local && !EMBED && window.SK_PAGE) {
   var CH = [["in", "Sign in"], ["code", "Email code"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
   var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
   var chGo = function (id) {

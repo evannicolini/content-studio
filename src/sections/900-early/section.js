@@ -270,7 +270,7 @@ function want(k) {
   return wallCache[u];
 }
 function wall(k) {
-  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode;
+  var u = WALL[k] || WALL.name; if (u === wallNow) return; wallNow = u; var tok = ++wallTok, bg = sky.parentNode; SK.edgeTint(u);
   want(k).then(function () {
     if (tok !== wallTok) return;
     var nx = document.createElement("img"); nx.className = "wl-sky nx"; nx.alt = ""; nx.src = u; bg.appendChild(nx);
@@ -965,7 +965,7 @@ function open(src) {
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
   else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
   requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
-  wallNow = sky.getAttribute("src");
+  wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow);
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();
   if (CTOK) { wall("you"); confirmLink(); KAY.say(["confirm"]); }
@@ -1145,7 +1145,7 @@ restartB.hidden = !(local || Q.has("review"));   /* review only: never on the li
 restartB.addEventListener("click", startOver);
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code) ---------- */
-if (local) {
+if (local && window.SK_PAGE) {
   var CH = [["name", "Your name"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["you", "Your email"], ["check", "Email code"], ["done", "You're in"]];
   var chGo = function (id) {
     if (sheet.classList.contains("done")) startOver();

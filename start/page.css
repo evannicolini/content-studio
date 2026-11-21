@@ -110,7 +110,7 @@ input { font: inherit; color: inherit; }
 [data-beam] > [data-beam-bloom] { pointer-events: none; }
 
 /* ---------- nav ---------- */
-.nav { position: fixed; z-index: 60; top: 14px; left: 50%; width: min(1180px, calc(100% - 28px)); height: var(--nav-h); transform: translateX(-50%); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: rgba(var(--tint), .34); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); transition: background-color .4s var(--ease), transform .5s var(--ease), opacity .4s; }
+.nav { position: fixed; z-index: 60; top: max(14px, calc(env(safe-area-inset-top) + 6px)); left: 50%; width: min(1180px, calc(100% - 28px)); height: var(--nav-h); transform: translateX(-50%); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: rgba(var(--tint), .34); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); transition: background-color .4s var(--ease), transform .5s var(--ease), opacity .4s; }
 .nav.solid { background: rgba(var(--tint), .62); }
 /* out of the way while scrolling down, back on a deliberate scroll up (kit.js) */
 .nav { transition: background-color .4s var(--ease), transform .55s cubic-bezier(.22, 1, .36, 1), opacity .4s ease; }
@@ -120,7 +120,7 @@ input { font: inherit; color: inherit; }
 .nav-links { display: flex; align-items: center; gap: clamp(14px, 2.2vw, 30px); font: 500 14.5px/1 var(--sans); color: var(--sand-2); }
 .nav-links a { padding: 8px 2px; transition: color .2s; }
 .nav-links a:hover { color: #fff; }
-@media (max-width: 860px) { .nav-links { display: none; } .nav { top: 10px; width: calc(100% - 20px); border-radius: 18px; --nav-h: 54px; padding-left: 14px; padding-right: 8px; } }
+@media (max-width: 860px) { .nav-links { display: none; } .nav { top: max(10px, calc(env(safe-area-inset-top) + 4px)); width: calc(100% - 20px); border-radius: 18px; --nav-h: 54px; padding-left: 14px; padding-right: 8px; } }
 
 /* ---------- the approved hero (sections/010-hero) and the nav ----------
    The hero is drawn on a 1440 artboard (390 on phones) and scales as one piece. --hx-u is one artboard pixel, as a length:
@@ -210,7 +210,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .fm-cap { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; color: var(--sand-2); }
 
 /* ---------- Kayla: the listen pill. Fixed at the bottom centre, glass lit like a selected tab in the app; it turns to ink glass over light sections (kit.js sets .light). ---------- */
-.kp { --kp-ink: 255, 255, 255; position: fixed; z-index: 70; left: 50%; bottom: clamp(12px, 1.8vw, 24px); transform: translate3d(-50%, 0, 0); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgb(var(--kp-ink)); transition: transform .6s var(--ease), opacity .5s; }
+.kp { --kp-ink: 255, 255, 255; position: fixed; z-index: 70; left: 50%; bottom: max(clamp(12px, 1.8vw, 24px), calc(env(safe-area-inset-bottom) + 4px)); transform: translate3d(-50%, 0, 0); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgb(var(--kp-ink)); transition: transform .6s var(--ease), opacity .5s; }
 .kp.light { --kp-ink: 21, 23, 27; }
 .kp.hide { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
 .kp-tag { padding: 6px 10px; border-radius: 999px; font: 500 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: rgb(var(--kp-ink)); background: rgba(var(--kp-ink), .1); -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(var(--kp-ink), 0.63), inset -1px -1px 1px -1px rgba(var(--kp-ink), 0.45); transition: opacity .4s; }
@@ -382,7 +382,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .wl.open { opacity: 1; }
 html.wl-open, html.wl-open body { overflow: hidden; }
 .wl .gx[hidden], .wl [hidden] { display: none !important; }
-.wl-bg { position: absolute; inset: 0; overflow: hidden; background: var(--vampire); }
+.wl-bg { position: absolute; inset: 0; overflow: hidden; background: transparent; }   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
 /* a slow 3% push-in on every wallpaper; the next one crossfades in and starts its own */
 .wl-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; transform: scale(1); transition: transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl.open .wl-sky { transform: scale(1.03); }
