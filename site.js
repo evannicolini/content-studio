@@ -5689,6 +5689,20 @@ async function story(r, mode) {
       var m = document.createElement("canvas"); m.width = W; m.height = Hh; var mg = m.getContext("2d");
       mg.drawImage(fr, 0, 0); mg.globalCompositeOperation = "destination-in"; mg.drawImage(ui, ux, uy, uw, uh);
       g.drawImage(m, 0, 0); g.drawImage(ui, ux, uy, uw, uh);
+      /* their own greeting and brand chip on the Home (the image is captured without them; positions are the app's, at 1440 wide) */
+      var k = uw / 1440, nm = r.first || "", bn = nm ? nm + "'s brand" : "Your brand";
+      g.save(); g.textBaseline = "top"; g.fillStyle = "#fff"; g.font = "300 " + Math.round(58 * k) + "px " + F; try { g.letterSpacing = (-0.035 * 58 * k).toFixed(1) + "px"; } catch (e) {}
+      g.fillText(greet() + (nm ? ", " + nm : ""), ux + 289 * k, uy + 73 * k + 2); try { g.letterSpacing = "0px"; } catch (e) {}
+      var dstr = new Date().toLocaleDateString("en-US", { weekday: "long" }) + " · " + new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" });
+      g.font = "500 " + Math.round(10.5 * k) + "px " + MO; g.fillStyle = "rgba(255,255,255,.92)"; try { g.letterSpacing = (0.2 * 10.5 * k).toFixed(1) + "px"; } catch (e) {}
+      g.fillText(dstr.toUpperCase(), ux + 292 * k, uy + 40 * k); try { g.letterSpacing = "0px"; } catch (e) {}
+      g.font = "400 " + Math.round(13.5 * k) + "px " + F; var cw = g.measureText(bn).width, cx = ux + 292 * k, cy = uy + 325 * k, ch = 36 * k, chw = cw + 50 * k;
+      rr(g, cx, cy, chw, ch, ch / 2); g.fillStyle = "rgba(12,19,28,.42)"; g.fill(); g.strokeStyle = "rgba(255,255,255,.32)"; g.lineWidth = 1.2; g.stroke();
+      var mg2 = g.createLinearGradient(cx, cy, cx + 26 * k, cy + 26 * k); mg2.addColorStop(0, "#DFEAE8"); mg2.addColorStop(1, "#536878");
+      rr(g, cx + 5 * k, cy + 5 * k, 26 * k, 26 * k, 8 * k); g.fillStyle = mg2; g.fill();
+      g.fillStyle = "#05090A"; g.font = "600 " + Math.round(12 * k) + "px " + F; g.textAlign = "center"; g.fillText((nm || "Y").charAt(0).toUpperCase(), cx + 18 * k, cy + 11 * k);
+      g.textAlign = "left"; g.fillStyle = "#fff"; g.font = "400 " + Math.round(13.5 * k) + "px " + F; g.fillText(bn, cx + 39 * k, cy + 11 * k);
+      g.restore();
       var fade = g.createLinearGradient(0, Hh - 260, 0, Hh); fade.addColorStop(0, "rgba(5,9,10,0)"); fade.addColorStop(1, "rgba(5,9,10,.55)"); g.fillStyle = fade; g.fillRect(0, Hh - 260, W, 260);
     }
     /* the words */
