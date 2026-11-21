@@ -163,3 +163,24 @@ function welcomeOne(first, downloadLink) {
   });
   return { subject, html, text };
 }
+
+// 5. Get Studio on your Mac: sent when someone signs up on a phone (askstudio.ai/start/ on a phone has no download). The button opens
+// the sign-up on their Mac: they sign in with the same email and Studio downloads, signed in.
+export function macEmail(first, link, opts = {}) { return themed(opts, () => macOne(first, link)); }
+function macOne(first, link) {
+  const name = one(first), subject = name ? name + ", get Studio on your Mac" : "Get Studio on your Mac";
+  const steps = ["Open this email on your Mac.", "Tap the button and sign in with this email.", "Studio downloads. Open it, and you're already signed in."];
+  const text = [(name ? `Hey ${name}, it's Evan.` : "Hey, it's Evan."), "", "Studio is for Mac, so here's your link for when you're at yours:", link, "",
+    ...steps.map((s, i) => (i + 1) + ". " + s), "", "Questions? Just reply to this email.", "", "Studio", "askstudio.ai"].join("\n");
+  const list = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 34px;">` +
+    steps.map((s, i) => `<tr><td width="40" valign="top" style="padding:0 0 14px;font-family:${MONO};font-size:11px;line-height:25px;font-weight:500;letter-spacing:2px;color:${C.soft};">0${i + 1}</td>
+<td valign="top" style="padding:0 0 14px;font-family:${FONT};font-size:17px;line-height:25px;color:${C.body};">${esc(s)}</td></tr>`).join("") + `</table>`;
+  const html = designed({
+    title: subject, preheader: "Studio is for Mac. Here's your link for when you're at yours.", hero: "hero21-welcome.jpg", heroAlt: "Studio, on your Mac. Get Studio on your Mac.",
+    kicker: "Studio for Mac", headline: name ? esc(name) + ", Studio is waiting on your Mac." : "Studio is waiting on your Mac.",
+    intro: "It's Evan. You signed up on your phone, and Studio is for Mac, so here's your link for when you're at yours.",
+    middle: list, button: { label: "Get Studio on your Mac", href: link, apple: true },
+    fine: "Questions? Just reply to this email.",
+  });
+  return { subject, html, text };
+}

@@ -1679,10 +1679,12 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-plan.sel::after { background: var(--pearl) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%2305090A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
 .st-plan.sel .tag { color: var(--vampire); background: linear-gradient(120deg, var(--platinum), var(--celadon)); }
 /* big screens (5K and up): the words, the bar and You're in grow with the screen; the app is already scaled by the stage */
-.st .wl-in { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
-.st .wl-left, .st .wl-top, .st .wl-dock, .st .wl-done .wl-dl { zoom: var(--uz, 1); }
-.st .wl-dwrap { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
-.st .wl-dstage .pass { --w: min(calc(640px * var(--uz, 1)), 44vw); }
+@media (min-width: 961px) {   /* desktop only: on phones these beat the one-column rules and squeezed You're in into a sliver */
+  .st .wl-in { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
+  .st .wl-left, .st .wl-top, .st .wl-dock, .st .wl-done .wl-dl { zoom: var(--uz, 1); }
+  .st .wl-dwrap { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
+  .st .wl-dstage .pass { --w: min(calc(640px * var(--uz, 1)), 44vw); }
+}
 @media (max-width: 960px) { .st[data-step="plan"] .wl-in { grid-template-columns: none; } .st[data-step="plan"] .wl-stage { transform: none; } .st-feats { max-height: none; } }
 .st[data-step="plan"] [data-st-line] { display: none; }   /* desktop: the heading and the cards already say it */
 @media (max-height: 940px) and (min-width: 961px) { .st-feats { max-height: 118px; } .st-plan .pr { font-size: 46px; } .st[data-step="plan"] .wl-qh { font-size: clamp(38px, 3.6vw, 56px); } }
@@ -1704,3 +1706,24 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 /* phones: "Look around first" under the plans, a full-width quiet glass button */
 .st-look.inline { display: flex; align-items: center; justify-content: center; width: 100%; margin: 14px 0 4px; }
 .st-look.inline[hidden] { display: none; }
+
+/* ---------- v3: the finish. A big glass Download button (the file comes down on the page, a live bar), the steps after it; on a
+   phone, the Mac link by email and a Copy link ---------- */
+.st-get { margin: 26px 0 8px; max-width: 460px; }
+.st-getb { display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 64px; padding: 0 28px; border-radius: 999px; font: 500 18px/1 var(--sans); color: #fff; }
+.st-getb .apple { width: 20px; height: 20px; fill: currentColor; margin-top: -3px; }
+.st-getb[disabled] { pointer-events: none; opacity: .75; }
+.st-prog { margin-top: 16px; }
+.st-prog i { display: block; height: 8px; border-radius: 8px; background: rgba(255, 255, 255, .16); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.st-prog b { display: block; height: 100%; width: 0; border-radius: 8px; background: linear-gradient(90deg, rgba(255, 255, 255, .7), #fff); box-shadow: 0 0 14px rgba(255, 255, 255, .5); transition: width .25s linear; }
+.st-prog p { display: flex; justify-content: space-between; margin: 10px 2px 0; font-size: 13.5px; color: var(--wl-l2); }
+.st-prog em { font: 500 12px/1.4 var(--mono); font-style: normal; color: #fff; }
+.st-done-get .st-how, .st-done-get .st-acts { display: none; }
+.st-done-get.got .st-how, .st-done-get.got .st-acts { display: grid; animation: wl-pop .6s var(--ease) both; }
+.st-done-get.got .st-acts { display: flex; }
+.st-mac { margin: 22px 0 6px; max-width: 460px; }
+.st-macp { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: var(--wl-l2); }
+.st-copy { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
+.st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
+.st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */

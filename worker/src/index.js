@@ -18,7 +18,7 @@
 // else (in the same order among yourselves).
 // Brevo is told after the answer has gone (ctx.waitUntil), so a slow or failing Brevo never fails a sign-up.
 
-import { confirmEmail, youreInEmail } from "./emails.js";
+import { confirmEmail, youreInEmail, macEmail } from "./emails.js";
 export { confirmEmail, youreInEmail, inviteEmail, welcomeEmail } from "./emails.js";
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-alikes
@@ -553,10 +553,52 @@ async function exportCsv(env) {
 }
 
 // ------------------------------------------------------------------------------------------------ routes
+// ---------- the website sign-up (askstudio.ai/start/): its answers, and the "Get Studio on your Mac" email ----------
+// The page has a Supabase session (the person signed in with their email code). Both endpoints take its access token and ask Supabase
+// who it is (GET /auth/v1/user with the public key): nothing here trusts an email the page sends.
+const SUPABASE = "https://nxbnmwxyocbqcjwzxtxi.supabase.co", SUPABASE_KEY = "sb_publishable_LRI7yb4xTKyN5VehjqxQuQ_vuSVY7Hk";   // public, made for browsers
+async function supaUser(env, token) {
+  token = text(token, 4000); if (!token) return null;
+  try {
+    const r = await fetch((env.SUPABASE_URL || SUPABASE) + "/auth/v1/user", { headers: { apikey: env.SUPABASE_KEY || SUPABASE_KEY, Authorization: "Bearer " + token } });
+    if (!r.ok) return null;
+    const u = await r.json(); if (!u || !u.email) return null;
+    const md = u.user_metadata || {};
+    return { email: String(u.email).toLowerCase(), first: text(md.first_name || md.given_name || md.name || "", 80).split(/\s+/)[0] };
+  } catch { return null; }
+}
+const PICK = { roles: ["Founder", "Business owner", "Creator", "Video editor", "Agency", "Social media manager", "Marketer", "Something else"], brands: ["1", "2-3", "4+"], claude: ["Pro or Max", "Free plan", "Not yet"], make: ["Ads", "Reels", "Launch films", "Carousels", "Podcasts", "Something else"] };
+const pick = (v, list, many) => { const a = (Array.isArray(v) ? v : [v]).map((x) => text(x, 60)).filter((x) => list.includes(x)); return many ? [...new Set(a)] : a[0] || ""; };
+async function signupProfile(request, env) {
+  const b = await body(request); if (!b) return fail("Send JSON.");
+  const u = await supaUser(env, b.access_token); if (!u) return fail("Sign in again.", 401);
+  if (!(await rateOk(env, "prof:" + (await sha(u.email)).slice(0, 24), 3600, 20))) return fail("Too many tries. Wait a little.", 429);
+  const roles = pick(b.roles, PICK.roles, true), brands = pick(b.brands, PICK.brands), claude = pick(b.claude, PICK.claude), make = pick(b.first_make, PICK.make, true);
+  if (!env.BREVO_API_KEY) return json({ ok: true, brevo: false });
+  const attributes = { FIRSTNAME: u.first, ROLE: roles.join(", "), BRANDS: brands, CLAUDE: claude, SOURCE: "signup" };
+  if (env.BREVO_FIRST_MAKE === "1") attributes.FIRST_MAKE = make.join(", ");   // the attribute is made in Brevo first (Evan's account)
+  const r = await brevo(env, "POST", "/contacts", { email: u.email, attributes, updateEnabled: true });
+  if (!r.ok) console.error("signup profile", r.detail);
+  return json({ ok: true, brevo: r.ok });
+}
+async function macLink(request, env) {
+  const b = await body(request); if (!b) return fail("Send JSON.");
+  const u = await supaUser(env, b.access_token); if (!u) return fail("Sign in again.", 401);
+  if (!(await rateOk(env, "mac:" + (await sha(u.email)).slice(0, 24), 3600, 3))) return fail("We already sent it. Check your email.", 429);
+  const link = siteOf(env) + "/start/?mac";
+  if (!env.BREVO_API_KEY) return json({ ok: true, sent: false, link });
+  const mail = macEmail(u.first, link);
+  const r = await brevo(env, "POST", "/smtp/email", { sender: SENDER, to: [{ email: u.email, name: u.first || u.email }], subject: mail.subject, htmlContent: mail.html, textContent: mail.text, tags: ["signup-mac-link"] });
+  if (!r.ok) console.error("mac link email", r.detail);
+  return json({ ok: true, sent: r.ok, link });
+}
+
 async function route(request, url, env, ctx) {
   const path = url.pathname, m = request.method;
   if (path === "/join") return m === "POST" ? await join(request, env, ctx) : fail("Use POST.", 405);
   if (path === "/confirm") return m === "POST" ? await confirm(request, env, ctx) : fail("Use POST.", 405);
+  if (path === "/signup/profile") return m === "POST" ? await signupProfile(request, env) : fail("Use POST.", 405);
+  if (path === "/signup/mac-link") return m === "POST" ? await macLink(request, env) : fail("Use POST.", 405);
   if (path === "/resend") return m === "POST" ? await resend(request, env) : fail("Use POST.", 405);
   if (path === "/status") return m === "GET" ? await status(url, env) : fail("Use GET.", 405);
   if (path === "/pass") return m === "GET" ? await passView(request, url, env) : fail("Use GET.", 405);

@@ -6021,7 +6021,8 @@ var SOUND = true;
 try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
 /* Kayla's sign-up lines that are recorded (assets/audio/<key>.mp3 + .json). Add a key here when its file lands; the rest stay silent.
    su-in su-code su-ok su-done pw-plan pw-ok pw-pay pw-promo pw-notrial pw-done */
-var VO = ["su-in", "su-code", "su-ok", "su-done", "pw-plan", "pw-ok", "pw-pay", "pw-promo", "pw-notrial", "pw-done"];
+var VO = ["su-in", "su-code", "su-ok", "su-done", "pw-plan", "pw-ok", "pw-pay", "pw-promo", "pw-notrial", "pw-done",
+  "wl-roles", "wl-brands", "wl-claude", "wl-b1", "wl-b2", "wl-b4", "wl-cpro", "wl-cfree", "wl-cno", "su-make", "su-dl", "su-mac"];   /* v3: the waitlist's own takes for the shared questions */
 var SFX = (function () {
   /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
      are fetched and decoded right away, so the first click can play her at once */
@@ -6095,10 +6096,18 @@ var KAY = (function () {
     "pw-pay": "Fourteen days for a dollar. Cancel anytime before then, and you won't be charged again.",
     "pw-promo": "A friend's code. Your first month is on us.",
     "pw-notrial": "Looks like you've had your free trial already. Here's the plan at its regular price.",
-    "pw-done": "You're all set. Studio is unlocked. Let's get back to it."
+    "pw-done": "You're all set. Studio is unlocked. Let's get back to it.",
+    "wl-roles": "Nice to meet you. So, what do you do? Pick everything that fits, and Studio shapes itself around you.",
+    "wl-brands": "And how many brands are you making content for? Each one gets its own look, its own voice, its own library.",
+    "wl-claude": "Studio runs on Claude. Do you use it yet? If not, that's totally fine. We'll set it up together.",
+    "wl-b1": "One brand. All in. Love that.", "wl-b2": "Two or three. Studio keeps every one of them looking like itself.", "wl-b4": "Four or more? You're exactly who we built this for.",
+    "wl-cpro": "Perfect. You're already set.", "wl-cfree": "The free plan is a great place to start.", "wl-cno": "No problem. We'll walk you through it.",
+    "su-make": "Last one. What do you want to make first? Pick as many as you like, and it'll be waiting for you when you open Studio.",
+    "su-dl": "You're in. Download Studio, open it... and you're already signed in.",
+    "su-mac": "Studio is for Mac, so I just emailed you a link. Open it on your Mac, and you're in."
   };
   var UNRECORDED = {}, waits = {};   /* a line with no voice file yet: she shows the words and stays quiet */
-  var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
+  var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1, "wl-b1": 1, "wl-b2": 1, "wl-b4": 1, "wl-cpro": 1, "wl-cfree": 1, "wl-cno": 1 }, reacting = false;
   var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
   Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k] && VO.indexOf(k) > -1) fetch("assets/audio/" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
@@ -6174,14 +6183,14 @@ var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
 /* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
    (#paywall), which Studio opens at the first export ("Keep your Studio: 14 days for $1"). */
-var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code"];
+var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code", "roles", "brands", "claude", "make"];   /* v3: who they are, after the code */
 /* the in-app paywall ("Unlock it: 14 days for $1"): only the plan and the pay steps, for someone already signed in to Studio.
    Studio opens #paywall in its own window and calls window.StudioPaywall.open({ token, first, email, handoff }) with the session it
    has; on this Mac #paywall alone opens it on the stand-in. When it's paid, it calls window.webkit.messageHandlers.studio (if there)
    with { unlocked: true, plan, period }, and its button goes back to Studio. */
 var PAYWALL = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
 if (PAYWALL) { ORDER = ["plan", "pay"]; sheet.classList.add("paywall"); }
-var SCENE = { "in": "home", code: "home", plan: "home", pay: "pass" };
+var SCENE = { "in": "home", code: "home", roles: "home", brands: "home", claude: "home", make: "home", plan: "home", pay: "pass" };
 var segs = $$("[data-st-seg] i"), scenes = {};
 $$(".wl-sc").forEach(function (s) { scenes[s.getAttribute("data-sc")] = s; });
 var back = $("[data-st-back]"), next = $("[data-st-next]"), go = $(".wl-go"), sky = $(".wl-sky"), fit = $(".wl-fit"), stage = $(".wl-stage"), toastEl = $("[data-st-toast]");
@@ -6229,7 +6238,7 @@ var AH = SK.appHome($("[data-st-ah]"), {});
 var STORY = null;
 function story(on) { if (on && !STORY) STORY = SK.appStory(AH, { sfx: function (n) { SFX.play(n === "key" ? "key" : n, { gain: n === "key" ? .5 : .4 }); } }); else if (!on && STORY) { STORY.stop(); STORY = null; } }
 function drawHome(typing) {
-  var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : 1;
+  var f = first(), pl = planOf(me.plan), n = ORDER[at] === "plan" || ORDER[at] === "pay" || me.paid ? pl.brands : typeof ans !== "undefined" && ans.brands === "4+" ? 5 : 1;
   AH.name(f);
   var bl = SK.BRANDS.slice();
   if (n > 3) bl.push({ n: "+ " + (pl.brands > 5 ? "every brand" : (pl.brands - 3) + " more"), m: "+", bg: "rgba(255,255,255,.12)" });
@@ -6264,7 +6273,8 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
 /* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
-function setWalls(src) { var u = src || "assets/su/done.jpg"; if (PHONE) u = u.replace(/\.jpg$/, "-m.jpg"); ["in", "code", "plan", "pay", "done"].forEach(function (k) { WALL[k] = u; }); }
+var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
+function setWalls(src) { Object.keys(WALLSET).forEach(function (k) { var u = src || "assets/" + WALLSET[k] + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
 var wallCache = {}, wallTok = 0, wallNow = "";
 function want(k) {
@@ -6420,9 +6430,11 @@ function ready() {
   if (q === "in") return !$("[data-st-mail]").hidden && !!val("first") && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val("email"));
   if (q === "code") return code().length === 6;
   if (q === "plan") return !!me.plan;
+  if (q === "roles" || q === "make") return ans[q].length > 0;
+  if (q === "brands" || q === "claude") return !!ans[q];
   return true;
 }
-var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
+var LINE = { "in": "su-in", code: "su-code", roles: "wl-roles", brands: "wl-brands", claude: "wl-claude", make: "su-make", plan: "pw-plan", pay: "pw-pay" };
 /* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
 function beamsOn() {   /* the fields of the step on screen carry the composer's beam: still, and moving only in the field you're typing in (21 always-moving beams made it hot and glitchy) */
   sheet.querySelectorAll(".wl-fb").forEach(function (fb) {
@@ -6455,7 +6467,7 @@ function setStep(n, quiet, ack) {
   back.disabled = n === 0;
   var last = q === "pay";
   next.hidden = last; go.hidden = !last;
-  $("[data-st-next-t]").textContent = q === "in" ? ($("[data-st-mail]").hidden ? "Continue" : "Send my code") : q === "code" ? "Verify" : "Continue";
+  $("[data-st-next-t]").textContent = q === "in" ? ($("[data-st-mail]").hidden ? "Continue" : "Send my code") : q === "code" ? "Verify" : q === "make" ? "Finish" : "Continue";
   next.disabled = !ready();
   scenes.home.classList.remove("menu");
   $("[data-st-look]").hidden = !(PAYWALL && q === "plan");
@@ -6486,6 +6498,7 @@ function advance() {
   if (q === "in") return startEmail();
   if (q === "code") return verify();
   if (!ready()) return;
+  if (q === "make") return finish();
   setStep(at + 1, false, q === "plan" ? "pw-ok" : null);   /* "Good choice." */
 }
 
@@ -6591,15 +6604,47 @@ function verify() {
 /* signed in: hand the session to the server for the Mac app at once, then the plan (or, for an invite, redeem it) */
 function signedIn() {
   drawHome();
-  if (me.invite) return redeem().then(function (r) { me.hand = r; me.invite.done = true; showDone(); });
+  if (me.invite) return redeem().then(function (r) { me.hand = r; me.invite.done = true; askOrDone(); });
   return handoff().then(function (h) {
     me.hand = h;
-    setTimeout(showDone, 520);   /* free: straight to You're in, and the download */
+    setTimeout(askOrDone, 520);   /* v3: who they are (unless answered before), then You're in and the Download button */
   }, function (x) {
     if (x && x.state === "has_plan") { me.hand = x; showDone("has"); return; }
     if (x && /sales_off|test_mode_only/.test(x.code || "")) { err("Studio is not on sale yet. Join the waitlist and we'll tell you first."); return; }
     throw x;
   });
+}
+
+/* ---------- v3: who they are (roles, brands, Claude, what first), waitlist-style; saved to their Studio profile ----------
+   Supabase user_metadata.onboarding = { roles: [..], brands: "1"|"2-3"|"4+", claude: "Pro or Max"|"Free plan"|"Not yet", first_make: [..],
+   answered_at } (the app reads it and skips these in onboarding), and the Brevo contact (ROLE, BRANDS, CLAUDE) through the waitlist Worker. */
+var ans = { roles: [], brands: "", claude: "", make: [] };
+var WAITLIST = "https://studio-waitlist.studio-licence.workers.dev";
+function answered() { var md = me.session && me.session.user && me.session.user.user_metadata; return md && md.onboarding && md.onboarding.answered_at; }
+function askOrDone() { if (PAYWALL || answered()) { showDone(); return; } setStep(ORDER.indexOf("roles"), false); }
+[].forEach.call(sheet.querySelectorAll('.wl-q[data-q="roles"], .wl-q[data-q="brands"], .wl-q[data-q="claude"], .wl-q[data-q="make"]'), function (stepQ) {
+  var q = stepQ.getAttribute("data-q"), multi = stepQ.hasAttribute("data-multi");
+  stepQ.querySelectorAll(".wl-opt").forEach(function (o) {
+    var b = document.createElement("span"); b.className = "wl-ob"; b.setAttribute("data-beam", "cx"); b.setAttribute("aria-hidden", "true"); b.innerHTML = "<span data-beam-bloom></span>"; o.insertBefore(b, o.firstChild);
+    o.addEventListener("click", function () {
+      var v = o.getAttribute("data-v");
+      if (multi) { var i = ans[q].indexOf(v); if (i > -1) ans[q].splice(i, 1); else ans[q].push(v); }
+      else ans[q] = v;
+      stepQ.querySelectorAll(".wl-opt").forEach(function (x) { var on = multi ? ans[q].indexOf(x.getAttribute("data-v")) > -1 : x === o; x.classList.toggle("sel", on); x.setAttribute("aria-pressed", on ? "true" : "false"); var ob = x.querySelector(".wl-ob"); if (on) ob.setAttribute("data-active", ""); else ob.removeAttribute("data-active"); });
+      if (q === "brands") { KAY.react({ "1": "wl-b1", "2-3": "wl-b2", "4+": "wl-b4" }[v]); drawHome(); }
+      if (q === "claude") KAY.react({ "Pro or Max": "wl-cpro", "Free plan": "wl-cfree", "Not yet": "wl-cno" }[v]);
+      next.disabled = !ready();
+    });
+  });
+});
+function finish() {
+  if (busy) return; busy = true; next.classList.add("busy"); $("[data-st-next-t]").textContent = "Saving";
+  var o = { roles: ans.roles.slice(), brands: ans.brands, claude: ans.claude, first_make: ans.make.slice(), answered_at: new Date().toISOString() };
+  var save = MOCK || !me.session ? Promise.resolve() : Promise.all([
+    supa().then(function (c) { return c.auth.updateUser({ data: { onboarding: o } }); }).catch(function () {}),
+    fetch(WAITLIST + "/signup/profile", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ access_token: me.session.access_token, roles: o.roles, brands: o.brands, claude: o.claude, first_make: o.first_make }) }).catch(function () {})
+  ]);
+  save.then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Finish"; showDone(); });   /* never blocks You're in */
 }
 
 /* ---------- step 3: the plan ---------- */
@@ -6948,8 +6993,8 @@ function setInvite(inv) {
   $("[data-st-ft]").textContent = (f ? f + " invited you" : "You're invited") + (inv.name ? ". For " + inv.name + "." : ".");
   $("[data-st-fine]").innerHTML = esc(f ? f + " invited you to Studio." : "You're invited to Studio.") + ' By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>. Free invite access is up to Studio and can change or end at any time.';
   h.innerHTML = esc(f ? f + " invited you." : "You're invited.") + "<span>Studio Pro, on us.</span>";
-  s.textContent = "No card, no plan. Sign in and Studio downloads.";
-  ORDER = ["in", "code"]; setStep(at, true);
+  s.textContent = "No card, no plan. Sign in, and Studio is ready for your Mac.";
+  ORDER = ["in", "code", "roles", "brands", "claude", "make"]; setStep(at, true);   /* v3: invites answer the questions too */
 }
 
 /* ---------- You're in ---------- */
@@ -6959,7 +7004,10 @@ function showDone(has) {
   wall("done");
   $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : "You're in";
   $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
-  $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : "Studio is downloading.";
+  var mode = PAYWALL || has ? "plain" : onMac() ? "get" : "mac";
+  doneEl.classList.toggle("st-done-get", mode === "get"); doneEl.classList.toggle("st-done-mac", mode === "mac");
+  $("[data-st-get-box]").hidden = mode !== "get"; $("[data-st-mac]").hidden = mode !== "mac";
+  $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : mode === "mac" ? "Studio is waiting on your Mac." : "Studio is ready for your Mac.";
   if (PAYWALL) { $("[data-st-dhi]").textContent = f ? "You're all set, " + f + "." : "You're all set."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
@@ -6978,10 +7026,10 @@ function showDone(has) {
     pass2.enter(2100);
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
-    SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : "su-done"]);
+    SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"]);
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
     if (PAYWALL) { tell({ type: "studio-paywall:unlocked", plan: me.plan, period: me.period }); try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
-    else setTimeout(download, 1800);   /* the download starts by itself */
+    else if (mode === "mac") sendMacLink();   /* v3: no surprise download; on a phone the link goes to their email */
   }
 }
 var STUDIO = (Q.get("studio") || "").replace(/\/+$/, "");
@@ -6993,6 +7041,55 @@ function download() {
   var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.remove();
 }
 $("[data-st-dl]").addEventListener("click", function (e) { e.preventDefault(); download(); });
+
+/* v3: a Mac on a desk gets the Download button; a phone or tablet gets the Mac link (?phone / ?mac force either on this Mac) */
+function onMac() { if (local && Q.has("phone")) return false; if (local && Q.has("mac")) return true; return /Macintosh|Mac OS X/.test(navigator.userAgent) && !(navigator.maxTouchPoints > 1) && !matchMedia("(pointer: coarse)").matches; }
+/* The Download button: the file comes down on the page with a live bar (fetch, streamed, into a blob, then saved as Studio.dmg). If the
+   browser can't stream it (no CORS on the file, an old browser), it falls back to a normal download. Then the 1-2-3 steps. */
+var getting = false;
+function getStudio() {
+  if (getting) return; getting = true;
+  var u = me.hand && me.hand.download, btn = $("[data-st-get]"), prog = $("[data-st-prog]"), bar = $("[data-st-bar]"), pt = $("[data-st-prog-t]"), pc = $("[data-st-pct]");
+  var mb = function (n) { return (n / 1048576).toFixed(n >= 104857600 ? 0 : 1) + " MB"; };
+  var show = function (got, total) { var f = total ? Math.min(1, got / total) : 0; bar.style.width = (total ? f * 100 : Math.min(92, got / 2621440)).toFixed(1) + "%"; pc.textContent = total ? Math.floor(f * 100) + "%" : mb(got); pt.textContent = total ? mb(got) + " of " + mb(total) : mb(got) + " so far"; };
+  var done = function (fallback) {
+    bar.style.width = "100%"; pc.textContent = fallback ? "" : "100%"; pt.textContent = fallback ? "Your browser is saving Studio.dmg" : "Downloaded · Studio.dmg";
+    $("[data-st-get-t]").textContent = "Download again"; btn.disabled = false; getting = false; doneEl.classList.add("got"); SFX.play("done", { gain: .6 });
+  };
+  var plain = function () { var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a); done(true); };
+  btn.disabled = true; $("[data-st-get-t]").textContent = "Downloading…"; prog.hidden = false; show(0, 1);
+  if (STUDIO && u) { location.href = u; done(true); return; }
+  if (MOCK || !u || u === "#download") {   /* this Mac: a stand-in file of Studio's size, at a fast connection's pace */
+    var total = 238 * 1048576, t0 = performance.now();
+    (function tick() { var f = Math.min(1, (performance.now() - t0) / 4200); show(total * f, total); if (f < 1) requestAnimationFrame(tick); else { done(false); toast("Downloaded (stand-in)."); } })();
+    return;
+  }
+  fetch(u).then(function (r) {
+    if (!r.ok || !r.body || !r.body.getReader) throw 0;
+    var total = +r.headers.get("Content-Length") || 0, got = 0, reader = r.body.getReader(), parts = [];
+    var pump = function () { return reader.read().then(function (x) { if (x.done) return; parts.push(x.value); got += x.value.length; show(got, total); return pump(); }); };
+    return pump().then(function () {
+      var href = URL.createObjectURL(new Blob(parts, { type: "application/x-apple-diskimage" })), a = document.createElement("a");
+      a.href = href; a.download = "Studio.dmg"; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(href); }, 120000); done(false);
+    });
+  }).catch(plain);
+}
+$("[data-st-get]").addEventListener("click", getStudio);
+/* a phone: the Mac link by email (the waitlist Worker checks the session and sends "Get Studio on your Mac"), and Copy link */
+var MACLINK = "https://askstudio.ai/start/?mac";
+function sendMacLink() {
+  var t = $("[data-st-mac-t]");
+  t.textContent = "Studio is for Mac. We emailed you a link to download it on your Mac.";
+  if (MOCK || !me.session) return;
+  fetch(WAITLIST + "/signup/mac-link", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ access_token: me.session.access_token }) })
+    .then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.ok) throw 0; if (j.link) MACLINK = j.link; })
+    .catch(function () { t.textContent = "Studio is for Mac. Copy your link and open it on your Mac."; });
+}
+$("[data-st-mac-copy]").addEventListener("click", function () {
+  var ok = function () { toast("Link copied. Open it on your Mac."); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(MACLINK).then(ok, ok); else ok();
+});
 $("[data-st-open]").addEventListener("click", function (e) {
   if (PAYWALL) { e.preventDefault(); tell({ type: "studio-paywall:close" }); try { window.webkit.messageHandlers.studio.postMessage({ close: true }); } catch (x) { if (!EMBED) close(); } return; }
   if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); }
@@ -7073,7 +7170,7 @@ restartB.addEventListener("click", function () { location.href = location.pathna
 
 /* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
 if (local && !EMBED && window.SK_PAGE) {
-  var CH = [["in", "Sign in"], ["code", "Email code"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
+  var CH = [["in", "Sign in"], ["code", "Email code"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["make", "Make first"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
   var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
   var chGo = function (id) {
     var wantPay = /^(plan|pay|unlocked)$/.test(id);
@@ -7084,10 +7181,14 @@ if (local && !EMBED && window.SK_PAGE) {
     if (id === "done" || id === "unlocked") { if (PAYWALL) me.paid = me.paid || { plan: me.plan, period: me.period }; showDone(false); return; }
     var n = ORDER.indexOf(id); if (n < 0) return;
     if (id === "code") $("[data-st-to]").textContent = me.email;
+    if (n > ORDER.indexOf("brands") && !ans.brands) ans.brands = "2-3";
+    if (n > ORDER.indexOf("roles") && !ans.roles.length) ans.roles = ["Founder", "Creator"];
+    if (n > ORDER.indexOf("claude") && !ans.claude) ans.claude = "Pro or Max";
     setStep(n, false);
   };
-  var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Orange dune", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
+  var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Each step its own", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
   var CHQ = Q.get("ch") || H.get("ch"); if (CHQ) setTimeout(function () { chGo(CHQ); chUI.paint(); }, 600);
+  new MutationObserver(function () { chUI.paint(); }).observe(sheet, { attributes: true, attributeFilter: ["data-step", "class"] });   /* the pill follows the step as you go */
 }
 
 /* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */

@@ -777,6 +777,40 @@ test("phone numbers become E.164 when they can", () => {
 let passed = 0, failed = 0;
 const realFetch = globalThis.fetch;
 const quiet = console.error;
+// the website sign-up's two calls: Supabase says who the token is (faked here); nothing trusts an email the page sends
+function withSupabase(t, users) {
+  const brevoFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init = {}) => {
+    const url = new URL(typeof input === "string" ? input : input.url);
+    if (url.hostname.endsWith(".supabase.co")) {
+      const tok = (new Headers(init.headers || {}).get("Authorization") || "").replace(/^Bearer /, ""), u = users[tok];
+      return u ? new Response(JSON.stringify({ email: u.email, user_metadata: { first_name: u.first } }), { status: 200 }) : new Response('{"msg":"bad jwt"}', { status: 401 });
+    }
+    return brevoFetch(input, init);
+  };
+}
+test("sign-up: the answers reach Brevo for the signed-in person only, cleaned to the known picks", async () => {
+  const t = setup(); withSupabase(t, { good: { email: "Maker@Example.com", first: "Mae" } });
+  const bad = await t.call("POST", "/signup/profile", { body: { access_token: "nope", roles: ["Founder"] } });
+  assert.equal(bad.status, 401, "an unknown token is refused");
+  const r = await t.call("POST", "/signup/profile", { body: { access_token: "good", email: "someone-else@example.com", roles: ["Founder", "Hacker", "Creator"], brands: "2-3", claude: "Free plan", first_make: ["Ads", "Reels", "x"] } });
+  assert.equal(r.status, 200); assert.equal(r.json.brevo, true);
+  const c = t.brevo.calls.find((x) => x.path === "/v3/contacts");
+  assert.equal(c.body.email, "maker@example.com", "Supabase's email, never the page's");
+  assert.deepEqual(c.body.attributes, { FIRSTNAME: "Mae", ROLE: "Founder, Creator", BRANDS: "2-3", CLAUDE: "Free plan", SOURCE: "signup" });
+  assert.ok(!c.body.listIds, "not added to the waitlist list");
+});
+test("sign-up on a phone: one Get Studio on your Mac email, at most 3 an hour", async () => {
+  const t = setup(); withSupabase(t, { good: { email: "phone@example.com", first: "Pat" } });
+  const r = await t.call("POST", "/signup/mac-link", { body: { access_token: "good" } });
+  assert.equal(r.status, 200); assert.equal(r.json.sent, true); assert.equal(r.json.link, "https://askstudio.ai/start/?mac");
+  const m = t.brevo.lastEmail("phone@example.com");
+  assert.equal(m.subject, "Pat, get Studio on your Mac"); assert.ok(m.html.includes("apple-black.png") && m.html.includes("/start/?mac"));
+  await t.call("POST", "/signup/mac-link", { body: { access_token: "good" } }); await t.call("POST", "/signup/mac-link", { body: { access_token: "good" } });
+  const capped = await t.call("POST", "/signup/mac-link", { body: { access_token: "good" } });
+  assert.equal(capped.status, 429);
+  assert.equal((await t.call("POST", "/signup/mac-link", { body: { access_token: "x" } })).status, 401);
+});
 for (const { name, fn } of tests) {
   console.error = () => {};                     // the Worker logs Brevo failures; the tests cause them on purpose
   try {
