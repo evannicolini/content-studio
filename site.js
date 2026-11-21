@@ -5739,14 +5739,23 @@ if (MOCK) $("[data-st-mode]").hidden = false;
 /* ---------- sound: the app's own takes, as in early access; the same speaker setting ---------- */
 var SOUND = true;
 try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
+/* Kayla's sign-up lines that are recorded (assets/audio/<key>.mp3 + .json). Add a key here when its file lands; the rest stay silent.
+   su-in su-code su-ok su-done pw-plan pw-ok pw-pay pw-promo pw-notrial pw-done */
+var VO = [];
 var SFX = (function () {
+  /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
+     are fetched and decoded right away, so the first click can play her at once */
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
-  var GAIN = { click: .5, tick: .16, key: .26, move: .38, send: .6, land: .45, done: .5 };
-  function wake() {
-    if (!AC || ctx) { if (ctx && ctx.state === "suspended") ctx.resume(); return; }
-    try { ctx = new AC(); } catch (e) { return; }
-    Object.keys(GAIN).forEach(function (n) { fetch("assets/sfx/" + n + ".wav").then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); });
-  }
+  /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
+     scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
+  var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
+  var GAIN = { tick: 1, click: 1, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  try { if (AC) ctx = new AC(); } catch (e) {}
+  function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) ctx.decodeAudioData(d, function (b) { buf[n] = b; }, function () {}); }).catch(function () {}); }
+  Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
+  load("bed", "assets/audio/bed-tides.mp3");
+  VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
+  function wake() { if (ctx && ctx.state === "suspended") { try { ctx.resume(); } catch (e) {} } }
   function play(n, o) {
     o = o || {};
     if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
@@ -5759,14 +5768,116 @@ var SFX = (function () {
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
   }
-  return { wake: wake, play: play };
+  /* a voice line from a decoded buffer: starts now, inside the click (no network, no gap); null if it isn't ready */
+  function voice(k, onend) {
+    var b = buf["vo:" + k]; if (!ctx || !b) return null;
+    var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = b; g.gain.value = 1; s.connect(g); g.connect(ctx.destination);
+    var t0 = ctx.currentTime, stopped = false; s.onended = function () { if (!stopped) onend && onend(); }; s.start();
+    return { dur: b.duration, at: function () { return Math.max(0, ctx.currentTime - t0); }, stop: function () { stopped = true; try { s.stop(); } catch (e) {} } };
+  }
+  function live() { var ua = navigator.userActivation; return !!ctx && (ctx.state === "running" || !ua || ua.isActive); }   /* a click or key is happening now (or already happened) */
+  /* the music bed (Theatre of Delays, "Tides", a seamless 97 s loop at about -24 LUFS): it fades in on the first click, sits about
+     10 dB lower while Kayla talks (300 ms ramps), swells a little on You're in, and fades out when the sheet closes */
+  var bed = (function () {
+    var src = null, g = null, duckOn = false, swellT = 0, swellOn = false, BASE = .9;
+    function level() { return BASE * (duckOn ? .316 : 1) * (swellOn ? 1.45 : 1); }
+    function to(v, sec) { if (!g) return; var t = ctx.currentTime; g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime(v, t + sec); }
+    return {
+      start: function () {
+        if (!SOUND || !ctx || !buf.bed || src) return;
+        g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
+        src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();
+        to(level(), 1.5);
+      },
+      duck: function (on) { duckOn = !!on; to(level(), .3); },
+      swell: function () { swellOn = true; to(level(), 1.2); clearTimeout(swellT); swellT = setTimeout(function () { swellOn = false; to(level(), 2.5); }, 4200); },
+      stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
+    };
+  })();
+  return { wake: wake, play: play, voice: voice, live: live, bed: bed, has: function (k) { return !!buf["vo:" + k]; } };
+})();
+
+/* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
+var KAY = (function () {
+  var LINES = {
+    "su-in": "Welcome to Studio. Let's get it on your Mac. It's free to start.",
+    "su-code": "Check your email. I just sent you a six-digit code.",
+    "su-ok": "Okay, got it. You're in.",
+    "su-done": "Studio is downloading. Open it, and make your first video before you pay a thing.",
+    "pw-plan": "Keep everything you've made. Pick the plan that fits how many brands you run.",
+    "pw-ok": "Good choice.",
+    "pw-pay": "Fourteen days for a dollar. Cancel anytime before then, and you won't be charged again.",
+    "pw-promo": "A friend's code. Your first month is on us.",
+    "pw-notrial": "Looks like you've had your free trial already. Here's the plan at its regular price.",
+    "pw-done": "You're all set. Studio is unlocked. Let's get back to it."
+  };
+  var UNRECORDED = {};   /* a line with no voice file yet: she shows the words and stays quiet */
+  var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
+  var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
+  a.preload = "auto";
+  Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k] && VO.indexOf(k) > -1) fetch("assets/audio/" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  function wave(k) {
+    var p = peaks[k] || [], n = 34, out = "";
+    for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
+    kw.innerHTML = out;
+  }
+  function bars(f) { var b = kw.children; for (var i = 0; i < b.length; i++) b[i].classList.toggle("on", i / b.length < f); }
+  a.addEventListener("timeupdate", function () { bars(a.duration ? a.currentTime / a.duration : 0); });
+  function words(k, all) { cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" "); }
+  function reveal(k, my) {
+    var spans = cap.querySelectorAll("span"), d = Math.max(1, (dur[k] || 5) - .4) * 1000, step = d / Math.max(1, spans.length);   /* the clips start on the first word */
+    spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, 60 + i * step); });
+  }
+  function ended(my) { if (my === tok) setTimeout(next, 250); }
+  function next() {
+    var my = ++tok;
+    if (vo) { vo.stop(); vo = null; }
+    cur = queue.shift();
+    reacting = !!(cur && REACT[cur]);
+    if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }   /* not recorded yet: skip it, quietly */
+    words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
+    if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
+    a.pause();
+    /* the intro from its decoded buffer, started right now inside the click; the rest stream as before */
+    if (SFX.has(cur) && SFX.live()) {
+      vo = SFX.voice(cur, function () { ended(my); });
+      if (vo) {
+        pill.classList.add("talk"); pill.classList.remove("ask"); reveal(cur, my); SFX.bed.duck(true);
+        (function tick() { if (my !== tok || !vo) return; bars(vo.at() / vo.dur); requestAnimationFrame(tick); })();
+        return;
+      }
+    }
+    if (SFX.has(cur) && !SFX.live()) { block(my); return; }   /* a link opened with no click: she waits for the first tap or key */
+    a.src = "assets/audio/" + cur + ".mp3";
+    var p = a.play();
+    pill.classList.add("talk"); pill.classList.remove("ask"); SFX.bed.duck(true);
+    reveal(cur, my);
+    if (p && p.catch) p.catch(function () { block(my); });
+  }
+  function block(my) { if (my !== tok) return; blocked = true; pill.classList.remove("talk"); pill.classList.add("ask"); words(cur, true); }
+  a.addEventListener("ended", function () { ended(tok); });
+  function say(keys) { queue = [].concat(keys); a.pause(); next(); }
+  function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); }
+  pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
+  /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
+  function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
+  sheet.addEventListener("pointerdown", unblock, true);
+  sheet.addEventListener("keydown", unblock, true);
+  /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
+  function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
+  function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
+  return { say: say, stop: stop, react: react, line: line, text: function (k) { return LINES[k]; } };
 })();
 var sndB = $("[data-st-snd]");
-function setSound(on) { SOUND = on; sndB.setAttribute("aria-pressed", on ? "true" : "false"); sndB.setAttribute("aria-label", on ? "Sound on" : "Sound off"); try { localStorage.setItem("studio-wl-sound", on ? "on" : "off"); } catch (e) {} }
+function setSound(on) {
+  SOUND = on; sndB.setAttribute("aria-pressed", on ? "true" : "false"); sndB.setAttribute("aria-label", on ? "Sound on" : "Sound off"); try { localStorage.setItem("studio-wl-sound", on ? "on" : "off"); } catch (e) {}
+  if (!on) { KAY.stop(); SFX.bed.stop(.4); if (typeof whyA !== "undefined") whyA.pause(); } else if (sheet.classList.contains("open")) SFX.bed.start();
+}
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(".st-way, .st-plan, button, a"); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
-sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (e.target.closest && e.target.closest(".st-way, .st-plan, button, a")) SFX.play("click"); });
+sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(".st-way, .st-plan, button, a")) SFX.play("click"); });
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
@@ -5946,7 +6057,7 @@ function Pass(el, opts) {
 }
 var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { onLanded: function () { SFX.play("land"); } });
 function drawPass(p) {
-  var pl = planOf(me.plan), nm = (me.first || val("first") || "").trim();
+  var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
     : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
     : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
@@ -6006,7 +6117,8 @@ function ready() {
   if (q === "plan") return !!me.plan;
   return true;
 }
-function setStep(n, quiet) {
+var LINE = { "in": "su-in", code: "su-code", plan: "pw-plan", pay: "pw-pay" };
+function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
   personal();
   if (cur !== nx) {
@@ -6035,6 +6147,7 @@ function setStep(n, quiet) {
   if (q === "plan") drawPlanStage(); else drawHome();
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
+  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
@@ -6057,7 +6170,7 @@ function advance() {
   if (q === "in") return startEmail();
   if (q === "code") return verify();
   if (!ready()) return;
-  setStep(at + 1);
+  setStep(at + 1, false, q === "plan" ? "pw-ok" : null);   /* "Good choice." */
 }
 
 /* ---------- step 1: the ways in ---------- */
@@ -6147,7 +6260,7 @@ function verify() {
   if (busy || code().length !== 6) return;
   busy = true; otpBox.classList.add("busy"); next.classList.add("busy"); $("[data-st-next-t]").textContent = "Checking";
   checkCode(code()).then(function (session) {
-    otpBox.classList.remove("busy"); otpBox.classList.add("ok"); SFX.play("land");
+    otpBox.classList.remove("busy"); otpBox.classList.add("ok"); SFX.play("land"); KAY.say(["su-ok"]);
     me.session = session;
     return signedIn();
   }).catch(function (x) {
@@ -6264,6 +6377,7 @@ var MONTH_FULL = MONTH.toLocaleDateString("en-US", { month: "long", day: "numeri
 function seats(pl) { return pl.people + (pl.people === 1 ? " seat · up to 2 Macs" : " seats · up to 2 Macs each"); }
 function priceWord(pl) { return me.period === "year" ? then(pl.id, "year").replace("/yr", "/year") : price(pl.id, "month") + "/month"; }
 var agree = form.elements.renew_ok, agreeL = $("[data-st-agree]");
+form.elements.pname.addEventListener("input", function () { me.first = val("pname").split(/\s+/)[0] || ""; me.full = val("pname"); drawPass(pass1); drawHome(); err(""); });
 function payStep() {
   var pl = planOf(me.plan), pw = priceWord(pl), per = me.period === "year" ? "year" : "month", bare = pw.replace(/\/(month|year)$/, "");
   $("[data-st-sname]").textContent = "Studio " + pl.name;
@@ -6277,22 +6391,23 @@ function payStep() {
     $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
     $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
-    $("[data-st-under]").innerHTML = "You pay " + esc(np) + " today. It renews every " + per + " (next on " + esc(nextD) + ") until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>." + legal;
+    $("[data-st-under]").innerHTML = "You pay " + esc(np) + " today. It renews every " + per + " (next on " + esc(nextD) + ") until you cancel. Cancel anytime in Studio, in Settings → Billing." + legal;
     $("[data-st-go-t]").textContent = "Start for " + np;
   } else if (me.promo) {   /* the friends' code (checkout-promo-v1): $0 today, the first charge a month from today */
     $("[data-st-payh]").textContent = "Your first month is free.";
     $("[data-st-today]").innerHTML = "<b>$0 today</b> for your first month. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(MONTH_FULL) + "</b>, until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + MONTH_FULL + " and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + MONTH_FULL + ", I won't be charged.";
-    $("[data-st-under]").innerHTML = "You pay $0 today. From " + esc(MONTH_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>." + legal;
+    $("[data-st-under]").innerHTML = "You pay $0 today. From " + esc(MONTH_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Studio, in Settings → Billing." + legal;
     $("[data-st-go-t]").textContent = PAYWALL ? "Start for $0" : "Start my free month";
   } else {
     $("[data-st-payh]").textContent = "14 days for $1.";
     $("[data-st-today]").innerHTML = "<b>$1 today</b> for a 14-day trial. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(RENEW_FULL) + "</b>, until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that after my 14-day trial for $1, Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + RENEW_FULL + " and every " + per + " after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + RENEW_FULL + ", I won't be charged " + bare + ".";
-    $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Settings → Billing or at <mark class=\"ph\">[manage billing link]</mark>. The $1 trial fee isn't refundable." + legal;
+    $("[data-st-under]").innerHTML = "You pay $1 today. From " + esc(RENEW_FULL) + " you'll be charged " + esc(pw) + " until you cancel. Cancel anytime in Studio, in Settings → Billing. The $1 trial fee isn't refundable." + legal;
     $("[data-st-go-t]").textContent = PAYWALL ? "Start for $1" : "Start 14 days for $1";
   }
   drawPromo();
+  $("[data-st-name]").hidden = !!first();   /* Studio sends the name it has; when it has none, the pass needs one */
   agree.checked = false; go.classList.add("off");   /* the terms just changed (or are new): ask again */
   reveal(stepEl("pay"));
   mountCard();
@@ -6326,6 +6441,7 @@ form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (ORDER[at] !== "pay") { advance(); return; }
   if (go.classList.contains("busy")) return;
+  if (!$("[data-st-name]").hidden && !val("pname")) { err("Add your name for your pass."); form.elements.pname.focus(); return; }
   if (!agree.checked) { err("Please check the box to confirm the renewal terms."); agreeL.classList.remove("bad"); void agreeL.offsetWidth; agreeL.classList.add("bad"); SFX.play("tick"); return; }
   if (!elements) { if (MOCK) return paid({ mock: true }); err("The card form hasn't loaded. Check your connection."); return; }
   go.classList.add("busy"); SFX.play("send"); err("");
@@ -6338,7 +6454,7 @@ form.addEventListener("submit", function (e) {
     var opts = { elements: elements, clientSecret: c.client_secret, confirmParams: { return_url: location.origin + location.pathname + (local ? "?live&paid=1" : "?review&paid=1") + HASH }, redirect: "if_required" };
     return (c.intent === "setup" ? stripe.confirmSetup(opts) : stripe.confirmPayment(opts)).then(function (r) { if (r.error) throw { human: r.error.message }; return status(c.subscription); });
   }).then(paid, function (x) {
-    if (x && (x.code === "trial_used" || x.code === "trial_used_after") && !me.promo) { var m = noTrial(x); setTimeout(function () { err(m); }, 30); return; }
+    if (x && (x.code === "trial_used" || x.code === "trial_used_after") && !me.promo) { var m = noTrial(x); KAY.say(["pw-notrial"]); setTimeout(function () { err(m); }, 30); return; }
     err(say(x));
   }).then(function () { go.classList.remove("busy"); });
 });
@@ -6368,7 +6484,7 @@ function applyCode() {
   if (me.period === "year") { err("Codes work on monthly plans. Switch to monthly to use it."); return; }
   applyB.classList.add("busy"); err(""); pfield.classList.remove("bad");
   promoCheck(code).then(function (j) {
-    SFX.play("land"); pin.value = ""; setPromo({ code: j.code || code, months: j.months || 1, label: j.label || "First month free" });
+    SFX.play("land"); KAY.say(["pw-promo"]); pin.value = ""; setPromo({ code: j.code || code, months: j.months || 1, label: j.label || "First month free" });
     toast((j.code || code) + " applied. Your first month is free.");
   }, function (x) { void pfield.offsetWidth; pfield.classList.add("bad"); SFX.play("tick"); err(say(x)); }).then(function () { applyB.classList.remove("busy"); });
 }
@@ -6446,7 +6562,10 @@ function checkout() {
     consent: { version: me.promo ? "checkout-promo-v1" : me.notrial ? "checkout-notrial-v1" : CONSENT, text: $("[data-st-agree-t]").textContent, price: priceWord(pl), renewal_date: starts().toISOString().slice(0, 10), agreed_at: me.agreedAt, signin_terms: "signup-a-v1" } };
   if (me.promo) body.promo = me.promo.code;
   else if (me.notrial) { body.trial = false; body.consent.renewal_date = new Date().toISOString().slice(0, 10); }
-  return api("/web/checkout", body).then(function (c) {
+  return api("/web/checkout", body).catch(function (x) {
+    if (x && x.code === "bad_token" && EMBED) return freshToken().then(function (t) { body.token = t; return api("/web/checkout", body); });   /* once, quietly */
+    throw x;
+  }).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
   });
@@ -6511,12 +6630,12 @@ function setInvite(inv) {
 /* ---------- You're in ---------- */
 var doneEl = $("[data-st-done]");
 function showDone(has) {
-  var f = first() || "there", pl = planOf(me.plan), h = me.hand || {};
+  var f = first(), pl = planOf(me.plan), h = me.hand || {};
   wall("done");
   $("[data-st-dk]").textContent = PAYWALL ? "Unlocked" : has ? "You have Studio" : "You're in";
   $("[data-st-dhi]").textContent = has ? "Welcome back, " + f + "." : "You're in, " + f + ".";
   $("[data-st-dsub2]").textContent = PAYWALL ? "Studio is unlocked." : "Studio is downloading.";
-  if (PAYWALL) { $("[data-st-dhi]").textContent = "You're all set, " + f + "."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
+  if (PAYWALL) { $("[data-st-dhi]").textContent = f ? "You're all set, " + f + "." : "You're all set."; $$("[data-st-open] span").forEach(function (sp) { if (sp.textContent === "Open Studio") sp.textContent = PW.action === "export" ? "Back to your export" : "Back to Studio"; }); }
   $("[data-st-dsub]").textContent = has ? "Your plan is already on this account. Download Studio, or open it if it's on this Mac."
     : me.invite ? "Studio Pro, on " + ((me.invite.from || "a friend").split(/\s+/)[0]) + ". No card, nothing to cancel."
     : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
@@ -6532,7 +6651,8 @@ function showDone(has) {
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
     pass2.enter(2100);
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
-    SFX.play("done");
+    SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
+    SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : "su-done"]);
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
     if (PAYWALL) { tell({ type: "studio-paywall:unlocked", plan: me.plan, period: me.period }); try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
     else setTimeout(download, 1800);   /* the download starts by itself */
@@ -6556,8 +6676,8 @@ $("[data-st-open]").addEventListener("click", function (e) {
 function open() {
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
-  if (!sky.getAttribute("src")) { sky.src = WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
-  SFX.wake();
+  if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = sky.src; }); }
+  SFX.wake(); if (SFX.live()) SFX.bed.start();
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
@@ -6565,7 +6685,7 @@ function open() {
   requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
   wallNow = sky.getAttribute("src");
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
-  intro().then(function () { reveal(stepEl(ORDER[at])); });
+  intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome();
   focusStep(SK.reduced ? 0 : 560);
 }
@@ -6588,7 +6708,7 @@ function intro() {
 }
 function hide() {
   if (!sheet.classList.contains("open")) return;
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop();
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }
@@ -6623,10 +6743,21 @@ if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) {
    this Mac (127.0.0.1 / localhost), is listened to; everything goes back to that exact origin, never "*" (except "ready"). */
 var PARENT = "", PW = { mode: "onboarding", action: "" };
 function tell(msg) { if (EMBED && PARENT) try { window.parent.postMessage(msg, PARENT); } catch (e) {} }
+/* the app's sign-in can run out while the paywall is open (an hour): ask Studio for a fresh token (studio-paywall:token), and wait
+   up to 8 s for its answer ({ type: "studio-paywall:token", token }) */
+var tokenWait = null;
+function freshToken() {
+  if (!EMBED || !PARENT) return Promise.reject(E("bad_token"));
+  if (tokenWait) return tokenWait.p;
+  var w = {}; w.p = new Promise(function (res, rej) { w.res = res; setTimeout(function () { if (tokenWait === w) { tokenWait = null; rej(E("bad_token")); } }, 8000); });
+  tokenWait = w; tell({ type: "studio-paywall:token" });
+  return w.p;
+}
 window.addEventListener("message", function (e) {
   if (!EMBED || e.source !== window.parent || !/^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(e.origin)) return;
   var d = e.data || {};
   if (d.type === "studio-paywall:open") { PARENT = e.origin; window.StudioPaywall.open(d); }
+  if (d.type === "studio-paywall:token" && d.token) { me.session = Object.assign({}, me.session, { access_token: d.token }); if (tokenWait) { var w = tokenWait; tokenWait = null; w.res(d.token); } }
 });
 var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
 function pwHead() {
@@ -6646,7 +6777,7 @@ function paywall(o) {
   $("[data-st-badge]").textContent = "Unlock";
   perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
   drawPlans(); slidePer(); pwHead();
-  if (MOCK && !me.first) { me.first = "Evan"; me.email = "evan@studio.com"; }
+  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Evan"; me.email = "evan@studio.com"; }
   steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
   at = 0; setStep(0, true); drawPlanStage();
 }

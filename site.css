@@ -4576,3 +4576,10 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st[data-step="plan"] [data-st-line] { display: none; }   /* desktop: the heading and the cards already say it */
 @media (max-height: 940px) and (min-width: 961px) { .st-feats { max-height: 118px; } .st-plan .pr { font-size: 46px; } .st[data-step="plan"] .wl-qh { font-size: clamp(38px, 3.6vw, 56px); } }
 @media (max-width: 960px) { .st[data-step="plan"] [data-st-line] { display: block; } }
+
+/* ---------- Kayla beside the bar (as in early access): her face, play, her voice; no captions; none on phones ---------- */
+.st .wl-kt { display: none !important; }
+.st .wl-dock { display: flex; align-items: center; gap: 12px; }
+@media (max-width: 960px) { .st .wl-kay { display: none !important; } }
+
+.st-name { margin: 0 0 12px; max-width: 460px; }
