@@ -5,6 +5,7 @@
 //   POST /resend             { email }: a new code (60 s apart)
 //   GET  /status?code=…      the place in line for a referral code
 //   GET  /pass?t=…           your own pass from its private link: the place, the friends, your full name (the token is the proof)
+//   POST /invited            { t }: one more invite sent (their pass token), so every device shows "2 invites sent"
 //   GET  /count              { ok, total }: how many are on the list (the site's live count)
 //   GET  /health             { ok: true }
 //   POST /admin/resync       send Brevo the sign-ups it has not got yet (Authorization: Bearer ADMIN_TOKEN)
@@ -19,8 +20,8 @@
 // else (in the same order among yourselves).
 // Brevo is told after the answer has gone (ctx.waitUntil), so a slow or failing Brevo never fails a sign-up.
 
-import { confirmEmail, youreInEmail, macEmail } from "./emails.js";
-export { confirmEmail, youreInEmail, inviteEmail, welcomeEmail } from "./emails.js";
+import { confirmEmail, youreInEmail, macEmail, friendJoinedEmail } from "./emails.js";
+export { confirmEmail, youreInEmail, inviteEmail, welcomeEmail, friendJoinedEmail } from "./emails.js";
 
 const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";  // no 0/O, 1/I/L look-alikes
 const CODE_LENGTH = 7;
@@ -120,14 +121,25 @@ async function standing(env, row) {
 }
 // priv: the answer goes to the person themselves (a new sign-up, a confirmation, their private link), so it carries their private
 // pass link and last name. Never on /status or a repeat sign-up (anyone can type an email).
+// invites: how many times they sent their link (POST /invited). pending: friends who signed up with it and haven't confirmed their
+// email yet (they count once they do). friends (private answers only): each friend's first name, oldest first, and whether it counts.
 async function answer(env, row, already, priv) {
   const s = await standing(env, row);
-  const out = { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front, already };
+  const p = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE referred_by = ? AND confirmed_at IS NULL").bind(row.code).first();
+  const out = { ok: true, code: row.code, first: row.first, position: s.position, total: s.total, referrals: row.referrals, boost: s.boost, goal: s.goal, front: s.front,
+    invites: row.invites || 0, pending: p ? p.n : 0, already };
   if (priv) {
     if (!row.pass_token) { row.pass_token = passToken(); await env.DB.prepare("UPDATE signups SET pass_token = ? WHERE seq = ? AND pass_token IS NULL").bind(row.pass_token, row.seq).run(); row = await bySeq(env, row.seq); }
     out.last = row.last; out.pass = row.pass_token;
+    const { results } = await env.DB.prepare("SELECT first, confirmed_at FROM signups WHERE referred_by = ? ORDER BY confirmed_at IS NULL, COALESCE(confirmed_at, created_at), seq LIMIT 12").bind(row.code).all();
+    out.friends = results.map((f) => ({ first: firstName(f.first), joined: !!f.confirmed_at }));
   }
   return out;
+}
+// A friend's first name as the inviter sees it (on the page and in an email): the first word, letters only, short. Never more.
+export function firstName(v) {
+  const w = String(v || "").trim().split(/\s+/)[0] || "";
+  return w.replace(/[^\p{L}\p{M}'’-]/gu, "").slice(0, 20);
 }
 function passToken() { return [...crypto.getRandomValues(new Uint8Array(16))].map((b) => b.toString(16).padStart(2, "0")).join(""); }
 const confirmOn = (env) => env.CONFIRM_EMAIL === "1";   // email confirmation: on once Brevo can send it (until then a sign-up counts at once)
@@ -293,6 +305,7 @@ async function confirmRow(env, ctx, row, via, priv = true) {
     if (referrer) await recount(env, referrer.code);   // counted from the rows themselves, so one email can never count twice
   }
   if (r.meta.changes) later(ctx, afterJoin(env, row.seq, referrer && referrer.seq).then(() => (env.SEND_YOURE_IN === "1" ? sendYoureIn(env, row.seq) : null)));
+  if (r.meta.changes && referrer && env.SEND_FRIEND_JOINED !== "0") later(ctx, sendFriendJoined(env, referrer.seq, row.seq));
   return json(await answer(env, await bySeq(env, row.seq), !r.meta.changes, priv));
 }
 
@@ -308,6 +321,21 @@ async function sendYoureIn(env, seq) {
   const r = await brevo(env, "POST", "/smtp/email", { sender: mail.sender, replyTo: mail.replyTo, to: [{ email: row.email, name: (row.first + " " + row.last).trim() }],
     subject: mail.subject, htmlContent: mail.html, textContent: mail.text, tags: ["waitlist-youre-in"] });
   if (!r.ok) console.error("you're in email", r.detail);
+}
+
+// "A friend joined": to the inviter, the moment a friend who used their link confirms. Their friend's first name, how many of GOAL,
+// and the private pass link. At most 6 a day to one person (a popular link stops emailing, the pass still shows everyone).
+async function sendFriendJoined(env, referrerSeq, friendSeq) {
+  if (!env.BREVO_API_KEY) return;
+  const [ref, friend] = await Promise.all([bySeq(env, referrerSeq), bySeq(env, friendSeq)]);
+  if (!ref || !ref.confirmed_at || !friend) return;
+  if (!(await rateOk(env, "fj:" + ref.seq, 86400, int(env.FRIEND_MAILS_PER_DAY, 6)))) return;
+  if (!ref.pass_token) await answer(env, ref, true, true);
+  const fresh = await bySeq(env, referrerSeq), s = await standing(env, fresh);
+  const mail = friendJoinedEmail(ref.first, firstName(friend.first), fresh.referrals, s.goal, s.front, siteOf(env) + "/?pass=" + fresh.pass_token);
+  const r = await brevo(env, "POST", "/smtp/email", { sender: SENDER, to: [{ email: ref.email, name: (ref.first + " " + ref.last).trim() }],
+    subject: mail.subject, htmlContent: mail.html, textContent: mail.text, tags: ["waitlist-friend-joined"] });
+  if (!r.ok) console.error("friend joined email", r.detail);
 }
 
 async function confirm(request, env, ctx) {
@@ -380,6 +408,21 @@ async function passView(request, url, env) {
   const row = await env.DB.prepare("SELECT * FROM signups WHERE pass_token = ?").bind(t).first();
   if (!row || !row.confirmed_at) return json({ ok: false, error: "That link isn't right." }, 404);
   return json(await answer(env, row, true, true));
+}
+
+// ------------------------------------------------------------------------------------------------ POST /invited
+// One more invite sent, from the page (Text a friend, Copy link, Share). The pass token is the proof, so only the person can count
+// their own. At most 50, and 30 calls per address per 10 minutes.
+async function invited(request, env) {
+  const b = await body(request);
+  if (b.error) return fail(b.error);
+  if (!(await rateOk(env, "inv:" + (await ipKey(request)), 600, 30))) return fail("Too many tries from here. Try again in a few minutes.", 429);
+  const t = String(typeof b.t === "string" ? b.t : "").toLowerCase().replace(/[^0-9a-f]/g, "").slice(0, 64);
+  if (t.length < 32) return json({ ok: false, error: "That link isn't right." }, 404);
+  const row = await env.DB.prepare("SELECT seq, invites, confirmed_at FROM signups WHERE pass_token = ?").bind(t).first();
+  if (!row || !row.confirmed_at) return json({ ok: false, error: "That link isn't right." }, 404);
+  await env.DB.prepare("UPDATE signups SET invites = MIN(50, invites + 1), invited_at = ? WHERE seq = ?").bind(now(), row.seq).run();
+  return json({ ok: true, invites: Math.min(50, (row.invites || 0) + 1) });
 }
 
 // ------------------------------------------------------------------------------------------------ Brevo
@@ -614,6 +657,7 @@ async function route(request, url, env, ctx) {
   if (path === "/resend") return m === "POST" ? await resend(request, env) : fail("Use POST.", 405);
   if (path === "/status") return m === "GET" ? await status(url, env) : fail("Use GET.", 405);
   if (path === "/pass") return m === "GET" ? await passView(request, url, env) : fail("Use GET.", 405);
+  if (path === "/invited") return m === "POST" ? await invited(request, env) : fail("Use POST.", 405);
   if (path === "/count") {
     if (m !== "GET") return fail("Use GET.", 405);
     const r = await env.DB.prepare("SELECT COUNT(*) AS n FROM signups WHERE confirmed_at IS NOT NULL").first();

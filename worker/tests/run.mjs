@@ -71,7 +71,7 @@ test("join: a new sign-up gets a code, its place and the whole shape", async () 
   const t = setup();
   const a = await t.join(person(1, { roles: ["Creator", "Agency"], brands: "3", claude: "Pro" }));
   assert.equal(a.status, 200);
-  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "front", "goal", "last", "ok", "pass", "position", "referrals", "total"]);
+  assert.deepEqual(Object.keys(a.json).sort(), ["already", "boost", "code", "first", "friends", "front", "goal", "invites", "last", "ok", "pass", "pending", "position", "referrals", "total"]);
   assert.match(a.json.pass, /^[0-9a-f]{32}$/, "the private pass link's token");
   assert.equal(a.json.ok, true);
   assert.match(a.json.code, CODE);
@@ -275,7 +275,7 @@ test("status: the same shape for a code, 404 for an unknown one", async () => {
   await t.join(person(2));
   const s = await t.call("GET", "/status?code=" + a.code.toLowerCase());
   assert.equal(s.status, 200);
-  assert.deepEqual(s.json, { ok: true, code: a.code, first: "First1", position: 1, total: 2, referrals: 0, boost: 10, goal: 3, front: false, already: true });
+  assert.deepEqual(s.json, { ok: true, code: a.code, first: "First1", position: 1, total: 2, referrals: 0, boost: 10, goal: 3, front: false, invites: 0, pending: 0, already: true });
   const unknown = await t.call("GET", "/status?code=ABCDEFG");
   assert.equal(unknown.status, 404);
   assert.equal(unknown.json.ok, false);
@@ -749,6 +749,71 @@ test("pass: the private link shows your own pass (and nothing for a wrong or unc
   assert.equal((await t.call("GET", "/pass?t=" + p3)).status, 404, "not until it is confirmed");
 });
 
+test("invites: the pass token counts one more invite, shown on /status and /pass; a wrong or unconfirmed token counts nothing", async () => {
+  const t = setup();
+  const a = (await t.join(person(1))).json;
+  assert.equal(a.invites, 0);
+  const r1 = await t.call("POST", "/invited", { body: { t: a.pass } });
+  assert.equal(r1.status, 200); assert.deepEqual(r1.json, { ok: true, invites: 1 });
+  assert.equal((await t.call("POST", "/invited", { body: { t: a.pass.toUpperCase() } })).json.invites, 2, "the token as typed in any case");
+  assert.equal((await t.call("GET", "/status?code=" + a.code)).json.invites, 2);
+  assert.equal((await t.call("GET", "/pass?t=" + a.pass)).json.invites, 2);
+  assert.equal((await t.call("POST", "/invited", { body: { t: "0".repeat(32) } })).status, 404);
+  assert.equal((await t.call("POST", "/invited", { body: { code: a.code } })).status, 404, "the public referral code can't count invites");
+  assert.equal((await t.call("GET", "/invited")).status, 405);
+  await t.joinOnly(person(2));
+  assert.equal((await t.call("POST", "/invited", { body: { t: t.row("person2@example.com").pass_token } })).status, 404, "not until it is confirmed");
+  t.env.DB.sqlite.prepare("UPDATE signups SET invites = 50 WHERE email = ?").run("person1@example.com");
+  assert.equal((await t.call("POST", "/invited", { body: { t: a.pass } })).json.invites, 50, "capped at 50");
+  const ip = "203.0.113.9";
+  let last;
+  for (let i = 0; i < 31; i++) last = await t.call("POST", "/invited", { body: { t: a.pass }, ip });
+  assert.equal(last.status, 429, "30 per address per 10 minutes");
+});
+
+test("friends: the pass lists each friend's first name, joined or still confirming; /status gives only the counts", async () => {
+  const t = setup();
+  const a = (await t.join(person(1))).json;
+  await t.join(person(2, { first: "Maya Rose", ref: a.code }));
+  await t.joinOnly(person(3, { first: "<b>Leo</b>", ref: a.code }));
+  const p = (await t.call("GET", "/pass?t=" + a.pass)).json;
+  assert.equal(p.referrals, 1); assert.equal(p.pending, 1);
+  assert.deepEqual(p.friends, [{ first: "Maya", joined: true }, { first: "bLeob", joined: false }], "first word, letters only; joined first");
+  const s = (await t.call("GET", "/status?code=" + a.code)).json;
+  assert.equal(s.pending, 1); assert.equal(s.friends, undefined, "the shared code never names anyone");
+  await t.call("POST", "/confirm", { body: { email: "person3@example.com", code: t.brevo.lastEmail("person3@example.com").code } });
+  const p2 = (await t.call("GET", "/pass?t=" + a.pass)).json;
+  assert.equal(p2.pending, 0); assert.deepEqual(p2.friends.map((f) => f.joined), [true, true]);
+});
+
+test("friend joined: the inviter gets one email per friend who confirms, with the name, n of 3 and the pass link", async () => {
+  const t = setup();
+  const a = (await t.join(person(1))).json;
+  const before = t.brevo.emails.length;
+  await t.joinOnly(person(2, { first: "Emmitt", ref: a.code }));
+  assert.equal(t.brevo.emails.filter((m) => m.to === "person1@example.com").length, 1, "nothing while the friend hasn't confirmed");
+  await t.call("POST", "/confirm", { body: { email: "person2@example.com", code: t.brevo.lastEmail("person2@example.com").code } });
+  const m = t.brevo.lastEmail("person1@example.com");
+  assert.equal(m.subject, "Emmitt just joined Studio with your link");
+  assert.deepEqual(m.body.tags, ["waitlist-friend-joined"]);
+  assert.ok(m.text.includes("That's 1 of 3. Two more and you all skip to the front of the line."), m.text);
+  assert.ok(m.text.includes("https://askstudio.ai/?pass=" + a.pass));
+  assert.ok(m.html.includes("Emmitt is in."));
+  assert.ok(!/<img[^>]+hero/i.test(m.html), "no hero image");
+  await t.call("POST", "/confirm", { body: { email: "person2@example.com", code: "000000" } });
+  await t.join(person(2, { first: "Emmitt", ref: a.code }));
+  assert.equal(t.brevo.emails.filter((m) => m.to === "person1@example.com").length, 2, "a confirmed friend signing up again sends nothing more");
+  await t.join(person(3, { ref: a.code })); await t.join(person(4, { first: "Ana", ref: a.code }));
+  const third = t.brevo.lastEmail("person1@example.com");
+  assert.equal(third.subject, "Ana joined. You're all at the front.");
+  assert.ok(third.text.includes("That's 3 of 3, so you and every friend from your link just moved to the front of the line."));
+  assert.ok(t.brevo.emails.length > before);
+  const off = setup({ SEND_FRIEND_JOINED: "0" });
+  const b = (await off.join(person(1))).json;
+  await off.join(person(2, { ref: b.code }));
+  assert.equal(off.brevo.emails.filter((m) => m.to === "person1@example.com").length, 1, "SEND_FRIEND_JOINED=0 turns it off");
+});
+
 test("confirmation off (CONFIRM_EMAIL unset): a sign-up counts at once, no email is sent, it is marked unverified", async () => {
   const t = setup({ CONFIRM_EMAIL: undefined });
   const host = (await t.joinOnly(person(1))).json;
@@ -757,7 +822,8 @@ test("confirmation off (CONFIRM_EMAIL unset): a sign-up counts at once, no email
   assert.equal(f.position, 2);
   assert.equal(t.row("person1@example.com").referrals, 1, "the friend counts at once");
   assert.equal(t.row("person2@example.com").confirmed_via, "unverified");
-  assert.equal(t.brevo.emails.length, 0, "no confirmation email");
+  assert.equal(t.brevo.emails.filter((m) => m.body.tags[0] === "waitlist-confirm").length, 0, "no confirmation email");
+  assert.deepEqual(t.brevo.emails.map((m) => m.to + " " + m.body.tags[0]), ["person1@example.com waitlist-friend-joined"], "only the friend-joined note to the host");
   assert.equal(t.brevo.contacts.get("person2@example.com").attributes.EMAIL_CONFIRMED, false);
   assert.equal((await t.call("GET", "/count")).json.total, 2);
 });

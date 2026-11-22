@@ -40,6 +40,16 @@ Every answer is JSON. An error looks like `{ "ok": false, "error": "A short sent
   at most 5 emails per address per hour (`capped: true`), 10 calls per IP address per 10 minutes. An unknown email gets the same answer as
   a real send.
 - **`GET /status?code=XXXXXXX`** answers with the same shape for that code (`already: true`), or 404 (unknown or not confirmed yet).
+  Every answer with a place also has `invites` (how many times they sent their link, from `POST /invited`) and `pending` (friends who
+  signed up with their link but haven't confirmed yet: the page shows them as "Confirming"). Private answers (`/confirm`, `/pass`, a
+  new sign-up) add `friends: [{ first, joined }]`, oldest first: each friend's first word, letters only. `/status` never names anyone.
+- **`POST /invited`** takes `{ t }` (the private pass token) and adds 1 to `invites` (at most 50): the page calls it on Text a friend →
+  Open Messages, Copy message, Copy link, Share, X and Email, so "2 invites sent" shows on every device. 30 calls per IP address per
+  10 minutes. Migration `0007_invites.sql` (additive: `invites`, `invited_at`).
+- **"A friend joined" email.** When a friend who used someone's link confirms, the inviter gets "{Friend} just joined Studio with your
+  link" (the 3rd: "{Friend} joined. You're all at the front."), from hello@askstudio.ai through Brevo, with n of 3 and their pass link
+  (`friendJoinedEmail` in `src/emails.js`, tag `waitlist-friend-joined`). At most 6 a day to one person (`FRIEND_MAILS_PER_DAY`);
+  `SEND_FRIEND_JOINED = "0"` turns it off.
 - **`GET /admin/brevo-check`** (admin token) shows the key's Brevo account, its senders and domains, and `sender_ready`: whether it
   may send as hello@askstudio.ai. It only reads.
 - **`GET /health`** answers `{ ok: true }`.

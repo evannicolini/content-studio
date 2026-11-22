@@ -1,4 +1,5 @@
-// Studio's emails, as { subject, html, text }. Four, and only four (Evan, 2026-11-20):
+// Studio's emails, as { subject, html, text }. Four, and only four (Evan, 2026-11-20), plus the Mac link (macEmail) and the
+// "a friend joined" note (friendJoinedEmail, Evan 2026-11-21: "where do I go to come back to see if my friends sign up"):
 //
 //   (the designed three take { theme: "light" } as their last argument; dark is the default)
 //   confirmEmail   "Confirm your spot"       designed: the 6-digit code and the one-tap button (sent by the Worker on sign-up)
@@ -6,6 +7,7 @@
 //   inviteEmail    "{first}, your Studio invite is here"   designed: the access link and 14 days free, in Evan's voice (held for launch)
 //   inviteText     the invite-ready SMS (not an email): Evan's voice, their first name
 //   welcomeEmail   "Welcome to Studio"       designed: the download, right after an app sign-up
+//   friendJoinedEmail "{friend} just joined Studio with your link"   designed, no hero: to the inviter, n of 3, the pass link
 //
 // Built for every inbox: tables and inline CSS, solid colours only (no borders, no glows), black by design, a VML button for
 // Outlook, readable with images off (each hero sits on a colour, with alt text), no scripts, no tracking of our own, one link
@@ -56,9 +58,9 @@ function designed({ title, preheader, hero, heroAlt, kicker, headline, intro, mi
 <!--[if mso]><table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
 <tr><td class="px" style="padding:0 36px 30px;line-height:0;font-size:0;"><img src="${esc(site + "/assets/email/" + C.lockup)}" width="${C.lw}" height="${C.lh}" alt="Studio" style="display:block;width:${C.lw}px;height:${C.lh}px;border:0;font-family:${FONT};font-size:20px;line-height:${C.lh}px;font-weight:600;color:${C.ink};"></td></tr>
-<tr><td bgcolor="${C.night}" style="background:${C.night};border-radius:22px;overflow:hidden;line-height:0;font-size:0;">
-<img src="${esc(site + "/assets/email/" + hero)}" width="600" height="257" alt="${esc(heroAlt)}" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:22px;font-family:${FONT};font-size:18px;line-height:26px;color:${C.ink};"></td></tr>
-<tr><td class="px" style="padding:40px 36px 8px;font-family:${FONT};color:${C.body};">
+${hero ? `<tr><td bgcolor="${C.night}" style="background:${C.night};border-radius:22px;overflow:hidden;line-height:0;font-size:0;">
+<img src="${esc(site + "/assets/email/" + hero)}" width="600" height="257" alt="${esc(heroAlt)}" style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:22px;font-family:${FONT};font-size:18px;line-height:26px;color:${C.ink};"></td></tr>` : ""}
+<tr><td class="px" style="padding:${hero ? 40 : 12}px 36px 8px;font-family:${FONT};color:${C.body};">
 ${kicker ? label(kicker, "margin:0 0 18px;") : ""}
 <h1 class="h1" style="margin:0 0 16px;font-family:${FONT};font-size:40px;line-height:44px;font-weight:300;letter-spacing:-1.2px;color:${C.ink};">${headline}</h1>
 <p style="margin:0 0 32px;font-size:17px;line-height:27px;color:${C.body};">${intro}</p>
@@ -181,6 +183,29 @@ function macOne(first, link) {
     intro: "It's Evan. You signed up on your phone, and Studio is for Mac, so here's your link for when you're at yours.",
     middle: list, button: { label: "Get Studio on your Mac", href: link, apple: true },
     fine: "Questions? Just reply to this email.",
+  });
+  return { subject, html, text };
+}
+
+// 6. A friend joined: to the inviter, the moment a friend who used their link confirms. No hero (it is a short note, often several in a
+// row): their friend's first name, how many of the 3, what happens at 3, and the private pass link where they watch the rest.
+export function friendJoinedEmail(first, friend, joined, goal, front, passLink, opts = {}) { return themed(opts, () => friendOne(first, friend, joined, goal, front, passLink)); }
+function friendOne(first, friend, joined, goal, front, passLink) {
+  const name = one(first, 40), who = one(friend, 20) || "A friend", n = Math.max(1, Number(joined) || 1), g = Math.max(1, Number(goal) || 3);
+  const left = Math.max(0, g - n), hi = name ? "Hi " + name + "," : "Hi,";
+  const subject = front && n >= g ? (n === g ? who + " joined. You're all at the front." : who + " just joined Studio with your link") : who + " just joined Studio with your link";
+  const where = n >= g
+    ? (n === g ? `That's ${g} of ${g}, so you and every friend from your link just moved to the front of the line.` : `That's ${n} friends. You and every friend from your link are at the front of the line.`)
+    : `That's ${n} of ${g}. ${left === 1 ? "One more" : left === 2 ? "Two more" : left + " more"} and you all skip to the front of the line.`;
+  const fine = "Your pass shows each friend go from invited to joined. It's just for you, so keep this email to check in anytime.";
+  const text = [hi, "", who + " just joined the Studio waitlist with your link. " + where, "", "See your pass:", passLink, "", fine, "", "Studio", "askstudio.ai"].join("\n");
+  const dots = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 32px;"><tr>` +
+    Array.from({ length: g }, (_, i) => `<td bgcolor="${i < n ? C.ink : C.well}" style="width:44px;height:6px;line-height:6px;font-size:0;border-radius:3px;background:${i < n ? C.ink : C.well};">&nbsp;</td>${i < g - 1 ? '<td style="width:8px;font-size:0;">&nbsp;</td>' : ""}`).join("") +
+    `<td style="padding-left:14px;font-family:${MONO};font-size:11px;line-height:14px;font-weight:500;letter-spacing:2px;color:${C.soft};">${Math.min(n, g)}/${g}</td></tr></table>`;
+  const html = designed({
+    title: subject, preheader: where, kicker: "Your friends", headline: esc(who) + " is in.",
+    intro: esc(hi) + " " + esc(who) + " just joined the Studio waitlist with your link. " + esc(where),
+    middle: dots, button: { label: "See your pass", href: passLink }, fine,
   });
   return { subject, html, text };
 }

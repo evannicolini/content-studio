@@ -445,14 +445,49 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 /* 0/3: a pill that fills as friends join; full (pearl) at the front */
 .wl-goal { --p: 0; position: relative; flex: none; display: inline-grid; place-items: center; min-width: 60px; height: 30px; padding: 0 12px; border-radius: 999px; overflow: hidden; background: var(--v-g); box-shadow: var(--v-rim); }
 .wl-goal i { position: absolute; inset: 0; transform-origin: 0 50%; transform: scaleX(var(--p)); background: linear-gradient(90deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .9)); transition: transform .9s var(--ease); }
-.wl-goal em { position: relative; font: 500 12.5px/1 var(--mono); font-style: normal; letter-spacing: .08em; margin-right: -.08em; color: #fff; text-align: center; }
-.wl-goal.full em, .wl-goal[style*="--p: 1"] em { color: var(--vampire); }
+.wl-goal em { position: relative; font: 500 12.5px/1 var(--mono); font-style: normal; letter-spacing: .08em; margin-right: -.08em; color: #fff; text-align: center; mix-blend-mode: difference; }   /* readable over the fill and the glass alike (a 1/3 fill hid the 1) */
+.wl-goal.full em, .wl-goal[style*="--p: 1"] em { color: #fff; }   /* difference blend: dark over the pearl fill */
 .wl-rtop span { display: block; margin-top: 6px; font-size: 14.5px; color: var(--wl-l2); }
 .wl-slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
-.wl-slots li { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 12px; border-radius: 14px; font-size: 13.5px; color: var(--wl-l3); background: rgba(255, 255, 255, .06); box-shadow: var(--v-rim); }
-.wl-slots li i { width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); flex: none; }
+.wl-rtop span.wl-prog { color: #fff; font-weight: 500; }
+/* a friend slot: the circle (an initial once they've signed up), their name or Friend n, and where they are, in mono */
+.wl-slots li { display: flex; align-items: center; gap: 10px; min-width: 0; height: 58px; padding: 0 12px; border-radius: 16px; color: var(--wl-l3); background: rgba(255, 255, 255, .06); box-shadow: var(--v-rim); transition: background-color .4s, box-shadow .4s, transform .2s var(--ease); }
+.wl-slots li[role=button] { cursor: pointer; }
+.wl-slots li[role=button]:hover { background: rgba(255, 255, 255, .1); }
+.wl-slots li[role=button]:active { transform: scale(.97); }
+.wl-slots li[role=button]:focus-visible { outline: 2px solid rgba(255, 255, 255, .7); outline-offset: 2px; }
+.wl-slots li i { position: relative; display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 50%; font: 500 13.5px/1 var(--sans); font-style: normal; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); transition: background-color .4s, box-shadow .4s; }
+.wl-slots li i svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.wl-fw { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.wl-fw b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 13.5px/1.15 var(--sans); letter-spacing: -.005em; color: var(--wl-l2); }
+.wl-fw small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 9.5px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--wl-l3); }
+.wl-slots li.st-empty i { color: rgba(245, 243, 238, .55); }
+/* Invited: the link went out; the circle is lit, a paper plane in it */
+.wl-slots li.st-invited { background: rgba(255, 255, 255, .09); }
+.wl-slots li.st-invited i { background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim-on); }
+.wl-slots li.st-invited small { color: var(--wl-l2); }
+/* Confirming: they signed up; the ring turns while their email is confirmed */
+.wl-slots li.st-confirming { color: #fff; background: rgba(255, 255, 255, .11); box-shadow: var(--v-rim-on); }
+.wl-slots li.st-confirming i { background: rgba(255, 255, 255, .2); box-shadow: none; }
+.wl-slots li.st-confirming i::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(255, 255, 255, 0) 0 55%, rgba(255, 255, 255, .85) 100%); -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); mask: radial-gradient(closest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); animation: wl-spin 1.6s linear infinite; }
+.wl-slots li.st-confirming b, .wl-slots li.got b { color: #fff; }
+.wl-slots li.st-confirming small { color: var(--wl-l2); }
+@keyframes wl-spin { to { transform: rotate(360deg); } }
+/* Joined: pearl, their initial, a check */
 .wl-slots li.got { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .07)); box-shadow: var(--v-rim-on); }
-.wl-slots li.got i { background: var(--pearl) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%2305090A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; box-shadow: none; }
+.wl-slots li.got i { background: var(--pearl); color: var(--vampire); box-shadow: none; }
+.wl-slots li.got i::after { content: ""; position: absolute; right: -3px; bottom: -3px; width: 14px; height: 14px; border-radius: 50%; background: var(--vampire) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%23F5F3EE' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 9px no-repeat; }
+.wl-slots li.got small { color: rgba(245, 243, 238, .82); }
+/* where to come back: the email, and the private pass link (any device) */
+.wl-comeback { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 12px 12px 14px; border-radius: 18px; background: rgba(255, 255, 255, .05); box-shadow: var(--v-rim); }
+.wl-bi { width: 20px; height: 20px; flex: none; fill: none; stroke: rgba(245, 243, 238, .8); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.wl-bt { flex: 1; min-width: 0; }
+.wl-rtop .wl-bt span, .wl-bt span { display: block; margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--wl-l2); }
+.wl-bt b { display: block; font: 500 14px/1.3 var(--sans); color: #fff; }
+.wl-pchip { flex: none; display: inline-flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px 0 12px; border-radius: 999px; font-size: 13px; white-space: nowrap; color: #fff; background: var(--v-g); box-shadow: var(--v-rim); transition: background-color .2s, transform .2s var(--ease); }
+.wl-pchip:hover { background: var(--v-g-h); }
+.wl-pchip:active { transform: scale(.96); }
+.wl-pchip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .wl-link { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 6px 6px 6px 18px; border-radius: 999px; background: rgba(5, 7, 11, .62); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: var(--v-rim); }
 .wl-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 14px/1 var(--mono); color: #fff; }
 .wl-url.wait { color: var(--wl-l3); animation: wl-wait 1.4s ease-in-out infinite; }
@@ -556,7 +591,14 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-dsub { font-size: 15.5px; }
   .wl-refbox { margin-top: 18px; padding: 16px 14px; border-radius: 24px; }
   .wl-share { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .wl-slots li { padding: 0 9px; font-size: 12.5px; gap: 7px; }
+  .wl-slots { gap: 6px; }
+  .wl-slots li { flex-direction: column; justify-content: center; gap: 8px; height: auto; min-height: 92px; padding: 12px 6px 11px; text-align: center; }
+  .wl-fw { align-items: center; width: 100%; }
+  .wl-fw small { font-size: 9px; letter-spacing: .08em; }
+  .wl-comeback { flex-wrap: wrap; align-items: flex-start; padding: 12px; }
+  .wl-bi { margin-top: 1px; }
+  .wl-comeback .wl-bt { flex: 1 1 calc(100% - 32px); }
+  .wl-pchip { margin: 2px 0 0 32px; }
   .wl-share { gap: 6px; }
   .wl-dfoot { flex-wrap: wrap; }
   .wl-opts.two .wl-opt b { overflow-wrap: anywhere; }
@@ -588,11 +630,11 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
 .wl-dstage.bloom::before { animation: wl-bloom 2.2s cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes wl-bloom { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 22% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: .22; transform: translate(-50%, -50%) scale(1.08); } }
 /* the three friend slots breathe, one after another */
-.wl.done.shown .wl-slots li:not(.got) i { animation: wl-slot 2.8s ease-in-out infinite; }
-.wl.done.shown .wl-slots li:nth-child(2):not(.got) i { animation-delay: .35s; }
-.wl.done.shown .wl-slots li:nth-child(3):not(.got) i { animation-delay: .7s; }
+.wl.done.shown .wl-slots li.st-empty i { animation: wl-slot 2.8s ease-in-out infinite; }
+.wl.done.shown .wl-slots li.st-empty:nth-child(2) i { animation-delay: .35s; }
+.wl.done.shown .wl-slots li.st-empty:nth-child(3) i { animation-delay: .7s; }
 @keyframes wl-slot { 0%, 100% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); } 50% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .62); } }
-@media (prefers-reduced-motion: reduce) { .wl.done .wl-sky { filter: none; } .wl-dstage.bloom::before, .wl.done.shown .wl-slots li i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .wl.done .wl-sky { filter: none; } .wl-dstage.bloom::before, .wl.done.shown .wl-slots li i, .wl-slots li.st-confirming i::after { animation: none; } }
 
 /* ---------- Check your email: six glass boxes (the app's sign-in code), a wrong code runs the auburn beam round them ---------- */
 .wl-cmail { font-weight: 500; color: #fff; word-break: break-all; }

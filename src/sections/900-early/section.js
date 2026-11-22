@@ -116,7 +116,7 @@ var SFX = (function () {
   /* Kayla's first lines at once; the rest a beat after the page has come in (decoding 15 files fought the reveal on a phone), or on the
      first press if that is sooner. Every line is still decoded long before its step: she can answer a pick at once. */
   ["intro", "name"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });
-  SK.afterReveal(function () { ["roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); }); });
+  SK.afterReveal(function () { ["roles", "brands", "claude", "invite", "in", "share", "back", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); }); });
   /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
@@ -182,7 +182,8 @@ var KAY = (function () {
     claude: "Studio runs on Claude. Do you use it yet? If not, that's totally fine. We'll set it up together.",
     invite: "Last thing. Where should we send your invite? Add your number too, if you'd like a text the moment it's ready.",
     in: "You're in. Welcome to Studio. When your invite lands, you get fourteen days of everything, free. I can't wait to see what you make.",
-    share: "Want to skip the line? Get three friends on the list... and you all move to the front. Together.",
+    share: "Invite three friends. You'll see each one go from invited to joined, right here... and we'll email you when they do. All three in? You all skip the line.",
+    back: "Welcome back. Your friends are right here, each one going from invited to joined... and we'll email you the moment one signs up.",
     /* her answers to a pick (single-choice steps): they cut in, and the last pick wins */
     b1: "One brand. All in. Love that.", b2: "Two or three. Studio keeps every one of them looking like itself.", b4: "Four or more? You're exactly who we built this for.",
     cpro: "Perfect. You're already set.", cfree: "The free plan is a great place to start.", cno: "No problem. We'll walk you through it.",
@@ -932,7 +933,8 @@ function checkEmail(j, d) {
 }
 /* confirmed (or an email that already was): the place, saved on this device, then You're in */
 function landed(j, d) {
-  var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || "", at: Date.now() };
+  var rec = { first: j.first || d.first, last: (d && d.last) || j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || "", at: Date.now(),
+    invites: j.invites || 0, pending: j.pending || 0, friends: j.friends || [] };
   try { localStorage.setItem(KEY, JSON.stringify(rec)); sessionStorage.removeItem("studio-ref"); } catch (x) {}
   savePend(null); clearDraft();
   showDone(rec);
@@ -975,7 +977,8 @@ var PTOK = (Q.get("pass") || "").toLowerCase().replace(/[^0-9a-f]/g, "").slice(0
 if (Q.has("pass")) try { Q.delete("pass"); history.replaceState(history.state, "", location.pathname + (Q.toString() ? "?" + Q : "") + location.hash); } catch (e) {}
 if (PTOK && API) fetch(API + "/pass?t=" + encodeURIComponent(PTOK)).then(function (r) { return r.json(); }).then(function (j) {
   if (!j || !j.ok) return;
-  try { localStorage.setItem(KEY, JSON.stringify({ first: j.first, last: j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || PTOK, at: Date.now() })); } catch (e) {}
+  var had = joined(), inv = Math.max(j.invites || 0, had && had.code === j.code ? had.invites || 0 : 0);   /* this device's own count stays if it is ahead */
+  try { localStorage.setItem(KEY, JSON.stringify({ first: j.first, last: j.last || "", code: j.code, position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost || 0, front: !!j.front, pass: j.pass || PTOK, at: had && had.code === j.code && had.at || Date.now(), invites: inv, pending: j.pending || 0, friends: j.friends || [] })); } catch (e) {}
   if (sheet.classList.contains("open")) showDone(joined(), true); else open("pass");
 }).catch(function () {});
 var CTOK = (Q.get("confirm") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 64);
@@ -1117,18 +1120,11 @@ function showDone(r, quiet) {
   var pos = sheet.querySelector("[data-wl-dpos]");
   pos.innerHTML = ranked ? '<b class="wl-roll"></b> ' + (r.front ? "at the front." : "on the list.") : "Welcome to Studio.";
   if (ranked) roll(pos.querySelector(".wl-roll"), "#" + place(r).toLocaleString("en-US"), again ? 0 : .9);
-  var got = Math.min(GOAL, r.referrals || 0), front = !!r.front;
-  sheet.querySelector("[data-wl-rhead]").textContent = !ranked ? "Know someone who'd want this?" : front ? "You're at the front of the line." : "Get 3 friends on the list. You all skip to the front.";
-  sheet.querySelector("[data-wl-rboost]").textContent = !ranked ? "Send them your link. They get early access too."
-    : front ? (got >= GOAL ? "3 friends joined with your link, so you and every friend from it are at the front for early access." : "A friend of yours got 3 friends on the list, so you're at the front with them.")
-    : "When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.";
-  var gp = sheet.querySelector("[data-wl-goal]"); gp.hidden = !ranked; gp.style.setProperty("--p", front ? 1 : got / GOAL); gp.querySelector("em").textContent = (front ? GOAL : got) + "/" + GOAL; gp.classList.toggle("full", front);
-  sheet.querySelector("[data-wl-slots]").hidden = !ranked;
-  sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) { li.classList.toggle("got", i < (r.referrals || 0)); li.querySelector("span").textContent = i < (r.referrals || 0) ? "Joined" : "Friend " + (i + 1); });
+  paintFriends(r);
   var url = link(r), urlEl = sheet.querySelector("[data-wl-url]"), shareBox = sheet.querySelector("[data-wl-share]"), copyB = sheet.querySelector("[data-wl-copy]");
   urlEl.textContent = url ? url.replace(/^https?:\/\//, "") : "Making your link…"; /* never "undefined": no code yet, no link yet */
   urlEl.classList.toggle("wait", !url); copyB.disabled = !url; shareBox.style.pointerEvents = url ? "" : "none"; shareBox.style.opacity = url ? "" : ".4";
-  pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
+  passSet(r);
   var t = encodeURIComponent(SAY), u = encodeURIComponent(url);
   var casual = TXT[txtAt] + url;
   var hrefs = { x: "https://twitter.com/intent/tweet?text=" + encodeURIComponent("just got on the list for Studio, it turns one sentence into a finished video 🤯") + "&url=" + u, mail: "mailto:?subject=" + encodeURIComponent("you have to see this") + "&body=" + encodeURIComponent(casual) };
@@ -1156,26 +1152,122 @@ function showDone(r, quiet) {
     if (!SK.reduced) { var n = 0; dh.querySelectorAll("span").forEach(function (sp) { if (!sp.closest(".wl-roll")) n = words(sp, n); }); doneEl.classList.add("w0"); void doneEl.offsetWidth; setTimeout(function () { doneEl.classList.remove("w0"); }, 500); }
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.bed.swell();
-    KAY.say(["in", "share"]);
+    KAY.say(quiet ? ["back"] : ["in", "share"]);   /* coming back to it: where your friends are, not You're in again */
   }
   if (!quiet) setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
+  if (!again) refresh(true);
+}
+function passSet(r) {
+  var ranked = typeof r.position === "number" && r.position > 0;
+  pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
+}
+
+/* ---------- your friends, told truthfully (Evan: "not just a completed status, but an invite status"): each of the 3 slots is
+   Not invited, Invited (you sent your link: Text a friend, Copy link, Share), Confirming (they signed up, their email isn't confirmed
+   yet, so they don't count yet) or Joined (their first name). Invites are kept on this device and, with the pass, on the Worker, so
+   every device shows them. The header says it in one line: "2 invites sent · 1 joined · 2 more to skip the line". ---------- */
+var SLOT_IC = {
+  "st-invited": '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M14 2 7.2 8.8M14 2l-4.3 12-2.5-5.2L2 6.3 14 2Z"/></svg>',
+  "st-empty": '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 4.5v7M4.5 8h7"/></svg>'
+};
+function friendsOf(r) {
+  var joinedN = r.referrals || 0, pend = r.pending || 0, sent = Math.max(r.invites || 0, joinedN + pend), list = r.friends || [];
+  var jn = list.filter(function (f) { return f.joined; }), pn = list.filter(function (f) { return !f.joined; }), out = [];
+  for (var i = 0; i < GOAL; i++) {
+    if (i < joinedN) out.push({ st: "st-joined", who: (jn[i] && jn[i].first) || "Friend " + (i + 1), say: "Joined" });
+    else if (i < joinedN + pend) out.push({ st: "st-confirming", who: (pn[i - joinedN] && pn[i - joinedN].first) || "Friend " + (i + 1), say: "Confirming" });
+    else if (i < sent) out.push({ st: "st-invited", who: "Friend " + (i + 1), say: "Invited" });
+    else out.push({ st: "st-empty", who: "Friend " + (i + 1), say: "Not invited" });
+  }
+  return { slots: out, joined: joinedN, pending: pend, sent: sent };
+}
+function progress(r, f) {
+  var front = !!r.front;
+  if (front) return f.joined >= GOAL ? f.joined + " joined with your link · you're all at the front" : "A friend of yours got 3 friends on the list, so you're at the front with them.";
+  if (!f.sent && !f.joined && !f.pending) return "When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.";
+  var parts = [], left = Math.max(0, GOAL - f.joined);
+  if (f.sent) parts.push(f.sent + (f.sent === 1 ? " invite sent" : " invites sent"));
+  parts.push(f.joined + " joined");
+  if (f.pending) parts.push(f.pending + " confirming");
+  if (left) parts.push(left + " more to skip the line");
+  return parts.join(" · ");
+}
+function paintFriends(r) {
+  var ranked = typeof r.position === "number" && r.position > 0, f = friendsOf(r), front = !!r.front, got = Math.min(GOAL, f.joined);
+  sheet.querySelector("[data-wl-rhead]").textContent = !ranked ? "Know someone who'd want this?" : front ? "You're at the front of the line." : "Get 3 friends on the list. You all skip to the front.";
+  var rb = sheet.querySelector("[data-wl-rboost]");
+  rb.textContent = !ranked ? "Send them your link. They get early access too." : progress(r, f);
+  rb.classList.toggle("wl-prog", ranked && (front || !!(f.sent || f.joined || f.pending)));
+  var gp = sheet.querySelector("[data-wl-goal]"); gp.hidden = !ranked; gp.style.setProperty("--p", front ? 1 : got / GOAL); gp.querySelector("em").textContent = (front ? GOAL : got) + "/" + GOAL; gp.classList.toggle("full", front);
+  gp.setAttribute("aria-label", (front ? GOAL : got) + " of " + GOAL + " friends joined");
+  sheet.querySelector("[data-wl-slots]").hidden = !ranked;
+  sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) {
+    var s = f.slots[i], ini = s.st === "st-joined" || s.st === "st-confirming";
+    li.className = s.st + (s.st === "st-joined" ? " got" : "");
+    li.querySelector("i").innerHTML = ini ? esc(s.who.charAt(0).toUpperCase()) : SLOT_IC[s.st] || "";
+    li.querySelector("b").textContent = s.who; li.querySelector("small").textContent = s.say;
+    var open = s.st === "st-empty" || s.st === "st-invited";   /* an open slot is a way to invite: it opens Text a friend */
+    if (open) { li.setAttribute("role", "button"); li.tabIndex = 0; li.setAttribute("aria-label", s.who + ": " + s.say.toLowerCase() + ". Text a friend."); }
+    else { li.removeAttribute("role"); li.removeAttribute("tabindex"); li.setAttribute("aria-label", s.who + ": " + s.say.toLowerCase()); }
+  });
   var pl = sheet.querySelector("[data-wl-plink]"); pl.hidden = !r.pass;
-  if (API && r.code) fetch(API + (r.pass ? "/pass?t=" + encodeURIComponent(r.pass) : "/status?code=" + encodeURIComponent(r.code))).then(function (x) { return x.json(); }).then(function (j) {
+  sheet.querySelector("[data-wl-backt]").textContent = r.pass ? "Check back here anytime, or open your pass link on any device." : "Check back here anytime, on this device.";
+}
+sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li) {
+  function go() { if (li.getAttribute("role") === "button") sheet.querySelector("[data-wl-text]").click(); }
+  li.addEventListener("click", go);
+  li.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+});
+/* one more invite sent: counted here at once, then on the Worker (its count wins when it's higher: other devices). Two taps within a
+   few seconds (Copy message, then Open Messages) are one friend. */
+var invAt = 0;
+function noteInvite() {
+  if (!rec || !rec.code || Date.now() - invAt < 4000) return;
+  invAt = Date.now();
+  rec = Object.assign({}, rec, { invites: (rec.invites || 0) + 1 });
+  save(rec); paintFriends(rec);
+  if (!API || !rec.pass) return;
+  post("/invited", { t: rec.pass }).then(function (j) {
+    if (!j || !j.ok || !rec || !(j.invites > (rec.invites || 0))) return;
+    rec = Object.assign({}, rec, { invites: j.invites }); save(rec); paintFriends(rec);
+  });
+}
+function save(r) { try { localStorage.setItem(KEY, JSON.stringify(r)); } catch (x) {} }
+/* fresh statuses: when You're in opens, whenever the page comes back into view (back from Messages, another tab, the phone unlocked),
+   and every 45 s while it's on screen. A friend who just joined gets a toast and the done sound. */
+var refAt = 0, refT = 0;
+function refresh(now) {
+  if (!API || !rec || !rec.code || !sheet.classList.contains("done") || document.hidden) return;
+  if (!now && Date.now() - refAt < 8000) return;
+  refAt = Date.now();
+  var r = rec;
+  fetch(API + (r.pass ? "/pass?t=" + encodeURIComponent(r.pass) : "/status?code=" + encodeURIComponent(r.code))).then(function (x) { return x.json(); }).then(function (j) {
     if (!j || !j.ok || !rec || rec.code !== r.code) return;
-    if (j.position === r.position && j.referrals === r.referrals && !!j.front === !!r.front) return;
-    var n = Object.assign({}, r, { position: j.position, total: j.total, referrals: j.referrals, boost: j.boost, front: !!j.front });
-    try { localStorage.setItem(KEY, JSON.stringify(n)); } catch (x) {}
-    showDone(n, true);
+    var cur = rec, n = Object.assign({}, cur, { position: j.position, total: j.total, referrals: j.referrals || 0, boost: j.boost, front: !!j.front,
+      invites: Math.max(cur.invites || 0, j.invites || 0), pending: j.pending || 0, friends: j.friends || cur.friends || [] });
+    var moved = n.position !== cur.position || !!n.front !== !!cur.front || n.referrals !== cur.referrals;
+    var same = !moved && n.invites === (cur.invites || 0) && n.pending === (cur.pending || 0) && JSON.stringify(n.friends) === JSON.stringify(cur.friends || []);
+    if (same) return;
+    save(n);
+    if (n.referrals > (cur.referrals || 0) && typeof cur.referrals === "number") {
+      var nf = (n.friends || []).filter(function (f) { return f.joined; })[n.referrals - 1];
+      toast((nf && nf.first ? nf.first : "A friend") + " just joined with your link."); SFX.play("done", { gain: .55 });
+    }
+    if (moved) showDone(n, true); else { rec = n; paintFriends(n); }
   }).catch(function () {});
 }
+document.addEventListener("visibilitychange", function () { if (!document.hidden) refresh(); });
+window.addEventListener("focus", function () { refresh(); });
+window.addEventListener("pageshow", function () { refresh(); });
+refT = setInterval(function () { refresh(); }, 45000);
 sheet.querySelector("[data-wl-copy]").addEventListener("click", function () {
   if (!rec || !rec.code) return;
   var url = link(rec), b = this, sp = b.querySelector("span:not(.gx-beam):not([data-beam-bloom])");
-  var ok = function () { sp.textContent = "Copied"; toast("Link copied. Send it to three friends."); setTimeout(function () { sp.textContent = "Copy link"; }, 2200); };
+  var ok = function () { sp.textContent = "Copied"; toast("Link copied. Send it to three friends."); setTimeout(function () { sp.textContent = "Copy link"; }, 2200); noteInvite(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { old(url); ok(); }); else { old(url); ok(); }
 });
 function old(text) { var t = document.createElement("textarea"); t.value = text; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); } catch (e) {} t.remove(); }
-sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: txt() }).catch(function () {}); });
+sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: txt() }).then(noteInvite, function () {}); });
 sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code) story(rec, "save"); });
 
 /* ---------- share, text-first (Evan: "98% of sharing is texting a friend"). Text a friend opens our own preview of the message,
@@ -1202,9 +1294,9 @@ sheet.querySelector("[data-wl-text]").addEventListener("click", function () {
 });
 tmsg.addEventListener("input", fitMsg);
 sheet.querySelector("[data-wl-again]").addEventListener("click", function () { txtAt = (txtAt + 1) % TXT.length; tmsg.value = txt(); fitMsg(); SFX.play("tick"); });
-smsA.addEventListener("click", function () { smsA.href = smsHref(tmsg.value.trim()); setTimeout(function () { overlay(tsheet, false); }, 400); });   /* Messages opens with it written; they pick who */
+smsA.addEventListener("click", function () { smsA.href = smsHref(tmsg.value.trim()); noteInvite(); setTimeout(function () { overlay(tsheet, false); }, 400); });   /* Messages opens with it written; they pick who */
 sheet.querySelector("[data-wl-copym]").addEventListener("click", function () {
-  var t = tmsg.value.trim(), ok = function () { toast("Message copied. Paste it to a friend."); };
+  var t = tmsg.value.trim(), ok = function () { toast("Message copied. Paste it to a friend."); noteInvite(); };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, function () { old(t); ok(); }); else { old(t); ok(); }
 });
 /* More: X, Email, Save the image, other apps */
@@ -1212,7 +1304,7 @@ var moreB = sheet.querySelector("[data-wl-moreb]"), moreM = sheet.querySelector(
 function moreMenu(on) { moreM.hidden = !on; moreB.setAttribute("aria-expanded", on ? "true" : "false"); moreB.classList.toggle("on", on); }
 moreB.addEventListener("click", function (e) { e.stopPropagation(); moreMenu(moreM.hidden); });
 document.addEventListener("click", function (e) { if (!moreM.hidden && !moreM.contains(e.target)) moreMenu(false); });
-moreM.querySelectorAll('[data-sh="x"], [data-sh="mail"]').forEach(function (a) { a.addEventListener("click", function () { setTimeout(function () { moreMenu(false); }, 200); }); });
+moreM.querySelectorAll('[data-sh="x"], [data-sh="mail"]').forEach(function (a) { a.addEventListener("click", function () { noteInvite(); setTimeout(function () { moreMenu(false); }, 200); }); });
 /* Share to your Story: our own full-screen preview of the real image (as MIRRA does), then Save to Photos and Open Instagram */
 var storyBlob = null, storyFor = "";
 function storyOf(r) {
@@ -1269,7 +1361,8 @@ sheet.querySelector("[data-wl-over]").addEventListener("click", startOver);
 sheet.querySelector("[data-wl-plink]").addEventListener("click", function () {
   if (!rec || !rec.pass) return;
   var u = (local ? location.origin + location.pathname : "https://askstudio.ai/") + "?pass=" + rec.pass;
-  var ok = function () { toast("Your pass link is copied. It's just for you: open it on any device to see your friends join."); };
+  var b = this, sp = b.querySelector("span");
+  var ok = function () { toast("Your pass link is copied. It's just for you: open it on any device to see your friends join."); if (sp) { sp.textContent = "Copied"; setTimeout(function () { sp.textContent = "Copy pass link"; }, 2200); } };
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, function () { old(u); ok(); }); else { old(u); ok(); }
 });
 var restartB = sheet.querySelector("[data-wl-restart]");
