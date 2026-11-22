@@ -482,6 +482,7 @@ async function pushContact(env, seq) {
     SMS_NOTIFY: !!row.sms_notify, SMS_NOTIFY_AT: row.sms_notify_at ? new Date(row.sms_notify_at * 1000).toISOString() : "",
     SMS_MARKETING: !!row.sms_marketing, SMS_MARKETING_AT: row.sms_marketing_at ? new Date(row.sms_marketing_at * 1000).toISOString() : "",
     EMAIL_CONFIRMED: row.confirmed_via === "code" || row.confirmed_via === "link",   // 'legacy' rows joined before confirmation: false
+    INSTAGRAM: row.instagram || "", WEBSITE: row.website || "",   // where their work lives (the brands step); Brevo fields made by /admin/brevo-setup (Evan's yes, 2026-11-22)
   };
   if (row.sms && row.sms_consent) attributes.SMS = row.sms;   // the SMS channel only for someone who ticked the box
   const body = { email: row.email, attributes, updateEnabled: true };
@@ -555,7 +556,7 @@ async function resync(url, env) {
 // Make the contact fields the sign-up writes, if Brevo doesn't have them yet (the key's own account).
 const ATTRS = { ROLE: "text", BRANDS: "text", CLAUDE: "text", SOURCE: "text", REF_CODE: "text", REFERRED_BY: "text", REFERRALS: "float", POSITION: "float",
   PHONE: "text", SMS_CONSENT: "boolean", SMS_CONSENT_AT: "text", SMS_CONSENT_TEXT: "text",
-  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean", FIRST_MAKE: "text", DREAM: "text", DREAM_AT: "text" };   // DREAM / DREAM_AT: the dream interview's answer (Evan's yes, 2026-11-21)
+  SMS_NOTIFY: "boolean", SMS_NOTIFY_AT: "text", SMS_MARKETING: "boolean", SMS_MARKETING_AT: "text", EMAIL_CONFIRMED: "boolean", FIRST_MAKE: "text", DREAM: "text", DREAM_AT: "text", INSTAGRAM: "text", WEBSITE: "text" };   // DREAM / DREAM_AT: the dream interview's answer (Evan's yes, 2026-11-21)
 async function brevoSetup(env) {
   if (!env.BREVO_API_KEY) return fail("Brevo is not set up yet (the BREVO_API_KEY secret).");
   const res = await fetch(BREVO + "/contacts/attributes", { headers: { "api-key": String(env.BREVO_API_KEY), Accept: "application/json" } });

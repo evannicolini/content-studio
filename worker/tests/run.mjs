@@ -135,6 +135,13 @@ test("work links: an Instagram handle and a website, cleaned, kept, and in the e
   const head = csv[0].split(","), one = csv.find((l) => l.startsWith("1,")).split(",");
   assert.equal(one[head.indexOf("instagram")], "newname");
   assert.equal(one[head.indexOf("website")], "https://new.studio");
+  // Brevo hears both (INSTAGRAM, WEBSITE), and blank as "" for someone who skipped them
+  const sent = t.brevo.calls.filter((c) => /\/contacts/.test(c.url) && c.body && c.body.attributes);
+  const mine = sent.filter((c) => c.body.email === "person1@example.com").pop(), skipped = sent.filter((c) => c.body.email === "person2@example.com").pop();
+  assert.equal(mine.body.attributes.INSTAGRAM, "newname");
+  assert.equal(mine.body.attributes.WEBSITE, "https://new.studio");
+  assert.equal(skipped.body.attributes.INSTAGRAM, "");
+  assert.equal(skipped.body.attributes.WEBSITE, "");
 });
 
 test("duplicate email: same code and place, details updated, already: true", async () => {
@@ -366,7 +373,7 @@ test("Brevo: the contact, its attributes and the list; the referrer's count", as
     attributes: { FIRSTNAME: "First1", LASTNAME: "Last1", SMS: "+447700900123", ROLE: "Creator", BRANDS: "", CLAUDE: "", SOURCE: "test",
       REF_CODE: a.code, REFERRED_BY: "", REFERRALS: 0, POSITION: 1, PHONE: "+447700900123", SMS_CONSENT: true,
       SMS_CONSENT_AT: c.body.attributes.SMS_CONSENT_AT, SMS_CONSENT_TEXT: "[waitlist-sms-v1] Text me",
-      SMS_NOTIFY: true, SMS_NOTIFY_AT: c.body.attributes.SMS_CONSENT_AT, SMS_MARKETING: true, SMS_MARKETING_AT: c.body.attributes.SMS_CONSENT_AT, EMAIL_CONFIRMED: true },
+      SMS_NOTIFY: true, SMS_NOTIFY_AT: c.body.attributes.SMS_CONSENT_AT, SMS_MARKETING: true, SMS_MARKETING_AT: c.body.attributes.SMS_CONSENT_AT, EMAIL_CONFIRMED: true, INSTAGRAM: "", WEBSITE: "" },
   });
   assert.match(c.body.attributes.SMS_CONSENT_AT, /^\d{4}-\d\d-\d\dT/);
   assert.equal(t.row("person1@example.com").brevo_synced, 1);
