@@ -2333,16 +2333,21 @@ function getStudio() {
   var u = me.hand && me.hand.download, btn = $("[data-st-get]"), prog = $("[data-st-prog]"), bar = $("[data-st-bar]"), pt = $("[data-st-prog-t]"), pc = $("[data-st-pct]");
   var mb = function (n) { return (n / 1048576).toFixed(n >= 104857600 ? 0 : 1) + " MB"; };
   var show = function (got, total) { var f = total ? Math.min(1, got / total) : 0; bar.style.width = (total ? f * 100 : Math.min(92, got / 2621440)).toFixed(1) + "%"; pc.textContent = total ? Math.floor(f * 100) + "%" : mb(got); pt.textContent = total ? mb(got) + " of " + mb(total) : mb(got) + " so far"; };
+  var test = MOCK || !u || u === "#download" || !!STUDIO;   /* the stand-in or the Hub's Launch day: no real file */
   var done = function (fallback) {
-    bar.style.width = "100%"; pc.textContent = fallback ? "" : "100%"; pt.textContent = fallback ? "Your browser is saving Studio.dmg" : "Downloaded · Studio.dmg";
-    $("[data-st-get-t]").textContent = "Download again"; btn.disabled = false; getting = false; doneEl.classList.add("got"); SFX.play("done", { gain: .6 });
+    bar.style.width = "100%"; pc.textContent = fallback || test ? "" : "100%";
+    pt.textContent = test ? "Test run: nothing is downloaded" : fallback ? "Your browser is saving Studio.dmg" : "Downloaded · Studio.dmg";
+    $("[data-st-get-t]").textContent = "Download again"; btn.disabled = false; getting = false; clearTimeout(stall);
+    where(test, fallback); doneEl.classList.add("got"); SFX.play("done", { gain: .6 });
+    if (!test) setTimeout(function () { point(6500); }, 500);   /* the real file: point at the browser's downloads for a few seconds */
   };
-  var plain = function () { var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a); done(true); };
+  var stall = setTimeout(function () { $("[data-st-retry]").hidden = false; }, 12000);   /* nothing for a while: a way to try again */
+  var plain = function () { var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a); $("[data-st-retry]").hidden = false; done(true); };
   btn.disabled = true; $("[data-st-get-t]").textContent = "Downloading…"; prog.hidden = false; show(0, 1);
   if (STUDIO && u) { location.href = u; done(true); return; }
   if (MOCK || !u || u === "#download") {   /* this Mac: a stand-in file of Studio's size, at a fast connection's pace */
     var total = 238 * 1048576, t0 = performance.now();
-    (function tick() { var f = Math.min(1, (performance.now() - t0) / 4200); show(total * f, total); if (f < 1) requestAnimationFrame(tick); else { done(false); toast("Downloaded (stand-in)."); } })();
+    (function tick() { var f = Math.min(1, (performance.now() - t0) / 4200); show(total * f, total); if (f < 1) requestAnimationFrame(tick); else done(false); })();
     return;
   }
   fetch(u).then(function (r) {
@@ -2357,6 +2362,36 @@ function getStudio() {
   }).catch(plain);
 }
 $("[data-st-get]").addEventListener("click", getStudio);
+/* where it went. Browsers save to the Downloads folder unless someone has changed it; each shows its downloads in its own place:
+   Chrome, Edge, Safari and Firefox at the top right of the toolbar, Arc in its sidebar. The pointer sits at that corner. */
+var BROWSER = "";
+function browser() {   /* asked when it's needed: Arc paints its palette onto the page after it loads */
+  var ua = navigator.userAgent;
+  try { if (getComputedStyle(document.documentElement).getPropertyValue("--arc-palette-title")) return "arc"; } catch (e) {}   /* Arc sets its palette on every page */
+  if (/Edg\//.test(ua)) return "edge"; if (/Firefox\//.test(ua)) return "firefox"; if (/Chrome\/|Chromium\//.test(ua)) return "chrome"; if (/Safari\//.test(ua)) return "safari"; return "";
+}
+var DLKEY = "", DLSAY = "";
+function known() { BROWSER = browser(); DLKEY = { chrome: "⇧⌘J", safari: "⌥⌘L", firefox: "⇧⌘Y" }[BROWSER] || ""; DLSAY = { chrome: "Chrome shows it under the download icon, top right.", edge: "Edge shows it under the download icon, top right.", safari: "Safari shows it under the ↓ button, top right.",
+  firefox: "Firefox shows it under the ↓ button, top right.", arc: "Arc shows it in your sidebar, at the bottom." }[BROWSER] || "Your browser shows it in its downloads list."; }
+function where(test, fallback) {
+  known();
+  $("[data-st-where-t]").textContent = test ? "Test run: nothing is downloaded." : fallback ? "Studio.dmg is going to your Downloads folder." : "Studio.dmg is in your Downloads folder.";
+  $("[data-st-where-s]").textContent = test ? "On askstudio.ai, Studio.dmg lands in your Downloads folder. " + DLSAY : DLSAY;
+  var k = $("[data-st-kbd]"); k.hidden = !DLKEY; k.textContent = DLKEY;
+  var r = $("[data-st-retry-a]"), u = me.hand && me.hand.download; r.href = test || !u ? "#" : u;
+}
+var ptrT = 0;
+function point(ms) {
+  known(); var p = $("[data-st-ptr]"), k = p.querySelector("[data-st-pkbd]");
+  p.classList.toggle("arc", BROWSER === "arc"); k.hidden = !DLKEY; k.textContent = DLKEY;
+  p.hidden = false; requestAnimationFrame(function () { requestAnimationFrame(function () { p.classList.add("on"); }); });
+  clearTimeout(ptrT); ptrT = setTimeout(function () { p.classList.remove("on"); setTimeout(function () { if (!p.classList.contains("on")) p.hidden = true; }, 600); }, ms || 6000);
+}
+$("[data-st-show]").addEventListener("click", function () { point(6000); });
+$("[data-st-retry-a]").addEventListener("click", function (e) {
+  if (this.getAttribute("href") === "#") { e.preventDefault(); toast("Test run: nothing is downloaded."); return; }
+  setTimeout(function () { point(6000); }, 800);   /* the direct link: the browser saves it, and the pointer shows where */
+});
 /* a phone: the Mac link by email (the waitlist Worker checks the session and sends "Get Studio on your Mac"), and Copy link */
 var MACLINK = "https://askstudio.ai/start/?mac";
 function sendMacLink() {

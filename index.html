@@ -44,7 +44,7 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=dab6be8c">
+<link rel="stylesheet" href="site.css?v=9005d4ce">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
@@ -1992,6 +1992,13 @@ set.</span></span></figure>
         <div class="st-get" data-st-get-box>
           <button type="button" class="st-getb" data-st-get data-gx="hot"><svg class="apple" aria-hidden="true"><use href="#apple"/></svg><span data-st-get-t>Download Studio for Mac</span></button>
           <div class="st-prog" data-st-prog hidden><i><b data-st-bar></b></i><p><span data-st-prog-t>Starting…</span><em data-st-pct>0%</em></p></div>
+          <!-- where it went (Evan: "I should be able to know where it downloaded"): the folder, where this browser shows it, Show me -->
+          <div class="st-where" data-st-where>
+            <span class="st-wi" aria-hidden="true"><svg class="st-finder" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="3.4" fill="#5fb0ff"/><path d="M8.7 1h2.9A3.4 3.4 0 0 1 15 4.4v7.2a3.4 3.4 0 0 1-3.4 3.4H7.4c.4-1.5.7-3.3.7-5.2H6.9C7 6.4 7.7 3.4 8.7 1Z" fill="#eaf4ff"/><path d="M5.2 5.3v1.5M10.8 5.3v1.5M4.5 10.5c2.1 1.5 4.9 1.5 7 0" fill="none" stroke="#17324d" stroke-width="1.05" stroke-linecap="round"/></svg></span>
+            <p><b data-st-where-t>Studio.dmg is in your Downloads folder.</b><span data-st-where-s>Your browser shows it in its downloads list.</span></p>
+            <button type="button" class="st-show" data-st-show data-gx><span>Show me</span><kbd data-st-kbd hidden></kbd></button>
+          </div>
+          <p class="st-retry" data-st-retry hidden>Download didn't start? <a data-st-retry-a href="#" rel="noopener">Try again</a></p>
         </div>
         <!-- v3 on a phone: Studio is for Mac, so the link goes to their email (and a Copy link) -->
         <div class="st-mac" data-st-mac hidden>
@@ -1999,7 +2006,7 @@ set.</span></span></figure>
           <button type="button" class="st-copy" data-st-mac-copy data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.6"/><path d="M10.5 3.3V3a1 1 0 0 0-1-1H3.4a1 1 0 0 0-1 1v6.1a1 1 0 0 0 1 1h.3"/></svg><span>Copy link</span></button>
         </div>
         <ol class="st-how">
-          <li><b>1</b><span>Open <em>Studio.dmg</em> from your downloads.</span></li>
+          <li><b>1</b><span>Open <em>Studio.dmg</em> from your <span class="st-fin"><svg class="st-finder" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="3.4" fill="#5fb0ff"/><path d="M8.7 1h2.9A3.4 3.4 0 0 1 15 4.4v7.2a3.4 3.4 0 0 1-3.4 3.4H7.4c.4-1.5.7-3.3.7-5.2H6.9C7 6.4 7.7 3.4 8.7 1Z" fill="#eaf4ff"/><path d="M5.2 5.3v1.5M10.8 5.3v1.5M4.5 10.5c2.1 1.5 4.9 1.5 7 0" fill="none" stroke="#17324d" stroke-width="1.05" stroke-linecap="round"/></svg>Downloads</span></span></li>
           <li><b>2</b><span>Drag Studio into Applications.</span></li>
           <li><b>3</b><span>Open it. You're already signed in.</span></li>
         </ol>
@@ -2013,6 +2020,8 @@ set.</span></span></figure>
     </div>
   </div>
   <p class="wl-toast" data-st-toast role="status" aria-live="polite"></p>
+  <!-- the pointer to the browser's own downloads button: top right (Chrome, Safari, Firefox, Edge), Arc's sidebar bottom left -->
+  <div class="st-ptr" data-st-ptr hidden aria-hidden="true"><i class="st-pring"></i><svg class="st-parw" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></svg><span class="st-ptx"><b>Studio.dmg is in here</b><kbd data-st-pkbd hidden></kbd></span></div>
 </div>
 
 </main>
@@ -2042,6 +2051,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=dab6be8c"></script>
+<script src="site.js?v=9005d4ce"></script>
 </body>
 </html>

@@ -5123,6 +5123,36 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-done-get .st-how, .st-done-get .st-acts { display: none; }
 .st-done-get.got .st-how, .st-done-get.got .st-acts { display: grid; animation: wl-pop .6s var(--ease) both; }
 .st-done-get.got .st-acts { display: flex; }
+/* where it went: the folder in words, where this browser shows downloads, Show me (and its shortcut); then a way to try again */
+.st-where { display: none; align-items: center; gap: 14px; margin-top: 16px; padding: 12px 12px 12px 14px; border-radius: 20px; background: rgba(var(--tint), .46); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
+.st-done-get.got .st-where { display: flex; animation: wl-pop .6s var(--ease) both; }
+.st-wi { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, .1); box-shadow: var(--v-rim); }
+.st-wi .st-finder { width: 22px; height: 22px; }
+.st-where p { flex: 1; min-width: 0; margin: 0; }
+.st-where p b { display: block; font: 500 15px/1.3 var(--sans); color: #fff; }
+.st-where p span { display: block; margin-top: 3px; font-size: 13px; line-height: 1.4; color: var(--wl-l2); }
+.st-show { flex: none; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 999px; font: 500 14px/1 var(--sans); color: #fff; }
+.st-show kbd, .st-ptr kbd { font: 500 11.5px/1 var(--mono); letter-spacing: .04em; padding: 4px 6px; border-radius: 7px; color: #fff; background: rgba(255, 255, 255, .12); box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .22); }
+.st-retry { display: none; margin: 12px 4px 0; font-size: 13px; color: var(--wl-l3); }
+.st-done-get.got .st-retry:not([hidden]) { display: block; }
+.st-retry a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .4); text-underline-offset: 3px; }
+.st-fin { display: inline-flex; align-items: center; gap: 5px; color: #fff; white-space: nowrap; }
+.st-fin .st-finder { width: 15px; height: 15px; margin-bottom: -1px; }
+/* the pointer: a glass tag with an arrow at the browser's downloads button, a soft ring pulsing behind it, for a few seconds */
+.st-ptr { position: fixed; z-index: 80; top: 12px; right: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; pointer-events: none; opacity: 0; transform: translateY(10px); transition: opacity .45s var(--ease), transform .55s var(--ease); }
+.st-ptr.on { opacity: 1; transform: none; }
+.st-ptr:not(.arc) .st-ptx { margin-top: 26px; }   /* the tag sits under the page's own Restart, sound and close; the arrow stays at the edge */
+.st-parw { width: 26px; height: 26px; margin-right: 10px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .45)); animation: st-nudge 1.1s ease-in-out infinite; }
+.st-pring { position: absolute; top: -18px; right: -6px; width: 58px; height: 58px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255, 255, 255, .7); animation: st-ring 1.6s ease-out infinite; }
+.st-ptx { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 16px; font: 500 14px/1 var(--sans); color: #fff; background: rgba(var(--tint), .72); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim), 0 18px 40px -18px rgba(0, 0, 0, .7); }
+.st-ptr.arc { top: auto; right: auto; bottom: 22px; left: 14px; flex-direction: row; align-items: center; }
+.st-ptr.arc .st-parw { transform: rotate(-90deg); margin: 0; animation-name: st-nudge-l; }
+.st-ptr.arc .st-pring { top: auto; right: auto; left: -34px; bottom: -14px; }
+@keyframes st-nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes st-nudge-l { 0%, 100% { transform: rotate(-90deg) translateY(0); } 50% { transform: rotate(-90deg) translateY(-6px); } }
+@keyframes st-ring { from { transform: scale(.55); opacity: .9; } to { transform: scale(1.25); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .st-parw, .st-pring { animation: none; } }
+@media (max-width: 520px) { .st-where { flex-wrap: wrap; } .st-show { margin-left: 54px; } }
 .st-mac { margin: 22px 0 6px; max-width: 460px; }
 .st-macp { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: var(--wl-l2); }
 .st-copy { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
