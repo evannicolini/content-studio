@@ -4,6 +4,54 @@ window.SK_WAITLIST = {"api":"https://studio-waitlist.studio-licence.workers.dev"
 
 window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""}};
 
+/* The site's one click sound (window.SKClick): the pass flip's own take (assets/sfx/app/ask-open.mp3), on every button, link and
+   [role=button] the main page and the legal pages have. One tiny Web Audio player: fetched and decoded a beat after the page has loaded, the
+   context is made and resumed inside that press, presses closer than 70 ms apart play once, nothing plays with reduced motion or
+   with the speaker off on the sign-ups (localStorage studio-wl-sound), and a blocked or missing audio stack is simply silent.
+   The sign-ups (900-early, 910-start) play the same file through their own mixer; SKClick.own is true there (window.SK_PAGE), so it never doubles.
+   build.py puts this file before kit.js on every page; legal.py puts it before legal.js. */
+(function () {
+  "use strict";
+  if (window.SKClick) return;
+  var URL_ = "/assets/sfx/app/ask-open.mp3", GAIN = .55, GAP = 70;
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = null, loading = false, last = 0;
+  var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function off() { try { return localStorage.getItem("studio-wl-sound") === "off"; } catch (e) { return false; } }
+  /* decoded off to the side (an OfflineAudioContext needs no gesture and logs no autoplay warning), once the page has settled */
+  function load() {
+    if (loading || reduced || !AC || SKClick.own) return; loading = true;
+    var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    fetch(URL_).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) {
+      if (!d) return;
+      var dc = OC ? new OC(1, 1, 44100) : (wake(), ctx); if (!dc) return;
+      var p = dc.decodeAudioData(d, function (b) { buf = b; }, function () {}); if (p && p.catch) p.catch(function () {});
+    }).catch(function () {});
+  }
+  function wake() {
+    if (!AC) return;
+    try { if (!ctx || ctx.state === "closed") ctx = new AC(); if (ctx.state !== "running") { var r = ctx.resume(); r && r.catch && r.catch(function () {}); } } catch (e) { ctx = null; return; }
+    load();
+  }
+  if (document.readyState === "complete") setTimeout(load, 1500); else window.addEventListener("load", function () { setTimeout(load, 1500); });
+  function play(gain) {
+    if (reduced || off() || SKClick.own) return;
+    wake();
+    var now = performance.now(); if (!ctx || !buf || now - last < GAP) return; last = now;
+    try { var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buf; g.gain.value = gain || GAIN; s.connect(g); g.connect(ctx.destination); s.start(); } catch (e) {}
+  }
+  var HIT = "button, a[href], [role=button], summary, input[type=checkbox], input[type=radio], input[type=submit], input[type=button]";
+  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };   /* a sign-up page (SK_PAGE) clicks through its own mixer */
+  /* the first press only warms it up (fetch + decode take a beat); every press after that clicks */
+  document.addEventListener("pointerdown", function (e) {
+    if (SKClick.own) return;
+    var t = e.target && e.target.closest && e.target.closest(HIT);
+    if (!t || t.disabled || t.closest("[data-sfx=off]")) { wake(); return; }
+    play();
+  }, { capture: true, passive: true });
+  document.addEventListener("keydown", function (e) { if (!SKClick.own && (e.key === "Enter" || e.key === " ") && e.target && e.target.closest && e.target.closest(HIT)) play(); }, true);
+})();
+
+
 /* Studio site kit: window.SK. Shared behaviour every section builds on.
    SK.beam(el, opts)            live border beam on any element (the app's beam engine)
    SK.orb(canvas, opts)         the thinking orb; returns { set(state) }
@@ -385,7 +433,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
-      name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
+      name: function (n, typing) { var h = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); if (hello._h !== h) { hello._h = h; hello.innerHTML = h; } },   /* unchanged: left alone (a step change redrew it, and replayed its chips, every time) */
       /* Post next, made for who you are: [{ img, kicker, title, fresh }] lead the strip, labelled; label replaces "Studio's picks" */
       picks: function (items, label) {
         pkWs.textContent = label || "Studio's picks";
@@ -393,6 +441,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
       },
       brands: function (list) {
+        var key = JSON.stringify(list || []); if (chips._k === key) return; chips._k = key;
         chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
@@ -493,18 +542,24 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
      What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
      the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
      sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
+  var tints = {};
   SK.edgeTint = function (src) {
     if (!src) return;
-    var im = new Image(); im.onload = function () {
+    var put = function (col) { document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col); };
+    if (tints[src]) { put(tints[src]); return; }   /* each wallpaper is read once: drawing it to a canvas cost a phone a frame or two mid-transition */
+    var im = new Image(); im.onload = function () { setTimeout(function () {
       try {
         var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
         g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
         var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
         for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
-        var col = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
-        document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col);   /* the sheet's own base takes it too */
+        /* as it shows at the top of the screen: under the sheet's shade (section.css .wl-bg::after) and, on a phone, the header's own
+           backing (.wl-top::before), together about 70% of the way to the near-black they're made of (half on a wide screen) */
+        var k = matchMedia("(max-width: 960px)").matches ? .7 : .5, mix = function (v, d) { return Math.round(v / n * (1 - k) + d * k); };
+        var col = "rgb(" + mix(r, 6) + "," + mix(gg, 10) + "," + mix(b, 12) + ")";
+        tints[src] = col; put(col);   /* the sheet's own base takes it too */
       } catch (e) {}
-    };
+    }, tints.first ? 700 : 0); tints.first = 1; };   /* after the first, a beat later: out of the way of the step change */
     im.src = src;
   };
   function edges() {
@@ -516,22 +571,116 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     SK.edges = function () { on = null; set(); };   /* a sheet closed over the site: back to the site's edge */
   }
 
+  /* ---------- SK.afterReveal(fn): work that can wait until the page has come in (the rest of Kayla's lines, their timings): runs ~2.4 s
+     after load, or on the first press or key if that is sooner. Once each. ---------- */
+  var laterFns = [], laterDone = false;
+  function runLater() { if (laterDone) return; laterDone = true; laterFns.splice(0).forEach(function (fn) { try { fn(); } catch (e) {} }); }
+  SK.afterReveal = function (fn) { if (laterDone) { setTimeout(fn, 0); return; } laterFns.push(fn); };
+  (function () {
+    var arm = function () { setTimeout(runLater, 2400); };
+    if (document.readyState === "complete") arm(); else window.addEventListener("load", arm);
+    ["pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { setTimeout(runLater, 60); }, { once: true, capture: true, passive: true }); });
+  })();
+
+  /* ---------- SK.sheetIn(sheet, sky, before, after): the sign-ups' entrance. The wallpaper is decoded before the first frame of it
+     (at most 700 ms: the page is never held for a slow network), then .open starts it and .entering runs the question's own build
+     (section.css html.pg-in) until it has played once; a step change ends it early (SK.stepSwap). ---------- */
+  SK.sheetIn = function (sheet, sky, before, after) {
+    var went = false, go = function () {
+      if (went) return; went = true;
+      requestAnimationFrame(function () { before && before(); requestAnimationFrame(function () {
+        sheet.classList.add("open", "entering"); after && after();
+        clearTimeout(sheet._ent); sheet._ent = setTimeout(function () { sheet.classList.remove("entering"); }, 2600);
+      }); });
+    };
+    if (sky && sky.decode && sky.getAttribute("src") && !sky.complete) { sky.decode().then(go, go); setTimeout(go, 700); } else go();
+  };
+
+  /* ---------- SK.stepSwap(box, cur, next, dir): one question to the next on the sign-ups (900-early, 910-start). The question you
+     leave drifts the way you're going and goes out of focus; the next one's words come into focus as they slide in (the word reveal,
+     .wl-bw), and its controls (fields, answers, buttons) rise up from lying a little flat, one after another. Back runs it the other
+     way. Only transform, opacity and a blur on text: the glass fades itself (an opacity or a filter on a box around glass would
+     switch its live blur off), and nothing is ever clipped. dir: 1 forward, -1 back. ---------- */
+  var SW_EASE = "cubic-bezier(.2, .8, .2, 1)", SW_OUT = "cubic-bezier(.4, 0, .7, .4)", SW_OUT_MS = 340;
+  var SW_GROUP = ".wl-opts, .wl-fields, .wl-otp, .st-otp, .st-ways, .st-plans, .wl-telrow";
+  function swGlassy(el) { var cs = getComputedStyle(el), b = cs.backdropFilter || cs.webkitBackdropFilter; return !!b && b !== "none"; }
+  function swHasGlass(el) { if (swGlassy(el)) return true; for (var c = el.firstElementChild; c; c = c.nextElementSibling) if (swHasGlass(c)) return true; return false; }
+  function swLeaves(el, out) {   /* the pieces that can fade on their own: glass fades itself, never a box around it */
+    if (swGlassy(el) || !swHasGlass(el)) { out.push(el); return out; }
+    for (var c = el.firstElementChild; c; c = c.nextElementSibling) swLeaves(c, out);
+    return out;
+  }
+  function swShown(el) { return !el.hidden && el.getClientRects().length > 0; }
+  function swParts(step) {
+    var head = null, text = [], ui = [];
+    for (var c = step.firstElementChild; c; c = c.nextElementSibling) {
+      if (!swShown(c)) continue;
+      if (c.classList.contains("wl-qh")) { head = c; continue; }
+      if (!swHasGlass(c)) { text.push(c); continue; }
+      if (c.matches(SW_GROUP)) { for (var g = c.firstElementChild; g; g = g.nextElementSibling) if (swShown(g)) { if (g.matches(SW_GROUP)) { for (var h = g.firstElementChild; h; h = h.nextElementSibling) if (swShown(h)) ui.push(h); } else ui.push(g); } }
+      else ui.push(c);
+    }
+    return { head: head, text: text, ui: ui };
+  }
+  function swStop(step) { (step._sw || []).forEach(function (a) { try { a.cancel(); } catch (e) {} }); step._sw = []; }
+  function swRun(step, el, kf, o) { var a = el.animate(kf, o); step._sw.push(a); return a; }
+  SK.stepSwap = function (box, cur, nx, dir, onShow) {
+    var sheet = box.closest(".wl"); if (sheet) sheet.classList.remove("entering");   /* the page's own entrance stops at the first step change */
+    swStop(cur); swStop(nx);
+    var h0 = box.offsetHeight;
+    cur.classList.remove("on"); cur.classList.toggle("past", dir > 0);
+    nx.classList.remove("past", "out"); nx.classList.add("on"); if (onShow) onShow();
+    var h1 = nx.offsetHeight;
+    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
+    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    if (SK.reduced || !nx.animate) { cur.classList.remove("out"); return; }
+    /* out: the way you're going, out of focus (text) or just away (glass) */
+    cur.classList.add("out"); clearTimeout(cur._out); cur._out = setTimeout(function () { cur.classList.remove("out"); swStop(cur); }, SW_OUT_MS + 60);
+    var a = swParts(cur), dx = -dir;
+    [a.head].concat(a.text).forEach(function (el, i) {
+      if (!el) return;
+      swRun(cur, el, [{ transform: "none", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(" + dx * 46 + "px, 0, 0)", opacity: 0, filter: "blur(10px)" }], { duration: SW_OUT_MS, delay: i * 18, easing: SW_OUT, fill: "forwards" });
+    });
+    a.ui.forEach(function (el, i) {
+      swRun(cur, el, [{ transform: "none" }, { transform: "translate3d(" + dx * 34 + "px, 6px, 0)" }], { duration: SW_OUT_MS, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" });
+      swLeaves(el, []).forEach(function (l) { swRun(cur, l, [{ opacity: 0 }], { duration: SW_OUT_MS - 60, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" }); });
+    });
+    /* in: the headline slides in as its words come into focus; the rest after it; the controls rise up from lying flat */
+    var b = swParts(nx), dI = dir;
+    if (b.head) swRun(nx, b.head, [{ transform: "translate3d(" + dI * 34 + "px, 0, 0)" }, { transform: "none" }], { duration: 900, delay: 60, easing: SW_EASE, fill: "backwards" });
+    b.text.forEach(function (el, i) {
+      swRun(nx, el, [{ transform: "translate3d(" + dI * 26 + "px, 0, 0)", opacity: 0, filter: "blur(8px)" }, { transform: "none", opacity: 1, filter: "blur(0px)" }], { duration: 760, delay: 120 + i * 70, easing: SW_EASE, fill: "backwards" });
+    });
+    b.ui.forEach(function (el, i) {
+      var d = 210 + Math.min(i, 8) * 45;
+      swRun(nx, el, [{ transform: "perspective(900px) translate3d(" + dI * 14 + "px, 26px, 0) rotateX(32deg)", transformOrigin: "50% 100%" }, { transform: "perspective(900px) translate3d(0, 0, 0) rotateX(0deg)", transformOrigin: "50% 100%" }], { duration: 820, delay: d, easing: SW_EASE, fill: "backwards" });
+      swLeaves(el, []).forEach(function (l) { swRun(nx, l, [{ opacity: 0 }, {}], { duration: 420, delay: d + 30, easing: "ease-out", fill: "backwards" }); });
+    });
+  };
+
   /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
      wallpaper (assets/.../*-frost.jpg, 360 px, blurred) as its background, lined up with where the wallpaper sits on the screen, under
      its tint and rim. iPhone's WebKit draws no live backdrop blur inside a masked or faded box, and it costs a phone far less than a
      live 30 px blur. SK.frost(src) on a wallpaper change; it re-aligns on resize and while things move (SK.frost.nudge()). ---------- */
   SK.frost = (function () {
     var src = "", t = 0, until = 0;
+    /* every box measured first, then only the values that changed written (it ran every frame of the reveal, measuring and writing in
+       turn: a forced layout per box per frame, the main cost of the load-in on a phone) */
     function place() {
       var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
       var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
       var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
-      for (var i = 0; i < els.length; i++) {
-        var el = els[i], r = el.getBoundingClientRect(); if (!r.width || !el.offsetWidth) continue;
-        var k = r.width / el.offsetWidth;
-        el.style.setProperty("--fz-img", 'url("' + src + '")');
-        el.style.setProperty("--fz-w", (dw / k).toFixed(1) + "px"); el.style.setProperty("--fz-h", (dh / k).toFixed(1) + "px");
-        el.style.setProperty("--fz-x", ((dx - r.left) / k).toFixed(1) + "px"); el.style.setProperty("--fz-y", ((dy - r.top) / k).toFixed(1) + "px");
+      var at = [], i, el;
+      for (i = 0; i < els.length; i++) { el = els[i]; var ow = el.offsetWidth, r = ow ? el.getBoundingClientRect() : null; at.push(r && r.width ? [el, r, r.width / ow] : null); }
+      var img = 'url("' + src + '")';
+      for (i = 0; i < at.length; i++) {
+        if (!at[i]) continue;
+        el = at[i][0]; var rr = at[i][1], k = at[i][2];
+        var v = [(dw / k).toFixed(1) + "px", (dh / k).toFixed(1) + "px", ((dx - rr.left) / k).toFixed(1) + "px", ((dy - rr.top) / k).toFixed(1) + "px"], key = img + v.join();
+        if (el._fz === key) continue;
+        el._fz = key;
+        el.style.setProperty("--fz-img", img);
+        el.style.setProperty("--fz-w", v[0]); el.style.setProperty("--fz-h", v[1]); el.style.setProperty("--fz-x", v[2]); el.style.setProperty("--fz-y", v[3]);
       }
     }
     function loop() { place(); if (performance.now() < until) t = requestAnimationFrame(loop); else t = 0; }
@@ -1185,9 +1334,9 @@ var SFX = (function () {
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
-  var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
+  var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
-  var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
      beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
@@ -1200,7 +1349,10 @@ var SFX = (function () {
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
+  /* Kayla's first lines at once; the rest a beat after the page has come in (decoding 15 files fought the reveal on a phone), or on the
+     first press if that is sooner. Every line is still decoded long before its step: she can answer a pick at once. */
+  ["intro", "name"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });
+  SK.afterReveal(function () { ["roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); }); });
   /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
@@ -1211,12 +1363,15 @@ var SFX = (function () {
   function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
-    if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
-    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0;
+    /* a press, a scene change and the pass flip are one sound (the flip's, ask-open.mp3): one take per press, never two stacked */
+    var b = buf[n] || (n === "click" || n === "ask" ? buf.move : null);
+    if (!SOUND || !ctx || !b || SK.reduced && n === "tick") return;
+    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0, one = n === "click" || n === "move" || n === "ask";
     if (gap && last[n] && now - last[n] < gap) return;
-    last[n] = now;
+    if (one && last.one && now - last.one < 220) return;
+    last[n] = now; if (one) last.one = now;
     var s = ctx.createBufferSource(), g = ctx.createGain();
-    s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
+    s.buffer = b; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
     g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
@@ -1273,7 +1428,8 @@ var KAY = (function () {
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
-  Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k]) fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  function meta(k) { if (!UNRECORDED[k]) fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); }
+  meta("intro"); meta("name"); SK.afterReveal(function () { Object.keys(LINES).forEach(function (k) { if (k !== "intro" && k !== "name") meta(k); }); });   /* her timings: the first two now, the rest once the page has come in */
   function wave(k) {
     var p = peaks[k] || [], n = 34, out = "";
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
@@ -1599,6 +1755,7 @@ function Pass(el, opts) {
   opts = opts || {};
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
+  function flipped() { if (st.flipped) return; st.flipped = true; if (opts.hint) opts.hint.classList.add("done"); }   /* the hint goes quiet after the first flip */
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
@@ -1614,7 +1771,10 @@ function Pass(el, opts) {
         if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift (Evan) */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
-      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
+      /* "Tap to flip", shown, not just said: until the first flip, every few seconds the pass starts to turn and settles back */
+      var nd = 0;
+      if (opts.nudge && !st.flipped && !st.intro && !st.drag && !SK.reduced) { st.nd0 = st.nd0 || now; var np = ((now - st.nd0) % 3600) / 1000 - 1.2; if (np > 0 && np < 1) nd = 26 * Math.sin(np * Math.PI) * (1 - np * .35); }
+      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + (st.ry + nd).toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
       var ny = ((st.ry % 360) + 540) % 360 - 180, mx = .5 + ny / 90 * .5, my = .35 - st.rx / 40;
       if (Math.abs(mx - lastMx) > .004 || Math.abs(my - lastMy) > .004) {
         lastMx = mx; lastMy = my;
@@ -1636,7 +1796,7 @@ function Pass(el, opts) {
   function up() {
     if (!st.drag) return;
     var d = st.drag; st.drag = null;
-    if (!d.moved) { st.flip += 180; SFX.play("move", { gain: .8 }); opts.onFlip && opts.onFlip(); }
+    if (!d.moved) { st.flip += 180; flipped(); SFX.play("move", { gain: .8 }); opts.onFlip && opts.onFlip(); }
     else st.flip += Math.round(st.try_ / 180) * 180;
     st.try_ = 0; st.trx = 0;
   }
@@ -1652,7 +1812,7 @@ function Pass(el, opts) {
     stop: function () { st.live = false; beamsRun(false); },
     land: function () { el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
-    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
+    spin: function () { st.flip += 360; flipped(); SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
       if ("mail" in d) q("mail").textContent = d.mail;
@@ -1666,7 +1826,7 @@ function Pass(el, opts) {
   };
 }
 var pass1 = Pass(sheet.querySelector("[data-wl-pass1]"));
-var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { onLanded: function () {
+var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { nudge: true, hint: sheet.querySelector(".wl-dstage .wl-hint"), onLanded: function () {
   SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
   var st = sheet.querySelector(".wl-dstage"); st.classList.remove("bloom"); void st.offsetWidth; st.classList.add("bloom");
 } });
@@ -1702,12 +1862,7 @@ function setStep(n, quiet, fromHist) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
   personal();
   if (cur !== nx) {
-    var h0 = box.offsetHeight;
-    cur.classList.remove("on"); cur.classList.toggle("past", n > at);
-    nx.classList.remove("past"); nx.classList.add("on"); reveal(nx);
-    var h1 = nx.offsetHeight;
-    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
-    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });   /* kit.js: out of focus the way you're going, the next one in */
     var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
@@ -2096,7 +2251,7 @@ function open(src) {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
   else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
-  requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  SK.sheetIn(sheet, sky, function () { sizeStage(); }, function () { sizeStage(); });   /* kit.js: the wallpaper decoded first, then the entrance */
   wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();

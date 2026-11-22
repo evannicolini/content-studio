@@ -54,6 +54,7 @@ def build():
         wl = {}
     js.append("window.SK_WAITLIST = %s;" % json.dumps(wl, separators=(",", ":")))
     prices_at = len(js)
+    js.append(read(SRC, "click.js"))
     js.append(read(SRC, "kit.js"))
     for n in names:
         h = read(secdir, n, "section.html").strip()
@@ -104,7 +105,7 @@ def pages(secdir, head_js):
     tpl = read(SRC, "page.html")
     for slug, title, desc, css_from, sec, hash_, sky, ogtitle, ogdesc, og, ogw, ogh, ogalt in PAGES:
         css = [read(SRC, "base.css")] + ["/* ===== %s ===== */\n%s" % (n, read(secdir, n, "section.css")) for n in css_from]
-        js = list(head_js) + [read(SRC, "kit.js")]
+        js = list(head_js) + [read(SRC, "click.js"), read(SRC, "kit.js")]
         j = read(secdir, sec, "section.js")
         js.append("/* ===== %s ===== */\n;(function () {\ntry {\n%s\n} catch (e) { console.error(%s, e); }\n})();" % (sec, j, json.dumps("section " + sec)))
         js.append("window.SK && SK.start && SK.start();")

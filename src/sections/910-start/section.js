@@ -41,9 +41,9 @@ var SFX = (function () {
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
-  var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
+  var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
-  var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
      beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
@@ -56,7 +56,8 @@ var SFX = (function () {
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  VO.forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });   /* the sign-up's own lines; one that is not recorded yet stays silent */
+  VO.slice(0, 2).forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });
+  SK.afterReveal(function () { VO.slice(2).forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); }); });   /* the rest once the page has come in (or on the first press) */   /* the sign-up's own lines; one that is not recorded yet stays silent */
   /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
@@ -67,12 +68,15 @@ var SFX = (function () {
   function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
-    if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
-    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0;
+    /* a press, a scene change and the pass flip are one sound (the flip's, ask-open.mp3): one take per press, never two stacked */
+    var b = buf[n] || (n === "click" || n === "ask" ? buf.move : null);
+    if (!SOUND || !ctx || !b || SK.reduced && n === "tick") return;
+    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0, one = n === "click" || n === "move" || n === "ask";
     if (gap && last[n] && now - last[n] < gap) return;
-    last[n] = now;
+    if (one && last.one && now - last.one < 220) return;
+    last[n] = now; if (one) last.one = now;
     var s = ctx.createBufferSource(), g = ctx.createGain();
-    s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
+    s.buffer = b; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
     g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
@@ -135,7 +139,8 @@ var KAY = (function () {
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1, "wl-b1": 1, "wl-b2": 1, "wl-b4": 1, "wl-cpro": 1, "wl-cfree": 1, "wl-cno": 1 }, reacting = false;
   var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
-  Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k] && VO.indexOf(k) > -1) fetch("assets/audio/" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  function meta(k) { if (!UNRECORDED[k] && VO.indexOf(k) > -1) fetch("assets/audio/" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); }
+  VO.slice(0, 2).forEach(meta); SK.afterReveal(function () { Object.keys(LINES).forEach(function (k) { if (VO.indexOf(k) > 1 || VO.indexOf(k) < 0) meta(k); }); });   /* her timings: the first two now, the rest once the page has come in */
   function wave(k) {
     var p = peaks[k] || [], n = 34, out = "";
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
@@ -350,6 +355,7 @@ function Pass(el, opts) {
   opts = opts || {};
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
+  function flipped() { if (st.flipped) return; st.flipped = true; if (opts.hint) opts.hint.classList.add("done"); }   /* the hint goes quiet after the first flip */
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
@@ -365,7 +371,10 @@ function Pass(el, opts) {
         if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
-      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
+      /* "Tap to flip", shown, not just said: until the first flip, every few seconds the pass starts to turn and settles back */
+      var nd = 0;
+      if (opts.nudge && !st.flipped && !st.intro && !st.drag && !SK.reduced) { st.nd0 = st.nd0 || now; var np = ((now - st.nd0) % 3600) / 1000 - 1.2; if (np > 0 && np < 1) nd = 26 * Math.sin(np * Math.PI) * (1 - np * .35); }
+      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + (st.ry + nd).toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
       var ny = ((st.ry % 360) + 540) % 360 - 180, mx = .5 + ny / 90 * .5, my = .35 - st.rx / 40;
       if (Math.abs(mx - lastMx) > .004 || Math.abs(my - lastMy) > .004) {
         lastMx = mx; lastMy = my;
@@ -383,7 +392,7 @@ function Pass(el, opts) {
     st.try_ = Math.max(-22, Math.min(22, x * 40)); st.trx = Math.max(-16, Math.min(16, -y * 30));
   });
   el.addEventListener("pointerdown", function (e) { st.drag = { x: e.clientX, y: e.clientY, ry0: st.try_, rx0: st.trx, moved: false }; });
-  function up() { if (!st.drag) return; var d = st.drag; st.drag = null; if (!d.moved) { st.flip += 180; SFX.play("move", { gain: .8 }); } else st.flip += Math.round(st.try_ / 180) * 180; st.try_ = 0; st.trx = 0; }
+  function up() { if (!st.drag) return; var d = st.drag; st.drag = null; if (!d.moved) { st.flip += 180; flipped(); SFX.play("move", { gain: .8 }); } else st.flip += Math.round(st.try_ / 180) * 180; st.try_ = 0; st.trx = 0; }
   window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
   el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
   el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
@@ -395,7 +404,7 @@ function Pass(el, opts) {
     start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
     stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
-    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
+    spin: function () { st.flip += 360; flipped(); SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
@@ -404,7 +413,8 @@ function Pass(el, opts) {
     }
   };
 }
-var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { onLanded: function () { SFX.play("land"); } });
+$("[data-st-fliph]").textContent = fine ? "Drag to turn it · click to flip" : "Tap to flip";   /* a phone has no click and nothing to drag with a mouse */
+var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { nudge: true, hint: $(".wl-dstage .wl-hint"), onLanded: function () { SFX.play("land"); } });
 function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
@@ -485,12 +495,7 @@ function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
   personal();
   if (cur !== nx) {
-    var h0 = box.offsetHeight;
-    cur.classList.remove("on"); cur.classList.toggle("past", n > at);
-    nx.classList.remove("past"); nx.classList.add("on"); reveal(nx);
-    var h1 = nx.offsetHeight;
-    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
-    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });   /* kit.js: out of focus the way you're going, the next one in */
     var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
@@ -1144,7 +1149,7 @@ function open() {
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
-  requestAnimationFrame(function () { sizeStage(); slidePer(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  SK.sheetIn(sheet, sky, function () { sizeStage(); slidePer(); }, function () { sizeStage(); });   /* kit.js: the wallpaper decoded first, then the entrance */
   wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });

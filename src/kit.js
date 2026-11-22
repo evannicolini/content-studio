@@ -379,7 +379,7 @@
     var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
-      name: function (n, typing) { hello.innerHTML = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); },
+      name: function (n, typing) { var h = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); if (hello._h !== h) { hello._h = h; hello.innerHTML = h; } },   /* unchanged: left alone (a step change redrew it, and replayed its chips, every time) */
       /* Post next, made for who you are: [{ img, kicker, title, fresh }] lead the strip, labelled; label replaces "Studio's picks" */
       picks: function (items, label) {
         pkWs.textContent = label || "Studio's picks";
@@ -387,6 +387,7 @@
         pkEl.innerHTML = tiles.concat(pk.slice(0, Math.max(0, 8 - tiles.length)).map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; })).join("");
       },
       brands: function (list) {
+        var key = JSON.stringify(list || []); if (chips._k === key) return; chips._k = key;
         chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
@@ -487,18 +488,24 @@
      What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
      the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
      sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
+  var tints = {};
   SK.edgeTint = function (src) {
     if (!src) return;
-    var im = new Image(); im.onload = function () {
+    var put = function (col) { document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col); };
+    if (tints[src]) { put(tints[src]); return; }   /* each wallpaper is read once: drawing it to a canvas cost a phone a frame or two mid-transition */
+    var im = new Image(); im.onload = function () { setTimeout(function () {
       try {
         var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
         g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
         var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
         for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
-        var col = "rgb(" + Math.round(r / n) + "," + Math.round(gg / n) + "," + Math.round(b / n) + ")";
-        document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col);   /* the sheet's own base takes it too */
+        /* as it shows at the top of the screen: under the sheet's shade (section.css .wl-bg::after) and, on a phone, the header's own
+           backing (.wl-top::before), together about 70% of the way to the near-black they're made of (half on a wide screen) */
+        var k = matchMedia("(max-width: 960px)").matches ? .7 : .5, mix = function (v, d) { return Math.round(v / n * (1 - k) + d * k); };
+        var col = "rgb(" + mix(r, 6) + "," + mix(gg, 10) + "," + mix(b, 12) + ")";
+        tints[src] = col; put(col);   /* the sheet's own base takes it too */
       } catch (e) {}
-    };
+    }, tints.first ? 700 : 0); tints.first = 1; };   /* after the first, a beat later: out of the way of the step change */
     im.src = src;
   };
   function edges() {
@@ -510,22 +517,116 @@
     SK.edges = function () { on = null; set(); };   /* a sheet closed over the site: back to the site's edge */
   }
 
+  /* ---------- SK.afterReveal(fn): work that can wait until the page has come in (the rest of Kayla's lines, their timings): runs ~2.4 s
+     after load, or on the first press or key if that is sooner. Once each. ---------- */
+  var laterFns = [], laterDone = false;
+  function runLater() { if (laterDone) return; laterDone = true; laterFns.splice(0).forEach(function (fn) { try { fn(); } catch (e) {} }); }
+  SK.afterReveal = function (fn) { if (laterDone) { setTimeout(fn, 0); return; } laterFns.push(fn); };
+  (function () {
+    var arm = function () { setTimeout(runLater, 2400); };
+    if (document.readyState === "complete") arm(); else window.addEventListener("load", arm);
+    ["pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { setTimeout(runLater, 60); }, { once: true, capture: true, passive: true }); });
+  })();
+
+  /* ---------- SK.sheetIn(sheet, sky, before, after): the sign-ups' entrance. The wallpaper is decoded before the first frame of it
+     (at most 700 ms: the page is never held for a slow network), then .open starts it and .entering runs the question's own build
+     (section.css html.pg-in) until it has played once; a step change ends it early (SK.stepSwap). ---------- */
+  SK.sheetIn = function (sheet, sky, before, after) {
+    var went = false, go = function () {
+      if (went) return; went = true;
+      requestAnimationFrame(function () { before && before(); requestAnimationFrame(function () {
+        sheet.classList.add("open", "entering"); after && after();
+        clearTimeout(sheet._ent); sheet._ent = setTimeout(function () { sheet.classList.remove("entering"); }, 2600);
+      }); });
+    };
+    if (sky && sky.decode && sky.getAttribute("src") && !sky.complete) { sky.decode().then(go, go); setTimeout(go, 700); } else go();
+  };
+
+  /* ---------- SK.stepSwap(box, cur, next, dir): one question to the next on the sign-ups (900-early, 910-start). The question you
+     leave drifts the way you're going and goes out of focus; the next one's words come into focus as they slide in (the word reveal,
+     .wl-bw), and its controls (fields, answers, buttons) rise up from lying a little flat, one after another. Back runs it the other
+     way. Only transform, opacity and a blur on text: the glass fades itself (an opacity or a filter on a box around glass would
+     switch its live blur off), and nothing is ever clipped. dir: 1 forward, -1 back. ---------- */
+  var SW_EASE = "cubic-bezier(.2, .8, .2, 1)", SW_OUT = "cubic-bezier(.4, 0, .7, .4)", SW_OUT_MS = 340;
+  var SW_GROUP = ".wl-opts, .wl-fields, .wl-otp, .st-otp, .st-ways, .st-plans, .wl-telrow";
+  function swGlassy(el) { var cs = getComputedStyle(el), b = cs.backdropFilter || cs.webkitBackdropFilter; return !!b && b !== "none"; }
+  function swHasGlass(el) { if (swGlassy(el)) return true; for (var c = el.firstElementChild; c; c = c.nextElementSibling) if (swHasGlass(c)) return true; return false; }
+  function swLeaves(el, out) {   /* the pieces that can fade on their own: glass fades itself, never a box around it */
+    if (swGlassy(el) || !swHasGlass(el)) { out.push(el); return out; }
+    for (var c = el.firstElementChild; c; c = c.nextElementSibling) swLeaves(c, out);
+    return out;
+  }
+  function swShown(el) { return !el.hidden && el.getClientRects().length > 0; }
+  function swParts(step) {
+    var head = null, text = [], ui = [];
+    for (var c = step.firstElementChild; c; c = c.nextElementSibling) {
+      if (!swShown(c)) continue;
+      if (c.classList.contains("wl-qh")) { head = c; continue; }
+      if (!swHasGlass(c)) { text.push(c); continue; }
+      if (c.matches(SW_GROUP)) { for (var g = c.firstElementChild; g; g = g.nextElementSibling) if (swShown(g)) { if (g.matches(SW_GROUP)) { for (var h = g.firstElementChild; h; h = h.nextElementSibling) if (swShown(h)) ui.push(h); } else ui.push(g); } }
+      else ui.push(c);
+    }
+    return { head: head, text: text, ui: ui };
+  }
+  function swStop(step) { (step._sw || []).forEach(function (a) { try { a.cancel(); } catch (e) {} }); step._sw = []; }
+  function swRun(step, el, kf, o) { var a = el.animate(kf, o); step._sw.push(a); return a; }
+  SK.stepSwap = function (box, cur, nx, dir, onShow) {
+    var sheet = box.closest(".wl"); if (sheet) sheet.classList.remove("entering");   /* the page's own entrance stops at the first step change */
+    swStop(cur); swStop(nx);
+    var h0 = box.offsetHeight;
+    cur.classList.remove("on"); cur.classList.toggle("past", dir > 0);
+    nx.classList.remove("past", "out"); nx.classList.add("on"); if (onShow) onShow();
+    var h1 = nx.offsetHeight;
+    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
+    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    if (SK.reduced || !nx.animate) { cur.classList.remove("out"); return; }
+    /* out: the way you're going, out of focus (text) or just away (glass) */
+    cur.classList.add("out"); clearTimeout(cur._out); cur._out = setTimeout(function () { cur.classList.remove("out"); swStop(cur); }, SW_OUT_MS + 60);
+    var a = swParts(cur), dx = -dir;
+    [a.head].concat(a.text).forEach(function (el, i) {
+      if (!el) return;
+      swRun(cur, el, [{ transform: "none", opacity: 1, filter: "blur(0px)" }, { transform: "translate3d(" + dx * 46 + "px, 0, 0)", opacity: 0, filter: "blur(10px)" }], { duration: SW_OUT_MS, delay: i * 18, easing: SW_OUT, fill: "forwards" });
+    });
+    a.ui.forEach(function (el, i) {
+      swRun(cur, el, [{ transform: "none" }, { transform: "translate3d(" + dx * 34 + "px, 6px, 0)" }], { duration: SW_OUT_MS, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" });
+      swLeaves(el, []).forEach(function (l) { swRun(cur, l, [{ opacity: 0 }], { duration: SW_OUT_MS - 60, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" }); });
+    });
+    /* in: the headline slides in as its words come into focus; the rest after it; the controls rise up from lying flat */
+    var b = swParts(nx), dI = dir;
+    if (b.head) swRun(nx, b.head, [{ transform: "translate3d(" + dI * 34 + "px, 0, 0)" }, { transform: "none" }], { duration: 900, delay: 60, easing: SW_EASE, fill: "backwards" });
+    b.text.forEach(function (el, i) {
+      swRun(nx, el, [{ transform: "translate3d(" + dI * 26 + "px, 0, 0)", opacity: 0, filter: "blur(8px)" }, { transform: "none", opacity: 1, filter: "blur(0px)" }], { duration: 760, delay: 120 + i * 70, easing: SW_EASE, fill: "backwards" });
+    });
+    b.ui.forEach(function (el, i) {
+      var d = 210 + Math.min(i, 8) * 45;
+      swRun(nx, el, [{ transform: "perspective(900px) translate3d(" + dI * 14 + "px, 26px, 0) rotateX(32deg)", transformOrigin: "50% 100%" }, { transform: "perspective(900px) translate3d(0, 0, 0) rotateX(0deg)", transformOrigin: "50% 100%" }], { duration: 820, delay: d, easing: SW_EASE, fill: "backwards" });
+      swLeaves(el, []).forEach(function (l) { swRun(nx, l, [{ opacity: 0 }, {}], { duration: 420, delay: d + 30, easing: "ease-out", fill: "backwards" }); });
+    });
+  };
+
   /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
      wallpaper (assets/.../*-frost.jpg, 360 px, blurred) as its background, lined up with where the wallpaper sits on the screen, under
      its tint and rim. iPhone's WebKit draws no live backdrop blur inside a masked or faded box, and it costs a phone far less than a
      live 30 px blur. SK.frost(src) on a wallpaper change; it re-aligns on resize and while things move (SK.frost.nudge()). ---------- */
   SK.frost = (function () {
     var src = "", t = 0, until = 0;
+    /* every box measured first, then only the values that changed written (it ran every frame of the reveal, measuring and writing in
+       turn: a forced layout per box per frame, the main cost of the load-in on a phone) */
     function place() {
       var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
       var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
       var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
-      for (var i = 0; i < els.length; i++) {
-        var el = els[i], r = el.getBoundingClientRect(); if (!r.width || !el.offsetWidth) continue;
-        var k = r.width / el.offsetWidth;
-        el.style.setProperty("--fz-img", 'url("' + src + '")');
-        el.style.setProperty("--fz-w", (dw / k).toFixed(1) + "px"); el.style.setProperty("--fz-h", (dh / k).toFixed(1) + "px");
-        el.style.setProperty("--fz-x", ((dx - r.left) / k).toFixed(1) + "px"); el.style.setProperty("--fz-y", ((dy - r.top) / k).toFixed(1) + "px");
+      var at = [], i, el;
+      for (i = 0; i < els.length; i++) { el = els[i]; var ow = el.offsetWidth, r = ow ? el.getBoundingClientRect() : null; at.push(r && r.width ? [el, r, r.width / ow] : null); }
+      var img = 'url("' + src + '")';
+      for (i = 0; i < at.length; i++) {
+        if (!at[i]) continue;
+        el = at[i][0]; var rr = at[i][1], k = at[i][2];
+        var v = [(dw / k).toFixed(1) + "px", (dh / k).toFixed(1) + "px", ((dx - rr.left) / k).toFixed(1) + "px", ((dy - rr.top) / k).toFixed(1) + "px"], key = img + v.join();
+        if (el._fz === key) continue;
+        el._fz = key;
+        el.style.setProperty("--fz-img", img);
+        el.style.setProperty("--fz-w", v[0]); el.style.setProperty("--fz-h", v[1]); el.style.setProperty("--fz-x", v[2]); el.style.setProperty("--fz-y", v[3]);
       }
     }
     function loop() { place(); if (performance.now() < until) t = requestAnimationFrame(loop); else t = 0; }

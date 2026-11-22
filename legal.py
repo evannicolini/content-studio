@@ -205,7 +205,7 @@ def build(root):
     src = os.path.join(root, "src", "legal")
     shell = open(os.path.join(src, "page.html"), encoding="utf-8").read()
     css = open(os.path.join(src, "legal.css"), encoding="utf-8").read()
-    js = open(os.path.join(src, "legal.js"), encoding="utf-8").read()
+    js = open(os.path.join(root, "src", "click.js"), encoding="utf-8").read() + "\n" + open(os.path.join(src, "legal.js"), encoding="utf-8").read()   # the site's click sound first
     made = []
     for fn, folder, short, desc in PAGES:
         title, dates, body, toc = convert(open(os.path.join(src, fn), encoding="utf-8").read())

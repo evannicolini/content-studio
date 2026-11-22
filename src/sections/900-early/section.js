@@ -98,9 +98,9 @@ var SFX = (function () {
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
-  var FILE = { tick: "app/hover.wav", click: "app/press.wav", move: "app/ask-open.mp3", ask: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
+  var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
-  var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
+  var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
   /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
      beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
@@ -113,7 +113,10 @@ var SFX = (function () {
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
-  ["intro", "name", "roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });   /* every Kayla line decoded ahead: she can answer a pick at once */
+  /* Kayla's first lines at once; the rest a beat after the page has come in (decoding 15 files fought the reveal on a phone), or on the
+     first press if that is sooner. Every line is still decoded long before its step: she can answer a pick at once. */
+  ["intro", "name"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); });
+  SK.afterReveal(function () { ["roles", "brands", "claude", "invite", "in", "share", "b1", "b2", "b4", "cpro", "cfree", "cno", "confirm"].forEach(function (k) { load("vo:" + k, "assets/audio/wl-" + k + ".mp3"); }); });
   /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
@@ -124,12 +127,15 @@ var SFX = (function () {
   function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
-    if (!SOUND || !ctx || !buf[n] || SK.reduced && n === "tick") return;
-    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0;
+    /* a press, a scene change and the pass flip are one sound (the flip's, ask-open.mp3): one take per press, never two stacked */
+    var b = buf[n] || (n === "click" || n === "ask" ? buf.move : null);
+    if (!SOUND || !ctx || !b || SK.reduced && n === "tick") return;
+    var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0, one = n === "click" || n === "move" || n === "ask";
     if (gap && last[n] && now - last[n] < gap) return;
-    last[n] = now;
+    if (one && last.one && now - last.one < 220) return;
+    last[n] = now; if (one) last.one = now;
     var s = ctx.createBufferSource(), g = ctx.createGain();
-    s.buffer = buf[n]; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
+    s.buffer = b; s.playbackRate.value = o.rate || (n === "key" || n === "tick" ? .94 + Math.random() * .12 : 1);
     g.gain.value = (GAIN[n] || .4) * (o.gain || 1);
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
@@ -186,7 +192,8 @@ var KAY = (function () {
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1 }, reacting = false;
   var pill = sheet.querySelector("[data-wl-kay]"), cap = sheet.querySelector("[data-wl-kt]"), kw = sheet.querySelector("[data-wl-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
-  Object.keys(LINES).forEach(function (k) { if (!UNRECORDED[k]) fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); });
+  function meta(k) { if (!UNRECORDED[k]) fetch("assets/audio/wl-" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); }
+  meta("intro"); meta("name"); SK.afterReveal(function () { Object.keys(LINES).forEach(function (k) { if (k !== "intro" && k !== "name") meta(k); }); });   /* her timings: the first two now, the rest once the page has come in */
   function wave(k) {
     var p = peaks[k] || [], n = 34, out = "";
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
@@ -512,6 +519,7 @@ function Pass(el, opts) {
   opts = opts || {};
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
+  function flipped() { if (st.flipped) return; st.flipped = true; if (opts.hint) opts.hint.classList.add("done"); }   /* the hint goes quiet after the first flip */
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
@@ -527,7 +535,10 @@ function Pass(el, opts) {
         if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift (Evan) */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
-      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + st.ry.toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
+      /* "Tap to flip", shown, not just said: until the first flip, every few seconds the pass starts to turn and settles back */
+      var nd = 0;
+      if (opts.nudge && !st.flipped && !st.intro && !st.drag && !SK.reduced) { st.nd0 = st.nd0 || now; var np = ((now - st.nd0) % 3600) / 1000 - 1.2; if (np > 0 && np < 1) nd = 26 * Math.sin(np * Math.PI) * (1 - np * .35); }
+      el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + (st.ry + nd).toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
       var ny = ((st.ry % 360) + 540) % 360 - 180, mx = .5 + ny / 90 * .5, my = .35 - st.rx / 40;
       if (Math.abs(mx - lastMx) > .004 || Math.abs(my - lastMy) > .004) {
         lastMx = mx; lastMy = my;
@@ -549,7 +560,7 @@ function Pass(el, opts) {
   function up() {
     if (!st.drag) return;
     var d = st.drag; st.drag = null;
-    if (!d.moved) { st.flip += 180; SFX.play("move", { gain: .8 }); opts.onFlip && opts.onFlip(); }
+    if (!d.moved) { st.flip += 180; flipped(); SFX.play("move", { gain: .8 }); opts.onFlip && opts.onFlip(); }
     else st.flip += Math.round(st.try_ / 180) * 180;
     st.try_ = 0; st.trx = 0;
   }
@@ -565,7 +576,7 @@ function Pass(el, opts) {
     stop: function () { st.live = false; beamsRun(false); },
     land: function () { el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
-    spin: function () { st.flip += 360; SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
+    spin: function () { st.flip += 360; flipped(); SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
     set: function (d) {
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
       if ("mail" in d) q("mail").textContent = d.mail;
@@ -579,7 +590,7 @@ function Pass(el, opts) {
   };
 }
 var pass1 = Pass(sheet.querySelector("[data-wl-pass1]"));
-var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { onLanded: function () {
+var pass2 = Pass(sheet.querySelector("[data-wl-pass2]"), { nudge: true, hint: sheet.querySelector(".wl-dstage .wl-hint"), onLanded: function () {
   SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
   var st = sheet.querySelector(".wl-dstage"); st.classList.remove("bloom"); void st.offsetWidth; st.classList.add("bloom");
 } });
@@ -615,12 +626,7 @@ function setStep(n, quiet, fromHist) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
   personal();
   if (cur !== nx) {
-    var h0 = box.offsetHeight;
-    cur.classList.remove("on"); cur.classList.toggle("past", n > at);
-    nx.classList.remove("past"); nx.classList.add("on"); reveal(nx);
-    var h1 = nx.offsetHeight;
-    box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
-    clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
+    SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });   /* kit.js: out of focus the way you're going, the next one in */
     var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
@@ -1009,7 +1015,7 @@ function open(src) {
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ wl: 1, step: at, d: 1 }, "", location.pathname + location.search + HASH); pushed = true; depth = 1; } catch (e) {} }
   else { depth = (history.state && history.state.d) || 0; try { history.replaceState(Object.assign({}, history.state, { wl: 1, step: at, d: depth }), ""); } catch (e) {} }
-  requestAnimationFrame(function () { sizeStage(); requestAnimationFrame(function () { sheet.classList.add("open"); sizeStage(); }); });
+  SK.sheetIn(sheet, sky, function () { sizeStage(); }, function () { sizeStage(); });   /* kit.js: the wallpaper decoded first, then the entrance */
   wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   count(); clearInterval(countT); countT = setInterval(count, 30000);
   if (!pend) pend = loadPend();
