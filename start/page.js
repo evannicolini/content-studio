@@ -340,7 +340,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   SK.hush = function (on) {
     SK.hushed = !!on;
     if (on) {
-      document.querySelectorAll("video").forEach(function (v) { if (v.closest("#early-access")) return; if (!v.paused) { v.pause(); hushedVids.push(v); } });
+      document.querySelectorAll("video").forEach(function (v) { if (v.closest("#early-access, #signup")) return; if (!v.paused) { v.pause(); hushedVids.push(v); } });
     } else {
       hushedVids.splice(0).forEach(function (v) { var r = v.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && r.width) { var p = v.play(); p && p.catch(function () {}); } });
     }
@@ -2376,13 +2376,14 @@ $("[data-st-open]").addEventListener("click", function (e) {
 
 /* ---------- open / close ---------- */
 function open() {
-  if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
+  /* from the site it opens right here, in the same tap, so that tap starts its sound; a link or a refresh loads askstudio.ai/start/ */
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = frostOf(sky.getAttribute("src")); }); }
   SFX.wake(); SFX.bed.start();   /* always: on a context that isn't running yet it waits silently and fades in on the first tap or key */
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
+  if (SK.hush) SK.hush(true);   /* the site's films pause behind it */
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
   SK.sheetIn(sheet, sky, function () { sizeStage(); slidePer(); }, function () { sizeStage(); });   /* kit.js: the wallpaper decoded first, then the entrance */
@@ -2412,7 +2413,7 @@ function intro() {
 function hide() {
   if (!sheet.classList.contains("open")) return;
   if (SK.edges) SK.edges();
-  sheet.classList.remove("open"); html.classList.remove("wl-open"); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
+  sheet.classList.remove("open"); html.classList.remove("wl-open"); if (SK.hush) SK.hush(false); pass1.stop(); pass2.stop(); KAY.stop(); SFX.bed.stop(); if (typeof whyA !== "undefined") whyA.pause();
   setTimeout(function () { if (!sheet.classList.contains("open")) sheet.hidden = true; }, SK.reduced ? 0 : 460);
   if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
 }

@@ -39,7 +39,7 @@ var OPEN = !!cfg.signup_open || (local && Q.has("open"));
 if (OPEN) document.querySelectorAll("[data-download]").forEach(function (b) {
   b.removeAttribute("data-download");
   var where = b.closest(".nav") ? "nav" : b.closest("#hero") ? "hero" : "steps";
-  b.setAttribute("href", "start/" + location.search); b.setAttribute("data-get", where);
+  b.setAttribute("href", "start/" + location.search); b.setAttribute("data-get", where); b.setAttribute("data-start", "");   /* 910 opens it in place */
   var sp = b.querySelector(":scope > span:not([data-beam-bloom])");
   if (sp) sp.textContent = where === "nav" ? "Get Studio" : "Get Studio for Mac";
   var help = b.parentNode && b.parentNode.querySelector("[data-send-help]");
@@ -1004,7 +1004,8 @@ if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.con
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
 function open(src) {
-  if (!window.SK_PAGE) { location.href = "early-access/" + location.search; return; }   /* a page of its own (build.py PAGES): the site never loads behind it */
+  /* from the site it opens right here, in the same tap (no page load), so the tap that opened it starts the music and Kayla in every
+     browser; a link or a refresh still loads askstudio.ai/early-access/, the page of its own (build.py PAGES, src/shell.html) */
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
@@ -1070,8 +1071,9 @@ window.addEventListener("popstate", function () {
 if (OPEN) document.querySelectorAll("[data-early]").forEach(function (b) {
   var w = b.getAttribute("data-early") || ""; if (w === "band") return;
   b.removeAttribute("data-early"); b.setAttribute("data-get", w);
+  b.setAttribute("data-start", "");   /* 910-start opens the sign-up right here, in the same tap (its sound starts with it) */
   if (b.tagName === "A") b.setAttribute("href", "start/" + location.search);
-  else b.addEventListener("click", function () { location.href = "start/" + location.search; });
+  else b.addEventListener("click", function () { if (!document.getElementById("signup")) location.href = "start/" + location.search; });
   var tw = document.createTreeWalker(b, NodeFilter.SHOW_TEXT), tn;
   while ((tn = tw.nextNode())) if (/get early access/i.test(tn.nodeValue)) tn.nodeValue = tn.nodeValue.replace(/get early access/i, /^plan/.test(w) ? "Start free" : "Get Studio");
 });

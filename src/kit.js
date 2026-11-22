@@ -286,7 +286,7 @@
   SK.hush = function (on) {
     SK.hushed = !!on;
     if (on) {
-      document.querySelectorAll("video").forEach(function (v) { if (v.closest("#early-access")) return; if (!v.paused) { v.pause(); hushedVids.push(v); } });
+      document.querySelectorAll("video").forEach(function (v) { if (v.closest("#early-access, #signup")) return; if (!v.paused) { v.pause(); hushedVids.push(v); } });
     } else {
       hushedVids.splice(0).forEach(function (v) { var r = v.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight && r.width) { var p = v.play(); p && p.catch(function () {}); } });
     }
