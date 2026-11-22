@@ -316,6 +316,12 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 
 /* endless loops rest while their section is more than a screen away (kit.js, restLoops): e = the box, b = ::before, a = ::after */
 [data-sk-rest~="e"], [data-sk-rest~="b"]::before, [data-sk-rest~="a"]::after { animation-play-state: paused !important; }
+/* a beam rests while what it's on is slid away and faded out (the nav, the floating early-access button, Kayla's pill under Pricing or
+   closed): still inside the margin its in-view check allows, so it was spinning out of sight */
+.nav.away [data-beam], .nav.away [data-beam]::before, .nav.away [data-beam]::after,
+.ea-float.away [data-beam], .ea-float.away [data-beam]::before, .ea-float.away [data-beam]::after,
+html.kp-away .kp:not(.playing) [data-beam], html.kp-away .kp:not(.playing) [data-beam]::before, html.kp-away .kp:not(.playing) [data-beam]::after,
+html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .kp [data-beam]::after { animation-play-state: paused !important; }
 
 /* the Ask Claude composer's border beam (Studio_App composer.css). Used by pricing, the creator, the waitlist and .gx buttons., copied verbatim from Studio_App web/product/composer.css ("cx") */
 @property --beam-angle-cx { syntax: "<angle>"; initial-value: 0deg; inherits: true; }
@@ -378,3 +384,23 @@ html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; heig
 .sk-cur .tag { position: absolute; left: 14px; top: 8px; display: flex; align-items: center; gap: 7px; height: 26px; padding: 3px 10px 3px 3px; border-radius: 999px; white-space: nowrap; font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--sand); background: rgba(12, 19, 28, .46); -webkit-backdrop-filter: blur(30px) saturate(150%); backdrop-filter: blur(30px) saturate(150%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); }
 .sk-cur .tag .fc { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
 .sk-cur .tag .fc img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- the lite tier (html.lite: in-app browsers and weak devices, shell.html) ----------
+   A section well off screen isn't styled, laid out or painted until it's near (content-visibility), which is most of what a 27,000 px
+   page asks of a phone's web view on load and on every frame after. Each keeps the height it had last time it was drawn (auto), and
+   starts from about its height on a phone. Not #chat or #anywhere: their footage runs past their edges, which this would clip. The
+   sections with their own overflow clip are clipped at the same edge already. */
+html.lite main > section:not(#hero):not(#chat):not(#anywhere) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
+html.lite.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real (kit.js SK.fullRender) */
+@media (max-width: 700px) {
+  html.lite #shoot { --cis: 2210px; } html.lite #why { --cis: 650px; } html.lite #work { --cis: 1060px; } html.lite #library { --cis: 1780px; }
+  html.lite #viral { --cis: 2430px; } html.lite #notes { --cis: 800px; } html.lite #aesthetic { --cis: 1050px; } html.lite #social { --cis: 2330px; }
+  html.lite #sound { --cis: 1200px; } html.lite #start { --cis: 1840px; } html.lite #views { --cis: 620px; } html.lite #connect { --cis: 910px; }
+  html.lite #creator { --cis: 1690px; } html.lite #pricing { --cis: 5540px; }
+}
+/* the beams turn 30 times a second instead of 60 (each beam's spin is 1.96 s: 59 steps), and their slow colour drift (a 12° hue swing
+   over 12 s) moves in 0.3° steps: Safari's engine only redraws a stepped animation when it steps, so each beam's huge gradients and
+   masks are worked out half as often. The order matches every beam's animation list: the spin, then its fade in or out. */
+html.lite [data-beam][data-active], html.lite [data-beam][data-fading] { animation-timing-function: steps(59), ease !important; }
+html.lite [data-beam][data-active]::before, html.lite [data-beam][data-active]::after, html.lite [data-beam][data-fading]::before, html.lite [data-beam][data-fading]::after,
+html.lite [data-beam] [data-beam-bloom] { animation-timing-function: steps(36) !important; }

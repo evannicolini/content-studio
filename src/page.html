@@ -30,6 +30,11 @@
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<!-- the lite tier (html.lite): in-app browsers (Instagram, Facebook, Messenger, TikTok, Snapchat, LinkedIn, Pinterest, Line) and weak
+     devices (4 GB of memory or less, or 4 cores or fewer that aren't Apple's). Their web view has far less headroom than Safari or Chrome,
+     so the page does the same look with less work: sections far off screen aren't drawn, the beams turn a little less often, sounds are
+     decoded on the first tap. ?lite=1 / ?lite=0 forces it either way (to test). kit.js: SK.lite, SK.inApp. -->
+<script>(function (r) { var ua = navigator.userAgent || "", m = location.search.match(/[?&]lite=([01])/), app = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|FB4A|Messenger|musical_ly|Bytedance|TikTok|Snapchat|LinkedInApp|Pinterest|\bLine\//i.test(ua), weak = (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4 && !/iPhone|iPad|Macintosh/.test(ua)), on = m ? m[1] === "1" : app || weak; window.SK_INAPP = app; window.SK_LITE = on; if (on) r.classList.add("lite"); })(document.documentElement);</script>
 <script>
   /* the sheet opens on its own hash (#early-access, #signup, #paywall); the address keeps ?ref=, ?confirm=, ?pass= and the rest */
   window.SK_PAGE = "{{SLUG}}";

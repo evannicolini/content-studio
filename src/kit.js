@@ -22,24 +22,43 @@
   SK.media = window.SK_MEDIA || {};
   SK.reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   SK.mobile = function () { return matchMedia("(max-width: 700px)").matches; };
+  SK.lite = !!window.SK_LITE; SK.inApp = !!window.SK_INAPP;   /* the lite tier (shell.html, page.html): same look, less work */
   SK.sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
   SK.CLAUDE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg>';
   SK.APPLE = '<svg class="apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>';
 
-  /* ---------- in-view ---------- */
+  /* ---------- in-view ----------
+     One IntersectionObserver per (margin, thresholds), shared by every element that asks with them: there are a few hundred of these
+     calls on the home page, and one observer each made the browser check every one of them on every frame that anything moved (in a
+     slow phone's in-app browser, about 4% of the main thread). An element can be watched more than once (a video: load near, play in
+     view); each watch keeps its own in/out state, and a new watch on an element already watched gets its first report like before. */
+  var viewPools = {};
   SK.onView = function (el, enter, leave, opts) {
     opts = opts || {};
+    if (!el) return { disconnect: function () {} };
     if (!("IntersectionObserver" in window)) { enter && enter(); return { disconnect: function () {} }; }
-    var inside = false;
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        var now = e.isIntersecting && e.intersectionRatio >= (opts.ratio || 0);
-        if (now && !inside) { inside = true; enter && enter(e); if (opts.once) io.disconnect(); }
-        else if (!now && inside) { inside = false; leave && leave(e); }
-      });
-    }, { rootMargin: opts.margin || "0px", threshold: opts.threshold || [0, opts.ratio || 0.01, 0.5] });
-    io.observe(el);
-    return io;
+    var th = opts.threshold || [0, opts.ratio || 0.01, 0.5], margin = opts.margin || "0px", key = margin + "|" + th.join(",");
+    var pool = viewPools[key];
+    if (!pool) {
+      pool = viewPools[key] = { subs: new Map() };
+      pool.io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          var list = pool.subs.get(e.target); if (!list) return;
+          list.slice().forEach(function (r) {
+            var now = e.isIntersecting && e.intersectionRatio >= r.ratio;
+            if (now && !r.inside) { r.inside = true; r.enter && r.enter(e); if (r.once) r.off(); }
+            else if (!now && r.inside) { r.inside = false; r.leave && r.leave(e); }
+          });
+        });
+      }, { rootMargin: margin, threshold: th });
+    }
+    var rec = { enter: enter, leave: leave, ratio: opts.ratio || 0, once: !!opts.once, inside: false };
+    rec.off = function () { var l = pool.subs.get(el); if (!l) return; var i = l.indexOf(rec); if (i >= 0) l.splice(i, 1); if (!l.length) { pool.subs.delete(el); pool.io.unobserve(el); } };
+    var list = pool.subs.get(el);
+    if (list) { list.push(rec); pool.io.unobserve(el); }   /* observed again, it is reported again: the new watch hears where it is */
+    else pool.subs.set(el, [rec]);
+    pool.io.observe(el);
+    return { disconnect: rec.off };
   };
 
   /* ---------- border beam ---------- */
@@ -275,8 +294,22 @@
     SK.onView(v, function () {
       if (SK.reduced || SK.hushed) return;   /* the early-access sheet is over the page: nothing behind it plays */
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
-      var p = v.play(); p && p.catch(function () {});
-    }, function () { v.pause(); }, { ratio: 0.2, threshold: [0, 0.2, 0.6] });
+      vPlay(v);
+    }, function () { vStop(v); }, { ratio: 0.2, threshold: [0, 0.2, 0.6] });
+  }
+  /* lite tier: at most 3 play at once (the shoot section's row of six clip thumbnails is the only place more are on screen); the ones
+     in view first play, the others hold their frame and start as a playing one leaves */
+  var vLive = [], vWait = [], V_MAX = 3;
+  function vPlay(v) {
+    if (SK.lite && vLive.indexOf(v) < 0) { if (vLive.length >= V_MAX) { if (vWait.indexOf(v) < 0) vWait.push(v); return; } vLive.push(v); }
+    var p = v.play(); p && p.catch(function () {});
+  }
+  function vStop(v) {
+    v.pause();
+    var w = vWait.indexOf(v); if (w >= 0) vWait.splice(w, 1);
+    var i = vLive.indexOf(v); if (i < 0) return;
+    vLive.splice(i, 1);
+    if (vWait.length && !SK.hushed) vPlay(vWait.shift());
   }
   SK.videos = function (root) { (root || document).querySelectorAll("video[data-play]").forEach(armVideo); };
   /* SK.hush(true) while a full-screen sheet covers the page: every video behind it pauses and none starts; SK.hush(false) plays the
@@ -615,6 +648,7 @@
     /* every box measured first, then only the values that changed written (it ran every frame of the reveal, measuring and writing in
        turn: a forced layout per box per frame, the main cost of the load-in on a phone) */
     function place() {
+      if (!document.querySelector(".wl.open")) return;   /* no sheet open (the home page): nothing of it is on screen */
       var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
       var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
       var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
@@ -864,10 +898,14 @@
     });
     if (!frames.length) return;
     var queued = false;
+    /* only the frames within a screen of the view are measured each frame (the rest are left as they are, as before): measuring a frame
+       in a section the lite tier hasn't laid out would lay it out */
+    frames.forEach(function (f) { f.near = false; SK.onView(f.el, function () { f.near = true; req(); }, function () { f.near = false; }, { margin: "100% 0px" }); });
     function upd() {
       queued = false;
       var vh = window.innerHeight;
       frames.forEach(function (f) {
+        if (!f.near) return;
         var r = f.el.getBoundingClientRect();
         if (r.bottom < -100 || r.top > vh + 100) return;
         var p = Math.max(0, Math.min(1, (vh - r.top) / (vh * 0.62))), e = 1 - Math.pow(1 - p, 3);
@@ -914,6 +952,17 @@
     });
   }
 
+  /* ---------- SK.fullRender(): before a jump down the page (an in-page link, Download to Pricing, a Pricing link), every section is laid
+     out for real for a moment, so the jump lands where it should: in the lite tier a section not yet drawn stands at about its height
+     (base.css, content-visibility), and a jump past several of them landed up to 600 px off. Each keeps its real height after (auto),
+     so it's needed once; it's one full layout, at the moment of a press. Nothing outside the lite tier. ---------- */
+  SK.fullRender = function () {
+    if (!SK.lite) return;
+    var r = document.documentElement; r.classList.add("cv-full"); void document.body.offsetHeight;
+    clearTimeout(SK.fullRender.t); SK.fullRender.t = setTimeout(function () { r.classList.remove("cv-full"); }, 3000);
+  };
+  if (SK.lite) document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]:not([href="#"]), a[href^="./#"], [data-vo-play]')) SK.fullRender(); }, true);
+
   /* ---------- start ---------- */
   SK.start = function () {
     document.documentElement.classList.remove("no-js");
@@ -927,6 +976,11 @@
       var r = el.getAttribute("data-beam-radius");
       SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });
     });
+    /* the beams written straight into a section's HTML (data-active from the start: Pricing's, the creator's) spin only while on screen,
+       like every other beam; paused, not stopped, so they never fade in again */
+    document.querySelectorAll('main [data-beam="cx"][data-active]:not([data-paused]):not(.gx-beam)').forEach(function (el) {
+      SK.onView(el, function () { el.removeAttribute("data-paused"); }, function () { el.setAttribute("data-paused", ""); }, { margin: "60px" });
+    });
     sendLabels();
     var mq = matchMedia("(max-width: 700px)");
     if (mq.addEventListener) mq.addEventListener("change", sendLabels); else if (mq.addListener) mq.addListener(sendLabels);
@@ -938,7 +992,7 @@
         e.preventDefault();
         if (SK.dl && !SK.mobile()) { window.location.href = SK.dl; return; }
         var pr = document.getElementById("pricing");
-        if (pr) { pr.scrollIntoView({ behavior: SK.reduced ? "auto" : "smooth", block: "start" }); setTimeout(function () { var i = pr.querySelector("input[data-code]"); if (i && !SK.mobile()) i.focus({ preventScroll: true }); }, 900); }
+        if (pr) { SK.fullRender(); pr.scrollIntoView({ behavior: SK.reduced ? "auto" : "smooth", block: "start" }); setTimeout(function () { var i = pr.querySelector("input[data-code]"); if (i && !SK.mobile()) i.focus({ preventScroll: true }); }, 900); }
         return;
       }
       var f = e.target.closest("[data-film]");
@@ -946,11 +1000,12 @@
     });
     var nav = document.querySelector(".nav");
     var kpEl = document.querySelector(".kp");
-    if (nav || kpEl) { var on = function () { var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7);
+    /* once a frame at most: it hit-tests the page under Kayla's pill (elementsFromPoint), which lays the page out */
+    if (nav || kpEl) { var onQ = 0, on = function () { onQ = 0; var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7);
       if (kpEl) { var pr = kpEl.getBoundingClientRect(), stack = document.elementsFromPoint ? document.elementsFromPoint(window.innerWidth / 2, Math.min(window.innerHeight - 2, pr.bottom - 30)) : [], hit = null;
         for (var hi = 0; hi < stack.length; hi++) { if (!kpEl.contains(stack[hi])) { hit = stack[hi]; break; } }
         var sec = hit && hit.closest ? hit.closest("section, footer") : null, fr = hit && hit.closest ? hit.closest(".frame") : null;
-        kpEl.classList.toggle("light", !!(sec && sec.classList.contains("on-paper") && !(fr && fr !== sec))); } }; on(); window.addEventListener("scroll", on, { passive: true }); }
+        kpEl.classList.toggle("light", !!(sec && sec.classList.contains("on-paper") && !(fr && fr !== sec))); } }; on(); window.addEventListener("scroll", function () { if (!onQ) onQ = requestAnimationFrame(on); }, { passive: true }); }
     /* the nav slides away while scrolling down and returns only on a deliberate scroll up: the upward travel has to add up to
        14% of the screen (at least 110px) with no downward movement in between. Always shown near the top. */
     if (nav) (function () {
@@ -982,7 +1037,7 @@
   function restLoops() {
     if (!("IntersectionObserver" in window) || !document.documentElement.getAnimations) return;
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) wakeLoops(e.target); else restSection(e.target); });
+      es.forEach(function (e) { e.target._far = !e.isIntersecting; if (e.isIntersecting) wakeLoops(e.target); else restSection(e.target); });
     }, { rootMargin: "100% 0px" });
     document.querySelectorAll("main > section:not(#hero)").forEach(function (s) { io.observe(s); });
     /* a jump (a link, a restored scroll) can land on a resting section before the observer reports it: wake it in the same frame */
@@ -1005,6 +1060,9 @@
       if (!b) boxes.push((b = { t: t, k: k, loop: false, once: false }));
       if (ef.getTiming().iterations === Infinity) b.loop = true; else b.once = true;
     });
+    /* a loop that is still running a one-off with it (a beam's fade-in: every beam, while the page loads) is left for now and looked at
+       again a moment later, if the section is still far away (before, it was left running for good) */
+    if (boxes.some(function (b) { return b.loop && b.once; }) && !sec._restAgain) sec._restAgain = setTimeout(function () { sec._restAgain = 0; if (sec._far) restSection(sec); }, 1500);
     boxes.forEach(function (b) {
       if (!b.loop || b.once) return;
       var v = (b.t.getAttribute("data-sk-rest") || "").split(" ");
@@ -1068,8 +1126,8 @@
     function check() {
       var h = h0(), f = isField(document.activeElement);
       if (!f && h > full) { full = h; root.style.setProperty("--lvh", Math.round(full) + "px"); }
-      var up = f && h < full - 150;
-      sheet.style.setProperty("--kbh", up ? Math.round(full - h) + "px" : "0px");
+      var up = f && h < full - 150, kbh = up ? Math.round(full - h) + "px" : "0px";
+      if (kbh !== check.kbh) { check.kbh = kbh; sheet.style.setProperty("--kbh", kbh); }   /* only when it changes: every resize wrote it, a style pass each */
       if (up !== on) { on = up; sheet.classList.toggle("kb", on); if (!on) unpan(); if (o.change) o.change(on); }
       if (on) keep();
     }
@@ -1077,7 +1135,7 @@
     window.addEventListener("resize", check);
     sheet.addEventListener("focusin", function (e) {
       if (!isField(e.target)) return;
-      sheet.style.setProperty("--kbh", Math.round(full * .45) + "px");   /* room before the keyboard arrives, so the field can rise now */
+      check.kbh = Math.round(full * .45) + "px"; sheet.style.setProperty("--kbh", check.kbh);   /* room before the keyboard arrives, so the field can rise now */
       keep(full * .45);
       [60, 350, 800, 1400].forEach(function (t) { setTimeout(check, t); });
     });

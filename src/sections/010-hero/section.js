@@ -114,7 +114,8 @@ function syncGlass() {
 var glassT = 0;
 function glassFor(ms) { var end = performance.now() + ms; (function f() { syncGlass(); if (performance.now() < end) requestAnimationFrame(f); })(); }
 SK.onView(hero, function () { syncGlass(); clearInterval(glassT); glassT = setInterval(syncGlass, 1000); }, function () { clearInterval(glassT); });
-window.addEventListener("resize", function () { requestAnimationFrame(syncGlass); });
+var glassQ = 0;
+window.addEventListener("resize", function () { if (!glassQ) glassQ = requestAnimationFrame(function () { glassQ = 0; syncGlass(); }); });
 window.addEventListener("load", function () { glassFor(5200); });
 glassFor(5200);
 
@@ -200,6 +201,7 @@ function parallax() {
   }
   measure();
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", function () { measure(); apply(cur); onScroll(); });
+  var rzQ = 0;   /* once a frame: measure() writes and then reads the layout, so every resize event (Instagram's bars send a run of them) cost a layout */
+  window.addEventListener("resize", function () { if (!rzQ) rzQ = requestAnimationFrame(function () { rzQ = 0; measure(); apply(cur); onScroll(); }); });
   onScroll();
 }

@@ -54,7 +54,7 @@ if (shared) {
     unlocked(info, false);
   }).catch(function () {}).then(function () {
     clean();
-    setTimeout(function () { root.scrollIntoView({ behavior: "auto", block: "start" }); }, 300);
+    setTimeout(function () { SK.fullRender && SK.fullRender(); root.scrollIntoView({ behavior: "auto", block: "start" }); }, 300);
   });
 } else if (saved) tryCode(saved).then(function (info) { unlocked(info, false); }).catch(function () {});
 
@@ -144,7 +144,9 @@ function paintWave(c) {
   var clamp = function (x) { return Math.min(1, Math.max(0, x)); };
   function paint() {
     queued = false;
-    var vh = window.innerHeight || 1;
+    var vh = window.innerHeight || 1, sr = root.getBoundingClientRect();
+    if (sr.bottom < -vh || sr.top > vh * 2) return;   /* Pricing a screen or more away: nothing to fade, and nothing in it is measured
+                                                         (in the lite tier it isn't laid out at all until it's near: measuring would) */
     keys.forEach(function (k, i) {
       var els = groups[k].filter(function (e) { return e.offsetParent !== null; });
       if (!els.length) return;

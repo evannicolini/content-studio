@@ -101,14 +101,20 @@ var SFX = (function () {
   var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
-  try { if (AC) ctx = new AC(); } catch (e) {}
+  /* only on the sheet's own page: on the home page the sheet never opens (open() goes to its page), and loading its sounds there fetched
+     5.6 MB and decoded every line and the music twice (the waitlist's and the sign-up's) into memory, for nothing */
+  try { if (AC && window.SK_PAGE) ctx = new AC(); } catch (e) {}
   /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
      beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
   var runFns = [];
   function watch(c) { if (c && c.addEventListener) c.addEventListener("statechange", function () { if (c === ctx && c.state === "running") runFns.forEach(function (fn) { try { fn(); } catch (e) {} }); }); }
   watch(ctx);
   var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
-  function decode(n) { if (!ctx || !raw[n]) return; var c = ctx; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
+  /* lite tier (in-app browsers, weak devices): the music bed (97 s, about 34 MB once decoded) is fetched now but decoded only when
+     sound can first play (the first tap), so a web view short on memory isn't holding it from the start; it fades in a beat later */
+  var dec = {}, c0 = function () { return ctx && ctx.state; };
+  runFns.push(function () { if (SK.lite) decode("bed"); });   /* the first tap: now it's decoded (and starts, if it was asked for) */
+  function decode(n) { if (!ctx || !raw[n]) return; if (n === "bed" && SK.lite && c0() !== "running") return; var c = ctx; if (dec[n] === c) return; dec[n] = c; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
   var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
@@ -121,7 +127,7 @@ var SFX = (function () {
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
     watch(ctx);
-    buf = {}; bed.reset(); Object.keys(raw).forEach(decode); if (playing) bedWant = true;   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
+    buf = {}; bed.reset(); if (playing) bedWant = true; Object.keys(raw).forEach(decode);   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
   }
   var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
   function wake() { keeper.wake(); }
@@ -157,7 +163,7 @@ var SFX = (function () {
     return {
       start: function () {
         if (!SOUND || !ctx || src) return;
-        if (!buf.bed) { bedWant = true; return; }
+        if (!buf.bed) { bedWant = true; decode("bed"); return; }
         bedWant = false;
         g = ctx.createGain(); g.gain.value = 0; g.connect(ctx.destination);
         src = ctx.createBufferSource(); src.buffer = buf.bed; src.loop = true; src.loopStart = 0; src.loopEnd = buf.bed.duration; src.connect(g); src.start();

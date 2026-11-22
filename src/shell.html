@@ -37,6 +37,11 @@
   var extra = (m[2] || "").replace(/^[?&]/, ""), q = l.search + (extra ? (l.search ? "&" : "?") + extra : "");
   l.replace((m[1] === "signup" || m[1] === "paywall" ? "start/" : "early-access/") + q + "#" + (m[1] === "early" ? "early-access" : m[1]));
 })(location);</script>
+<!-- the lite tier (html.lite): in-app browsers (Instagram, Facebook, Messenger, TikTok, Snapchat, LinkedIn, Pinterest, Line) and weak
+     devices (4 GB of memory or less, or 4 cores or fewer that aren't Apple's). Their web view has far less headroom than Safari or Chrome,
+     so the page does the same look with less work: sections far off screen aren't drawn, the beams turn a little less often, sounds are
+     decoded on the first tap. ?lite=1 / ?lite=0 forces it either way (to test). kit.js: SK.lite, SK.inApp. -->
+<script>(function (r) { var ua = navigator.userAgent || "", m = location.search.match(/[?&]lite=([01])/), app = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|FB4A|Messenger|musical_ly|Bytedance|TikTok|Snapchat|LinkedInApp|Pinterest|\bLine\//i.test(ua), weak = (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4 && !/iPhone|iPad|Macintosh/.test(ua)), on = m ? m[1] === "1" : app || weak; window.SK_INAPP = app; window.SK_LITE = on; if (on) r.classList.add("lite"); })(document.documentElement);</script>
 <script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
