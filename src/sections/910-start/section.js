@@ -45,6 +45,11 @@ var SFX = (function () {
   /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: 2.8, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   try { if (AC) ctx = new AC(); } catch (e) {}
+  /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
+     beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
+  var runFns = [];
+  function watch(c) { if (c && c.addEventListener) c.addEventListener("statechange", function () { if (c === ctx && c.state === "running") runFns.forEach(function (fn) { try { fn(); } catch (e) {} }); }); }
+  watch(ctx);
   var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
   function decode(n) { if (!ctx || !raw[n]) return; var c = ctx; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
@@ -55,6 +60,7 @@ var SFX = (function () {
   /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
+    watch(ctx);
     buf = {}; bed.reset(); Object.keys(raw).forEach(decode); if (playing) bedWant = true;   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
   }
   var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
@@ -100,7 +106,7 @@ var SFX = (function () {
       stop: function (sec) { if (!src) return; var s0 = src; to(0, sec == null ? 1.2 : sec); src = null; setTimeout(function () { try { s0.stop(); } catch (e) {} }, ((sec == null ? 1.2 : sec) + .1) * 1000); }
     };
   })();
-  return { wake: wake, play: play, voice: voice, live: live, bed: bed, has: function (k) { return !!buf["vo:" + k]; } };
+  return { wake: wake, play: play, voice: voice, live: live, bed: bed, state: function () { return ctx ? ctx.state : "none"; }, onRun: function (fn) { runFns.push(fn); }, has: function (k) { return !!buf["vo:" + k]; } };
 })();
 
 /* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
@@ -182,7 +188,9 @@ var KAY = (function () {
   /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
   function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
   function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
-  return { say: say, stop: stop, react: react, line: line, text: function (k) { return LINES[k]; } };
+  /* sound became allowed without a tap in the sheet (SFX.onRun): a line she was holding plays now */
+  function retry() { if (blocked && cur && SOUND) { blocked = false; say([cur].concat(queue)); } }
+  return { say: say, stop: stop, react: react, line: line, retry: retry, text: function (k) { return LINES[k]; } };
 })();
 var sndB = $("[data-st-snd]");
 function setSound(on) {
@@ -194,6 +202,13 @@ sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.
 var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
 sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
+/* the music never depends on where the first tap or key lands: any one, anywhere on the page, makes sure it's playing while the
+   sheet is open; so does the context starting by itself, and coming back to the page (back button, bfcache) */
+function bedNow() { if (SOUND && sheet.classList.contains("open")) SFX.bed.start(); }
+["pointerdown", "keydown", "touchend", "click"].forEach(function (t) { document.addEventListener(t, bedNow, true); });
+window.addEventListener("pageshow", function () { SFX.wake(); bedNow(); });
+SFX.onRun(function () { bedNow(); KAY.retry(); });
+if (local) window.__stSFX = SFX;   /* this Mac: the sound tests reach it */
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
 /* ---------- what we know ---------- */
@@ -1124,7 +1139,7 @@ function open() {
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = frostOf(sky.getAttribute("src")); }); }
-  SFX.wake(); if (SFX.live()) SFX.bed.start();
+  SFX.wake(); SFX.bed.start();   /* always: on a context that isn't running yet it waits silently and fades in on the first tap or key */
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();

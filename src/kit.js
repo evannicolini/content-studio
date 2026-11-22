@@ -712,11 +712,12 @@
       };
       var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
       a.addEventListener("play", function () { started = true; off(); });
-      /* she can be closed (the x on her pill), and stays closed on later visits until someone asks for her sound again (Enter site) */
+      /* she can be closed (the x on her pill), and stays closed for the rest of this visit (this tab); a later visit hears her again.
+         (It used to be every later visit, undone by Enter site; with that gone, nothing would ever bring her back. The old key is cleared.) */
       var OFFK = "studio-kayla-off", root = document.documentElement, isOff = false;
-      try { isOff = localStorage.getItem(OFFK) === "1"; } catch (e) {}
-      SK.kaylaOff = function () { audios.forEach(function (o) { o.pause(); }); root.classList.add("kp-off"); started = true; off(); try { localStorage.setItem(OFFK, "1"); } catch (e) {} };
-      SK.kaylaOn = function () { root.classList.remove("kp-off"); try { localStorage.removeItem(OFFK); } catch (e) {} };
+      try { localStorage.removeItem(OFFK); isOff = sessionStorage.getItem(OFFK) === "1"; } catch (e) {}
+      SK.kaylaOff = function () { audios.forEach(function (o) { o.pause(); }); root.classList.add("kp-off"); started = true; off(); try { sessionStorage.setItem(OFFK, "1"); } catch (e) {} };
+      SK.kaylaOn = function () { root.classList.remove("kp-off"); try { sessionStorage.removeItem(OFFK); } catch (e) {} };
       var kx = kp.querySelector("[data-kp-x]");
       if (kx) kx.addEventListener("click", function (e) { e.stopPropagation(); SK.kaylaOff(); });
       if (isOff) { root.classList.add("kp-off"); started = true; }
