@@ -1,7 +1,7 @@
 # Studio Privacy Policy
 
 **Effective date:** November 20, 2026
-**Last updated:** November 21, 2026
+**Last updated:** November 22, 2026
 
 ## The short version
 
@@ -25,7 +25,7 @@ This Privacy Policy explains how Nicolini Productions LLC, a California company 
 | Category | Examples | When |
 | --- | --- | --- |
 | Account | Name, email address, sign-in method (Google, Apple or email code), the account identifier from Google or Apple | Creating an account |
-| Waitlist | First and last name, email, phone number, role, number of brands, how you use Claude, referral code | Joining the waitlist |
+| Waitlist | First and last name, email, phone number, role, number of brands, your Instagram handle and website if you add them, how you use Claude, referral code | Joining the waitlist |
 | Billing | Plan, seat count, billing status and history, billing country and postal code, the last four digits and brand of your card (shown to us by Stripe) | Starting a trial or subscription |
 | Communications | Messages and attachments you send us, survey answers, feedback | Contacting us |
 | SMS | Mobile number, your SMS consent record, opt-out status | Opting in to texts |
@@ -142,7 +142,7 @@ We may keep information longer where the law requires it, or to resolve disputes
 
 This section is for residents of California and other US states with consumer privacy laws (such as Colorado, Connecticut, Oregon, Texas and Virginia). It supplements the rest of this policy.
 
-**9.1 Categories collected in the past 12 months.** Identifiers (name, email, phone, IP address, device ID); customer records (billing details); commercial information (plan and purchase history); internet and network activity (Site and app usage, diagnostics); approximate geolocation (from IP address or billing country); professional information (role, number of brands); and inferences (waitlist rank, likely plan fit). We collect them from the sources and for the purposes in Sections 2 and 4, and disclose them for business purposes to the processors in Section 7.1. We don't collect sensitive personal information for the purpose of inferring characteristics about you.
+**9.1 Categories collected in the past 12 months.** Identifiers (name, email, phone, IP address, device ID); customer records (billing details); commercial information (plan and purchase history); internet and network activity (Site and app usage, diagnostics); approximate geolocation (from IP address or billing country); professional information (role, number of brands, and the Instagram handle and website you choose to share); and inferences (waitlist rank, likely plan fit). We collect them from the sources and for the purposes in Sections 2 and 4, and disclose them for business purposes to the processors in Section 7.1. We don't collect sensitive personal information for the purpose of inferring characteristics about you.
 
 **9.2 No sale or sharing.** **We do not sell personal information, and we do not "share" it for cross-context behavioural advertising,** as those terms are defined in California law. We don't knowingly sell or share the personal information of anyone under 16. If this changes (for example, if we add advertising pixels to the Site), we will update this policy beforehand, add a **"Do Not Sell or Share My Personal Information"** link, and honour opt-outs, including browser **Global Privacy Control (GPC)** signals.
 

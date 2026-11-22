@@ -156,6 +156,28 @@ async function rateOk(env, who, win = int(env.RATE_WINDOW, 600), max = int(env.R
   return true;
 }
 
+// Where their work lives, cleaned the way the page does it (src/sections/900-early): a handle with no @, link or trailing slash,
+// letters, numbers, periods and underscores; a website as https://host/path (brand.com is taken as https://brand.com).
+// Anything that can't be one is dropped, never refused: both are optional.
+export function igHandle(v) {
+  let h = typeof v === "string" ? v.trim().slice(0, 200) : "";
+  const m = h.match(/^(?:https?:\/\/)?(?:www\.|m\.)?(?:instagram\.com|instagr\.am)\/(?:_u\/)?([^/?#\s]+)/i);
+  if (m) h = m[1];
+  h = h.replace(/^@+/, "").replace(/\/+$/, "").toLowerCase();
+  return /^(?!.*\.\.)(?!.*\.$)[a-z0-9._]{1,30}$/.test(h) ? h : "";
+}
+export function siteUrl(v) {
+  let s = typeof v === "string" ? v.trim().slice(0, 400) : "";
+  if (!s) return "";
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(s)) s = "https://" + s.replace(/^\/+/, "");
+  try {
+    const u = new URL(s), h = u.hostname.toLowerCase();
+    if (!/^https?:$/.test(u.protocol) || u.username || u.password || !/^([a-z0-9-]+\.)+([a-z]{2,}|xn--[a-z0-9-]+)$/.test(h)) return "";
+    const out = u.protocol + "//" + h + (u.port ? ":" + u.port : "") + (u.pathname === "/" ? "" : u.pathname.replace(/\/+$/, "")) + u.search;
+    return out.length <= 200 ? out : "";
+  } catch { return ""; }
+}
+
 function readForm(b) {
   const email = text(b.email, 300).toLowerCase();
   if (!email) return { error: "Add your email address." };
@@ -169,6 +191,7 @@ function readForm(b) {
   const f = {
     email, first, last, phone, cc, sms: e164(phone, cc), roles,
     brands: text(b.brands, 300), claude: text(b.claude, 120), source: text(b.source, 120), ref: cleanCode(b.ref),
+    instagram: igHandle(b.instagram), website: siteUrl(b.website),
     smsVersion: text(b.sms_consent_version, 40), terms: text(b.terms_version, 40),
   };
   // Two separate opt-ins, each kept only with a number that can take texts. The one v1 box (sms_consent) covered both.
@@ -211,11 +234,12 @@ async function join(request, env, ctx) {
         const r = await env.DB.prepare(
           `INSERT INTO signups (email, first, last, phone, cc, sms, roles, brands, claude, source, code, referred_by, ip, created_at, updated_at,
              sms_consent, sms_consent_at, sms_consent_text, sms_consent_version, terms_version, user_agent, consent_ip, consent_country,
-             sms_notify, sms_notify_at, sms_notify_text, sms_marketing, sms_marketing_at, sms_marketing_text, pass_token)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
+             sms_notify, sms_notify_at, sms_notify_text, sms_marketing, sms_marketing_at, sms_marketing_text, pass_token, instagram, website)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING`
         ).bind(f.email, f.first, f.last, f.phone, f.cc, f.sms, f.roles, f.brands, f.claude, f.source, newCode(), referrer ? referrer.code : null, who, t, t,
           f.smsOk ? 1 : 0, f.smsOk ? t : null, f.smsOk ? f.smsText : null, f.smsOk ? f.smsVersion : null, f.terms || null, ua, f.smsOk ? cip : null, f.smsOk ? ccountry : null,
-          f.notify ? 1 : 0, f.notify ? t : null, f.notify ? f.notifyText : null, f.marketing ? 1 : 0, f.marketing ? t : null, f.marketing ? f.marketingText : null, passToken()).run();
+          f.notify ? 1 : 0, f.notify ? t : null, f.notify ? f.notifyText : null, f.marketing ? 1 : 0, f.marketing ? t : null, f.marketing ? f.marketingText : null, passToken(),
+          f.instagram || null, f.website || null).run();
         if (r.meta.changes) added = await bySeq(env, r.meta.last_row_id);
         else raced = true;                                             // the same email landed a moment ago: update it below
       } catch (e) {
@@ -231,10 +255,11 @@ async function join(request, env, ctx) {
   // The same email again: new details, the same place, code and referrer. A ref on a second sign-up counts for nothing.
   const keepPhone = !f.phone;
   await env.DB.prepare(
-    `UPDATE signups SET first = ?, last = ?, phone = ?, cc = ?, sms = ?, roles = ?, brands = ?, claude = ?, source = ?,
+    `UPDATE signups SET first = ?, last = ?, phone = ?, cc = ?, sms = ?, roles = ?, brands = ?, claude = ?, source = ?, instagram = ?, website = ?,
      brevo_synced = 0, updated_at = ? WHERE seq = ?`
   ).bind(f.first, f.last, keepPhone ? row.phone : f.phone, keepPhone ? row.cc : f.cc, keepPhone ? row.sms : f.sms,
-    f.roles || row.roles, f.brands || row.brands, f.claude || row.claude, f.source || row.source, Math.max(t, row.updated_at + 1), row.seq).run();
+    f.roles || row.roles, f.brands || row.brands, f.claude || row.claude, f.source || row.source, f.instagram || row.instagram || null, f.website || row.website || null,
+    Math.max(t, row.updated_at + 1), row.seq).run();   // a blank Instagram or website on a repeat sign-up keeps the one we had
   // A new tick is recorded with its own time and words; an unticked box on a repeat sign-up is not an opt-out (STOP is).
   if (f.smsOk) await env.DB.prepare("UPDATE signups SET sms_consent = 1, sms_consent_at = ?, sms_consent_text = ?, sms_consent_version = ?, user_agent = ?, consent_ip = ?, consent_country = ? WHERE seq = ?")
     .bind(t, f.smsText, f.smsVersion, ua, cip, ccountry, row.seq).run();
@@ -589,7 +614,7 @@ function csvCell(v) {
   if (/^[=+\-@\t\r]/.test(s) && !/^\+?[\d ()-]+$/.test(s)) s = "'" + s;   // keep spreadsheets from running a cell as a formula
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
-const COLUMNS = ["seq", "position", "front", "joined", "confirmed_at", "confirmed_via", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "sms_notify", "sms_notify_at", "sms_marketing", "sms_marketing_at", "consent_ip", "consent_country", "terms_version", "roles", "brands", "claude", "source",
+const COLUMNS = ["seq", "position", "front", "joined", "confirmed_at", "confirmed_via", "email", "first", "last", "phone", "cc", "sms", "sms_consent", "sms_consent_at", "sms_consent_version", "sms_notify", "sms_notify_at", "sms_marketing", "sms_marketing_at", "consent_ip", "consent_country", "terms_version", "roles", "brands", "claude", "instagram", "website", "source",
   "code", "referred_by", "referrals", "ip", "brevo_synced", "brevo_error"];
 async function exportCsv(env) {
   const { results } = await env.DB.prepare(

@@ -659,12 +659,12 @@ function setStep(n, quiet, fromHist) {
 /* the answers so far, kept for this tab: a reload, or a swipe back to the page and forward again, picks up where it was */
 var DRAFT = "studio-early-draft";
 function saveDraft() {
-  try { sessionStorage.setItem(DRAFT, JSON.stringify({ at: at, ans: ans, f: { first: val("first"), last: val("last"), other: val("other"), email: val("email"), phone: val("phone"), cc: sel.value, n: form.elements.sms_notify.checked, m: form.elements.sms_marketing.checked } })); } catch (e) {}
+  try { sessionStorage.setItem(DRAFT, JSON.stringify({ at: at, ans: ans, f: { first: val("first"), last: val("last"), other: val("other"), instagram: val("instagram"), website: val("website"), email: val("email"), phone: val("phone"), cc: sel.value, n: form.elements.sms_notify.checked, m: form.elements.sms_marketing.checked } })); } catch (e) {}
 }
 function loadDraft() {
   try {
     var d = JSON.parse(sessionStorage.getItem(DRAFT) || "null"); if (!d || !d.f) return 0;
-    ["first", "last", "other", "email", "phone"].forEach(function (k) { form.elements[k].value = d.f[k] || ""; });
+    ["first", "last", "other", "instagram", "website", "email", "phone"].forEach(function (k) { form.elements[k].value = d.f[k] || ""; });
     if (d.f.cc) { sel.value = d.f.cc; showCC(); }
     form.elements.sms_notify.checked = !!d.f.n; form.elements.sms_marketing.checked = !!d.f.m;
     ans = { roles: [].concat((d.ans && d.ans.roles) || []), brands: (d.ans && d.ans.brands) || "", claude: (d.ans && d.ans.claude) || "" };
@@ -681,7 +681,7 @@ function loadDraft() {
 function clearDraft() { try { sessionStorage.removeItem(DRAFT); } catch (e) {} }
 /* each empty field types its own example, left to right with a caret, when its step comes up; focus stops it where a normal
    placeholder would be, and any text hides it */
-var TY = { first: "First name", last: "Last name", other: "Photographer, coach, musician…", email: "you@studio.com", phone: "(555) 123-4567" };
+var TY = { first: "First name", last: "Last name", other: "Photographer, coach, musician…", instagram: "yourbrand", website: "yourbrand.com", email: "you@studio.com", phone: "(555) 123-4567" };
 var tyTok = 0;
 form.querySelectorAll("input").forEach(function (inp) {
   var t = TY[inp.name], box = inp.closest(".wl-box"); if (!t || !box) return;
@@ -742,7 +742,36 @@ function focusStep(delay) {
 function advance() {
   if (busy || at >= ORDER.length - 1 || ORDER[at] === "you" || ORDER[at] === "check") return;   /* those two move on only by sending */
   if (!ready(at)) { if (ORDER[at] === "name") checkName(); return; }
+  if (ORDER[at] === "brands" && !checkWork()) return;
   busy = true; setStep(at + 1); setTimeout(function () { busy = false; }, 450);
+}
+/* where their work lives: both optional. Instagram: a handle (a pasted instagram.com/… link, an @, a trailing slash all come off);
+   website: brand.com is taken as https://brand.com. Only something that can't be either is stopped, with a word on why. */
+function igHandle(v) {
+  v = String(v || "").trim();
+  var m = v.match(/^(?:https?:\/\/)?(?:www\.|m\.)?(?:instagram\.com|instagr\.am)\/(?:_u\/)?([^\/?#\s]+)/i);
+  if (m) v = m[1];
+  return v.replace(/^@+/, "").replace(/\/+$/, "").toLowerCase();
+}
+var IG_OK = /^(?!.*\.\.)(?!.*\.$)[a-z0-9._]{1,30}$/;
+function siteUrl(v) {
+  v = String(v || "").trim(); if (!v) return "";
+  if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) v = "https://" + v.replace(/^\/+/, "");
+  try {
+    var u = new URL(v), h = u.hostname.toLowerCase();
+    if (!/^https?:$/.test(u.protocol) || u.username || u.password || !/^([a-z0-9-]+\.)+([a-z]{2,}|xn--[a-z0-9-]+)$/.test(h)) return null;
+    var out = u.protocol + "//" + h + (u.port ? ":" + u.port : "") + (u.pathname === "/" ? "" : u.pathname.replace(/\/+$/, "")) + u.search;
+    return out.length <= 200 ? out : null;
+  } catch (e) { return null; }
+}
+function checkWork() {
+  var ig = form.elements.instagram, site = form.elements.website, bad = [], msg = "";
+  var h = igHandle(ig.value); if (h !== ig.value) { ig.value = h; ig.dispatchEvent(new Event("change")); }
+  if (h && !IG_OK.test(h)) { bad.push("instagram"); msg = "That Instagram handle doesn't look right. It's letters, numbers, periods and underscores."; }
+  if (site.value.trim() && siteUrl(site.value) === null) { bad.push("website"); msg = msg || "That website doesn't look right. Try something like yourbrand.com."; }
+  mark(bad, msg);
+  if (bad.length) form.elements[bad[0]].focus();
+  return !bad.length;
 }
 function checkName() {
   var bad = [];
@@ -770,7 +799,7 @@ steps.forEach(function (s, n) {
       }
       next.disabled = !ready(at); saveDraft();
       if (q === "roles") drawHome(); else if (q === "brands") drawBrands(); else if (q === "claude") drawClaude();
-      if (!multi) setTimeout(advance, SK.reduced ? 60 : 520); /* one answer: on to the next, once it has landed on the right */
+      if (!multi && q !== "brands") setTimeout(advance, SK.reduced ? 60 : 520); /* one answer: on to the next, once it has landed on the right (brands waits: its Instagram and website are under it) */
     });
   });
 });
@@ -790,7 +819,18 @@ function mark(names, msg) {
   var errEl = steps[at].querySelector(".wl-err"); if (errEl) errEl.textContent = msg || "";
 }
 inputs.forEach(function (inp) {
-  inp.addEventListener("input", function () {
+  /* Instagram and website: the value is never rewritten while someone types (an iPhone's keyboard loses its place when it is).
+     A pasted instagram.com link becomes the handle right after the paste; an @ typed first isn't put in (the @ is drawn in front);
+     the rest is tidied when they leave the field, and checked on Continue (checkWork). */
+  if (inp.name === "instagram") {
+    inp.addEventListener("beforeinput", function (e) { if (e.inputType === "insertText" && e.data && /^@+$/.test(e.data) && (inp.selectionStart || 0) === 0) e.preventDefault(); });
+    inp.addEventListener("paste", function () { setTimeout(function () { var h = igHandle(inp.value); if (h !== inp.value) { inp.value = h; inp.dispatchEvent(new Event("input")); } }, 0); });
+  }
+  if (inp.name === "instagram" || inp.name === "website") inp.addEventListener("change", function () {
+    var v = inp.name === "instagram" ? igHandle(inp.value) : inp.value.trim(); if (v !== inp.value) inp.value = v;
+    saveDraft();
+  });
+  inp.addEventListener("input", function (e) {
     var f = inp.closest(".wl-f");
     if (f.classList.contains("bad")) { f.classList.remove("bad"); if (!form.querySelector(".wl-q.on .wl-f.bad")) { var e = steps[at].querySelector(".wl-err"); if (e) e.textContent = ""; } }
     if (inp.name === "first" || inp.name === "last") { drawHome(true); clearTimeout(inp._t); inp._t = setTimeout(function () { drawHome(); }, 900); personal(); }
@@ -862,7 +902,7 @@ form.addEventListener("submit", function (e) {
   mark(bad, msg);
   if (bad.length) { form.elements[bad[0]].focus(); return; }
   var intl = /^\s*\+/.test(phone), roles = ans.roles.map(function (r) { return r === "Something else" && val("other") ? "Something else: " + val("other") : r; });
-  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
+  var d = { first: val("first"), last: val("last"), email: email, phone: intl ? "+" + digits : digits.replace(/^0+/, ""), cc: intl ? "" : c[1], roles: roles, brands: ans.brands, claude: ans.claude, instagram: IG_OK.test(igHandle(val("instagram"))) ? igHandle(val("instagram")) : "", website: siteUrl(val("website")) || "", source: (local ? "hub-test · " : "") + SRC + " · " + from, ref: REF, hp: val("company"),
     sms_notify: nOk, sms_notify_text: nOk ? smsWords("[data-wl-smsn]") : "", sms_marketing: mOk, sms_marketing_text: mOk ? smsWords("[data-wl-smsm]") : "",
     sms_consent_version: "waitlist-sms-v2", terms_version: "waitlist-email-v2" };
   go.classList.add("busy"); SFX.play("send");
@@ -996,7 +1036,7 @@ function confirmLink() {
   });
 }
 
-SK.keepTyping(form.querySelectorAll('input[name="first"], input[name="last"], input[name="email"], input[name="phone"], input[name="other"]'));   /* a field that loses focus to nothing mid-typing takes it back */
+SK.keepTyping(form.querySelectorAll('input[name="first"], input[name="last"], input[name="email"], input[name="phone"], input[name="other"], input[name="instagram"], input[name="website"]'));   /* a field that loses focus to nothing mid-typing takes it back */
 /* ---------- the keyboard on a phone (SK.keyboard): the bar steps aside only while the keyboard is really up ---------- */
 var KBD = !fine;
 if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"); } });

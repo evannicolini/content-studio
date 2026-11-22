@@ -48,7 +48,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="early-access/page.css?v=03ead5b0">
+<link rel="stylesheet" href="early-access/page.css?v=105f1082">
 <style>html.sk-page { background: #1b1a19; } html.sk-page body { background: transparent; }</style>
 </head>
 <body>
@@ -138,6 +138,14 @@
               <button type="button" class="wl-opt big" data-v="2-3" aria-pressed="false"><b>2–3</b><small>brands</small></button>
               <button type="button" class="wl-opt big" data-v="4+" aria-pressed="false"><b>4+</b><small>brands</small></button>
             </div>
+            <!-- where their work lives (Evan): both optional, never in the way of Continue. A pasted instagram.com link becomes the handle;
+                 brand.com becomes https://brand.com -->
+            <p class="wl-wk" id="wl-wk">Where can we see your work? <span class="wl-help">Optional</span></p>
+            <div class="wl-fields wl-work" role="group" aria-labelledby="wl-wk">
+              <label class="wl-f wl-ig"><span>Instagram</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><span class="wl-at" aria-hidden="true">@</span><input writingsuggestions="false" autocorrect="off" name="instagram" type="text" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" maxlength="120" aria-label="Instagram handle"></span></label>
+              <label class="wl-f"><span>Website</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input writingsuggestions="false" autocorrect="off" name="website" type="url" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" enterkeyhint="next" maxlength="200"></span></label>
+            </div>
+            <p class="wl-err" role="alert" aria-live="assertive"></p>
           </div>
 
           <div class="wl-q" data-q="claude" role="group" aria-labelledby="wl-q-claude">
@@ -316,6 +324,6 @@
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="early-access/page.js?v=03ead5b0"></script>
+<script src="early-access/page.js?v=105f1082"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 // The Worker's own fetch handler runs against a fresh in-memory D1 stand-in (tests/d1.mjs) and a fake Brevo
 // (tests/fakes.mjs) for each test.
 import assert from "node:assert/strict";
-import worker, { e164, confirmEmail } from "../src/index.js";
+import worker, { e164, confirmEmail, igHandle, siteUrl } from "../src/index.js";
 import { d1 } from "./d1.mjs";
 import { fakeBrevo } from "./fakes.mjs";
 
@@ -101,6 +101,40 @@ test("join: names and fields are trimmed and capped", async () => {
   assert.equal(row.last.length, 80);
   assert.equal(row.brands.length, 300);
   assert.equal(row.roles, "Creator, Brand");
+});
+
+test("work links: an Instagram handle and a website, cleaned, kept, and in the export", async () => {
+  // the handle: a pasted link, an @, a trailing slash, capitals all come off; what can't be a handle is dropped, never refused
+  for (const [given, want] of [["@Studio.Films", "studio.films"], ["https://www.instagram.com/studio_films/", "studio_films"], ["instagram.com/studio?igsh=abc", "studio"],
+    ["http://m.instagram.com/Studio/", "studio"], ["instagr.am/studio", "studio"], ["  studio  ", "studio"], ["two words", ""], ["dots..twice", ""], ["ends.", ""],
+    ["a".repeat(31), ""], ["", ""], [42, ""], [null, ""]]) assert.equal(igHandle(given), want, JSON.stringify(given));
+  // the website: brand.com becomes https://brand.com; a path stays, a bare trailing slash and the #part go; nothing that isn't a web address
+  for (const [given, want] of [["brand.com", "https://brand.com"], ["www.Brand.co.uk/", "https://www.brand.co.uk"], ["http://brand.com/work/", "http://brand.com/work"],
+    ["https://brand.com/a?b=1#top", "https://brand.com/a?b=1"], ["//brand.com", "https://brand.com"], ["brand", ""], ["javascript:alert(1)", ""], ["ftp://brand.com", ""],
+    ["https://user:pw@brand.com", ""], ["https://" + "a".repeat(250) + ".com", ""], ["", ""], [7, ""]]) assert.equal(siteUrl(given), want, JSON.stringify(given));
+  const t = setup();
+  const r = await t.join(person(1, { instagram: "https://instagram.com/Studio.Films/", website: "studio.film/reel" }));
+  assert.equal(r.status, 200);
+  let row = t.row("person1@example.com");
+  assert.equal(row.instagram, "studio.films");
+  assert.equal(row.website, "https://studio.film/reel");
+  // a repeat sign-up with them blank keeps them; a new one replaces them; nonsense is dropped (the rest of the sign-up still goes through)
+  await t.joinOnly(person(1, { instagram: "", website: "" }));
+  row = t.row("person1@example.com");
+  assert.equal(row.instagram, "studio.films");
+  assert.equal(row.website, "https://studio.film/reel");
+  await t.joinOnly(person(1, { instagram: "@newname", website: "new.studio" }));
+  row = t.row("person1@example.com");
+  assert.equal(row.instagram, "newname");
+  assert.equal(row.website, "https://new.studio");
+  const r2 = await t.join(person(2, { instagram: "not a handle!", website: "not a site" }));
+  assert.equal(r2.status, 200);
+  assert.equal(t.row("person2@example.com").instagram, null);
+  assert.equal(t.row("person2@example.com").website, null);
+  const csv = (await t.call("GET", "/admin/export.csv", { headers: { Authorization: "Bearer " + ADMIN }, origin: null })).text.trim().split("\r\n");
+  const head = csv[0].split(","), one = csv.find((l) => l.startsWith("1,")).split(",");
+  assert.equal(one[head.indexOf("instagram")], "newname");
+  assert.equal(one[head.indexOf("website")], "https://new.studio");
 });
 
 test("duplicate email: same code and place, details updated, already: true", async () => {
@@ -482,7 +516,7 @@ test("admin: export.csv lists everyone with their place", async () => {
   assert.match(r.headers.get("Content-Type"), /^text\/csv/);
   const lines = r.text.trim().split("\r\n");
   assert.equal(lines.length, 14);
-  assert.equal(lines[0], "seq,position,front,joined,confirmed_at,confirmed_via,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,sms_notify,sms_notify_at,sms_marketing,sms_marketing_at,consent_ip,consent_country,terms_version,roles,brands,claude,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
+  assert.equal(lines[0], "seq,position,front,joined,confirmed_at,confirmed_via,email,first,last,phone,cc,sms,sms_consent,sms_consent_at,sms_consent_version,sms_notify,sms_notify_at,sms_marketing,sms_marketing_at,consent_ip,consent_country,terms_version,roles,brands,claude,instagram,website,source,code,referred_by,referrals,ip,brevo_synced,brevo_error");
   const twelve = lines.find((l) => l.startsWith("12,"));
   assert.match(twelve, /^12,3,/, "seq 12 with one referral (score 2) is third");
   const thirteen = lines.find((l) => l.startsWith("13,"));
