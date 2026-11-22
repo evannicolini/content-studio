@@ -906,7 +906,13 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   html.ea-on:not(.kp-off) .kp { left: max(12px, env(safe-area-inset-left)); transform: translate3d(0, 0, 0); }
   html.ea-on:not(.kp-off) .kp.hide, html.ea-on:not(.kp-off).kp-away .kp:not(.playing) { transform: translate3d(0, 140%, 0); }
   html.ea-on:not(.kp-off) .kp .kp-tag { display: none; }
+  /* one row, never overlapping (Evan, iPhone 17 Pro Max): Kayla folds to her face and play (the waveform and time slide shut), and
+     the button fills the rest of the row, from her right edge to the margin; both sit on the same line above the home indicator */
+  html.ea-on:not(.kp-off) .kp .kp-wave, html.ea-on:not(.kp-off) .kp .kp-time { max-width: 0; min-width: 0; opacity: 0; margin: 0 -5px; padding: 0; }
+  html.ea-on:not(.kp-off) .ea-float { left: calc(max(12px, env(safe-area-inset-left)) + var(--kp-mini, 104px) + 8px); right: max(12px, env(safe-area-inset-right)); bottom: max(12px, calc(env(safe-area-inset-bottom) + 4px)); justify-content: flex-start; }
+  html.ea-on:not(.kp-off) .ea-float > span:not([class]) { flex: 1; overflow: hidden; text-overflow: ellipsis; }
 }
+@media (max-width: 352px) { .ea-float .ea-ic { display: none; } }
 
 /* ---------- smaller laptops: a little tighter ---------- */
 @media (max-height: 820px) and (min-width: 961px) {
