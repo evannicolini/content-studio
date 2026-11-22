@@ -48,7 +48,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="early-access/page.css?v=a6b923ea">
+<link rel="stylesheet" href="early-access/page.css?v=03ead5b0">
 <style>html.sk-page { background: #1b1a19; } html.sk-page body { background: transparent; }</style>
 </head>
 <body>
@@ -261,9 +261,11 @@
         <h3 class="wl-dh"><span data-wl-dhi>You're in, Evan.</span><span class="wl-dpos" data-wl-dpos></span></h3>
         <p class="wl-dsub">When your invite lands, you get 14 days of everything, free. We'll email and text you the moment it's ready.</p>
         <div class="wl-refbox">
-          <div class="wl-rtop"><div class="wl-rhead"><b data-wl-rhead>Get 3 friends on the list. You all skip to the front.</b><span class="wl-goal" data-wl-goal><i></i><em>0/3</em></span></div><span data-wl-rboost>When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.</span></div>
-          <!-- each friend: Not invited, Invited (they sent their link), Confirming (signed up, email not confirmed yet), Joined (their first name) -->
-          <ol class="wl-slots" data-wl-slots><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 1</b><small>Not invited</small></span></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 2</b><small>Not invited</small></span></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 3</b><small>Not invited</small></span></li></ol>
+          <div class="wl-rtop"><div class="wl-rhead"><b data-wl-rhead>Get 3 friends on the list. You all skip to the front.</b></div><span data-wl-rboost>When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.</span></div>
+          <!-- the tally (Evan, after MIRRA's Invite Friends): a big "1 of 3 friends joined", three dashes under it (joined, invited, open), a tiny legend -->
+          <div class="wl-tally" data-wl-tally><p class="wl-tn"><b data-wl-tn>0</b><span data-wl-tt>of 3 friends joined</span></p><div class="wl-dash" data-wl-dash aria-hidden="true"><i></i><i></i><i></i></div><p class="wl-leg" aria-hidden="true"><span class="j">Joined</span><span class="v">Invited</span></p></div>
+          <!-- each friend, a row with a status pill: Invite (not invited yet), Invited (you sent your link), Confirming (signed up, email not confirmed yet), Joined (their first name) -->
+          <ol class="wl-slots" data-wl-slots><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 1</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 2</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 3</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li></ol>
           <!-- text-first (Evan): Text a friend first; Copy link and the Story next; X, Email and the rest under More -->
           <button type="button" class="wl-text" data-wl-text><span class="wl-msgic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 5.2c-4.5 0-8 2.9-8 6.5 0 2 1.1 3.8 2.9 5-.1.9-.6 2.1-1.5 2.9 1.7 0 3.2-.7 4.1-1.4.8.2 1.6.3 2.5.3 4.5 0 8-2.9 8-6.5s-3.5-6.8-8-6.8Z"/></svg></span><span class="t"><b>Text a friend</b><small>A quick message with your link</small></span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
           <div class="wl-share" data-wl-share>
@@ -314,6 +316,6 @@
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="early-access/page.js?v=a6b923ea"></script>
+<script src="early-access/page.js?v=03ead5b0"></script>
 </body>
 </html>

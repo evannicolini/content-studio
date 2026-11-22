@@ -2412,10 +2412,10 @@ function friendsOf(r) {
   var joinedN = r.referrals || 0, pend = r.pending || 0, sent = Math.max(r.invites || 0, joinedN + pend), list = r.friends || [];
   var jn = list.filter(function (f) { return f.joined; }), pn = list.filter(function (f) { return !f.joined; }), out = [];
   for (var i = 0; i < GOAL; i++) {
-    if (i < joinedN) out.push({ st: "st-joined", who: (jn[i] && jn[i].first) || "Friend " + (i + 1), say: "Joined" });
-    else if (i < joinedN + pend) out.push({ st: "st-confirming", who: (pn[i - joinedN] && pn[i - joinedN].first) || "Friend " + (i + 1), say: "Confirming" });
-    else if (i < sent) out.push({ st: "st-invited", who: "Friend " + (i + 1), say: "Invited" });
-    else out.push({ st: "st-empty", who: "Friend " + (i + 1), say: "Not invited" });
+    if (i < joinedN) out.push({ st: "st-joined", who: (jn[i] && jn[i].first) || "Friend " + (i + 1), say: "Joined", sub: "On the list with your link" });
+    else if (i < joinedN + pend) out.push({ st: "st-confirming", who: (pn[i - joinedN] && pn[i - joinedN].first) || "Friend " + (i + 1), say: "Confirming", sub: "Signed up, confirming their email" });
+    else if (i < sent) out.push({ st: "st-invited", who: "Friend " + (i + 1), say: "Invited", sub: "Your link is on its way" });
+    else out.push({ st: "st-empty", who: "Friend " + (i + 1), say: "Invite", sub: "Not invited yet" });
   }
   return { slots: out, joined: joinedN, pending: pend, sent: sent };
 }
@@ -2436,16 +2436,20 @@ function paintFriends(r) {
   var rb = sheet.querySelector("[data-wl-rboost]");
   rb.textContent = !ranked ? "Send them your link. They get early access too." : progress(r, f);
   rb.classList.toggle("wl-prog", ranked && (front || !!(f.sent || f.joined || f.pending)));
-  var gp = sheet.querySelector("[data-wl-goal]"); gp.hidden = !ranked; gp.style.setProperty("--p", front ? 1 : got / GOAL); gp.querySelector("em").textContent = (front ? GOAL : got) + "/" + GOAL; gp.classList.toggle("full", front);
-  gp.setAttribute("aria-label", (front ? GOAL : got) + " of " + GOAL + " friends joined");
+  /* the tally: "1 of 3 friends joined", a dash per friend (joined, invited or confirming, open); at the front, all three are lit */
+  var ty = sheet.querySelector("[data-wl-tally]"), shown = front ? GOAL : got; ty.hidden = !ranked;
+  sheet.querySelector("[data-wl-tn]").textContent = shown;
+  sheet.querySelector("[data-wl-tt]").textContent = "of " + GOAL + (GOAL === 1 ? " friend" : " friends") + " joined";
+  ty.querySelector(".wl-tn").setAttribute("aria-label", shown + " of " + GOAL + " friends joined");
+  ty.querySelectorAll("[data-wl-dash] i").forEach(function (d, i) { var s = f.slots[i]; d.className = front || s.st === "st-joined" ? "j" : s.st === "st-empty" ? "" : "v"; });
   sheet.querySelector("[data-wl-slots]").hidden = !ranked;
   sheet.querySelectorAll("[data-wl-slots] li").forEach(function (li, i) {
     var s = f.slots[i], ini = s.st === "st-joined" || s.st === "st-confirming";
     li.className = s.st + (s.st === "st-joined" ? " got" : "");
     li.querySelector("i").innerHTML = ini ? esc(s.who.charAt(0).toUpperCase()) : SLOT_IC[s.st] || "";
-    li.querySelector("b").textContent = s.who; li.querySelector("small").textContent = s.say;
+    li.querySelector("b").textContent = s.who; li.querySelector("small").textContent = s.sub; li.querySelector(".wl-st").textContent = s.say;
     var open = s.st === "st-empty" || s.st === "st-invited";   /* an open slot is a way to invite: it opens Text a friend */
-    if (open) { li.setAttribute("role", "button"); li.tabIndex = 0; li.setAttribute("aria-label", s.who + ": " + s.say.toLowerCase() + ". Text a friend."); }
+    if (open) { li.setAttribute("role", "button"); li.tabIndex = 0; li.setAttribute("aria-label", s.who + ": " + s.sub.toLowerCase() + ". Text a friend."); }
     else { li.removeAttribute("role"); li.removeAttribute("tabindex"); li.setAttribute("aria-label", s.who + ": " + s.say.toLowerCase()); }
   });
   var pl = sheet.querySelector("[data-wl-plink]"); pl.hidden = !r.pass;
@@ -2619,7 +2623,7 @@ if (local && window.SK_PAGE) {
     if (!ans.claude) ans.claude = "Pro or Max";
     if (!val("email")) form.elements.email.value = "sam@example.com";
     personal(); drawHome(); drawBrands();
-    if (id === "done") { showDone({ first: first() || "Sam", code: "QEYAB67", position: 1231, referrals: 1, pass: "demo" }); return; }
+    if (id === "done") { showDone({ first: first() || "Sam", code: "QEYAB67", position: 1231, referrals: 1, invites: 2, friends: [{ first: "Maya", joined: true }], pass: "demo" }); return; }
     var n = ORDER.indexOf(id); if (n < 0) return;
     if (id === "check") sheet.querySelector("[data-wl-cmail]").textContent = val("email");
     setStep(n, false);

@@ -825,25 +825,40 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-refbox { margin-top: 26px; padding: 20px; border-radius: 28px; background: rgba(var(--tint), .56); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .wl-rtop b { display: block; font: 500 18px/1.25 var(--sans); letter-spacing: -.015em; }
 .wl-rhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
-/* 0/3: a pill that fills as friends join; full (pearl) at the front */
-.wl-goal { --p: 0; position: relative; flex: none; display: inline-grid; place-items: center; min-width: 60px; height: 30px; padding: 0 12px; border-radius: 999px; overflow: hidden; background: var(--v-g); box-shadow: var(--v-rim); }
-.wl-goal i { position: absolute; inset: 0; transform-origin: 0 50%; transform: scaleX(var(--p)); background: linear-gradient(90deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, .9)); transition: transform .9s var(--ease); }
-.wl-goal em { position: relative; font: 500 12.5px/1 var(--mono); font-style: normal; letter-spacing: .08em; margin-right: -.08em; color: #fff; text-align: center; mix-blend-mode: difference; }   /* readable over the fill and the glass alike (a 1/3 fill hid the 1) */
-.wl-goal.full em, .wl-goal[style*="--p: 1"] em { color: #fff; }   /* difference blend: dark over the pearl fill */
 .wl-rtop span { display: block; margin-top: 6px; font-size: 14.5px; color: var(--wl-l2); }
-.wl-slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
 .wl-rtop span.wl-prog { color: #fff; font-weight: 500; }
+/* the tally (after MIRRA's Invite Friends, in Studio's glass): a big "1 of 3 friends joined", three dashes, a tiny legend */
+.wl-tally { margin-top: 18px; }
+.wl-tn { display: flex; align-items: baseline; gap: 9px; color: var(--wl-l2); font-size: 16px; letter-spacing: -.01em; }
+.wl-tn b { font: 300 40px/1 var(--sans); letter-spacing: -.03em; color: #fff; font-variant-numeric: tabular-nums; }
+.wl-dash { display: flex; gap: 6px; margin-top: 12px; }
+.wl-dash i { flex: 1; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .1); box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .14); transition: background-color .6s var(--ease), box-shadow .6s; }
+.wl-dash i.v { background: rgba(255, 255, 255, .42); box-shadow: none; }
+.wl-dash i.j { background: var(--pearl); box-shadow: 0 0 14px -2px rgba(255, 255, 255, .55); }
+.wl-leg { display: flex; gap: 16px; margin-top: 10px; font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--wl-l3); }
+.wl-leg span { display: inline-flex; align-items: center; gap: 7px; }
+.wl-leg span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pearl); }
+.wl-leg .v::before { border-radius: 2px; background: rgba(255, 255, 255, .42); }
+/* each friend: a row, their initial or an icon, the name, and a status pill */
+.wl-slots { display: grid; gap: 6px; margin-top: 16px; }
+.wl-slots li { display: flex; align-items: center; gap: 12px; min-width: 0; height: 54px; padding: 0 10px 0 12px; border-radius: 16px; color: var(--wl-l3); background: rgba(255, 255, 255, .05); box-shadow: var(--v-rim); transition: background-color .4s, box-shadow .4s, transform .2s var(--ease); }
+.wl-fw { flex: 1; }
+.wl-st { flex: none; padding: 7px 11px; border-radius: 999px; font: 500 10px/1 var(--mono); font-style: normal; letter-spacing: .1em; text-transform: uppercase; color: var(--wl-l2); background: rgba(255, 255, 255, .07); box-shadow: inset 0 0 0 .5px rgba(255, 255, 255, .16); white-space: nowrap; }
+.wl-slots li.st-empty .wl-st { color: #fff; background: rgba(255, 255, 255, .12); }
+.wl-slots li.st-empty .wl-st::after { content: " +"; }
+.wl-slots li.st-invited .wl-st { color: #fff; background: rgba(255, 255, 255, .16); }
+.wl-slots li.st-confirming .wl-st { color: #fff; background: rgba(255, 255, 255, .18); }
+.wl-slots li.got .wl-st { color: var(--vampire); background: var(--pearl); box-shadow: none; }
 /* a friend slot: the circle (an initial once they've signed up), their name or Friend n, and where they are, in mono */
-.wl-slots li { display: flex; align-items: center; gap: 10px; min-width: 0; height: 58px; padding: 0 12px; border-radius: 16px; color: var(--wl-l3); background: rgba(255, 255, 255, .06); box-shadow: var(--v-rim); transition: background-color .4s, box-shadow .4s, transform .2s var(--ease); }
 .wl-slots li[role=button] { cursor: pointer; }
 .wl-slots li[role=button]:hover { background: rgba(255, 255, 255, .1); }
 .wl-slots li[role=button]:active { transform: scale(.97); }
 .wl-slots li[role=button]:focus-visible { outline: 2px solid rgba(255, 255, 255, .7); outline-offset: 2px; }
 .wl-slots li i { position: relative; display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 50%; font: 500 13.5px/1 var(--sans); font-style: normal; color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); transition: background-color .4s, box-shadow .4s; }
 .wl-slots li i svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.wl-fw { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.wl-fw b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 13.5px/1.15 var(--sans); letter-spacing: -.005em; color: var(--wl-l2); }
-.wl-fw small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 9.5px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--wl-l3); }
+.wl-fw { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.wl-fw b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 14.5px/1.15 var(--sans); letter-spacing: -.005em; color: var(--wl-l2); }
+.wl-fw small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; line-height: 1.2; color: var(--wl-l3); }
 .wl-slots li.st-empty i { color: rgba(245, 243, 238, .55); }
 /* Invited: the link went out; the circle is lit, a paper plane in it */
 .wl-slots li.st-invited { background: rgba(255, 255, 255, .09); }
@@ -980,10 +995,8 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-dsub { font-size: 15.5px; }
   .wl-refbox { margin-top: 18px; padding: 16px 14px; border-radius: 24px; }
   .wl-share { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .wl-slots { gap: 6px; }
-  .wl-slots li { flex-direction: column; justify-content: center; gap: 8px; height: auto; min-height: 92px; padding: 12px 6px 11px; text-align: center; }
-  .wl-fw { align-items: center; width: 100%; }
-  .wl-fw small { font-size: 9px; letter-spacing: .08em; }
+  .wl-slots li { height: 52px; gap: 11px; padding: 0 8px 0 10px; }
+  .wl-tn b { font-size: 36px; }
   .wl-comeback { flex-wrap: wrap; align-items: flex-start; padding: 12px; }
   .wl-bi { margin-top: 1px; }
   .wl-comeback .wl-bt { flex: 1 1 calc(100% - 32px); }
@@ -1012,9 +1025,10 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
 .wl.done .wl-sky { filter: brightness(.84) saturate(.96); }
 .wl.done.shown .wl-sky { filter: brightness(1.05) saturate(1.04); }
 .wl.done .wl-bg::after { transition: background-color 2.4s var(--ease); }
-/* a soft bloom behind the pass when it lands */
+/* a soft bloom behind the pass when it lands: as wide as the stage, so at its peak (1.08, blurred) it stays inside the page's side
+   padding and never makes the page scroll sideways (it was 120%: 7 to 52 px too wide on desktop) */
 .wl-dstage { position: relative; }
-.wl-dstage::before { content: ""; position: absolute; left: 50%; top: 46%; width: 120%; aspect-ratio: 1.6; transform: translate(-50%, -50%) scale(.7); border-radius: 50%; pointer-events: none; opacity: 0;
+.wl-dstage::before { content: ""; position: absolute; left: 50%; top: 46%; width: 100%; aspect-ratio: 1.6; transform: translate(-50%, -50%) scale(.7); border-radius: 50%; pointer-events: none; opacity: 0;
   background: radial-gradient(closest-side, rgba(255, 246, 230, .42), rgba(255, 255, 255, .14) 55%, rgba(255, 255, 255, 0) 100%); filter: blur(10px); }
 .wl-dstage.bloom::before { animation: wl-bloom 2.2s cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes wl-bloom { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 22% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: .22; transform: translate(-50%, -50%) scale(1.08); } }
