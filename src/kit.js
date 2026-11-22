@@ -374,9 +374,11 @@
       /* the footage you drag in */
       '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
       "</div>";
-    /* the composer's beam moves only while a request is being typed; Ask Studio's while its panel is open (each moving beam costs a style pass a frame) */
+    /* the composer's beam runs like the app's whenever the composer is on screen (SK.onView: off screen it stops, so a phone pays for it
+       only while it is seen); Ask Studio's only while its panel is open (each moving beam costs a style pass a frame) */
     var cbs = host.querySelectorAll(".ah-cb"); for (var ci = 0; ci < cbs.length; ci++) cbs[ci].setAttribute("data-paused", "");
     var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
+    SK.onView(host.querySelector(".ah-comp"), function () { beamRun(".ah-comp > .ah-cb", true); }, function () { beamRun(".ah-comp > .ah-cb", false); }, { margin: "60px" });
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
       name: function (n, typing) { var h = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); if (hello._h !== h) { hello._h = h; hello.innerHTML = h; } },   /* unchanged: left alone (a step change redrew it, and replayed its chips, every time) */
@@ -391,7 +393,7 @@
         chips.innerHTML = (list || []).map(function (b, i) { return '<span class="ah-chip" style="--i:' + i + '">' + (b.img ? '<img class="ah-bm" src="' + esc(b.img) + '" alt="">' : '<span class="ah-bm" style="background:' + (b.bg || "#1a1a1a") + ";color:" + (b.ink || "#fff") + '">' + esc(b.m || (b.n || "?").charAt(0)) + "</span>") + esc(b.n) + "</span>"; }).join("");
       },
       allBrands: function (t) { host.querySelector("[data-ah-allb]").textContent = t; },
-      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); beamRun(".ah-comp > .ah-cb", !!caret); },
+      typeAsk: function (t, caret) { ask.textContent = t; host.querySelector(".ah-comp").classList.toggle("live", !!caret); },
       attach: function (imgs) { host.querySelector("[data-ah-att]").innerHTML = (imgs || []).map(function (u, i) { return '<span class="wl-in-a" style="--i:' + i + '"><img src="' + esc(u) + '" alt=""></span>'; }).join("") + (imgs && imgs.length ? "<b>" + imgs.length + " clips</b>" : ""); },
       sending: function (on) { host.querySelector(".ah-comp").classList.toggle("send", !!on); },
       working: function (on, title, status) { var wk = host.querySelector("[data-ah-wk]"); wk.hidden = !on; if (title) host.querySelector("[data-ah-wkt]").textContent = title; if (status) host.querySelector("[data-ah-wks]").textContent = status; },

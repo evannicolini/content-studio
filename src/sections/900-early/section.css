@@ -847,6 +847,7 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-cb { position: absolute !important; inset: 0; z-index: 2; border-radius: inherit !important; pointer-events: none; --beam-strength: 1.15; }
 .ah-cb::after, .ah-cb::before, .ah-cb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .ah-ask .ah-cb { --beam-strength: .9; }
+@media (prefers-reduced-motion: reduce) { .ah-comp > .ah-cb { display: none; } }   /* like .gx: no moving beam */
 .ah-chip { padding: 0 15px 0 4px; gap: 9px; animation: ah-chip .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms); }
 .ah-bm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); }
 @keyframes ah-chip { from { opacity: 0; transform: translateY(6px) scale(.96); } }
