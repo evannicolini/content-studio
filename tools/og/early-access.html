@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- The /early-access/ link preview (assets/og-invite.jpg). Rendered by tools/og.js at 1200x630, 2x.
+     It uses the site's own CSS (early-access/page.css) and the same pass markup as section.js passHTML(): the glass invite pass,
+     centred and fully in frame over the lone-tree wallpaper. No beam, no plate, no drop shadow (a still image, Evan's look). -->
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="early-access/page.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #0c0e12; }
+  .og { position: relative; width: 1200px; height: 630px; overflow: hidden; }
+  /* the wallpaper a little larger and shifted, so the lone tree stands clear of the words, left of the pass */
+  .og .bg { position: absolute; left: -340px; top: -235px; width: 1560px; max-width: none; height: auto; }
+  /* neutral grade: the bright dawn sky goes a soft grey so white type reads; the ground stays warm */
+  .og .grade { position: absolute; inset: 0; background:
+      linear-gradient(180deg, rgba(12, 14, 18, .58) 0%, rgba(12, 14, 18, .34) 34%, rgba(12, 14, 18, .16) 58%, rgba(12, 14, 18, .5) 100%); }
+  .og .col { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; text-align: center; }
+  .og h1 { margin: 0; font: 300 58px/1 var(--sans); letter-spacing: -.042em; color: var(--sand); white-space: nowrap; }
+  .og h1 span { color: rgba(245, 243, 238, .62); }
+  .og p { margin: 0; font: 400 21px/1.3 var(--sans); letter-spacing: -.005em; color: rgba(245, 243, 238, .82); white-space: nowrap; }
+  .og .stage { perspective: 1800px; margin: 34px 0 30px; }
+  .og .pass { --w: 500px; cursor: default; text-align: left; transform: rotateX(8deg) rotateY(-10deg) rotateZ(.5deg); }
+  .og .pass .plate, .og .pass .pbeam, .og .pass .sweep, .og .pass .side.back { display: none; }
+  /* a still image can afford the real thing: the glass blurs the wallpaper right behind it (the site uses a pre-blurred copy) */
+  .og .pass .card { box-shadow: var(--v-rim); -webkit-backdrop-filter: blur(26px) saturate(1.1); backdrop-filter: blur(26px) saturate(1.1);
+      background: linear-gradient(150deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .05) 46%, rgba(255, 255, 255, .09)), rgba(16, 18, 22, .42); }
+  .og .pass .card .frost { display: none; }
+  .og .pass .foil { --mx: .32; --my: .22; }
+  .og .pass .spec i { transform: translate3d(-34%, 0, 0) skewX(-14deg); }
+</style></head>
+<body>
+<!--DEFS-->
+<div class="og">
+  <img class="bg" src="assets/wl/name.jpg" alt="">
+  <div class="grade"></div>
+  <div class="col">
+    <h1>You’re invited <span>to Studio.</span></h1>
+    <div class="stage"><div class="pass" id="pass"></div></div>
+    <p>One sentence in. A finished video out.</p>
+  </div>
+</div>
+<script>
+  /* the front of section.js passHTML(), with its words for a friend who was sent the link */
+  var frost = '<img class="frost" src="assets/wl/name-frost.jpg" alt="">';
+  document.getElementById("pass").innerHTML =
+    '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div></div>' +
+    '<div class="lift top"><span class="mark"><svg viewBox="36 36 440 440"><use href="#studio-mark"/></svg>Studio</span><span class="mono">Early access · Invite</span></div>' +
+    '<div class="lift who"><span class="mono dim">Invite for</span><div class="name">Your spot</div><div class="mail">Held for you by a friend</div></div>' +
+    '<div class="lift row"><div><span class="mono dim">Admits</span><b>One</b></div><div><span class="mono dim">Trial</span><b class="s">14 days, free</b></div><div><span class="mono dim">For</span><b class="s">Mac</b></div></div>' +
+    '<div class="lift cut"></div><div class="lift bars" id="bars"></div></div>';
+  /* section.js bars(), seeded */
+  (function (box, seed) {
+    var s = 0, out = "", x = 0; for (var i = 0; i < seed.length; i++) s = (s * 31 + seed.charCodeAt(i)) >>> 0; s = s || 7;
+    while (x < 96) { s = (s * 16807) % 2147483647; var w = .35 + (s % 4) * .3; out += '<i style="width:' + w.toFixed(2) + '%"></i>'; x += w + .7; }
+    box.innerHTML = out;
+  })(document.getElementById("bars"), "studio");
+</script>
+</body></html>
