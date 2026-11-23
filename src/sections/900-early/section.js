@@ -659,8 +659,22 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
 setTimeout(beamsOn, 0);
+/* every step starts at its top (Evan: scrolled down on one step, the next opened scrolled down). Before the swap, not after it: the
+   step box, the sheet, the done screen and the window go to 0 at once; overflow off for that moment stops a fling iOS is still
+   coasting (it would carry on past a plain scrollTop), and it's checked again once the swap has run, unless a finger is on it since */
+var touchedAt = 0;
+sheet.addEventListener("touchstart", function () { touchedAt = Date.now(); }, { passive: true });
+function toTop() {
+  [sheet.querySelector(".wl-in"), sheet, doneEl].forEach(function (el) {
+    if (!el || !el.scrollTop) return;
+    var o = el.style.overflowY; el.style.overflowY = "hidden"; el.scrollTop = 0; void el.offsetHeight; el.style.overflowY = o;
+  });
+  if (window.scrollY) window.scrollTo(0, 0);
+}
+try { if (window.SK_PAGE && "scrollRestoration" in history) history.scrollRestoration = "manual"; } catch (e) {}
 function setStep(n, quiet, fromHist) {
   var cur = steps[at], nx = steps[n], q = ORDER[n], dir = n > at ? 1 : -1, was = at;
+  if (n !== was) { toTop(); var t0 = Date.now(); [90, 450, 900].forEach(function (t) { setTimeout(function () { if (touchedAt < t0 && ORDER[at] === q) toTop(); }, t); }); }
   personal();
   if (cur !== nx) {
     SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });   /* kit.js: out of focus the way you're going, the next one in */
@@ -689,7 +703,6 @@ function setStep(n, quiet, fromHist) {
   if (!fromHist && n !== was && sheet.classList.contains("open") && DEEP.test(location.hash)) {
     try { if (n > was) { depth++; history.pushState({ wl: 1, step: n, d: depth }, "", location.href); } else history.replaceState({ wl: 1, step: n, d: depth }, ""); } catch (e) {}
   }
-  if (n !== was) { var sc = sheet.querySelector(".wl-in"); if (sc.scrollTop > 0) sc.scrollTo({ top: 0, behavior: SK.reduced ? "auto" : "smooth" }); }
   saveDraft();
 }
 /* the answers so far, kept for this tab: a reload, or a swipe back to the page and forward again, picks up where it was */
