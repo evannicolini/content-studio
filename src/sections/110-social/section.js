@@ -20,7 +20,8 @@ var netEls = {};
 root.querySelectorAll("#soc-nets li").forEach(function (li) { netEls[li.getAttribute("data-net")] = li; });
 var posts = [], anims = [], token = 0, state = "pile", phone = SK.mobile();
 
-function cardHTML(src) { return '<span class="soc-fx"><span class="soc-fy"><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" decoding="async"><img class="br" src="assets/media/social/brand-' + (BRAND[src] || "mirra") + '.png" alt="" width="12" height="12" decoding="async"></span></span></span>'; }
+/* the calendar's cards load as the calendar comes near (loading=lazy): 70 to 170 of them were fetched and decoded with the page */
+function cardHTML(src) { return '<span class="soc-fx"><span class="soc-fy"><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" loading="lazy" decoding="async"><img class="br" src="assets/media/social/brand-' + (BRAND[src] || "mirra") + '.png" alt="" width="12" height="12" loading="lazy" decoding="async"></span></span></span>'; }
 
 function build() {
   grid.innerHTML = "";

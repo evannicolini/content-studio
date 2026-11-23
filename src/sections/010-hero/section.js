@@ -131,7 +131,7 @@ SK.onView(hero, function () {
   hero.classList.add("off");
   if (started) { halt(); compose("", ""); }
 });
-function begin() { html.classList.remove("hx-intro"); warm(); started = true; if (inView) loop(0); setTimeout(parallax, 400); }
+function begin() { html.classList.remove("hx-intro"); hero.classList.add("bw-done"); warm(); started = true; if (inView) loop(0); setTimeout(parallax, 400); }
 
 /* ---------- the intro, once ---------- */
 function intro() {

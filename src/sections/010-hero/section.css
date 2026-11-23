@@ -40,6 +40,7 @@
 #hero .hx-bw.end { margin-right: 0; }
 #hero .hx-br { display: none; }
 #hero.w0 .hx-bw { opacity: 0; filter: blur(20px); transform: translate3d(-.32em, 0, 0); }
+#hero.bw-done .hx-bw { will-change: auto; }   /* the headline's words keep their own layer only for the intro (section.js begin) */
 #hero .hx-dl { margin-top: 26px; transition: opacity .7s var(--ez) .3s, transform .8s var(--ez) .3s, background-color .25s; }
 #hero.pre .hx-dl { opacity: 0; transform: translateY(20px); }
 #hero .hx-send-help { display: none; }

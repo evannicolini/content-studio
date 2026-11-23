@@ -948,20 +948,19 @@
       })(h);
       h.style.setProperty("--step", (n > 12 ? 45 : 75) + "ms");
       h.classList.add("bl");
-      SK.onView(h, function () { h.classList.add("bl-in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
+      SK.onView(h, function () { h.classList.add("bl-in"); setTimeout(function () { h.classList.add("bl-done"); }, n * (n > 12 ? 45 : 75) + 1200); }, null, { once: true, margin: "0px 0px -8% 0px" });
     });
   }
 
   /* ---------- SK.fullRender(): before a jump down the page (an in-page link, Download to Pricing, a Pricing link), every section is laid
-     out for real for a moment, so the jump lands where it should: in the lite tier a section not yet drawn stands at about its height
-     (base.css, content-visibility), and a jump past several of them landed up to 600 px off. Each keeps its real height after (auto),
-     so it's needed once; it's one full layout, at the moment of a press. Nothing outside the lite tier. ---------- */
+     out for real for a moment, so the jump lands where it should: a section not yet drawn stands at about its height (base.css,
+     content-visibility), and a jump past several of them landed up to 600 px off. Each keeps its real height after (auto), so it's
+     needed once; it's one full layout, at the moment of a press. ---------- */
   SK.fullRender = function () {
-    if (!SK.lite) return;
     var r = document.documentElement; r.classList.add("cv-full"); void document.body.offsetHeight;
     clearTimeout(SK.fullRender.t); SK.fullRender.t = setTimeout(function () { r.classList.remove("cv-full"); }, 3000);
   };
-  if (SK.lite) document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]:not([href="#"]), a[href^="./#"], [data-vo-play]')) SK.fullRender(); }, true);
+  document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]:not([href="#"]), a[href^="./#"], [data-vo-play]')) SK.fullRender(); }, true);
 
   /* ---------- start ---------- */
   SK.start = function () {

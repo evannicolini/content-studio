@@ -150,6 +150,7 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 /* ---------- headings: words reveal left to right, from out of focus to sharp (added by kit.js) ---------- */
 .bl .bw { display: inline-block; opacity: 0; filter: blur(14px); transform: translate3d(-.22em, 0, 0); transition: opacity .75s var(--ease), filter .95s var(--ease), transform .95s var(--ease); transition-delay: calc(var(--n) * var(--step, 70ms)); will-change: filter, opacity, transform; }
 .bl.bl-in .bw { opacity: 1; filter: blur(0); transform: none; }
+.bl.bl-done .bw { will-change: auto; }   /* once in, a word is plain text again: every word of every heading was its own layer for good */
 
 /* ---------- reveal ---------- */
 [data-reveal] { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity .9s var(--ease), transform 1.1s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); will-change: opacity, transform; }
@@ -385,19 +386,23 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
 .sk-cur .tag .fc { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
 .sk-cur .tag .fc img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ---------- the lite tier (html.lite: in-app browsers and weak devices, shell.html) ----------
-   A section well off screen isn't styled, laid out or painted until it's near (content-visibility), which is most of what a 27,000 px
-   page asks of a phone's web view on load and on every frame after. Each keeps the height it had last time it was drawn (auto), and
-   starts from about its height on a phone. Not #chat or #anywhere: their footage runs past their edges, which this would clip. The
-   sections with their own overflow clip are clipped at the same edge already. */
-html.lite main > section:not(#hero):not(#chat):not(#anywhere) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
-html.lite.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real (kit.js SK.fullRender) */
+/* ---------- sections off screen aren't drawn (every browser) ----------
+   A section well off screen isn't styled, laid out or painted, and keeps no layers, until it's near (content-visibility: auto, as
+   customesignature.com does); before, the page kept 550 to 800 compositor layers for sections all the way down. Each keeps the height
+   it had the last time it was drawn (auto), and starts from about its height at this size. Before a jump down the page everything is
+   laid out for a moment (kit.js SK.fullRender), so jumps land where they did. */
+main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
+html.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real */
+#shoot { --cis: 1920px; } #chat { --cis: 850px; } #why { --cis: 860px; } #work { --cis: 1400px; } #anywhere { --cis: 850px; } #library { --cis: 2330px; }
+#viral { --cis: 2560px; } #notes { --cis: 1060px; } #aesthetic { --cis: 1420px; } #social { --cis: 2520px; } #sound { --cis: 870px; } #start { --cis: 1180px; }
+#views { --cis: 850px; } #connect { --cis: 1030px; } #creator { --cis: 1010px; } #pricing { --cis: 3030px; }
 @media (max-width: 700px) {
-  html.lite #shoot { --cis: 2210px; } html.lite #why { --cis: 650px; } html.lite #work { --cis: 1060px; } html.lite #library { --cis: 1780px; }
-  html.lite #viral { --cis: 2430px; } html.lite #notes { --cis: 800px; } html.lite #aesthetic { --cis: 1050px; } html.lite #social { --cis: 2330px; }
-  html.lite #sound { --cis: 1200px; } html.lite #start { --cis: 1840px; } html.lite #views { --cis: 620px; } html.lite #connect { --cis: 910px; }
-  html.lite #creator { --cis: 1690px; } html.lite #pricing { --cis: 5540px; }
+  #shoot { --cis: 2210px; } #chat { --cis: 1310px; } #why { --cis: 730px; } #work { --cis: 1060px; } #anywhere { --cis: 940px; } #library { --cis: 1780px; }
+  #viral { --cis: 2430px; } #notes { --cis: 820px; } #aesthetic { --cis: 1060px; } #social { --cis: 2330px; } #sound { --cis: 1200px; } #start { --cis: 1840px; }
+  #views { --cis: 700px; } #connect { --cis: 910px; } #creator { --cis: 1690px; } #pricing { --cis: 5540px; }
 }
+
+/* ---------- the lite tier (html.lite: in-app browsers and weak devices, shell.html) ---------- */
 /* the beams turn 30 times a second instead of 60 (each beam's spin is 1.96 s: 59 steps), and their slow colour drift (a 12° hue swing
    over 12 s) moves in 0.3° steps: Safari's engine only redraws a stepped animation when it steps, so each beam's huge gradients and
    masks are worked out half as often. The order matches every beam's animation list: the spin, then its fade in or out. */
