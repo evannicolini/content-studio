@@ -1394,8 +1394,38 @@ document.querySelectorAll("[data-early-band]").forEach(function (el) {
   f.innerHTML = STAR + "<span>Get early access</span>" + ARROW;
   document.body.appendChild(f);
   SK.gx(f, { hot: true });
+  /* one tap, at once (Evan, Instagram on his iPhone: "about 4 taps"). The tap is taken when the finger lifts (touchend), not from the
+     click iOS makes up after it, which it can hold back for a hover or drop when the tap only stopped a fling; the pill presses in
+     under the finger and shows it's on its way (goAway) until the next page is up, and a second tap never restarts the trip. The
+     page it opens is fetched once the pill first shows (warm), so it comes from the cache. */
+  var t0 = null;
+  f.addEventListener("touchstart", function (e) { var t = e.touches[0]; t0 = e.touches.length === 1 ? { x: t.clientX, y: t.clientY, at: Date.now() } : null; f.classList.toggle("press", !!t0); }, { passive: true });
+  f.addEventListener("touchmove", function (e) { var t = e.touches[0]; if (t0 && (Math.abs(t.clientX - t0.x) > 12 || Math.abs(t.clientY - t0.y) > 12)) { t0 = null; f.classList.remove("press"); } }, { passive: true });
+  f.addEventListener("touchcancel", function () { t0 = null; f.classList.remove("press"); });
+  f.addEventListener("touchend", function (e) {
+    var s = t0; t0 = null; f.classList.remove("press");
+    if (!s || Date.now() - s.at > 900) return;
+    e.preventDefault();   /* nothing synthesized after it: no sticky hover, no late click */
+    var h = f.getAttribute("href") || "";
+    if (h.charAt(0) === "#") { tapEl = f; open(f.getAttribute("data-early") || "float"); } else goAway(h, f);
+  }, { passive: false });
+  function warm() {
+    if (warm.done || !window.fetch || !window.URL) return; warm.done = true;
+    try { if (navigator.connection && navigator.connection.saveData) return; } catch (e) {}
+    var page = new URL(OPEN ? "start/" : "early-access/", location.href), get = function (u) { return fetch(u, { credentials: "same-origin" }); };
+    (window.requestIdleCallback || function (cb) { setTimeout(cb, 1500); })(function () {
+      get(page.href).then(function (r) { return r.ok ? r.text() : ""; }).then(function (h) {
+        var base = new URL((h.match(/<base href="([^"]*)"/) || [])[1] || "", page), re = /(?:src|href)="([^"]+\.(?:css|js|jpg)(?:\?[^"]*)?)"/g, m, seen = {};
+        while ((m = re.exec(h))) {
+          var u = new URL(m[1], base).href;
+          if (seen[u] || (/\.jpg/.test(u) && /-m\.jpg/.test(u) !== SK.mobile())) continue;   /* its wallpaper: the phone's or the desktop's */
+          seen[u] = 1; get(u).catch(function () {});
+        }
+      }).catch(function () {});
+    });
+  }
   var seen = { hero: true, pricing: false, foot: false };
-  function set() { var on = !seen.hero && !seen.pricing && !seen.foot; f.classList.toggle("away", !on); html.classList.toggle("ea-on", on); }
+  function set() { var on = !seen.hero && !seen.pricing && !seen.foot; f.classList.toggle("away", !on); html.classList.toggle("ea-on", on); if (on) warm(); }
   [["hero", document.getElementById("hero")], ["pricing", document.getElementById("pricing")], ["foot", document.querySelector(".foot")]].forEach(function (x) {
     if (!x[1]) { seen[x[0]] = false; return; }
     SK.onView(x[1], function () { seen[x[0]] = true; set(); }, function () { seen[x[0]] = false; set(); }, { margin: x[0] === "hero" ? "-30% 0px 0px 0px" : "0px 0px -18% 0px" });
@@ -2363,8 +2393,17 @@ if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.con
 
 /* ---------- open / close ---------- */
 function joined() { try { var j = JSON.parse(localStorage.getItem(KEY) || "null"); return j && j.first && j.code ? j : null; } catch (e) { return null; } } /* a sign-up saved without a code (the first version) counts as none */
+/* leaving the site for the sign-up's own page: the button that was tapped shows it's on its way, and further taps don't restart it */
+var tapEl = null, going = 0;
+function goAway(url, el) {
+  if (going && Date.now() - going < 8000) return;
+  going = Date.now();
+  if (el) el.classList.add("busy");
+  location.href = url;
+}
+window.addEventListener("pageshow", function () { going = 0; document.querySelectorAll(".busy[data-early], .ea-float.busy").forEach(function (b) { b.classList.remove("busy"); }); });
 function open(src) {
-  if (!window.SK_PAGE) { location.href = "early-access/" + location.search; return; }   /* a page of its own (build.py PAGES): the site never loads behind it */
+  if (!window.SK_PAGE) { goAway("early-access/" + location.search, tapEl); return; }   /* a page of its own (build.py PAGES): the site never loads behind it */
   from = src || from;
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
@@ -2440,6 +2479,7 @@ document.addEventListener("click", function (e) {
   var t = e.target.closest && e.target.closest("[data-early], a[href='" + HASH + "']");
   if (!t || sheet.contains(t)) return;
   e.preventDefault();
+  tapEl = t;
   open(t.getAttribute("data-early") || "link");
 });
 sheet.querySelectorAll("[data-wl-close]").forEach(function (b) { b.addEventListener("click", close); });

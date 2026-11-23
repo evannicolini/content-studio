@@ -539,6 +539,10 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 html.kp-off .ea-float { right: 50%; transform: translate3d(50%, 0, 0); }
 html.kp-off .ea-float.away { transform: translate3d(50%, 150%, 0); }
 html.wl-open .ea-float { opacity: 0; pointer-events: none; }
+.ea-float { touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
+.ea-float.press, .ea-float.busy { scale: .97; }   /* under the finger at once (scale, so the slide-in transform is kept) */
+.ea-float.busy .go > svg { opacity: 0; }
+.ea-float.busy .go::after { content: ""; position: absolute; inset: 0; margin: auto; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(16, 21, 28, .22); border-top-color: #10151c; animation: wl-spin .7s linear infinite; }
 @media (max-width: 640px) {
   .ea-float { height: 56px; padding: 0 8px 0 18px; font-size: 15px; }
   .ea-float .go { width: 38px; height: 38px; margin-right: -2px; }

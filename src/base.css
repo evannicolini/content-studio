@@ -348,14 +348,14 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
   box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .6), inset 0 0 18px rgba(160, 200, 255, .1);
   transition: transform .25s var(--ease), background-color .25s var(--ease), opacity .25s, box-shadow .3s; }
 .gx > :not(.gx-beam) { position: relative; z-index: 4; }
-.gx:hover { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 0 0 22px rgba(170, 210, 255, .2); }
+@media (hover: hover) { .gx:hover { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 0 0 22px rgba(170, 210, 255, .2); } }   /* not on touch: a phone would keep it stuck on after a tap */
 .gx:active { transform: scale(.975); }
 .gx[disabled], .gx[aria-disabled="true"] { opacity: .42; cursor: default; }
 .gx[disabled] > .gx-beam, .gx[aria-disabled="true"] > .gx-beam { display: none; }
 .gx svg { width: 17px; height: 17px; flex: none; }
 .gx .ea-ic, .gx svg.fill { fill: currentColor; }
 .gx .arw { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease); }
-.gx:hover .arw { transform: translateX(3px); }
+@media (hover: hover) { .gx:hover .arw { transform: translateX(3px); } }   /* not on touch: a phone would keep it stuck on after a tap */
 /* the beam layer follows the button's pill shape */
 .gx > .gx-beam { position: absolute !important; inset: 0; z-index: 0; border-radius: inherit !important; overflow: hidden; pointer-events: none; --beam-strength: 1.15; }
 .gx > .gx-beam::after, .gx > .gx-beam::before, .gx > .gx-beam [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
@@ -363,7 +363,7 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
 .gx.hot { background: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06) 50%, rgba(190, 220, 255, .14)), rgba(12, 18, 28, .46); box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .75), inset 0 0 26px rgba(150, 200, 255, .22), 0 10px 40px -12px rgba(60, 140, 255, .45); }
 /* the round pearl end, like the composer's send button */
 .gx .go { display: grid; place-items: center; width: 40px; height: 40px; margin-right: -18px; margin-left: 4px; border-radius: 50%; color: #10151c; background: var(--pearl); box-shadow: inset 1px 1px 1px -1px #fff; transition: transform .3s var(--ease); }
-.gx:hover .go { transform: translateX(2px); }
+@media (hover: hover) { .gx:hover .go { transform: translateX(2px); } }   /* not on touch: a phone would keep it stuck on after a tap */
 .gx .go svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .gx.sm { height: 44px; padding: 0 18px; font-size: 15px; gap: 8px; }
 .gx.sm .go { width: 32px; height: 32px; margin-right: -12px; }
