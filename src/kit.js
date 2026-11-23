@@ -288,6 +288,10 @@
     v.muted = true; v.playsInline = true;
     v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
     if (!v.hasAttribute("preload")) v.preload = "none";
+    /* a phone plays the -m clip (portrait): its poster is that clip's first frame (-m.jpg beside it), so the frame is there before the
+       clip buffers and the hand-over is seamless; the wide poster showed the wrong part of the scene */
+    var m = SK.mobile() && v.getAttribute("data-src-m");
+    if (m && v.hasAttribute("poster")) v.poster = m.replace(/\.mp4$/, ".jpg");
     SK.onView(v, function () {
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
     }, null, { margin: "500px 0px", once: true });
@@ -962,9 +966,23 @@
   };
   document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]:not([href="#"]), a[href^="./#"], [data-vo-play]')) SK.fullRender(); }, true);
 
+  /* ---------- drawn ahead: a section within two screens of what's visible is laid out and painted for real (.cv-near, base.css),
+     so its poster, video frame and tiles are ready before it scrolls in. The browser's own content-visibility: auto only drew a
+     section just before it arrived: on a fast flick in Instagram's browser it came in black, and a video's frame came in as an empty
+     blur until its clip buffered. Farther than that, sections are still skipped. ---------- */
+  function drawAhead() {
+    if (!("IntersectionObserver" in window)) return;
+    var go = function () { if (go.done) return; go.done = true; removeEventListener("scroll", go); clearTimeout(t);   /* not during the first load: it starts on the first scroll (or 3 s in), so the intro isn't slowed */
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle("cv-near", e.isIntersecting); }); }, { rootMargin: "200% 0px" });
+    document.querySelectorAll("main > section:not(#hero)").forEach(function (s) { io.observe(s); });
+    };
+    var t = setTimeout(go, 3000); addEventListener("scroll", go, { passive: true });
+  }
+
   /* ---------- start ---------- */
   SK.start = function () {
     document.documentElement.classList.remove("no-js");
+    drawAhead();
     blurHeads();
     document.querySelectorAll("[data-reveal]").forEach(function (el) {
       SK.onView(el, function () { el.classList.add("in"); }, null, { once: true, margin: "0px 0px -8% 0px" });
@@ -978,6 +996,7 @@
     /* the beams written straight into a section's HTML (data-active from the start: Pricing's, the creator's) spin only while on screen,
        like every other beam; paused, not stopped, so they never fade in again */
     document.querySelectorAll('main [data-beam="cx"][data-active]:not([data-paused]):not(.gx-beam)').forEach(function (el) {
+      el.setAttribute("data-paused", "");   /* paused until seen: a section not yet drawn never tells its beams they're off screen */
       SK.onView(el, function () { el.removeAttribute("data-paused"); }, function () { el.setAttribute("data-paused", ""); }, { margin: "60px" });
     });
     sendLabels();
@@ -1121,7 +1140,7 @@
       var vh = est ? full - est : h0(), top = vv ? vv.offsetTop : 0, r = a.getBoundingClientRect(), want = top + Math.min(vh * .22, 140);
       if (r.top < top + 56 || r.bottom > top + vh - 20) { var sc = scroller(); if (sc) sc.scrollTop += r.top - want; }
     }
-    function unpan() { if (window.scrollY || root.scrollTop || document.body.scrollTop) { window.scrollTo(0, 0); document.body.scrollTop = 0; } }
+    function unpan() { if (sheet.hidden || !window.SK_PAGE) return; if (window.scrollY || root.scrollTop || document.body.scrollTop) { window.scrollTo(0, 0); document.body.scrollTop = 0; } }
     function check() {
       var h = h0(), f = isField(document.activeElement);
       if (!f && h > full) { full = h; root.style.setProperty("--lvh", Math.round(full) + "px"); }

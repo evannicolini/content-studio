@@ -3,11 +3,7 @@ if (!root) return;
 
 /* the footage drifts a little against the scroll (only while on screen) */
 (function (el) {
-  /* on a phone the wide poster would show the wrong part of the scene: let the phone clip fade in instead */
-  if (el && !SK.reduced && SK.mobile() && el.getAttribute("data-src-m")) {
-    el.removeAttribute("poster"); el.style.opacity = "0";
-    el.addEventListener("playing", function () { el.style.opacity = ""; }, { once: true });
-  }
+  /* on a phone the clip's own first frame is the poster (kit.js armVideo): it used to be hidden until the clip played, an empty blur meanwhile */
   if (!el || SK.reduced) return;
   var y = 0, raf = 0, on = false, lastT = NaN;
   function step() {

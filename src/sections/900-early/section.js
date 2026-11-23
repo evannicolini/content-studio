@@ -1044,7 +1044,7 @@ function confirmLink() {
 
 SK.keepTyping(form.querySelectorAll('input[name="first"], input[name="last"], input[name="email"], input[name="phone"], input[name="other"], input[name="instagram"], input[name="website"]'));   /* a field that loses focus to nothing mid-typing takes it back */
 /* ---------- the keyboard on a phone (SK.keyboard): the bar steps aside only while the keyboard is really up ---------- */
-var KBD = !fine;
+var KBD = !fine && window.SK_PAGE;   /* only on the sheet's own page: on the home page the sheet never opens, and the watcher's unpan scrolled the site to the top */
 if (KBD) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? doneEl : sheet.querySelector(".wl-in"); } });
 
 /* ---------- open / close ---------- */

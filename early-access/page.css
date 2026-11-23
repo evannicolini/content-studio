@@ -393,6 +393,7 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
    laid out for a moment (kit.js SK.fullRender), so jumps land where they did. */
 main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
 html.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real */
+main > section.cv-near:not(#hero) { content-visibility: visible; }   /* within two screens: drawn ahead of the scroll (kit.js drawAhead) */
 #shoot { --cis: 1920px; } #chat { --cis: 850px; } #why { --cis: 860px; } #work { --cis: 1400px; } #anywhere { --cis: 850px; } #library { --cis: 2330px; }
 #viral { --cis: 2560px; } #notes { --cis: 1060px; } #aesthetic { --cis: 1420px; } #social { --cis: 2520px; } #sound { --cis: 870px; } #start { --cis: 1180px; }
 #views { --cis: 850px; } #connect { --cis: 1030px; } #creator { --cis: 1010px; } #pricing { --cis: 3030px; }

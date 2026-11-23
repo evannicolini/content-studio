@@ -393,6 +393,7 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
    laid out for a moment (kit.js SK.fullRender), so jumps land where they did. */
 main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
 html.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real */
+main > section.cv-near:not(#hero) { content-visibility: visible; }   /* within two screens: drawn ahead of the scroll (kit.js drawAhead) */
 #shoot { --cis: 1920px; } #chat { --cis: 850px; } #why { --cis: 860px; } #work { --cis: 1400px; } #anywhere { --cis: 850px; } #library { --cis: 2330px; }
 #viral { --cis: 2560px; } #notes { --cis: 1060px; } #aesthetic { --cis: 1420px; } #social { --cis: 2520px; } #sound { --cis: 870px; } #start { --cis: 1180px; }
 #views { --cis: 850px; } #connect { --cis: 1030px; } #creator { --cis: 1010px; } #pricing { --cis: 3030px; }
@@ -5187,8 +5188,8 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 @media (max-width: 520px) { .st-where { flex-wrap: wrap; } .st-show { margin-left: 54px; } }
 .st-mac { margin: 22px 0 6px; max-width: 460px; }
 .st-macp { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: var(--wl-l2); }
-.st-copy { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
-.st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.wl.st .st-copy {   /* scoped: 040 (the statement) has its own .st-copy, and this one squeezed its words to 48px on the home page */  display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
+.wl.st .st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
 .st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */
 .st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }   /* five chips: Something else takes the last row */

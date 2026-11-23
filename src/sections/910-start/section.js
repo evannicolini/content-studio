@@ -495,7 +495,7 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
   });
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
-if (!fine) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });   /* the keyboard on a phone: the bar steps aside only while it's really up */
+if (!fine && window.SK_PAGE) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });   /* the keyboard on a phone: the bar steps aside only while it's really up */
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;

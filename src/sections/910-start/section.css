@@ -374,8 +374,8 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 @media (max-width: 520px) { .st-where { flex-wrap: wrap; } .st-show { margin-left: 54px; } }
 .st-mac { margin: 22px 0 6px; max-width: 460px; }
 .st-macp { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: var(--wl-l2); }
-.st-copy { display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
-.st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.wl.st .st-copy {   /* scoped: 040 (the statement) has its own .st-copy, and this one squeezed its words to 48px on the home page */  display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
+.wl.st .st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
 .st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */
 .st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }   /* five chips: Something else takes the last row */
