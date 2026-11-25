@@ -2689,12 +2689,13 @@ sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) {
 
 /* ---------- share, text-first (Evan: "98% of sharing is texting a friend"). Text a friend opens our own preview of the message,
    editable, then Messages; Copy link and Share to your Story next; X, Email, Save and other apps under More. ---------- */
-var TXT = [   /* casual, like a real text; each ends with their link */
-  "yo I just got on the list for Studio, it turns one sentence into a finished video 🤯 sign up with my link and we both move up the list → ",
-  "ok you have to see this. Studio makes a whole video from one sentence. get on the list with my link and we both move up → ",
-  "just got on the waitlist for Studio (you type one sentence, it makes the video 😳) use my link and we both move up → "
+var TXT = [   /* Evan's own words first (the default); Say it another way goes through the rest, same voice. Each ends with their link.
+                 The referral moves people up the list (3 friends: all to the front), so nothing here promises more than that. */
+  "Hey, I've been using this Studio app for all my content recently, and it makes full videos from a single prompt. Join the early access list with my link and we both move up! → ",
+  "Hey, have you seen Studio? I've been making all my content with it lately, and it turns a single prompt into a full video. Join the early access list with my link and we both move up! → ",
+  "Hey, I found this app called Studio and I've been using it for everything I post. You type one prompt and it makes the whole video. Get on the early access list with my link and we both move up! → "
 ];
-var txtAt = Math.floor(Math.random() * TXT.length);
+var txtAt = 0;
 function txt() { return TXT[txtAt] + link(rec); }
 var UA = navigator.userAgent, CAN_SMS = /iPhone|iPad|iPod|Android/.test(UA) || /Macintosh/.test(UA);   /* phones, and Macs (Messages) */
 function smsHref(body) { return (/Android/.test(UA) ? "sms:?body=" : "sms:&body=") + encodeURIComponent(body); }
