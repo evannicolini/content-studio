@@ -268,14 +268,14 @@ function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[
 
 /* ---------- the stage: the app, signing you in ---------- */
 var BRANDS = [
-  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
-  { n: "MIRRA", s: "Social app", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
-  { n: "Custom Esignature", s: "E-signatures", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
+  { n: "Northwind", s: "Brand kit ready", m: "N", bg: "linear-gradient(140deg, #6E8FD8, #1D2F63)", ink: "#F5F3EE", sw: ["#0B1430", "#1D2F63", "#6E8FD8", "#EEF1F8"] },
+  { n: "Lowtide Coffee", s: "Coffee roasters", m: "L", bg: "linear-gradient(140deg, #D9A86C, #6B3F1D)", ink: "#FFF7EC", sw: ["#2A1708", "#6B3F1D", "#D9A86C", "#F6EEE3"] },
+  { n: "Fieldnote", s: "Outdoor goods", m: "F", bg: "linear-gradient(140deg, #BED2C3, #2F5D50)", ink: "#05090A", sw: ["#0E1F1A", "#2F5D50", "#BED2C3", "#EEF3EF"] },
   { n: "Fourth brand", s: "Ready when you are", m: "4", bg: "linear-gradient(140deg, #BBC9C7, #536878)", ink: "#05090A", sw: ["#05090A", "#536878", "#BBC9C7", "#DFEAE8"] },
   { n: "Fifth brand", s: "Ready when you are", m: "5", bg: "linear-gradient(140deg, #BED2C3, #0E191E)", ink: "#05090A", sw: ["#0E191E", "#536878", "#BED2C3", "#E5E4E2"] }
 ];
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
-function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
+function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* made-up demo brands only (tools/test_demo.js) */
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
 var AH = SK.appHome($("[data-st-ah]"), {});
@@ -741,6 +741,7 @@ whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("
 whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
+  if (trialEnded() && !me.promo) { $("[data-st-line]").innerHTML = "<b>Studio " + esc(pl.name) + " is " + esc(t) + ", starting today.</b> Cancel anytime in Studio, in Settings → Billing."; return; }
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
     : "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
 }
@@ -798,7 +799,7 @@ function payStep() {
   var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
   if (me.notrial && !me.promo) {   /* this account or card already had its trial (checkout-notrial-v1): the full price today, every month after */
     var np = me.notrial.price, npm = np + "/" + per, nextD = (function () { var d = new Date(NOW); if (per === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); })();
-    $("[data-st-payh]").textContent = "You've had your free trial.";
+    $("[data-st-payh]").textContent = trialEnded() ? PW.words.title : "You've had your free trial.";
     $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
     $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
@@ -952,7 +953,7 @@ function checkCode(token) {
 function oauth(way, b) {
   if (MOCK) {
     b.classList.add("busy"); b.querySelector(".t").textContent = "Opening " + (way === "apple" ? "Apple" : "Google") + "…"; SFX.play("send");
-    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
+    return wait(900).then(function () { me.first = "Alex"; me.email = "alex@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Alex"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
   }
   return supa().then(function (c) { return c.auth.signInWithOAuth({ provider: way, options: { redirectTo: location.origin + location.pathname + location.search + HASH } }); });
 }
@@ -1012,7 +1013,7 @@ function noTrial(x) {
     : "You've had your free trial. Studio " + pl.name + " is " + me.notrial.price + "/" + (me.period === "year" ? "year" : "month") + ".";
 }
 function lookup(code) {
-  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Evan Nicolini", name: "", plan: "pro" }; });
+  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Sam Rivera", name: "", plan: "pro" }; });
   return api("/web/invite?code=" + encodeURIComponent(code)).catch(function (x) { if (x.status === 404) return { state: "unknown" }; throw x; });
 }
 function redeem() {
@@ -1299,9 +1300,28 @@ window.addEventListener("message", function (e) {
   if (d.type === "studio-paywall:token" && d.token) { me.session = Object.assign({}, me.session, { access_token: d.token }); if (tokenWait) { var w = tokenWait; tokenWait = null; w.res(d.token); } }
 });
 var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
+/* the cases with words of their own, from pricing.json "paywall_copy" (the app's file, which the licence server publishes; pricing.py
+   puts it in window.SK_PRICES.copy, and Studio sends the same case's words with studio-paywall:open). "trial": day 14, the 14-day
+   trial ended: "Your trial ended. Keep your Studio.", the plans at their own price, no trial fee, no Look around. */
+var COPY = P.copy || {};
+function words(o) { var c = o && o.copy && typeof o.copy === "object" && o.copy.title ? o.copy : COPY[PW.action]; return c && c.title ? c : null; }
+function trialEnded() { return PAYWALL && !!PW && PW.action === "trial" && !!PW.words; }
+/* day 14: the plan at its own price today (checkout-notrial-v1, trial: false), whichever plan and period is picked */
+function endedPrice() {
+  if (!trialEnded() || me.promo) return;
+  var pl = planOf(me.plan), num = parseFloat(String(me.period === "year" ? then(pl.id, "year") : price(pl.id, me.period)).replace(/[^0-9.]/g, "")) || 0;
+  me.notrial = { price: "$" + (num % 1 ? num.toFixed(2) : num), cents: Math.round(num * 100) };
+}
 function pwHead() {
   if (!PAYWALL) return;
   var pl = planOf(me.plan), pq = stepEl("plan"), head = PW.mode === "locked" ? (HEADS[PW.action] || "Keep making with Studio.") : "Keep your Studio.";
+  if (trialEnded()) {
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(PW.words.title) + "<span>" + esc(PW.words.line || "") + "</span>";
+    pq.querySelector(".wl-qs").textContent = PW.words.sub || "";
+    $("[data-st-look]").textContent = PW.words.dismiss || "Not now";
+    return;
+  }
   pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>" + (me.promo ? "Your first month is free, then " : "14 days for $1, then ") + esc(then(pl.id, me.period)) + ".</span>";
   pq.querySelector(".wl-qs").textContent = me.promo ? "Cancel anytime before " + startsLong() + " and you won't be charged. Your plan starts " + startsLong() + "."
     : "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
@@ -1309,14 +1329,16 @@ function pwHead() {
 }
 function paywall(o) {
   o = o || {};
-  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] ? o.action : "";
+  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] || COPY[o.action] || (o.action === "trial" && o.copy) ? o.action : "";
+  PW.words = words(o); if (PW.action === "trial" && !PW.words) PW.action = "";
+  me.notrial = null;
   if (o.plan && planOf(o.plan).id === o.plan) me.plan = o.plan;
   if (o.period === "year" || o.period === "month") me.period = o.period;
   me.first = String(o.first || o.first_name || o.given_name || o.name || o.full_name || "").trim().split(/\s+/)[0]; me.email = o.email || "";   /* Studio sends first; the other names are taken too */ me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
   $("[data-st-badge]").textContent = "Unlock";
   perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
   drawPlans(); slidePer(); pwHead();
-  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Evan"; me.email = "evan@studio.com"; }
+  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Alex"; me.email = "alex@northwind.example"; }   /* a made-up person */
   steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
   at = 0; setStep(0, true); drawPlanStage();
 }
@@ -1327,7 +1349,7 @@ if (EMBED) sheet.classList.add("embed");
 
 /* first paint */
 drawPlans(); drawHome(); setStep(0, true);
-if (PAYWALL) paywall({});
+if (PAYWALL) paywall({ action: (/[#&?]action=(\w+)/.exec(location.hash + location.search) || [])[1] || "" });   /* #paywall&action=trial: day 14, on its own */
 if (INV) lookup(INV).then(setInvite, function () { setInvite({ state: "open", from: "" }); });
 /* back from Google/Apple (the session is in the address), or from a bank's 3-D Secure page (?paid=1) */
 if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { return c.auth.getSession(); }).then(function (r) {

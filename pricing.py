@@ -102,7 +102,28 @@ def period_view(data, period, team_cost):
 def view(data, team_cost):
     save = max([0] + [1 - p["year"]["price"] / (p["month"]["price"] * 12) for p in data["plans"]])
     return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100), "live": live(data),
-            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost)}
+            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost), "copy": paywall_copy(data)}
+
+
+COPY_CASES = ("trial",)     # the paywall's cases the site needs words for (910-start): "trial" is day 14, the 14-day trial ended
+COPY_FIELDS = ("title", "line", "sub", "dismiss")
+
+
+def paywall_copy(data):
+    """The paywall's words per case, from pricing.json "paywall_copy" (the app's file: Studio shows the same words), so they are
+    written in one place. The build fails when a case is missing: the licence server publishes the file when it is deployed
+    (server/deploy.py), so deploy the server first."""
+    c = data.get("paywall_copy")
+    out = {}
+    for case in COPY_CASES:
+        v = (c or {}).get(case) if isinstance(c, dict) else None
+        if not (isinstance(v, dict) and isinstance(v.get("title"), str) and v["title"].strip() and isinstance(v.get("line"), str)):
+            raise PricingError('pricing.json has no paywall_copy.%s {title, line}: the paywall\'s words come from the app\'s pricing.json '
+                               '(deploy the licence server first: it publishes the file)' % case)
+        out[case] = {f: v[f] for f in COPY_FIELDS if isinstance(v.get(f), str)}
+        if re.search(r"\$1(?![\d.,])|14 days for|look around", " ".join(out[case].values()), re.I):
+            raise PricingError("pricing.json paywall_copy.%s offers the trial again ($1, 14 days for, Look around): the trial has ended" % case)
+    return out
 
 
 def team_cost(template):
