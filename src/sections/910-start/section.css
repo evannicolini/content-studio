@@ -149,7 +149,7 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 
 /* phones */
 @media (max-width: 960px) {
-  /* phones: the app is there too, under the question, as on the waitlist (Evan: never cut it on phones) */
+  /* phones: the app is there too, under the question, as on the waitlist (the owner: never cut it on phones) */
   .st-mode { height: 26px; padding: 0 9px; font-size: 9px; letter-spacing: .1em; }
   .st-plans { grid-template-columns: 1fr; gap: 8px; }
   .st-plan { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 10px; padding: 14px 16px; }
@@ -173,7 +173,7 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st .wl-toast { white-space: nowrap; max-width: calc(100vw - 32px); }
 
 
-/* ---------- selected = brighter glass, the inner rim and the border beam; never a solid white fill (Evan's rule) ---------- */
+/* ---------- selected = brighter glass, the inner rim and the border beam; never a solid white fill (the owner's rule) ---------- */
 .st-sb { position: absolute !important; inset: 0; z-index: 0; border-radius: inherit !important; pointer-events: none; opacity: 0; transition: opacity .35s var(--ease); --beam-strength: 1.15; }
 .st-sb::after, .st-sb::before, .st-sb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .st-way > :not(.st-sb), .st-plan > :not(.st-sb) { position: relative; z-index: 1; }

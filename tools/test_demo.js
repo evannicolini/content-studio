@@ -1,7 +1,8 @@
 // Public previews use made-up demo data only: no real brand, person or count from a real Studio in the app previews the site
 // draws (the sign-up's and the paywall's app on the right, the early-access sheet's, SK.appHome / SK.BRANDS in kit.js), and the
 // day-14 paywall (#paywall&action=trial) says "Your trial ended. Keep your Studio." with the plans: no $1, no "14 days for",
-// no "Look around first", on its plan step or its pay step.
+// no "Look around first", on its plan step or its pay step. No comment in the sources names a private person or brand, and the
+// built output (what askstudio.ai serves) carries no comments at all (strip.py).
 //   node tools/test_demo.js                         the sources and the built preview pages (no browser)
 //   python3 build.py --serve  (PORT=8770 for another port)   then   node tools/test_demo.js http://127.0.0.1:8760
 //                                                   also the pages themselves, in headless Chrome (playwright-core: npm i
@@ -42,6 +43,30 @@ const prices = (start.match(/^window\.SK_PRICES = (.*);$/m) || [])[1];
 let copy = null; try { copy = JSON.parse(prices).copy.trial; } catch (e) {}
 check("the built page carries pricing.json's day-14 words (SK_PRICES.copy.trial)", !!copy && copy.title === "Your trial ended." && copy.line === "Keep your Studio.", copy);
 check("910-start does not type the day-14 words itself", !/Your trial ended/.test(sec.replace(/\/\*[\s\S]*?\*\//g, "")), "typed in section.js");
+
+// ---------------------------------------------------------------- comments
+// The sources' comments (src/, the Worker, tools/) never carry a private name either: they are public in the repo. And what the
+// build emits (strip.py, run by build.py) carries no comment at all: the main page, every page of its own, the legal pages. Licence
+// comments (/*! ... */, @license, @preserve) are the one kind kept. Comments are found by strip.py's own reader of JS, CSS and HTML
+// (strings, template literals and regex literals are never taken for comments).
+const { execFileSync } = require("child_process");
+const PY = process.env.PYTHON || "python3", STRIP = path.join(ROOT, "strip.py");
+const walk = (d) => fs.existsSync(d) ? fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => e.isDirectory() ? (e.name === "node_modules" ? [] : walk(path.join(d, e.name))) : [path.join(d, e.name)]) : [];
+const SOURCES = ["src", "worker/src", "worker/tests", "tools"].flatMap((d) => walk(path.join(ROOT, d))).filter((f) => /\.(m?js|css|html)$/.test(f));
+const notes = execFileSync(PY, [STRIP, "--comments", ...SOURCES], { encoding: "utf8", maxBuffer: 64 << 20 }).split("\n").filter(Boolean).map((l) => JSON.parse(l));
+const privNotes = notes.filter((c) => c.text.split("\n").some((l) => hits(l).length));
+check("the sources' comments (" + notes.length + " in " + SOURCES.length + " files): no private name", !privNotes.length,
+      privNotes.slice(0, 5).map((c) => path.relative(ROOT, c.file) + ": " + c.text.slice(0, 100)));
+const BUILT = ["index.html", "site.js", "site.css", "terms/index.html", "privacy/index.html"].concat(...["start", "early-access"].map((s) => ["index.html", "page.js", "page.css"].map((n) => s + "/" + n)));
+const LICENCE = /^\/\*!|@license|@preserve/;
+for (const f of BUILT) {
+  const p = path.join(ROOT, f);
+  if (!fs.existsSync(p)) { check(f + " is built", false, "missing"); continue; }
+  const left = execFileSync(PY, [STRIP, "--comments", p], { encoding: "utf8", maxBuffer: 64 << 20 }).split("\n").filter(Boolean).map((l) => JSON.parse(l).text).filter((t) => !LICENCE.test(t));
+  check(f + ": no comment in what the build emits", !left.length, left.slice(0, 3).map((t) => t.slice(0, 100)));
+}
+const kept = fs.readFileSync(path.join(ROOT, "site.js"), "utf8").match(/\/\*![^\n]*/g) || [];
+check("the licence comment is kept (thinking-orbs, MIT)", kept.some((l) => /MIT License/.test(l)), kept);
 
 if (!BASE) { console.log(failed ? "\n" + failed + " failed" : "\nall passed (sources; pass a site address to check the pages in Chrome too)"); process.exit(failed ? 1 : 0); }
 

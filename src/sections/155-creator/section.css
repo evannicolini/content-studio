@@ -1,8 +1,8 @@
 /* 155 the creator: the approved canvas "Creator B" (cr.css, B blocks, with A and C taken out), then the site's own frame:
    on desktop the 1404 x 1010 board is scaled to the frame's width (section.js sets --crk); under 1100px it stacks. */
 /* The creator, round 4. Studio's own language: a wallpaper frame, soft dark glass with the plain rim, Hanken 300, mono brackets.
-   The phone is the Custom Esignature site's iPhone asset (978x2000, screen inset 2.15% 5.05%, radius 11.5%/5.6%) with Evan's
-   real MIRRA profile inside: his clip on top, the real app screen below it. The orb is thinking-orbs "working" (orbs.js). */
+   The phone is an existing iPhone asset (978x2000, screen inset 2.15% 5.05%, radius 11.5%/5.6%) with the founder's
+   real profile inside: his clip on top, the real app screen below it. The orb is thinking-orbs "working" (orbs.js). */
 .cr { --sand: #f5f3ee; --sand2: rgba(245, 243, 238, .76); --sand3: rgba(245, 243, 238, .5);
   --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
   --glass: rgba(18, 22, 30, .46); --blur: blur(40px) saturate(115%);
@@ -29,7 +29,7 @@
   -webkit-mask: linear-gradient(180deg, #000 0, #000 11%, transparent 12.6%, transparent 53.6%, #000 56.6%); mask: linear-gradient(180deg, #000 0, #000 11%, transparent 12.6%, transparent 53.6%, #000 56.6%); }
 .cr-pframe { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
-/* ---------- Ask Evan: typeable, Enter opens his Digital Persona ---------- */
+/* ---------- Ask the founder: typeable, Enter opens his Digital Persona ---------- */
 .cr-q { position: relative; padding: 22px 18px 18px; }
 .cr-br { position: absolute; width: 16px; height: 16px; border: solid rgba(255, 255, 255, .72); border-width: 0; }
 .cr-br.tl { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
@@ -51,7 +51,7 @@
 .cr-go { width: 40px; height: 40px; border: 0; border-radius: 18px; display: grid; place-items: center; background: var(--sand); cursor: pointer; }
 .cr-go svg { width: 15px; height: 15px; stroke: #0b0c0e; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- the matched pair: his voice note, and the way to his MIRRA ---------- */
+/* ---------- the matched pair: his voice note, and the way to his profile ---------- */
 .cr-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .cr-pair.col { grid-template-columns: 1fr; }
 .cr-pill { display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 12px; height: 56px; padding: 0 8px; border-radius: 18px; background: rgba(255, 255, 255, .09); box-shadow: var(--rim); min-width: 0; }
@@ -169,7 +169,7 @@ a.cr-mirra { color: inherit; text-decoration: none; }
   .cr .cr-feather { height: 90px; }
   .cr-wp { right: 50%; transform: translateX(50%); bottom: 16px; height: 36px; }
   .cr-wp span { min-width: 150px; font-size: 12px; }
-  /* phones: the profile phone fades out under the Ask field instead of being cut flat; Meet Evan on MIRRA sits right under it
+  /* phones: the profile phone fades out under the Ask field instead of being cut flat; Meet the founder sits right under it
      (his profile, then the way to it), then the numbers, the tools, and what he founded */
   .cr .cr-stage { clip-path: none; }
   .cr .cr-stage .cr-phone { -webkit-mask-image: linear-gradient(180deg, #000 74%, transparent 87%); mask-image: linear-gradient(180deg, #000 74%, transparent 87%); }

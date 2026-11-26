@@ -42,7 +42,7 @@ var SFX = (function () {
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
+  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard */
   var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   /* only on the sheet's own page: on the home page the sheet never opens (open() goes to its page), and loading its sounds there fetched
      5.6 MB and decoded every line and the music twice (the waitlist's and the sign-up's) into memory, for nothing */
@@ -210,7 +210,7 @@ function setSound(on) {
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
-var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
+var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks */
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
 sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 /* the music never depends on where the first tap or key lands: any one, anywhere on the page, makes sure it's playing while the
@@ -317,7 +317,7 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
 /* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
-/* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
+/* The owner: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
 var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
 function setWalls(src) { Object.keys(WALLSET).forEach(function (k) { var u = src || "assets/" + WALLSET[k] + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
@@ -1201,7 +1201,7 @@ function open() {
 /* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader (Evan): the page builds itself in instead (.wl.open, section.css) */
+  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader: the page builds itself in instead (.wl.open, section.css) */
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {

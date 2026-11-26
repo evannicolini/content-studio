@@ -80,7 +80,7 @@ document.querySelectorAll("[data-early-band]").forEach(function (el) {
   f.innerHTML = STAR + "<span>Get early access</span>" + ARROW;
   document.body.appendChild(f);
   SK.gx(f, { hot: true });
-  /* one tap, at once (Evan, Instagram on his iPhone: "about 4 taps"). The tap is taken when the finger lifts (touchend), not from the
+  /* one tap, at once (the owner, Instagram on his iPhone: "about 4 taps"). The tap is taken when the finger lifts (touchend), not from the
      click iOS makes up after it, which it can hold back for a hover or drop when the tap only stopped a fling; the pill presses in
      under the finger and shows it's on its way (goAway) until the next page is up, and a second tap never restarts the trip. The
      page it opens is fetched once the pill first shows (warm), so it comes from the cache. */
@@ -129,7 +129,7 @@ var SFX = (function () {
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
+  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard */
   var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   /* only on the sheet's own page: on the home page the sheet never opens (open() goes to its page), and loading its sounds there fetched
      5.6 MB and decoded every line and the music twice (the waitlist's and the sign-up's) into memory, for nothing */
@@ -295,7 +295,7 @@ setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
 /* the pointer: a soft tick on hover (mouse only), a click on press; a key for every few letters typed */
 if (local) window.__wlSFX = SFX;   /* this Mac: the sound tests reach it */
-var HIT = ".wl-opt, button, .wl-sh, a, input:not(.wl-hp), select, label.wl-sms, .wl-kay, .pass, [role=button], .wl-slots li, .wl-copy";   /* every control clicks (Evan) */
+var HIT = ".wl-opt, button, .wl-sh, a, input:not(.wl-hp), select, label.wl-sms, .wl-kay, .pass, [role=button], .wl-slots li, .wl-copy";   /* every control clicks */
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
 sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 /* the music never depends on where the first tap or key lands: any one, anywhere on the page, makes sure it's playing while the
@@ -312,7 +312,7 @@ sheet.appendChild(sheet.querySelector(".wl-dock")); /* the bar and Kayla sit on 
 var ORDER = steps.map(function (s) { return s.getAttribute("data-q"); });
 /* a wallpaper per step, from the app's own set; the next one is fetched and decoded ahead, then crossfaded in */
 var PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
-var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, dune grass and ocean (Evan), the dune, the coast pine path (Evan), Pebble Beach, peach dawn */
+var WALL = {};   /* the app's clean wallpapers (never the film-grain ones): lone tree, dune grass and ocean, the dune, the coast pine path, Pebble Beach, peach dawn */
 function setWalls(src) { ["name", "roles", "brands", "claude", "you", "in"].forEach(function (k) { var u = src || "assets/wl/" + k + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");   /* each step its own; the Chapters pill can try one for all (SK.wallPick) */
 var wallCache = {}, wallTok = 0, wallNow = "";
@@ -569,7 +569,7 @@ function Pass(el, opts) {
         if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
       } else {
         var k = st.drag ? .35 : .09;
-        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift (Evan) */
+        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift */
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
       /* "Tap to flip", shown, not just said: until the first flip, every few seconds the pass starts to turn and settles back */
@@ -659,7 +659,7 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
 setTimeout(beamsOn, 0);
-/* every step starts at its top (Evan: scrolled down on one step, the next opened scrolled down). Before the swap, not after it: the
+/* every step starts at its top (the owner: scrolled down on one step, the next opened scrolled down). Before the swap, not after it: the
    step box, the sheet, the done screen and the window go to 0 at once; overflow off for that moment stops a fling iOS is still
    coasting (it would carry on past a plain scrollTop), and it's checked again once the swap has run, unless a finger is on it since */
 var touchedAt = 0;
@@ -1261,7 +1261,7 @@ function passSet(r) {
   pass2.set({ name: (r.first + " " + (r.last || "")).trim(), mail: ranked ? "On the list since " + new Date(r.at || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "On the list", k1: "Place", no: ranked ? "#" + place(r).toLocaleString("en-US") : "In", k3: "Friends", v3: Math.min(3, r.referrals || 0) + " of 3", sig: ranked ? "No. " + ("000" + place(r)).slice(-4) : "Studio", seed: r.code || r.first });
 }
 
-/* ---------- your friends, told truthfully (Evan: "not just a completed status, but an invite status"): each of the 3 slots is
+/* ---------- your friends, told truthfully (the owner: "not just a completed status, but an invite status"): each of the 3 slots is
    Not invited, Invited (you sent your link: Text a friend, Copy link, Share), Confirming (they signed up, their email isn't confirmed
    yet, so they don't count yet) or Joined (their first name). Invites are kept on this device and, with the pass, on the Worker, so
    every device shows them. The header says it in one line: "2 invites sent · 1 joined · 2 more to skip the line". ---------- */
@@ -1373,9 +1373,9 @@ function old(text) { var t = document.createElement("textarea"); t.value = text;
 sheet.querySelector('[data-sh="more"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code && navigator.share) navigator.share({ title: "Studio", text: txt() }).then(noteInvite, function () {}); });
 sheet.querySelector('[data-sh="save"]').addEventListener("click", function (e) { e.preventDefault(); moreMenu(false); if (rec && rec.code) story(rec, "save"); });
 
-/* ---------- share, text-first (Evan: "98% of sharing is texting a friend"). Text a friend opens our own preview of the message,
+/* ---------- share, text-first (the owner: "98% of sharing is texting a friend"). Text a friend opens our own preview of the message,
    editable, then Messages; Copy link and Share to your Story next; X, Email, Save and other apps under More. ---------- */
-var TXT = [   /* Evan's own words first (the default); Say it another way goes through the rest, same voice. Each ends with their link.
+var TXT = [   /* The owner's own words first (the default); Say it another way goes through the rest, same voice. Each ends with their link.
                  The referral moves people up the list (3 friends: all to the front), so nothing here promises more than that. */
   "Hey, I've been using this Studio app for all my content recently, and it makes full videos from a single prompt. Join the early access list with my link and we both move up! → ",
   "Hey, have you seen Studio? I've been making all my content with it lately, and it turns a single prompt into a full video. Join the early access list with my link and we both move up! → ",
@@ -1409,7 +1409,7 @@ function moreMenu(on) { moreM.hidden = !on; moreB.setAttribute("aria-expanded", 
 moreB.addEventListener("click", function (e) { e.stopPropagation(); moreMenu(moreM.hidden); });
 document.addEventListener("click", function (e) { if (!moreM.hidden && !moreM.contains(e.target)) moreMenu(false); });
 moreM.querySelectorAll('[data-sh="x"], [data-sh="mail"]').forEach(function (a) { a.addEventListener("click", function () { noteInvite(); setTimeout(function () { moreMenu(false); }, 200); }); });
-/* Share to your Story: our own full-screen preview of the real image (as MIRRA does), then Save to Photos and Open Instagram */
+/* Share to your Story: our own full-screen preview of the real image (as other apps do), then Save to Photos and Open Instagram */
 var storyBlob = null, storyFor = "";
 function storyOf(r) {
   if (storyBlob && storyFor === r.code) return Promise.resolve(storyBlob);

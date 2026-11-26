@@ -1095,7 +1095,7 @@
     sec.querySelectorAll("[data-sk-rest]").forEach(function (el) { el.removeAttribute("data-sk-rest"); });
   }
 
-  /* ---------- scroll focus (as on the Custom Esignature site): a section is dim and soft at the edge of the screen and comes to
+  /* ---------- scroll focus (as on another site): a section is dim and soft at the edge of the screen and comes to
      full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
   function focusSections() {
     if (SK.reduced) return;

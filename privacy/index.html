@@ -27,8 +27,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <script>document.documentElement.classList.add("js");</script>
 <style>
-/* Studio legal pages (terms/, privacy/). Built by build.py into each page. Same look as the site: dark page,
-   Hanken Grotesk light and tight, IBM Plex Mono labels, glass with a highlight on the edge, never a stroke. */
 :root {
   --ink: #090c11;
   --sand: #f5f3ee;
@@ -60,7 +58,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .label::before { content: "["; opacity: .55; }
 .label::after { content: "]"; opacity: .55; }
 
-/* ---------- header ---------- */
 .lg-nav { position: fixed; z-index: 60; top: 14px; left: 50%; transform: translateX(-50%); width: min(1180px, calc(100% - 28px)); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; color: var(--sand); }
 .brand .mark { width: 28px; height: 28px; overflow: visible; }
@@ -70,12 +67,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-links a[aria-current] { color: #fff; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); }
 .lg-links .home svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- the sky, faint, fading into the page ---------- */
 .sky { position: absolute; z-index: 0; inset: 0 0 auto; height: min(720px, 92vh); background: url(../assets/hero/sky.jpg) center 30% / cover no-repeat; opacity: .42; pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); }
 .sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 12, 17, 0), rgba(9, 12, 17, .5) 62%, var(--ink)); }
 
-/* ---------- page ---------- */
 .lg { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin-inline: auto; padding: 0 var(--gut); }
 .lg-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 7vw, 96px); }
 .lg-head h1 { font: 300 clamp(46px, 7vw, 104px)/.98 var(--sans); letter-spacing: -.045em; color: var(--sand); text-wrap: balance; }
@@ -87,7 +82,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-grid { display: grid; grid-template-columns: 250px minmax(0, 68ch); justify-content: space-between; gap: 72px; align-items: start; padding-bottom: clamp(80px, 10vw, 140px); }
 @media (min-width: 1100px) { .lg-grid { grid-template-columns: 270px minmax(0, 68ch); justify-content: start; gap: clamp(72px, 9vw, 150px); } }
 
-/* ---------- contents ---------- */
 .toc { position: sticky; top: var(--top); max-height: calc(100vh - var(--top) - 24px); overflow: auto; overscroll-behavior: contain; scrollbar-width: none; margin-left: -12px; }
 .toc::-webkit-scrollbar { display: none; }
 .toc-pill { display: none; }
@@ -98,7 +92,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .toc-list a.on { color: #fff; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
 .toc-list a.on b { color: var(--sand-2); }
 
-/* ---------- the document ---------- */
 .doc { min-width: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
 .doc > * + * { margin-top: 1.05em; }
 .doc strong { font-weight: 500; color: var(--sand); }
@@ -130,10 +123,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .doc .callout { position: relative; padding: 22px 26px; border-radius: 20px; font-size: 16px; line-height: 1.62; color: var(--sand); background: linear-gradient(135deg, rgba(191, 227, 255, .1), rgba(255, 255, 255, .025) 60%), var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .doc .callout > * + * { margin-top: .8em; }
 
-/* placeholders still to fill in: visible on purpose */
 mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; background: rgba(255, 184, 77, .14); padding: .22em .5em; border-radius: 6px; box-shadow: inset 1px 1px 1px -1px rgba(255, 214, 150, .7), inset -1px -1px 1px -1px rgba(255, 214, 150, .45); white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
-/* tables: glass rows */
 .tbl { margin-top: 1.4em !important; margin-bottom: .4em; }
 .tbl table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 15px; line-height: 1.55; }
 .tbl th { padding: 0 18px 4px; font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); text-align: left; vertical-align: bottom; }
@@ -145,16 +136,14 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 .tbl.cols-3 td:first-child { width: 24%; }
 .tbl.cols-2 td:first-child { width: 42%; }
 
-/* ---------- footer ---------- */
 .lg-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; width: 100%; max-width: 1180px; margin-inline: auto; padding: 40px var(--gut) 72px; font-size: 14px; color: var(--sand-3); }
 .lg-foot .brand { font-size: 17px; }
 .lg-foot .brand .mark { width: 26px; height: 26px; }
 .lg-foot .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .lg-foot .links a:hover { color: var(--sand); }
 
-/* ---------- tablet and phone ---------- */
 @media (max-width: 960px) {
-  :root { --top: 142px; } /* the header plus the sticky Contents pill */
+  :root { --top: 142px; }  
   .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .toc { z-index: 40; top: 82px; max-height: none; overflow: visible; margin: 0 0 40px; justify-self: start; max-width: 100%; }
   .toc-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 14px 0 18px; border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); font: 500 14px/1 var(--sans); color: var(--sand); white-space: nowrap; }
@@ -182,7 +171,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
   .doc h2 { gap: 12px; margin-bottom: 20px; }
   .doc .callout { padding: 18px 20px; border-radius: 18px; font-size: 15.5px; }
   .doc ol > li { padding-left: 2.2em; }
-  /* tables become stacked glass cards */
   .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; width: auto !important; }
   .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .tbl table { border-spacing: 0; }
@@ -199,7 +187,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 </style>
 </head>
 <body>
-<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
 
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -340,12 +327,6 @@ Contact: hello@askstudio.ai</p>
 </footer>
 
 <script>
-/* The site's one click sound (window.SKClick): the pass flip's own take (assets/sfx/app/ask-open.mp3), on every button, link and
-   [role=button] the main page and the legal pages have. One tiny Web Audio player: fetched and decoded a beat after the page has loaded, the
-   context is made and resumed inside that press, presses closer than 70 ms apart play once, nothing plays with reduced motion or
-   with the speaker off on the sign-ups (localStorage studio-wl-sound), and a blocked or missing audio stack is simply silent.
-   The sign-ups (900-early, 910-start) play the same file through their own mixer; SKClick.own is true there (window.SK_PAGE), so it never doubles.
-   build.py puts this file before kit.js on every page; legal.py puts it before legal.js. */
 (function () {
   "use strict";
   if (window.SKClick) return;
@@ -353,7 +334,6 @@ Contact: hello@askstudio.ai</p>
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = null, loading = false, last = 0;
   var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function off() { try { return localStorage.getItem("studio-wl-sound") === "off"; } catch (e) { return false; } }
-  /* decoded off to the side (an OfflineAudioContext needs no gesture and logs no autoplay warning), once the page has settled */
   function load() {
     if (loading || reduced || !AC || SKClick.own) return; loading = true;
     var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
@@ -376,8 +356,7 @@ Contact: hello@askstudio.ai</p>
     try { var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buf; g.gain.value = gain || GAIN; s.connect(g); g.connect(ctx.destination); s.start(); } catch (e) {}
   }
   var HIT = "button, a[href], [role=button], summary, input[type=checkbox], input[type=radio], input[type=submit], input[type=button]";
-  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };   /* a sign-up page (SK_PAGE) clicks through its own mixer */
-  /* the first press only warms it up (fetch + decode take a beat); every press after that clicks */
+  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };    
   document.addEventListener("pointerdown", function (e) {
     if (SKClick.own) return;
     var t = e.target && e.target.closest && e.target.closest(HIT);
@@ -387,7 +366,6 @@ Contact: hello@askstudio.ai</p>
   document.addEventListener("keydown", function (e) { if (!SKClick.own && (e.key === "Enter" || e.key === " ") && e.target && e.target.closest && e.target.closest(HIT)) play(); }, true);
 })();
 
-/* Studio legal pages: the contents list follows the reader (current section highlighted), and on phones it folds into a pill. */
 (function () {
   var toc = document.querySelector(".toc"), pill = toc && toc.querySelector(".toc-pill"), cur = toc && toc.querySelector("[data-cur]");
   if (!toc) return;
@@ -419,7 +397,6 @@ Contact: hello@askstudio.ai</p>
     var a = links[on];
     a.classList.add("on");
     a.setAttribute("aria-current", "location");
-    /* keep the highlighted entry in view inside the sticky list (desktop), without moving the page */
     var box = getComputedStyle(toc).overflowY === "auto" ? toc : null;
     if (box) {
       var t = a.offsetTop, b = t + a.offsetHeight;
