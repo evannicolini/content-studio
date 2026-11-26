@@ -1,7 +1,7 @@
 # Studio Terms of Service
 
 **Effective date:** November 20, 2026
-**Last updated:** November 20, 2026
+**Last updated:** November 26, 2026
 
 > **Please read Section 22.** It requires most disputes to be resolved by individual binding arbitration rather than in court, and waives your right to a jury trial and to take part in a class action. You can opt out within 30 days (Section 22.8).
 
@@ -58,14 +58,14 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 Prices are in US dollars and exclude taxes. The Site and checkout show current plans and prices; if those differ from this table, the price shown at checkout when you subscribe applies.
 
-**5.2 The "14 days for $1" trial.** New subscribers may be offered a 14-day trial for a one-time fee of $1.00 (the "**Trial Fee**").
+**5.2 The free 14-day trial.** New users may be offered a free 14-day trial of the Service.
 
-- We charge the $1.00 Trial Fee when you start the trial.
-- Your trial lasts 14 days. **Unless you cancel before your trial ends, on day 15 (14 days after you start) your subscription automatically converts to the plan you chose, and we charge that plan's full monthly price to your payment method.** Checkout shows the exact renewal date.
-- One trial per person, household, payment method and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).
-- We email you a reminder before your trial converts. If the reminder doesn't arrive, that doesn't change your renewal date or your right to cancel.
+- The trial is free. We don't ask for a payment method to start it, and nothing is charged during it.
+- Your trial lasts 14 days from when you start it. The App shows how many days are left.
+- **When your trial ends, it does not turn into a paid subscription on its own.** To keep using the Service, you choose a plan and subscribe through checkout. Until you do, your access to the paid features stops at the end of the trial.
+- One trial per person, household and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).
 
-**5.3 Automatic renewal.** **Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.** By starting a trial or subscription and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.
+**5.3 Automatic renewal.** **Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.** By subscribing and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.
 
 **5.4 How to cancel.** You can cancel at any time, effective immediately for future renewals, by any of these methods:
 
@@ -75,7 +75,7 @@ Prices are in US dollars and exclude taxes. The Site and checkout show current p
 
 Cancelling stops all future charges. **You keep access until the end of the period you've already paid for (or the end of your trial), and then your subscription ends.** We send a confirmation when you cancel. Deleting the App does not cancel your subscription.
 
-**5.5 Refunds.** **The $1.00 Trial Fee and all subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.** We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.
+**5.5 Refunds.** **Subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.** We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.
 
 **5.6 Price changes.** We may change plan prices. We'll give you at least **30 days' notice** by email before a new price applies to your subscription, and it will take effect only at your next renewal after the notice period. If you don't want to pay the new price, cancel before it takes effect. If you keep your subscription after it takes effect, you agree to the new price.
 
