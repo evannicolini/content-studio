@@ -1692,9 +1692,10 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
   .wl.st[data-step="pay"] .wl-form { flex: 1; min-height: 0; display: flex; flex-direction: column; }
   .wl.st[data-step="pay"] .wl-steps { flex: 1; min-height: 0; height: auto !important; }
   .wl.st[data-step="pay"] .wl-q[data-q="pay"].on { height: 100%; display: flex; flex-direction: column; }
-  .st-pscroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin: 0 -10px; padding: 0 10px 4px; }
+  .st-pscroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin: 0 -10px; padding: 0 10px 2px; }
   .st-pscroll::-webkit-scrollbar { display: none; }
-  .st-pfoot { flex: none; padding-top: 2px; }
+  .st-pfoot { flex: none; }
+  .st-pfoot .st-agree { margin-top: 6px; }
   .st-pfoot { position: relative; }
   .st-more { position: absolute; z-index: 3; left: calc(min(100%, 460px) + 10px); top: -46px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; cursor: pointer;
     background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim), 0 8px 24px -10px rgba(0, 0, 0, .5); transition: transform .25s var(--ease); }
@@ -1704,6 +1705,11 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 }
 @media (min-width: 961px) and (max-height: 900px) {
   .wl.st[data-step="pay"] .wl-qh { font-size: clamp(28px, 2.5vw, 40px); }
+  .wl.st[data-step="pay"] [data-st-then] { display: none; }    
+}
+@media (max-width: 960px) {
+  .wl.st .wl-in { scroll-padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .st-agree .tx small, .st-under { color: rgba(245, 243, 238, .94); text-shadow: 0 1px 2px rgba(6, 9, 13, .55), 0 0 14px rgba(6, 9, 13, .6), 0 0 32px rgba(6, 9, 13, .45); }
 }
 
 .wl.st.paywall .st-how, .wl.st.paywall .st-dl { display: none; }
