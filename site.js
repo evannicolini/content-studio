@@ -2,7 +2,7 @@ window.SK_MEDIA = {"generated":"2026-11-17","note":"All paths are relative to th
 
 window.SK_WAITLIST = {"api":"https://studio-waitlist.studio-licence.workers.dev","brevo_form":"","webhook":"","count_offset":1224,"signup_open":false};
 
-window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""},"copy":{"trial":{"title":"Your trial ended.","line":"Keep your Studio.","sub":"Everything you made is still here. Pick a plan and carry on where you left off.","dismiss":"Not now"}}};
+window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""},"copy":{"trial":{"title":"Your trial ended.","line":"Keep your Studio.","sub":"Everything you made is still here. Pick a plan and carry on where you left off.","dismiss":"Not now"}},"trial_fee":0,"trial_days":14};
 
 (function () {
   "use strict";
@@ -6521,7 +6521,7 @@ var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { nud
 function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
-    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
+    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days free, no card"] }
     : paidStart() ? { kind: pl.name + " · " + (me.period === "year" ? "Yearly" : "Monthly"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, tk: "Price", trial: me.notrial.price + "/" + (me.period === "year" ? "yr" : "mo"), k3: "Renews", v3: renewsShort(), sig: "Studio " + pl.name, seed: (nm + me.email) || "studio" }
     : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), tk: "Trial", name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
@@ -6616,7 +6616,7 @@ function setStep(n, quiet, ack) {
   story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
-  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
+  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? [FEE === 0 && !trialEnded() ? "pw-ok" : "pw-notrial"] : [LINE[q]]));
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
@@ -6825,7 +6825,7 @@ whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("
 whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
-  if (trialEnded() && !me.promo) { $("[data-st-line]").innerHTML = "<b>Studio " + esc(pl.name) + " is " + esc(t) + ", starting today.</b> Cancel anytime in Studio, in Settings → Billing."; return; }
+  if (straight() && !me.promo) { $("[data-st-line]").innerHTML = "<b>Studio " + esc(pl.name) + " is " + esc(t) + ", starting today.</b> Cancel anytime in Studio, in Settings → Billing."; return; }
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
     : "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
 }
@@ -6880,7 +6880,7 @@ function payStep() {
   var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
   if (me.notrial && !me.promo) {    
     var np = me.notrial.price, npm = np + "/" + per, nextD = (function () { var d = new Date(NOW); if (per === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); })();
-    $("[data-st-payh]").textContent = trialEnded() ? PW.words.title : "You've had your free trial.";
+    $("[data-st-payh]").textContent = trialEnded() ? PW.words.title : FEE === 0 ? "Keep your Studio." : "You've had your free trial.";
     $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
     $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
@@ -6983,7 +6983,7 @@ applyB.addEventListener("click", applyCode);
 pin.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
 pin.addEventListener("input", function () { pfield.classList.remove("bad"); });
 SK.keepTyping([pin, form.elements.pname, form.elements.first, form.elements.email]);    
-$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast("Code removed. Back to 14 days for $1."); });
+$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast(FEE ? "Code removed. Back to 14 days for $" + FEE + "." : "Code removed."); });
 agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 
 function E(code, human, extra) { var e = new Error(code); e.code = code; e.human = human; return Object.assign(e, extra || {}); }
@@ -7135,7 +7135,7 @@ function showDone(has) {
     : PAYWALL && paidStart() ? "You're on Studio " + pl.name + ". Your next charge is " + me.notrial.price + " on " + renewsLong() + "."
     : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
-    : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
+    : "Free to start. Your first 14 days are free, with no card: pick a plan when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
   if (STUDIO && h.code) { h.download = h.open = STUDIO + "/_launch/download?code=" + encodeURIComponent(h.code); }
   open.href = h.open || "studio://"; dl.href = h.download || "#";
@@ -7357,10 +7357,12 @@ window.addEventListener("message", function (e) {
 });
 var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
 var COPY = P.copy || {};
+var FEE = Number(P.trial_fee) || 0;
+function straight() { return PAYWALL && (FEE === 0 || trialEnded()); }
 function words(o) { var c = o && o.copy && typeof o.copy === "object" && o.copy.title ? o.copy : COPY[PW.action]; return c && c.title ? c : null; }
 function trialEnded() { return PAYWALL && !!PW && PW.action === "trial" && !!PW.words; }
 function endedPrice() {
-  if (!trialEnded() || me.promo) return;
+  if (!straight() || me.promo) return;
   var pl = planOf(me.plan), num = parseFloat(String(me.period === "year" ? then(pl.id, "year") : price(pl.id, me.period)).replace(/[^0-9.]/g, "")) || 0;
   me.notrial = { price: "$" + (num % 1 ? num.toFixed(2) : num), cents: Math.round(num * 100) };
 }
@@ -7372,6 +7374,13 @@ function pwHead() {
     pq.querySelector(".wl-qh").innerHTML = esc(PW.words.title) + "<span>" + esc(PW.words.line || "") + "</span>";
     pq.querySelector(".wl-qs").textContent = PW.words.sub || "";
     $("[data-st-look]").textContent = PW.words.dismiss || "Not now";
+    return;
+  }
+  if (straight() && !me.promo) {            
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>Studio " + esc(pl.name) + " is " + esc(then(pl.id, me.period)) + ".</span>";
+    pq.querySelector(".wl-qs").textContent = "Your plan starts today. Cancel anytime in Studio, in Settings → Billing.";
+    $("[data-st-look]").textContent = PW.mode === "locked" ? "Not now" : "Look around first";
     return;
   }
   pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>" + (me.promo ? "Your first month is free, then " : "14 days for $1, then ") + esc(then(pl.id, me.period)) + ".</span>";

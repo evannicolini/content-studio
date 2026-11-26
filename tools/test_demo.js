@@ -119,7 +119,14 @@ const DOLLAR1 = /\$1(?![\d.,])/;          // the trial fee: "$1", never "$199" o
   await p.goto(BASE + "/start/?s=" + Date.now() + "#paywall", { waitUntil: "load" });
   await p.waitForTimeout(4000);
   t = await visible();
-  check("the onboarding paywall still says 14 days for $1", /14 days for \$1/.test(t) && /Look around first/.test(t), t.slice(0, 200));
+  // pricing.json "trial_fee": 0 (window.SK_PRICES.trial_fee): the trial is at sign-in, no card, so this paywall sells the plan itself
+  check("the onboarding paywall: Keep your Studio, the plan at its own price, no $1, no \"14 days for\"", /Keep your Studio\./.test(t) && /Studio Pro is \$199\/mo/.test(t)
+        && !DOLLAR1.test(t) && !/14 days for/i.test(t) && /Look around first/.test(t), t.slice(0, 200));
+  await p.click("[data-st-next]").catch(() => {});
+  await p.waitForTimeout(2500);
+  t = await visible();
+  check("the onboarding paywall's pay step: the plan's price today, no $1, no trial", /\$199 today/.test(t) && !DOLLAR1.test(t) && !/14 days for/i.test(t) && !/day trial/i.test(t),
+        (t.match(/.{0,50}(\$1(?![\d.,])|14 days for|day trial|today).{0,50}/i) || [""])[0]);
   check("no page errors", !errs.length, errs.slice(0, 3));
   await b.close();
   console.log(failed ? "\n" + failed + " failed" : "\nall passed");

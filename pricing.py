@@ -102,7 +102,18 @@ def period_view(data, period, team_cost):
 def view(data, team_cost):
     save = max([0] + [1 - p["year"]["price"] / (p["month"]["price"] * 12) for p in data["plans"]])
     return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100), "live": live(data),
-            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost), "copy": paywall_copy(data)}
+            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost), "copy": paywall_copy(data),
+            "trial_fee": trial_fee(data), "trial_days": data.get("trial_days") if isinstance(data.get("trial_days"), int) else 0}
+
+
+def trial_fee(data):
+    """pricing.json "trial_fee": what a trial at checkout costs (0 now: the trial is at sign-in, no card, and checkout is the plan
+    itself). 910-start reads it (window.SK_PRICES.trial_fee) to drop the trial step and its copy."""
+    try:
+        n = float(data.get("trial_fee") or 0)
+    except (TypeError, ValueError):
+        n = 0
+    return int(n) if n == int(n) else n
 
 
 COPY_CASES = ("trial",)     # the paywall's cases the site needs words for (910-start): "trial" is day 14, the 14-day trial ended
@@ -222,8 +233,11 @@ def trial_html(data):
     d = data.get("trial_days")
     if not isinstance(d, int) or d <= 0:
         return ""
-    return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything, free. Card required. You won\'t be charged for %d days. '
-            'On a smaller plan, extra brands are locked, never deleted.</p>' % (d, d))
+    if trial_fee(data):                  # the old card trial at checkout (only with a fee)
+        return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything. Card required. You won\'t be charged for %d days. '
+                'On a smaller plan, extra brands are locked, never deleted.</p>' % (d, d))
+    return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything, free, with no card. Pick your plan when you\'re ready. '
+            'On a smaller plan, extra brands are locked, never deleted.</p>' % d)
 
 
 def render(template):
