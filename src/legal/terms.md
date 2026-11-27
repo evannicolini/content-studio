@@ -55,7 +55,9 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 This section protects Studio itself, not what you make with it: the videos and other content you create stay Your Content under Section 9.
 
-**Breach.** Breaking this Section 4.5 or Section 4.2 is a material breach. We may end your licence and account immediately under Section 14.2, **with no refund of any fees, including prepaid fees**, and we may enforce our intellectual property and other rights by any lawful means, including going to court for an injunction under Section 22.4, damages, and recovery of our reasonable legal fees where the law allows.
+**Two strikes for attempts through Studio's AI.** If you use, or try to use, Studio or its AI to extract, copy or recreate Studio Materials, the first attempt gets a warning in the App (we may also email it to you). **A second attempt on your account automatically suspends your licence and account**, and no refund of any fees is due. Detection is automated and can be wrong: if you believe a warning or suspension was a mistake, email hello@askstudio.ai with "Appeal" in the subject within 30 days. We'll review it and reply, and if it was a mistake we'll lift the strike or restore your access. This warning step covers only attempts made through Studio or its AI; it doesn't limit what we may do about other breaches of Section 4.2 or this Section 4.5.
+
+**Breach.** Breaking this Section 4.5 or Section 4.2 is a material breach. Subject to the two-strike rule above for attempts through Studio's AI, we may end your licence and account immediately under Section 14.2, **with no refund of any fees, including prepaid fees**, and we may enforce our intellectual property and other rights by any lawful means, including going to court for an injunction under Section 22.4, damages, and recovery of our reasonable legal fees where the law allows.
 
 ## 5. Subscriptions, trial and billing
 
