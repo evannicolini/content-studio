@@ -1,7 +1,7 @@
 # Studio Privacy Policy
 
 **Effective date:** November 20, 2026
-**Last updated:** November 22, 2026
+**Last updated:** November 26, 2026
 
 ## The short version
 
@@ -52,6 +52,8 @@ This Privacy Policy explains how Nicolini Productions LLC, a California company 
 When Studio shows you the plans, it sends the same two codes, and nothing else, to ask whether this Mac can still have a free trial. For each Mac of a key, our server keeps that code, the version, and when it first and last checked in. A Mac that hasn't checked in for 30 days is removed.
 
 **Consent records.** When you agree to auto-renewal at checkout, or to receive texts from us, we record the IP address you agreed from, the country it points to, your browser (its user agent), the exact wording shown to you, and the date and time you agreed. We keep these records as proof of your consent, for the periods in Section 8.
+
+**Refused requests to copy Studio.** When Studio refuses a request to copy or rebuild Studio itself, we record the time and the kind of request against the licence, never what was asked. Under the Terms, a second such request suspends the licence automatically; you can appeal by email.
 
 **2.3 Information from others**
 
@@ -129,6 +131,7 @@ All the above categories exclude text messaging originator opt-in data and conse
 | Data | How long |
 | --- | --- |
 | Account, licence and device data | While your account is open, then deleted within 30 days of account deletion |
+| Refused-request records (time and kind only, Section 2.2) | While your account is open, then deleted within 30 days of account deletion |
 | Billing and transaction records | As long as tax and accounting law requires (typically 7 years) |
 | Waitlist data | Until you join Studio, ask to be removed, or 24 months after you sign up, whichever comes first |
 | SMS and email consent and opt-out records | For as long as we message you, plus 5 years as proof of consent |
@@ -162,7 +165,7 @@ This section is for residents of California and other US states with consumer pr
 | --- | --- |
 | Providing your account, licence and subscription | Performance of a contract |
 | Billing, tax and accounting records | Legal obligation |
-| Security, fraud prevention, diagnostics, product improvement, waitlist and referral operation | Our legitimate interests in running a secure, working, improving service. We balance these against your rights |
+| Security, fraud prevention, enforcing our Terms (including refused-request records), diagnostics, product improvement, waitlist and referral operation | Our legitimate interests in running a secure, working, improving service. We balance these against your rights |
 | Marketing emails | Consent, or legitimate interests for existing customers where the law allows. You can opt out anytime |
 | SMS messages | Consent |
 | Non-essential cookies (if we ever use them) | Consent |
@@ -171,7 +174,7 @@ This section is for residents of California and other US states with consumer pr
 
 **10.3 International transfers.** We're based in the United States, and our processors may handle data in the US and other countries. When we transfer personal information from the EU, UK or Switzerland, we rely on appropriate safeguards, such as the European Commission's Standard Contractual Clauses (with the UK Addendum where applicable), or a provider's certification under the EU-US Data Privacy Framework and its UK and Swiss extensions.
 
-**10.4 Automated decisions.** We don't make decisions that have legal or similarly significant effects on you based solely on automated processing. Waitlist position and referral rank are calculated automatically, but they don't have those effects.
+**10.4 Automated decisions.** Waitlist position and referral rank are calculated automatically, but they don't have legal or similarly significant effects on you. One decision is automatic and does: under Section 4.5 of our Terms, a second request to use Studio to copy or rebuild Studio itself suspends the licence automatically, as part of the contract you agreed to. You can contest it and have a person review it by emailing hello@askstudio.ai with "Appeal" in the subject within 30 days; if it was a mistake, we restore your access. We make no other decisions with those effects based solely on automated processing.
 
 ## 11. SMS terms
 
