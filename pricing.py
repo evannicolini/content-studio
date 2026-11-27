@@ -26,6 +26,10 @@ LOGOS = {"meta": ("assets/logos/svg/meta.svg", "w"), "claude": ("assets/logos/sv
          "higgsfield": ("assets/logos/svg/higgsfield.svg", "w"), "elevenlabs": ("assets/logos/svg/elevenlabs.svg", "g"),
          "metricool": ("assets/logos/metricool.png", "g"), "instagram": ("assets/logos/social/ig.svg", "w"),
          "ig": ("assets/logos/social/ig.svg", "w")}
+# Rows of pricing.json the WEBSITE never shows (the app's own plan cards still do). Matched on the label's start, in lower case.
+# "Creators: UGC and influencer finder": Evan, 2026-11-26, "We definitely do not need the creators line on the new website
+# pricing." Dropped in load(), so the pricing panel, the plan cards, the checkout and window.SK_PRICES all leave it out.
+SITE_SKIP_ROWS = ("creators:",)
 
 
 class PricingError(Exception):
@@ -49,7 +53,8 @@ def load():
     plans = data.get("plans") or []
     if not plans or any(not isinstance((p.get("month") or {}).get("price"), int) or not isinstance((p.get("year") or {}).get("price"), int) for p in plans):
         raise PricingError("pricing.json: every plan needs whole-dollar month.price and year.price")
-    for row in data.get("rows") or []:
+    data["rows"] = [r for r in data.get("rows") or [] if not str(r.get("label") or "").strip().lower().startswith(SITE_SKIP_ROWS)]
+    for row in data["rows"]:
         missing = [p["id"] for p in plans if p["id"] not in (row.get("values") or {})]
         if missing:
             raise PricingError("pricing.json: row %r has no value for %s" % (row.get("label"), ", ".join(missing)))
