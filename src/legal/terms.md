@@ -46,6 +46,17 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 **4.4 Reservation.** The App is licensed, not sold. We and our licensors keep all rights not expressly granted to you.
 
+**4.5 Studio's code, instructions, look and packs.** Studio's software and code; the instructions, prompts, skills and rules that guide its AI; the packs our servers deliver (including the AI pack, media library, sound effects and other content packs); its templates and presets; and its distinctive look, motion and visual style (together, "**Studio Materials**") are our confidential property and trade secrets. They are licensed to you only for use inside the App under Section 4.1. Unless we agree in writing, you may not, and may not help or let anyone else:
+
+- reverse engineer, decompile, extract, scrape, copy, record or reproduce any Studio Materials, except to the extent applicable law forbids this restriction;
+- sell, resell, share, publish, give away or redistribute Studio Materials, or packs or files taken from the App, on their own or bundled with anything else;
+- use Studio Materials, or anything derived from them, to build, train, improve or market a product or service that competes with Studio, or to recreate the App, its presets or its visual style in another product;
+- use Studio, its AI or any AI account connected to it to do any of the above, including by asking it to reveal, rewrite or export its instructions, prompts, skills or packs.
+
+This section protects Studio itself, not what you make with it: the videos and other content you create stay Your Content under Section 9.
+
+**Breach.** Breaking this Section 4.5 or Section 4.2 is a material breach. We may end your licence and account immediately under Section 14.2, **with no refund of any fees, including prepaid fees**, and we may enforce our intellectual property and other rights by any lawful means, including going to court for an injunction under Section 22.4, damages, and recovery of our reasonable legal fees where the law allows.
+
 ## 5. Subscriptions, trial and billing
 
 **5.1 Plans.** Studio is sold as a monthly subscription. Current plans:
@@ -164,7 +175,7 @@ We may remove content we can access, disable features, or suspend or terminate a
 
 ## 12. Our intellectual property; feedback
 
-**12.1 Ours.** The Service, including the App, Site, software, design, templates, workflows, prompts we provide, documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.
+**12.1 Ours.** The Service, including the App, Site, software, design, templates, workflows, prompts we provide, Studio Materials (Section 4.5), documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.
 
 **12.2 Feedback.** If you send us ideas, suggestions or feedback, you give us a perpetual, irrevocable, worldwide, royalty-free licence to use them for any purpose without paying or crediting you. You aren't required to send feedback.
 
@@ -189,7 +200,7 @@ If your material was removed and you believe that was a mistake, you may send a 
 
 **14.2 By us.** We may suspend or terminate your access, or any part of it, immediately and without notice, if we reasonably believe you violated these Terms, created risk or possible legal exposure for us or others, failed to pay, or engaged in fraud or abuse, or if we're required to by law. We may also stop offering the Service, or any plan, for any reason, with at least 30 days' notice to active subscribers. **If we terminate your paid subscription for convenience (not because of your breach), we'll refund the prepaid fees for the unused part of your current billing period.** No other refunds are due on termination.
 
-**14.3 Effect.** When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.
+**14.3 Effect.** When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 4.2, 4.5, 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.
 
 ## 15. Changes to the Service
 
