@@ -1,6 +1,6 @@
 // Locks the download link behind the invite code. The link is stored encrypted in assets/gate.json; only the right code opens it.
 //   node tools/make_gate.mjs "<invite code>" "<download url>" [size in MB] [version]
-// Codes are compared in capitals with spaces and dashes ignored, so "dream it" and "DREAM-IT" are the same code.
+// Codes are compared in capitals with spaces, dashes and other punctuation ignored, so "<invite code>" and "<INVITE-CODE>" are the same code.
 // Change the code or the link: run this again, then python3 build.py, then publish.
 import { webcrypto as c } from "node:crypto";
 import { writeFileSync } from "node:fs";
