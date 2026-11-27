@@ -5,7 +5,7 @@
 //   python3 build.py --serve   (PORT=8770)   and, for the last part,   cd worker && npx wrangler@4 dev --port 8819 --var DEV_ECHO:1
 //   node tools/test_worklinks.js [http://127.0.0.1:8760] [http://127.0.0.1:8819]
 // Exit code 1 if anything fails. Writes shots to tools/_shots/ (not in git).
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const pw = require("playwright-core"); const { launch } = require("./browser");   // Playwright's own headless Chromium, never the owner's Chrome // npm i playwright-core, or set NODE_PATH to a folder that has it
 const fs = require("fs"), path = require("path");
 const BASE = (process.argv[2] || "http://127.0.0.1:8760").replace(/\/+$/, ""), API = (process.argv[3] || "").replace(/\/+$/, "");
 const SHOTS = path.join(__dirname, "_shots"); fs.mkdirSync(SHOTS, { recursive: true });
@@ -14,7 +14,7 @@ const check = (name, ok, got) => { if (!ok) failed++; console.log((ok ? "PASS " 
 const SIZES = [["desktop 1440", { width: 1440, height: 900 }, false], ["desktop 1280", { width: 1280, height: 800 }, false], ["phone 375", { width: 375, height: 667 }, true], ["phone 393", { width: 393, height: 852 }, true], ["phone 440", { width: 440, height: 956 }, true]];
 
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--mute-audio"] });
+  const b = await launch({ args: ["--mute-audio"] });
   for (const [name, vp, mob] of SIZES) {
     const ctx = await b.newContext({ viewport: vp, isMobile: mob, hasTouch: mob, deviceScaleFactor: mob ? 3 : 1, permissions: ["clipboard-read", "clipboard-write"] });
     const p = await ctx.newPage(); const errs = []; p.on("pageerror", (e) => errs.push(e.message));

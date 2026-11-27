@@ -4,7 +4,7 @@
 // longest, total blocking time) and the main thread's own split (script, style, layout). Chrome measures the main thread; WebKit
 // can't be slowed, so this is the cost the page asks of a phone, not WebKit's own number.
 //   python3 build.py --serve   (PORT=8770)   then   node tools/perf_inapp.js [http://127.0.0.1:8760] [--rates 4,6] [--ua instagram|safari] [--json out.json]
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const pw = require("playwright-core"); const { launch } = require("./browser");   // Playwright's own headless Chromium, never the owner's Chrome // npm i playwright-core, or set NODE_PATH to a folder that has it
 const fs = require("fs");
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
@@ -40,7 +40,7 @@ const live = (p) => p.evaluate(() => {   // what the page has going at this mome
 });
 
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--mute-audio", "--autoplay-policy=document-user-activation-required"] });
+  const b = await launch({ args: ["--mute-audio", "--autoplay-policy=document-user-activation-required"] });
   const all = {};
   for (const rate of RATES) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 664 }, screen: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: UA });
