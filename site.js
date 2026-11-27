@@ -6988,7 +6988,7 @@ form.addEventListener("submit", function (e) {
   if (ORDER[at] !== "pay") { advance(); return; }
   if (go.classList.contains("busy")) return;
   if (!$("[data-st-name]").hidden && !val("pname")) { err("Add your name for your pass."); form.elements.pname.focus(); return; }
-  if (!agree.checked) { err("Please check the box to confirm the renewal terms."); agreeL.classList.remove("bad"); void agreeL.offsetWidth; agreeL.classList.add("bad"); SFX.play("tick"); return; }
+  if (!agree.checked) { err("Please check the box to confirm the renewal terms."); agreeL.classList.remove("bad"); void agreeL.offsetWidth; agreeL.classList.add("bad"); SFX.play("tick"); var bar = $(".st-dock .wl-bar"), ar = agreeL.getBoundingClientRect(); if (bar && ar.bottom > bar.getBoundingClientRect().top - 8) agreeL.scrollIntoView({ block: "center", behavior: SK.reduced ? "auto" : "smooth" }); return; }    
   if (!elements) { if (MOCK) return paid({ mock: true }); err("The card form hasn't loaded. Check your connection."); return; }
   go.classList.add("busy"); SFX.play("send"); err("");
   elements.submit().then(function (r) {
@@ -7014,6 +7014,14 @@ function paid(c) {
 $("[data-st-change]").addEventListener("click", function () { setStep(ORDER.indexOf("plan")); });
 
 var pfield = $("[data-st-pfield]"), pin = form.elements.promo, applyB = $("[data-st-apply]");
+(function () {
+  var sc = $(".st-pscroll"), more = $("[data-st-more]"); if (!sc || !more) return;
+  function check() { var scrolls = getComputedStyle(sc).overflowY === "auto"; more.hidden = !(scrolls && sc.scrollHeight - sc.clientHeight - sc.scrollTop > 14); }
+  sc.addEventListener("scroll", check, { passive: true }); window.addEventListener("resize", check);
+  if ("ResizeObserver" in window) { var ro = new ResizeObserver(check); ro.observe(sc); [].forEach.call(sc.children, function (c) { ro.observe(c); }); }
+  more.addEventListener("click", function () { sc.scrollBy({ top: Math.max(120, sc.clientHeight * .7), behavior: SK.reduced ? "auto" : "smooth" }); });
+  check();
+})();
 function drawPromo() {
   $("[data-st-havecode]").hidden = !!me.promo || !pfield.hidden;
   $("[data-st-pchip]").hidden = !me.promo;
