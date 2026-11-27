@@ -255,12 +255,22 @@ function starts() { return me.promo ? MONTH : RENEW; }
 function startsShort() { return starts().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
 function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
-var PLANS = [
-  /* the rows of the website's pricing table (160-pricing), so the two always agree */
-  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
-];
+/* the plans: the same plans and rows as the website's Pricing (160-pricing), both built from the app's pricing.json (pricing.py
+   hands them over as SK_PRICES.plans / .rows), so the checkout can never say something Pricing doesn't. The list below is only a
+   stand-in for a build without them. */
+var PLANS = (function () {
+  var stand = [
+    /* the rows of the website's pricing table (160-pricing), so the two always agree */
+    { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
+  ];
+  if (!P.plans || !P.plans.length || !P.rows || !P.rows.length) return stand;
+  return P.plans.map(function (p) {
+    return { id: p.id, name: p.name, best: !!p.best, tag: p.tag || "", brands: p.brands == null ? 99 : p.brands, people: p.seats || 1, macs: p.macs, blurb: p.note || "",
+      feats: P.rows.map(function (r) { var v = (r.values || {})[p.id]; return [typeof v === "string" ? v : r.label, v === true || (typeof v === "string" && v) ? 1 : 0]; }) };
+  });
+})();
 function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
 function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
 function then(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "").replace(/^Billed\s*/, "").replace(/\s*yearly$/, "/yr") || price(id, per) + "/mo" : price(id, per) + "/mo"; }
@@ -700,7 +710,7 @@ var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>'
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
     return '<div class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" role="radio" tabindex="0" aria-checked="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
-      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
+      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">' + esc(p.tag || "Most popular") + "</span>" : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
       '<span class="st-why" data-why="' + p.id + '" role="button" tabindex="0" aria-label="Why ' + esc(p.name) + '? Kayla explains"><img src="assets/kayla.jpg" alt=""><span class="pl"><svg viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><em>Why ' + esc(p.name) + '?</em><span class="wv" data-wv></span></span>' +

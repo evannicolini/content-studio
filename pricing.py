@@ -103,7 +103,10 @@ def view(data, team_cost):
     save = max([0] + [1 - p["year"]["price"] / (p["month"]["price"] * 12) for p in data["plans"]])
     return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100), "live": live(data),
             "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost), "copy": paywall_copy(data),
-            "trial_fee": trial_fee(data), "trial_days": data.get("trial_days") if isinstance(data.get("trial_days"), int) else 0}
+            "trial_fee": trial_fee(data), "trial_days": data.get("trial_days") if isinstance(data.get("trial_days"), int) else 0,
+            # the plans and the comparison rows themselves, for the checkout (910-start), so it shows exactly what Pricing shows
+            "plans": [{k: p.get(k) for k in ("id", "name", "note", "best", "tag", "brands", "seats", "macs")} for p in data["plans"]],
+            "rows": [{"label": r.get("label", ""), "values": r.get("values", {})} for r in data.get("rows", [])]}
 
 
 def trial_fee(data):
