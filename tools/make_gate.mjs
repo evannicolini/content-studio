@@ -1,5 +1,6 @@
 // Locks the download link behind the invite code. The link is stored encrypted in assets/gate.json; only the right code opens it.
 //   node tools/make_gate.mjs "<invite code>" "<download url>" [size in MB] [version]
+// The site no longer shows size or version (the founders link always serves the newest DMG); leave them out.
 // Codes are compared in capitals with spaces, dashes and other punctuation ignored, so "<invite code>" and "<INVITE-CODE>" are the same code.
 // Change the code or the link: run this again, then python3 build.py, then publish.
 import { webcrypto as c } from "node:crypto";
