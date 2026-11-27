@@ -27,7 +27,7 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 **3.2 Security.** You are responsible for everything that happens under your account and on the Macs where you use Studio, including activity by anyone you let use them. Keep your email account, devices and connected third-party accounts secure. Tell us right away at hello@askstudio.ai if you think your account has been compromised.
 
-**3.3 Seats and devices.** Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on up to **two (2) Macs** at a time. We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.
+**3.3 Seats and devices.** Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on a set number of Macs at a time: **Creator: one (1) Mac; Pro and Unlimited: up to two (2) Macs per person.** We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.
 
 ## 4. Licence to use Studio
 
@@ -50,11 +50,11 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 **5.1 Plans.** Studio is sold as a monthly subscription. Current plans:
 
-| Plan | Price | Seats |
-| --- | --- | --- |
-| Creator | $99 per month | 1 |
-| Pro | $199 per month | 3 |
-| Unlimited | $299 per month | 10 |
+| Plan | Price | Seats | Macs per seat |
+| --- | --- | --- | --- |
+| Creator | $99 per month | 1 | 1 |
+| Pro | $199 per month | 3 | 2 |
+| Unlimited | $299 per month | 10 | 2 |
 
 Prices are in US dollars and exclude taxes. The Site and checkout show current plans and prices; if those differ from this table, the price shown at checkout when you subscribe applies.
 
