@@ -798,7 +798,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
       var onGesture = function (e) {
         if (started) return off();
-        if (e.target && e.target.closest && e.target.closest(".wl, [data-early]")) return;  
+        if (e.target && e.target.closest && e.target.closest(".wl, [data-early], .pd-i")) return;  
         if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play], [data-enter], [data-note]")) { started = true; return off(); }
         if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
         tryPlay();

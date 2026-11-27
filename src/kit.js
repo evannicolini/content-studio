@@ -847,7 +847,7 @@
       var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
       var onGesture = function (e) {
         if (started) return off();
-        if (e.target && e.target.closest && e.target.closest(".wl, [data-early]")) return; /* early access sign-up: not a reason to start her (900-early) */
+        if (e.target && e.target.closest && e.target.closest(".wl, [data-early], .pd-i")) return; /* early access sign-up (900-early) or a pricing row's (i) tip (160): not a reason to start her */
         if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play], [data-enter], [data-note]")) { started = true; return off(); }
         if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
         tryPlay();
