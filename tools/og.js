@@ -3,7 +3,7 @@
 // The template sits next to the site's own files (served from the repo root), so it uses the site's CSS, fonts, wallpapers and the
 // Studio mark from src/shell.html. Needs playwright-core (npm i playwright-core) and macOS sips for the downscale.
 // One og:image per page: iMessage shows every og:image it finds side by side, so a second (square) one draws two stitched frames.
-const pw = require("playwright-core");
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const fs = require("fs"), path = require("path"), http = require("http"), { execFileSync } = require("child_process");
 const ROOT = path.join(__dirname, "..");
 const JOBS = { "early-access": { tpl: "tools/og/early-access.html", out: "assets/og-invite.jpg" } };
@@ -24,7 +24,7 @@ const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascrip
     r.writeHead(200, { "content-type": TYPES[path.extname(f)] || "application/octet-stream" }); fs.createReadStream(f).pipe(r);
   }).listen(0, "127.0.0.1");
   await new Promise((ok) => srv.on("listening", ok));
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true });
+  const b = await launch();
   try {
     const p = await (await b.newContext({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 2 })).newPage();
     const errs = [];

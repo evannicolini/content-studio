@@ -4,7 +4,7 @@
 // compositor's layers (count, and the memory their textures take: width x height x 4 bytes x the screen's scale squared).
 // Also the main thread's style, layout and paint work per second while idle there.
 //   node tools/offscreen_audit.js [url] [--phone|--desktop] [--ua instagram|safari] [--json out.json]
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const fs = require("fs");
 const argv = process.argv.slice(2);
 const opt = (k, d) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : d; };
@@ -27,7 +27,7 @@ const PROBE = () => {   // counts rAF callbacks and timer runs by the line that 
 };
 
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--mute-audio", "--enable-gpu-rasterization"] });
+  const b = await launch({ args: ["--enable-gpu-rasterization"] });
   const ctx = await b.newContext(DESK ? { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 } : { viewport: { width: 390, height: 664 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true, userAgent: UA });
   await ctx.addInitScript(PROBE);
   const p = await ctx.newPage(), cdp = await ctx.newCDPSession(p);

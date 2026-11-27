@@ -1,13 +1,13 @@
 // Screenshots of the local site in headless Chrome.
 //   node tools/shot.js <out.png> [--sel "#work"] [--wait 2500] [--mobile] [--w 1440] [--h 900] [--full] [--y 1200] [--port 8760] [--click "sel"]
 // --sel scrolls that element to the top of the viewport first (offset -80). Prints page errors and failed requests.
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const a = process.argv.slice(2), out = a[0];
 const opt = (k, d) => { const i = a.indexOf("--" + k); return i < 0 ? d : (a[i + 1] && !a[i + 1].startsWith("--") ? a[i + 1] : true); };
 (async () => {
   const mobile = !!opt("mobile", false);
   const w = +opt("w", mobile ? 390 : 1440), h = +opt("h", mobile ? 844 : 900);
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
+  const b = await launch({ args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
   const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
   const p = await ctx.newPage();
   const errs = [];

@@ -3,12 +3,12 @@
 // STUDIOK7 typed at 60 ms a key came out as "S"). Also: "Look around first" stays on one line beside the bar.
 //   python3 build.py --serve   (PORT=8770 for another port)   then   node tools/test_codes.js [http://127.0.0.1:8760]
 // Runs on this Mac's stand-in (no account, no charge). Exit code 1 if anything fails.
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const BASE = (process.argv[2] || "http://127.0.0.1:8760").replace(/\/+$/, "");
 let failed = 0;
 const check = (name, ok, got) => { if (!ok) failed++; console.log((ok ? "PASS " : "FAIL ") + name + (ok ? "" : "  (got " + JSON.stringify(got) + ")")); };
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true });
+  const b = await launch();
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, permissions: ["clipboard-read", "clipboard-write"] });
   const p = await ctx.newPage(); const errs = []; p.on("pageerror", (e) => errs.push(e.message));
   const paste = async (sel, text) => { await p.evaluate((t) => navigator.clipboard.writeText(t), text); await p.click(sel); await p.keyboard.press(process.platform === "darwin" ? "Meta+V" : "Control+V"); };

@@ -71,10 +71,10 @@ check("the licence comment is kept (thinking-orbs, MIT)", kept.some((l) => /MIT 
 if (!BASE) { console.log(failed ? "\n" + failed + " failed" : "\nall passed (sources; pass a site address to check the pages in Chrome too)"); process.exit(failed ? 1 : 0); }
 
 // ---------------------------------------------------------------- the pages, as a person sees them
-const pw = require("playwright-core");
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const DOLLAR1 = /\$1(?![\d.,])/;          // the trial fee: "$1", never "$199" or "$1,908"
 (async () => {
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--mute-audio"] });
+  const b = await launch({ args: ["--use-mock-keychain", "--password-store=basic"] });
   const p = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
   const errs = []; p.on("pageerror", (e) => errs.push(e.message));
   // what a page shows: its text, every image's address and words, every label a screen reader reads

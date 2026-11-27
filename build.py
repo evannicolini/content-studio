@@ -20,7 +20,7 @@ them out once it is written, keeping every string, regex and licence comment (ES
 file the same program as before). The comments stay in src/, for the people who build the site.
 Nothing here needs a package: plain Python 3.
 """
-import hashlib, http.server, json, os, re, sys
+import hashlib, http.server, json, os, re, subprocess, sys
 
 import legal, pricing, strip
 
@@ -145,6 +145,9 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    # Page tests and captures never start the owner's Google Chrome (tools/browser.js only): refuse to build if one could.
+    if subprocess.call([sys.executable, os.path.join(ROOT, "tools", "check_no_chrome.py")]) != 0:
+        sys.exit(1)
     names, ver = build()
     print("built", len(names), "sections,", ver)
     if "--serve" in sys.argv:

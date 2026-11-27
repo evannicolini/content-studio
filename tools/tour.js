@@ -1,12 +1,12 @@
 // One pass over every section, desktop or phone: node tools/tour.js [--mobile] [--wait 3500] [--only id,id]
 // Writes _shots/tour/<nn>-<id>-<d|m>.jpg and prints overflow, errors and 404s once.
-const pw = require("playwright-core"); // npm i playwright-core, or set NODE_PATH to a folder that has it
+const { launch } = require("./browser");   // Playwright's own headless Chromium with audio muted, never the owner's Google Chrome
 const fs = require("fs"), a = process.argv.slice(2);
 const opt = (k, d) => { const i = a.indexOf("--" + k); return i < 0 ? d : (a[i + 1] && !a[i + 1].startsWith("--") ? a[i + 1] : true); };
 (async () => {
   const mobile = !!opt("mobile", false), tag = mobile ? "m" : "d", out = __dirname + "/../_shots/tour";
   fs.mkdirSync(out, { recursive: true });
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
+  const b = await launch({ args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
   const ctx = await b.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width: 1440, height: 900 }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
   const p = await ctx.newPage(), errs = new Set();
   p.on("pageerror", (e) => errs.add("PAGEERROR " + String(e.message).slice(0, 200)));
