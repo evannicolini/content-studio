@@ -1,15 +1,17 @@
-// Checks the published site: node tools/live_check.js <url> [invite code]
-const pw = require("playwright-core");
+// Checks the published site: node tools/live_check.js <url>   (with STUDIO_GATE_CODE='<code>' set, it also tries the founders gate)
+// The code comes from the environment, never argv, and is never printed. Runs in Playwright's own headless Chromium with audio
+// muted (tools/browser.js), never the owner's Google Chrome.
+const { launch } = require("./browser");
 (async () => {
-  const url = process.argv[2], code = process.argv[3];
-  const b = await pw.chromium.launch({ channel: "chrome", headless: true, args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
+  const url = process.argv[2], code = process.env.STUDIO_GATE_CODE || "";
+  const b = await launch({ args: ["--use-mock-keychain", "--password-store=basic", "--autoplay-policy=no-user-gesture-required"] });
   for (const mobile of [false, true]) {
     const ctx = await b.newContext({ viewport: mobile ? { width: 390, height: 844 } : { width: 1440, height: 900 }, deviceScaleFactor: mobile ? 2 : 1, isMobile: mobile, hasTouch: mobile });
     const p = await ctx.newPage(), bad = new Set();
     p.on("pageerror", (e) => bad.add("PAGEERROR " + String(e.message).slice(0, 160)));
     p.on("response", (r) => { if (r.status() >= 400) bad.add(r.status() + " " + r.url().slice(0, 120)); });
     let dl = null;
-    await p.route("**/*dropbox.com/**", (r) => { dl = r.request().url(); r.fulfill({ status: 200, headers: { "content-disposition": "attachment; filename=Studio.dmg" }, body: "x" }); });
+    await p.route("**/studio-licence*/get*", (r) => { dl = r.request().url(); r.fulfill({ status: 204 }); });   // the download link is answered with a stub, never fetched
     await p.goto(url + "?c=" + Date.now(), { waitUntil: "domcontentloaded" });
     await p.waitForTimeout(6000);
     await p.screenshot({ path: "_shots/live-" + (mobile ? "m" : "d") + ".jpg", type: "jpeg", quality: 80 });
