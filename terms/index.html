@@ -27,8 +27,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <script>document.documentElement.classList.add("js");</script>
 <style>
-/* Studio legal pages (terms/, privacy/). Built by build.py into each page. Same look as the site: dark page,
-   Hanken Grotesk light and tight, IBM Plex Mono labels, glass with a highlight on the edge, never a stroke. */
 :root {
   --ink: #090c11;
   --sand: #f5f3ee;
@@ -60,7 +58,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .label::before { content: "["; opacity: .55; }
 .label::after { content: "]"; opacity: .55; }
 
-/* ---------- header ---------- */
 .lg-nav { position: fixed; z-index: 60; top: 14px; left: 50%; transform: translateX(-50%); width: min(1180px, calc(100% - 28px)); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; color: var(--sand); }
 .brand .mark { width: 28px; height: 28px; overflow: visible; }
@@ -70,12 +67,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-links a[aria-current] { color: #fff; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); }
 .lg-links .home svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- the sky, faint, fading into the page ---------- */
 .sky { position: absolute; z-index: 0; inset: 0 0 auto; height: min(720px, 92vh); background: url(../assets/hero/sky.jpg) center 30% / cover no-repeat; opacity: .42; pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); }
 .sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 12, 17, 0), rgba(9, 12, 17, .5) 62%, var(--ink)); }
 
-/* ---------- page ---------- */
 .lg { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin-inline: auto; padding: 0 var(--gut); }
 .lg-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 7vw, 96px); }
 .lg-head h1 { font: 300 clamp(46px, 7vw, 104px)/.98 var(--sans); letter-spacing: -.045em; color: var(--sand); text-wrap: balance; }
@@ -87,7 +82,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-grid { display: grid; grid-template-columns: 250px minmax(0, 68ch); justify-content: space-between; gap: 72px; align-items: start; padding-bottom: clamp(80px, 10vw, 140px); }
 @media (min-width: 1100px) { .lg-grid { grid-template-columns: 270px minmax(0, 68ch); justify-content: start; gap: clamp(72px, 9vw, 150px); } }
 
-/* ---------- contents ---------- */
 .toc { position: sticky; top: var(--top); max-height: calc(100vh - var(--top) - 24px); overflow: auto; overscroll-behavior: contain; scrollbar-width: none; margin-left: -12px; }
 .toc::-webkit-scrollbar { display: none; }
 .toc-pill { display: none; }
@@ -98,7 +92,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .toc-list a.on { color: #fff; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
 .toc-list a.on b { color: var(--sand-2); }
 
-/* ---------- the document ---------- */
 .doc { min-width: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
 .doc > * + * { margin-top: 1.05em; }
 .doc strong { font-weight: 500; color: var(--sand); }
@@ -130,10 +123,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .doc .callout { position: relative; padding: 22px 26px; border-radius: 20px; font-size: 16px; line-height: 1.62; color: var(--sand); background: linear-gradient(135deg, rgba(191, 227, 255, .1), rgba(255, 255, 255, .025) 60%), var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .doc .callout > * + * { margin-top: .8em; }
 
-/* placeholders still to fill in: visible on purpose */
 mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; background: rgba(255, 184, 77, .14); padding: .22em .5em; border-radius: 6px; box-shadow: inset 1px 1px 1px -1px rgba(255, 214, 150, .7), inset -1px -1px 1px -1px rgba(255, 214, 150, .45); white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
-/* tables: glass rows */
 .tbl { margin-top: 1.4em !important; margin-bottom: .4em; }
 .tbl table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 15px; line-height: 1.55; }
 .tbl th { padding: 0 18px 4px; font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); text-align: left; vertical-align: bottom; }
@@ -145,16 +136,14 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 .tbl.cols-3 td:first-child { width: 24%; }
 .tbl.cols-2 td:first-child { width: 42%; }
 
-/* ---------- footer ---------- */
 .lg-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; width: 100%; max-width: 1180px; margin-inline: auto; padding: 40px var(--gut) 72px; font-size: 14px; color: var(--sand-3); }
 .lg-foot .brand { font-size: 17px; }
 .lg-foot .brand .mark { width: 26px; height: 26px; }
 .lg-foot .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .lg-foot .links a:hover { color: var(--sand); }
 
-/* ---------- tablet and phone ---------- */
 @media (max-width: 960px) {
-  :root { --top: 142px; } /* the header plus the sticky Contents pill */
+  :root { --top: 142px; }  
   .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .toc { z-index: 40; top: 82px; max-height: none; overflow: visible; margin: 0 0 40px; justify-self: start; max-width: 100%; }
   .toc-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 14px 0 18px; border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); font: 500 14px/1 var(--sans); color: var(--sand); white-space: nowrap; }
@@ -182,7 +171,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
   .doc h2 { gap: 12px; margin-bottom: 20px; }
   .doc .callout { padding: 18px 20px; border-radius: 18px; font-size: 15.5px; }
   .doc ol > li { padding-left: 2.2em; }
-  /* tables become stacked glass cards */
   .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; width: auto !important; }
   .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .tbl table { border-spacing: 0; }
@@ -199,7 +187,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 </style>
 </head>
 <body>
-<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
 
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -232,7 +219,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
     <h1>Terms of Service</h1>
     <dl class="dates">
 <div><dt>Effective date</dt><dd>November 20, 2026</dd></div>
-<div><dt>Last updated</dt><dd>November 20, 2026</dd></div>
+<div><dt>Last updated</dt><dd>November 26, 2026</dd></div>
     </dl>
   </header>
 
@@ -282,24 +269,29 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <h2 id="3-your-account-seats-and-devices"><span class="n">3</span><span class="t">Your account, seats and devices</span></h2>
 <p id="3-1" class="clause"><strong>3.1 Account.</strong> You can sign in with Google, Apple or a one-time code sent to your email. Give us accurate information and keep it up to date. One person per login; don't share login credentials.</p>
 <p id="3-2" class="clause"><strong>3.2 Security.</strong> You are responsible for everything that happens under your account and on the Macs where you use Studio, including activity by anyone you let use them. Keep your email account, devices and connected third-party accounts secure. Tell us right away at hello@askstudio.ai if you think your account has been compromised.</p>
-<p id="3-3" class="clause"><strong>3.3 Seats and devices.</strong> Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on up to <strong>two (2) Macs</strong> at a time. We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.</p>
+<p id="3-3" class="clause"><strong>3.3 Seats and devices.</strong> Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on a set number of Macs at a time: <strong>Creator: one (1) Mac; Pro and Unlimited: up to two (2) Macs per person.</strong> We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.</p>
 <h2 id="4-licence-to-use-studio"><span class="n">4</span><span class="t">Licence to use Studio</span></h2>
 <p id="4-1" class="clause"><strong>4.1 Our licence to you.</strong> While your account is in good standing and you follow these Terms, we grant you a limited, non-exclusive, non-transferable, non-sublicensable, revocable licence to install and use the App on Macs you own or control, within your plan's seat and device limits, for your own internal business or personal purposes.</p>
 <p id="4-2" class="clause"><strong>4.2 Restrictions.</strong> You may not, and may not help anyone else to:</p>
 <ul><li>copy, modify or create derivative works of the App or Service, except as the law expressly allows;</li><li>reverse engineer, decompile, disassemble or try to extract source code, models, prompts or underlying logic, except to the extent applicable law forbids this restriction;</li><li>bypass, disable or tamper with licence keys, entitlement checks, device limits, trial limits, notarization or other security or usage controls;</li><li>sell, resell, rent, lease, sublicense, white-label, or offer the Service to third parties as a service bureau or as part of a competing product;</li><li>use the Service to build a competing product, or benchmark it for publication without our written consent;</li><li>access the Service by automated means outside the App's intended features, or interfere with our servers or other users.</li></ul>
 <p id="4-3" class="clause"><strong>4.3 Updates.</strong> The App may update itself automatically. Some updates may be required for the App to keep working. We may change, add or remove features over time (see <a class="xref" href="#15-changes-to-the-service">Section 15</a>).</p>
 <p id="4-4" class="clause"><strong>4.4 Reservation.</strong> The App is licensed, not sold. We and our licensors keep all rights not expressly granted to you.</p>
+<p id="4-5" class="clause"><strong>4.5 Studio's code, instructions, look and packs.</strong> Studio's software and code; the instructions, prompts, skills and rules that guide its AI; the packs our servers deliver (including the AI pack, media library, sound effects and other content packs); its templates and presets; and its distinctive look, motion and visual style (together, "<strong>Studio Materials</strong>") are our confidential property and trade secrets. They are licensed to you only for use inside the App under <a class="xref" href="#4-1">Section 4.1</a>. Unless we agree in writing, you may not, and may not help or let anyone else:</p>
+<ul><li>reverse engineer, decompile, extract, scrape, copy, record or reproduce any Studio Materials, except to the extent applicable law forbids this restriction;</li><li>sell, resell, share, publish, give away or redistribute Studio Materials, or packs or files taken from the App, on their own or bundled with anything else;</li><li>use Studio Materials, or anything derived from them, to build, train, improve or market a product or service that competes with Studio, or to recreate the App, its presets or its visual style in another product;</li><li>use Studio, its AI or any AI account connected to it to do any of the above, including by asking it to reveal, rewrite or export its instructions, prompts, skills or packs.</li></ul>
+<p>This section protects Studio itself, not what you make with it: the videos and other content you create stay Your Content under <a class="xref" href="#9-your-content">Section 9</a>.</p>
+<p><strong>Two strikes for attempts through Studio's AI.</strong> If you use, or try to use, Studio or its AI to extract, copy or recreate Studio Materials, the first attempt gets a warning in the App (we may also email it to you). <strong>A second attempt on your account automatically suspends your licence and account</strong>, and no refund of any fees is due. Detection is automated and can be wrong: if you believe a warning or suspension was a mistake, email hello@askstudio.ai with "Appeal" in the subject within 30 days. We'll review it and reply, and if it was a mistake we'll lift the strike or restore your access. This warning step covers only attempts made through Studio or its AI; it doesn't limit what we may do about other breaches of <a class="xref" href="#4-2">Section 4.2</a> or this <a class="xref" href="#4-5">Section 4.5</a>.</p>
+<p><strong>Breach.</strong> Breaking this <a class="xref" href="#4-5">Section 4.5</a> or <a class="xref" href="#4-2">Section 4.2</a> is a material breach. Subject to the two-strike rule above for attempts through Studio's AI, we may end your licence and account immediately under <a class="xref" href="#14-2">Section 14.2</a>, <strong>with no refund of any fees, including prepaid fees</strong>, and we may enforce our intellectual property and other rights by any lawful means, including going to court for an injunction under <a class="xref" href="#22-4">Section 22.4</a>, damages, and recovery of our reasonable legal fees where the law allows.</p>
 <h2 id="5-subscriptions-trial-and-billing"><span class="n">5</span><span class="t">Subscriptions, trial and billing</span></h2>
 <p id="5-1" class="clause"><strong>5.1 Plans.</strong> Studio is sold as a monthly subscription. Current plans:</p>
-<div class="tbl cols-3"><table><thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">Seats</th></tr></thead><tbody><tr><td data-th="Plan">Creator</td><td data-th="Price">$99 per month</td><td data-th="Seats">1</td></tr><tr><td data-th="Plan">Pro</td><td data-th="Price">$199 per month</td><td data-th="Seats">3</td></tr><tr><td data-th="Plan">Unlimited</td><td data-th="Price">$299 per month</td><td data-th="Seats">10</td></tr></tbody></table></div>
+<div class="tbl cols-4"><table><thead><tr><th scope="col">Plan</th><th scope="col">Price</th><th scope="col">Seats</th><th scope="col">Macs per seat</th></tr></thead><tbody><tr><td data-th="Plan">Creator</td><td data-th="Price">$99 per month</td><td data-th="Seats">1</td><td data-th="Macs per seat">1</td></tr><tr><td data-th="Plan">Pro</td><td data-th="Price">$199 per month</td><td data-th="Seats">3</td><td data-th="Macs per seat">2</td></tr><tr><td data-th="Plan">Unlimited</td><td data-th="Price">$299 per month</td><td data-th="Seats">10</td><td data-th="Macs per seat">2</td></tr></tbody></table></div>
 <p>Prices are in US dollars and exclude taxes. The Site and checkout show current plans and prices; if those differ from this table, the price shown at checkout when you subscribe applies.</p>
-<p id="5-2" class="clause"><strong>5.2 The "14 days for $1" trial.</strong> New subscribers may be offered a 14-day trial for a one-time fee of $1.00 (the "<strong>Trial Fee</strong>").</p>
-<ul><li>We charge the $1.00 Trial Fee when you start the trial.</li><li>Your trial lasts 14 days. <strong>Unless you cancel before your trial ends, on day 15 (14 days after you start) your subscription automatically converts to the plan you chose, and we charge that plan's full monthly price to your payment method.</strong> Checkout shows the exact renewal date.</li><li>One trial per person, household, payment method and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).</li><li>We email you a reminder before your trial converts. If the reminder doesn't arrive, that doesn't change your renewal date or your right to cancel.</li></ul>
-<p id="5-3" class="clause"><strong>5.3 Automatic renewal.</strong> <strong>Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.</strong> By starting a trial or subscription and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.</p>
+<p id="5-2" class="clause"><strong>5.2 The free 14-day trial.</strong> New users may be offered a free 14-day trial of the Service.</p>
+<ul><li>The trial is free. We don't ask for a payment method to start it, and nothing is charged during it.</li><li>Your trial lasts 14 days from when you start it. The App shows how many days are left.</li><li><strong>When your trial ends, it does not turn into a paid subscription on its own.</strong> To keep using the Service, you choose a plan and subscribe through checkout. Until you do, your access to the paid features stops at the end of the trial.</li><li>One trial per person, household and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).</li></ul>
+<p id="5-3" class="clause"><strong>5.3 Automatic renewal.</strong> <strong>Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.</strong> By subscribing and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.</p>
 <p id="5-4" class="clause"><strong>5.4 How to cancel.</strong> You can cancel at any time, effective immediately for future renewals, by any of these methods:</p>
 <ul><li><strong>In the App:</strong> Settings → Billing → Cancel subscription;</li><li><strong>Online:</strong> the "Manage billing" link on your account page and in every receipt and billing email;</li><li><strong>By email:</strong> write to hello@askstudio.ai from your account email address. We process cancellation emails within one business day. Cancellations received before your renewal date are honoured even if we process them after that date.</li></ul>
 <p>Cancelling stops all future charges. <strong>You keep access until the end of the period you've already paid for (or the end of your trial), and then your subscription ends.</strong> We send a confirmation when you cancel. Deleting the App does not cancel your subscription.</p>
-<p id="5-5" class="clause"><strong>5.5 Refunds.</strong> <strong>The $1.00 Trial Fee and all subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.</strong> We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.</p>
+<p id="5-5" class="clause"><strong>5.5 Refunds.</strong> <strong>Subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.</strong> We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.</p>
 <p id="5-6" class="clause"><strong>5.6 Price changes.</strong> We may change plan prices. We'll give you at least <strong>30 days' notice</strong> by email before a new price applies to your subscription, and it will take effect only at your next renewal after the notice period. If you don't want to pay the new price, cancel before it takes effect. If you keep your subscription after it takes effect, you agree to the new price.</p>
 <p id="5-7" class="clause"><strong>5.7 Withdrawal rights (where applicable).</strong> If you are a consumer in a country (for example in the EU or UK) whose law gives you a right to withdraw from an online contract, you ask us to start providing the Service immediately when you subscribe. To the extent your law allows, you will pay for the Service you used before withdrawing, and you lose the right to withdraw once the Service has been fully provided for the current period.</p>
 <p id="5-8" class="clause"><strong>5.8 Taxes.</strong> Prices don't include sales tax, VAT, GST or similar taxes. You pay any taxes that apply, and we may collect them where the law requires.</p>
@@ -333,7 +325,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <ol><li>is illegal, or promotes illegal activity;</li><li>depicts a real person's likeness or voice without their consent, including <strong>deepfakes, non-consensual intimate imagery, or sexual content of any real person</strong>;</li><li>sexualizes minors or depicts child sexual abuse material in any form (we report this to the authorities);</li><li><strong>impersonates</strong> a person, brand or organization, or misrepresents your affiliation, including fake endorsements or testimonials;</li><li>infringes or misappropriates intellectual property, publicity, privacy or other rights;</li><li>is defamatory, harassing, hateful, threatening or violent, or incites violence;</li><li>is deceptive or fraudulent, including scams, fake reviews, misleading ads, election or civic misinformation, or undisclosed paid promotion;</li><li>is <strong>spam</strong>, including bulk unsolicited messages, engagement manipulation, fake accounts, or automation that breaks a platform's rules;</li><li>contains malware, or attacks, probes or overloads any system;</li><li><strong>circumvents licensing, seat or device limits, trials or payment</strong>, or shares, resells or redistributes access to the Service;</li><li>violates the terms or usage policies of any Third-Party Service you connect.</li></ol>
 <p>We may remove content we can access, disable features, or suspend or terminate accounts for any violation, and may report illegal activity to the authorities. We have no obligation to monitor Your Content, but we may review it if we're notified of, or suspect, a violation.</p>
 <h2 id="12-our-intellectual-property-feedback"><span class="n">12</span><span class="t">Our intellectual property; feedback</span></h2>
-<p id="12-1" class="clause"><strong>12.1 Ours.</strong> The Service, including the App, Site, software, design, templates, workflows, prompts we provide, documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.</p>
+<p id="12-1" class="clause"><strong>12.1 Ours.</strong> The Service, including the App, Site, software, design, templates, workflows, prompts we provide, Studio Materials (<a class="xref" href="#4-5">Section 4.5</a>), documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.</p>
 <p id="12-2" class="clause"><strong>12.2 Feedback.</strong> If you send us ideas, suggestions or feedback, you give us a perpetual, irrevocable, worldwide, royalty-free licence to use them for any purpose without paying or crediting you. You aren't required to send feedback.</p>
 <h2 id="13-copyright-complaints-dmca"><span class="n">13</span><span class="t">Copyright complaints (DMCA)</span></h2>
 <p>We respect intellectual property rights and respond to valid notices under the Digital Millennium Copyright Act. If you believe material available through the Service infringes your copyright, send our designated agent a notice that includes:</p>
@@ -343,7 +335,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <h2 id="14-suspension-and-termination"><span class="n">14</span><span class="t">Suspension and termination</span></h2>
 <p id="14-1" class="clause"><strong>14.1 By you.</strong> You can stop using the Service at any time. To end a paid subscription, cancel as described in <a class="xref" href="#5-4">Section 5.4</a>. To delete your account, email hello@askstudio.ai or use the in-App option where available.</p>
 <p id="14-2" class="clause"><strong>14.2 By us.</strong> We may suspend or terminate your access, or any part of it, immediately and without notice, if we reasonably believe you violated these Terms, created risk or possible legal exposure for us or others, failed to pay, or engaged in fraud or abuse, or if we're required to by law. We may also stop offering the Service, or any plan, for any reason, with at least 30 days' notice to active subscribers. <strong>If we terminate your paid subscription for convenience (not because of your breach), we'll refund the prepaid fees for the unused part of your current billing period.</strong> No other refunds are due on termination.</p>
-<p id="14-3" class="clause"><strong>14.3 Effect.</strong> When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.</p>
+<p id="14-3" class="clause"><strong>14.3 Effect.</strong> When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 4.2, 4.5, 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.</p>
 <h2 id="15-changes-to-the-service"><span class="n">15</span><span class="t">Changes to the Service</span></h2>
 <p>The Service changes over time. We may add, change or remove features, integrations, models, providers, limits and plans. If we make a change that materially reduces the core functionality of your paid plan, we'll tell you in advance where reasonably possible, and you can cancel. Your only remedy is to cancel before your next renewal.</p>
 <h2 id="16-disclaimers"><span class="n">16</span><span class="t">Disclaimers</span></h2>
@@ -395,12 +387,6 @@ Contact: hello@askstudio.ai</p>
 </footer>
 
 <script>
-/* The site's one click sound (window.SKClick): the pass flip's own take (assets/sfx/app/ask-open.mp3), on every button, link and
-   [role=button] the main page and the legal pages have. One tiny Web Audio player: fetched and decoded a beat after the page has loaded, the
-   context is made and resumed inside that press, presses closer than 70 ms apart play once, nothing plays with reduced motion or
-   with the speaker off on the sign-ups (localStorage studio-wl-sound), and a blocked or missing audio stack is simply silent.
-   The sign-ups (900-early, 910-start) play the same file through their own mixer; SKClick.own is true there (window.SK_PAGE), so it never doubles.
-   build.py puts this file before kit.js on every page; legal.py puts it before legal.js. */
 (function () {
   "use strict";
   if (window.SKClick) return;
@@ -408,7 +394,6 @@ Contact: hello@askstudio.ai</p>
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = null, loading = false, last = 0;
   var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function off() { try { return localStorage.getItem("studio-wl-sound") === "off"; } catch (e) { return false; } }
-  /* decoded off to the side (an OfflineAudioContext needs no gesture and logs no autoplay warning), once the page has settled */
   function load() {
     if (loading || reduced || !AC || SKClick.own) return; loading = true;
     var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
@@ -431,8 +416,7 @@ Contact: hello@askstudio.ai</p>
     try { var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buf; g.gain.value = gain || GAIN; s.connect(g); g.connect(ctx.destination); s.start(); } catch (e) {}
   }
   var HIT = "button, a[href], [role=button], summary, input[type=checkbox], input[type=radio], input[type=submit], input[type=button]";
-  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };   /* a sign-up page (SK_PAGE) clicks through its own mixer */
-  /* the first press only warms it up (fetch + decode take a beat); every press after that clicks */
+  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };    
   document.addEventListener("pointerdown", function (e) {
     if (SKClick.own) return;
     var t = e.target && e.target.closest && e.target.closest(HIT);
@@ -442,7 +426,6 @@ Contact: hello@askstudio.ai</p>
   document.addEventListener("keydown", function (e) { if (!SKClick.own && (e.key === "Enter" || e.key === " ") && e.target && e.target.closest && e.target.closest(HIT)) play(); }, true);
 })();
 
-/* Studio legal pages: the contents list follows the reader (current section highlighted), and on phones it folds into a pill. */
 (function () {
   var toc = document.querySelector(".toc"), pill = toc && toc.querySelector(".toc-pill"), cur = toc && toc.querySelector("[data-cur]");
   if (!toc) return;
@@ -474,7 +457,6 @@ Contact: hello@askstudio.ai</p>
     var a = links[on];
     a.classList.add("on");
     a.setAttribute("aria-current", "location");
-    /* keep the highlighted entry in view inside the sticky list (desktop), without moving the page */
     var box = getComputedStyle(toc).overflowY === "auto" ? toc : null;
     if (box) {
       var t = a.offsetTop, b = t + a.offsetHeight;

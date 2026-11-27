@@ -42,7 +42,7 @@ var SFX = (function () {
   /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
      scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
+  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard */
   var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
   /* only on the sheet's own page: on the home page the sheet never opens (open() goes to its page), and loading its sounds there fetched
      5.6 MB and decoded every line and the music twice (the waitlist's and the sign-up's) into memory, for nothing */
@@ -210,7 +210,7 @@ function setSound(on) {
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
-var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
+var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks */
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
 sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
 /* the music never depends on where the first tap or key lands: any one, anywhere on the page, makes sure it's playing while the
@@ -255,12 +255,22 @@ function starts() { return me.promo ? MONTH : RENEW; }
 function startsShort() { return starts().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
 function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
-var PLANS = [
-  /* the rows of the website's pricing table (160-pricing), so the two always agree */
-  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
-];
+/* the plans: the same plans and rows as the website's Pricing (160-pricing), both built from the app's pricing.json (pricing.py
+   hands them over as SK_PRICES.plans / .rows), so the checkout can never say something Pricing doesn't. The list below is only a
+   stand-in for a build without them. */
+var PLANS = (function () {
+  var stand = [
+    /* the rows of the website's pricing table (160-pricing), so the two always agree */
+    { id: "creator", name: "Creator", brands: 1, people: 1, macs: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "pro", name: "Pro", best: true, brands: 3, people: 3, macs: 2, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "unlimited", name: "Unlimited", brands: 99, people: 10, macs: 2, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
+  ];
+  if (!P.plans || !P.plans.length || !P.rows || !P.rows.length) return stand;
+  return P.plans.map(function (p) {
+    return { id: p.id, name: p.name, best: !!p.best, tag: p.tag || "", brands: p.brands == null ? 99 : p.brands, people: p.seats || 1, macs: p.macs, blurb: p.note || "",
+      feats: P.rows.map(function (r) { var v = (r.values || {})[p.id]; return [typeof v === "string" ? v : r.label, v === true || (typeof v === "string" && v) ? 1 : 0]; }) };
+  });
+})();
 function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
 function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
 function then(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "").replace(/^Billed\s*/, "").replace(/\s*yearly$/, "/yr") || price(id, per) + "/mo" : price(id, per) + "/mo"; }
@@ -268,14 +278,14 @@ function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[
 
 /* ---------- the stage: the app, signing you in ---------- */
 var BRANDS = [
-  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
-  { n: "MIRRA", s: "Social app", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
-  { n: "Custom Esignature", s: "E-signatures", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
+  { n: "Northwind", s: "Brand kit ready", m: "N", bg: "linear-gradient(140deg, #6E8FD8, #1D2F63)", ink: "#F5F3EE", sw: ["#0B1430", "#1D2F63", "#6E8FD8", "#EEF1F8"] },
+  { n: "Lowtide Coffee", s: "Coffee roasters", m: "L", bg: "linear-gradient(140deg, #D9A86C, #6B3F1D)", ink: "#FFF7EC", sw: ["#2A1708", "#6B3F1D", "#D9A86C", "#F6EEE3"] },
+  { n: "Fieldnote", s: "Outdoor goods", m: "F", bg: "linear-gradient(140deg, #BED2C3, #2F5D50)", ink: "#05090A", sw: ["#0E1F1A", "#2F5D50", "#BED2C3", "#EEF3EF"] },
   { n: "Fourth brand", s: "Ready when you are", m: "4", bg: "linear-gradient(140deg, #BBC9C7, #536878)", ink: "#05090A", sw: ["#05090A", "#536878", "#BBC9C7", "#DFEAE8"] },
   { n: "Fifth brand", s: "Ready when you are", m: "5", bg: "linear-gradient(140deg, #BED2C3, #0E191E)", ink: "#05090A", sw: ["#0E191E", "#536878", "#BED2C3", "#E5E4E2"] }
 ];
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
-function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
+function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* made-up demo brands only (tools/test_demo.js) */
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
 var AH = SK.appHome($("[data-st-ah]"), {});
@@ -317,7 +327,7 @@ window.addEventListener("resize", function () { requestAnimationFrame(sizeStage)
 /* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
    Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
-/* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
+/* The owner: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
 var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
 function setWalls(src) { Object.keys(WALLSET).forEach(function (k) { var u = src || "assets/" + WALLSET[k] + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
@@ -424,7 +434,7 @@ var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { nud
 function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
-    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
+    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days free, no card"] }
     : paidStart() ? { kind: pl.name + " · " + (me.period === "year" ? "Yearly" : "Monthly"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, tk: "Price", trial: me.notrial.price + "/" + (me.period === "year" ? "yr" : "mo"), k3: "Renews", v3: renewsShort(), sig: "Studio " + pl.name, seed: (nm + me.email) || "studio" }
     : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), tk: "Trial", name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
@@ -522,7 +532,7 @@ function setStep(n, quiet, ack) {
   story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
-  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
+  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? [FEE === 0 && !trialEnded() ? "pw-ok" : "pw-notrial"] : [LINE[q]]));
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
@@ -700,7 +710,7 @@ var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>'
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
     return '<div class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" role="radio" tabindex="0" aria-checked="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
-      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
+      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">' + esc(p.tag || "Most popular") + "</span>" : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
       '<span class="st-why" data-why="' + p.id + '" role="button" tabindex="0" aria-label="Why ' + esc(p.name) + '? Kayla explains"><img src="assets/kayla.jpg" alt=""><span class="pl"><svg viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><em>Why ' + esc(p.name) + '?</em><span class="wv" data-wv></span></span>' +
@@ -741,6 +751,7 @@ whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("
 whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
+  if (straight() && !me.promo) { $("[data-st-line]").innerHTML = "<b>Studio " + esc(pl.name) + " is " + esc(t) + ", starting today.</b> Cancel anytime in Studio, in Settings → Billing."; return; }
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
     : "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
 }
@@ -785,7 +796,12 @@ var APPEARANCE = {
 /* the checkout words (Studio legal, consent copy b, checkout-v1): the real price and the real renewal date, never "in 14 days" */
 var RENEW_FULL = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }), CONSENT = "checkout-v1";
 var MONTH_FULL = MONTH.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-function seats(pl) { return pl.people + (pl.people === 1 ? " seat · up to 2 Macs" : " seats · up to 2 Macs each"); }
+/* "1 seat · 1 Mac", "3 seats · up to 2 Macs each": from the plan's seats and Macs per person (pricing.json, what the licence server
+   enforces: Creator 1 Mac, Pro and Unlimited 2 per person) */
+function seats(pl) {
+  var m = pl.macs || 2, macs = m === 1 ? "1 Mac" : "up to " + m + " Macs";
+  return pl.people === 1 ? "1 seat · " + macs : pl.people + " seats · " + macs + " each";
+}
 function priceWord(pl) { return me.period === "year" ? then(pl.id, "year").replace("/yr", "/year") : price(pl.id, "month") + "/month"; }
 var agree = form.elements.renew_ok, agreeL = $("[data-st-agree]");
 form.elements.pname.addEventListener("input", function () { me.first = val("pname").split(/\s+/)[0] || ""; me.full = val("pname"); drawPass(pass1); drawHome(); err(""); });
@@ -798,7 +814,7 @@ function payStep() {
   var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
   if (me.notrial && !me.promo) {   /* this account or card already had its trial (checkout-notrial-v1): the full price today, every month after */
     var np = me.notrial.price, npm = np + "/" + per, nextD = (function () { var d = new Date(NOW); if (per === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); })();
-    $("[data-st-payh]").textContent = "You've had your free trial.";
+    $("[data-st-payh]").textContent = trialEnded() ? PW.words.title : FEE === 0 ? "Keep your Studio." : "You've had your free trial.";
     $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
     $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
@@ -904,7 +920,7 @@ applyB.addEventListener("click", applyCode);
 pin.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
 pin.addEventListener("input", function () { pfield.classList.remove("bad"); });
 SK.keepTyping([pin, form.elements.pname, form.elements.first, form.elements.email]);   /* a field that loses focus to nothing mid-typing takes it back */
-$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast("Code removed. Back to 14 days for $1."); });
+$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast(FEE ? "Code removed. Back to 14 days for $" + FEE + "." : "Code removed."); });
 agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 
 /* ---------- the server and Supabase (or, on this Mac, a stand-in that answers the same way) ---------- */
@@ -952,7 +968,7 @@ function checkCode(token) {
 function oauth(way, b) {
   if (MOCK) {
     b.classList.add("busy"); b.querySelector(".t").textContent = "Opening " + (way === "apple" ? "Apple" : "Google") + "…"; SFX.play("send");
-    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
+    return wait(900).then(function () { me.first = "Alex"; me.email = "alex@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Alex"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
   }
   return supa().then(function (c) { return c.auth.signInWithOAuth({ provider: way, options: { redirectTo: location.origin + location.pathname + location.search + HASH } }); });
 }
@@ -1012,7 +1028,7 @@ function noTrial(x) {
     : "You've had your free trial. Studio " + pl.name + " is " + me.notrial.price + "/" + (me.period === "year" ? "year" : "month") + ".";
 }
 function lookup(code) {
-  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Evan Nicolini", name: "", plan: "pro" }; });
+  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Sam Rivera", name: "", plan: "pro" }; });
   return api("/web/invite?code=" + encodeURIComponent(code)).catch(function (x) { if (x.status === 404) return { state: "unknown" }; throw x; });
 }
 function redeem() {
@@ -1062,7 +1078,7 @@ function showDone(has) {
     : PAYWALL && paidStart() ? "You're on Studio " + pl.name + ". Your next charge is " + me.notrial.price + " on " + renewsLong() + "."
     : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
-    : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
+    : "Free to start. Your first 14 days are free, with no card: pick a plan when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
   if (STUDIO && h.code) { h.download = h.open = STUDIO + "/_launch/download?code=" + encodeURIComponent(h.code); }
   open.href = h.open || "studio://"; dl.href = h.download || "#";
@@ -1200,7 +1216,7 @@ function open() {
 /* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader (Evan): the page builds itself in instead (.wl.open, section.css) */
+  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader: the page builds itself in instead (.wl.open, section.css) */
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {
@@ -1299,9 +1315,40 @@ window.addEventListener("message", function (e) {
   if (d.type === "studio-paywall:token" && d.token) { me.session = Object.assign({}, me.session, { access_token: d.token }); if (tokenWait) { var w = tokenWait; tokenWait = null; w.res(d.token); } }
 });
 var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
+/* the cases with words of their own, from pricing.json "paywall_copy" (the app's file, which the licence server publishes; pricing.py
+   puts it in window.SK_PRICES.copy, and Studio sends the same case's words with studio-paywall:open). "trial": day 14, the 14-day
+   trial ended: "Your trial ended. Keep your Studio.", the plans at their own price, no trial fee, no Look around. */
+var COPY = P.copy || {};
+/* pricing.json "trial_fee" (window.SK_PRICES.trial_fee): 0 now. The trial is the one every new account gets at sign-in, with no
+   card, so every checkout here is a straight subscription to the plan picked, at its own price, today: no "$1", no "14 days for".
+   (A fee above 0 would bring the old card trial back, with the copy below.) */
+var FEE = Number(P.trial_fee) || 0;
+function straight() { return PAYWALL && (FEE === 0 || trialEnded()); }
+function words(o) { var c = o && o.copy && typeof o.copy === "object" && o.copy.title ? o.copy : COPY[PW.action]; return c && c.title ? c : null; }
+function trialEnded() { return PAYWALL && !!PW && PW.action === "trial" && !!PW.words; }
+/* day 14: the plan at its own price today (checkout-notrial-v1, trial: false), whichever plan and period is picked */
+function endedPrice() {
+  if (!straight() || me.promo) return;
+  var pl = planOf(me.plan), num = parseFloat(String(me.period === "year" ? then(pl.id, "year") : price(pl.id, me.period)).replace(/[^0-9.]/g, "")) || 0;
+  me.notrial = { price: "$" + (num % 1 ? num.toFixed(2) : num), cents: Math.round(num * 100) };
+}
 function pwHead() {
   if (!PAYWALL) return;
   var pl = planOf(me.plan), pq = stepEl("plan"), head = PW.mode === "locked" ? (HEADS[PW.action] || "Keep making with Studio.") : "Keep your Studio.";
+  if (trialEnded()) {
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(PW.words.title) + "<span>" + esc(PW.words.line || "") + "</span>";
+    pq.querySelector(".wl-qs").textContent = PW.words.sub || "";
+    $("[data-st-look]").textContent = PW.words.dismiss || "Not now";
+    return;
+  }
+  if (straight() && !me.promo) {           /* no trial fee: the plan, today */
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>Studio " + esc(pl.name) + " is " + esc(then(pl.id, me.period)) + ".</span>";
+    pq.querySelector(".wl-qs").textContent = "Your plan starts today. Cancel anytime in Studio, in Settings → Billing.";
+    $("[data-st-look]").textContent = PW.mode === "locked" ? "Not now" : "Look around first";
+    return;
+  }
   pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>" + (me.promo ? "Your first month is free, then " : "14 days for $1, then ") + esc(then(pl.id, me.period)) + ".</span>";
   pq.querySelector(".wl-qs").textContent = me.promo ? "Cancel anytime before " + startsLong() + " and you won't be charged. Your plan starts " + startsLong() + "."
     : "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
@@ -1309,14 +1356,16 @@ function pwHead() {
 }
 function paywall(o) {
   o = o || {};
-  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] ? o.action : "";
+  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] || COPY[o.action] || (o.action === "trial" && o.copy) ? o.action : "";
+  PW.words = words(o); if (PW.action === "trial" && !PW.words) PW.action = "";
+  me.notrial = null;
   if (o.plan && planOf(o.plan).id === o.plan) me.plan = o.plan;
   if (o.period === "year" || o.period === "month") me.period = o.period;
   me.first = String(o.first || o.first_name || o.given_name || o.name || o.full_name || "").trim().split(/\s+/)[0]; me.email = o.email || "";   /* Studio sends first; the other names are taken too */ me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
   $("[data-st-badge]").textContent = "Unlock";
   perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
   drawPlans(); slidePer(); pwHead();
-  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Evan"; me.email = "evan@studio.com"; }
+  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Alex"; me.email = "alex@northwind.example"; }   /* a made-up person */
   steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
   at = 0; setStep(0, true); drawPlanStage();
 }
@@ -1327,7 +1376,7 @@ if (EMBED) sheet.classList.add("embed");
 
 /* first paint */
 drawPlans(); drawHome(); setStep(0, true);
-if (PAYWALL) paywall({});
+if (PAYWALL) paywall({ action: (/[#&?]action=(\w+)/.exec(location.hash + location.search) || [])[1] || "" });   /* #paywall&action=trial: day 14, on its own */
 if (INV) lookup(INV).then(setInvite, function () { setInvite({ state: "open", from: "" }); });
 /* back from Google/Apple (the session is in the address), or from a bank's 3-D Secure page (?paid=1) */
 if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { return c.auth.getSession(); }).then(function (r) {

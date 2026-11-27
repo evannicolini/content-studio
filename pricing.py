@@ -107,7 +107,42 @@ def period_view(data, period, team_cost):
 def view(data, team_cost):
     save = max([0] + [1 - p["year"]["price"] / (p["month"]["price"] * 12) for p in data["plans"]])
     return {"default": "month" if data.get("default_period") == "month" else "year", "save": jround(save * 100), "live": live(data),
-            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost)}
+            "year": period_view(data, "year", team_cost), "month": period_view(data, "month", team_cost), "copy": paywall_copy(data),
+            "trial_fee": trial_fee(data), "trial_days": data.get("trial_days") if isinstance(data.get("trial_days"), int) else 0,
+            # the plans and the comparison rows themselves, for the checkout (910-start), so it shows exactly what Pricing shows
+            "plans": [{k: p.get(k) for k in ("id", "name", "note", "best", "tag", "brands", "seats", "macs")} for p in data["plans"]],
+            "rows": [{"label": r.get("label", ""), "values": r.get("values", {})} for r in data.get("rows", [])]}
+
+
+def trial_fee(data):
+    """pricing.json "trial_fee": what a trial at checkout costs (0 now: the trial is at sign-in, no card, and checkout is the plan
+    itself). 910-start reads it (window.SK_PRICES.trial_fee) to drop the trial step and its copy."""
+    try:
+        n = float(data.get("trial_fee") or 0)
+    except (TypeError, ValueError):
+        n = 0
+    return int(n) if n == int(n) else n
+
+
+COPY_CASES = ("trial",)     # the paywall's cases the site needs words for (910-start): "trial" is day 14, the 14-day trial ended
+COPY_FIELDS = ("title", "line", "sub", "dismiss")
+
+
+def paywall_copy(data):
+    """The paywall's words per case, from pricing.json "paywall_copy" (the app's file: Studio shows the same words), so they are
+    written in one place. The build fails when a case is missing: the licence server publishes the file when it is deployed
+    (server/deploy.py), so deploy the server first."""
+    c = data.get("paywall_copy")
+    out = {}
+    for case in COPY_CASES:
+        v = (c or {}).get(case) if isinstance(c, dict) else None
+        if not (isinstance(v, dict) and isinstance(v.get("title"), str) and v["title"].strip() and isinstance(v.get("line"), str)):
+            raise PricingError('pricing.json has no paywall_copy.%s {title, line}: the paywall\'s words come from the app\'s pricing.json '
+                               '(deploy the licence server first: it publishes the file)' % case)
+        out[case] = {f: v[f] for f in COPY_FIELDS if isinstance(v.get(f), str)}
+        if re.search(r"\$1(?![\d.,])|14 days for|look around", " ".join(out[case].values()), re.I):
+            raise PricingError("pricing.json paywall_copy.%s offers the trial again ($1, 14 days for, Look around): the trial has ended" % case)
+    return out
 
 
 def team_cost(template):
@@ -206,8 +241,11 @@ def trial_html(data):
     d = data.get("trial_days")
     if not isinstance(d, int) or d <= 0:
         return ""
-    return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything, free. Card required. You won\'t be charged for %d days. '
-            'On a smaller plan, extra brands are locked, never deleted.</p>' % (d, d))
+    if trial_fee(data):                  # the old card trial at checkout (only with a fee)
+        return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything. Card required. You won\'t be charged for %d days. '
+                'On a smaller plan, extra brands are locked, never deleted.</p>' % (d, d))
+    return ('<p class="pd-trial" data-pd-group="2">Every plan starts with %d days of everything, free, with no card. Pick your plan when you\'re ready. '
+            'On a smaller plan, extra brands are locked, never deleted.</p>' % d)
 
 
 def render(template):

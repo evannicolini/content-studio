@@ -15,11 +15,14 @@ Layout
     src/legal/                  terms.md + privacy.md -> terms/index.html + privacy/index.html (legal.py: page.html, legal.css, legal.js)
 
 Each section.js is wrapped in its own function and only runs if its <section> is on the page.
+Every file the build writes (index.html, site.css, site.js, the PAGES, terms/ and privacy/) ships with no comments: strip.py takes
+them out once it is written, keeping every string, regex and licence comment (ESBUILD=<esbuild binary> also proves each JS and CSS
+file the same program as before). The comments stay in src/, for the people who build the site.
 Nothing here needs a package: plain Python 3.
 """
 import hashlib, http.server, json, os, re, sys
 
-import legal, pricing
+import legal, pricing, strip
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, "src")
@@ -80,7 +83,11 @@ def build():
     open(os.path.join(ROOT, "site.js"), "w", encoding="utf-8").write(js_s)
     open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(page)
     pages(secdir, [x for x in js if x.startswith("window.SK_")])
-    legal.build(ROOT)  # askstudio.ai/terms and /privacy
+    made = legal.build(ROOT)  # askstudio.ai/terms and /privacy
+    # what askstudio.ai serves carries no comments (strip.py): the main page, every page of its own, the legal pages
+    for f in ["index.html", "site.css", "site.js"] + [os.path.join(pg[0], n) for pg in PAGES for n in ("index.html", "page.css", "page.js")] + \
+             [os.path.join(d, "index.html") for d in made]:
+        strip.file(os.path.join(ROOT, f))
     return names, ver
 
 

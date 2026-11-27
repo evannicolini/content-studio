@@ -9,8 +9,9 @@ var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "A
 /* posts per day across the 30 days, desktop (the counter shows whatever this really adds up to) */
 var PER_DAY = [3, 2, 4, 2, 3, 1, 2, 2, 3, 4, 2, 3, 2, 1, 4, 2, 3, 2, 2, 3, 1, 2, 3, 4, 2, 2, 3, 1, 2, 3];
 var BRAND = {};
-(M.films || []).forEach(function (f) { BRAND[f.slug] = /esignature/i.test(f.brand || "") ? "ces" : "mirra"; BRAND[f.poster] = BRAND[f.slug]; });
-(M.thumbs || []).forEach(function (t) { BRAND[t.file] = BRAND[t.from_slug] || "mirra"; });
+/* each film's badge on the calendar: a made-up demo brand (Northwind, Lowtide Coffee), never the film's real one */
+(M.films || []).forEach(function (f, i) { BRAND[f.slug] = i % 2 ? "lowtide" : "northwind"; BRAND[f.poster] = BRAND[f.slug]; });
+(M.thumbs || []).forEach(function (t) { BRAND[t.file] = BRAND[t.from_slug] || "northwind"; });
 function rnd(i) { var x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
 
 /* ================= the calendar ================= */
@@ -21,7 +22,7 @@ root.querySelectorAll("#soc-nets li").forEach(function (li) { netEls[li.getAttri
 var posts = [], anims = [], token = 0, state = "pile", phone = SK.mobile();
 
 /* the calendar's cards load as the calendar comes near (loading=lazy): 70 to 170 of them were fetched and decoded with the page */
-function cardHTML(src) { return '<span class="soc-fx"><span class="soc-fy"><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" loading="lazy" decoding="async"><img class="br" src="assets/media/social/brand-' + (BRAND[src] || "mirra") + '.png" alt="" width="12" height="12" loading="lazy" decoding="async"></span></span></span>'; }
+function cardHTML(src) { return '<span class="soc-fx"><span class="soc-fy"><span class="soc-card"><img src="' + src + '" alt="" width="180" height="320" loading="lazy" decoding="async"><img class="br" src="assets/media/social/brand-' + (BRAND[src] || "northwind") + '.svg" alt="" width="12" height="12" loading="lazy" decoding="async"></span></span></span>'; }
 
 function build() {
   grid.innerHTML = "";
@@ -207,7 +208,7 @@ var cSp = rowNew.querySelector(".sp b"), cRe = rowNew.querySelector(".re b"), cC
 var kSp = A("sad-k-sp"), kRe = A("sad-k-re"), kCp = A("sad-k-cp"), kLv = A("sad-k-lv"), kBd = A("sad-k-bd");
 var ASK = "Run this as an ad, $40 a day", DAILY = 40, BASE_SP = 384, BASE_RE = 32, END_SP = 112, END_RE = 10, END_DAY = 3;
 var WEEK = [["Mon", "10a", "ces-sea-cliffs", "Sea cliffs", 1], ["Tue", "4p", "mirra-multivitamin", "Multivitamin", 1], ["Wed", "12p", "ces-company-becoming", "Launch film", 1], ["Thu", "9a", "ces-forest", "Forest", 1],
-  ["Fri", "6p", "founders-retreat", "Founders retreat", 0], ["Sat", "11a", "ces-agent-kitchen", "Agent kitchen", 0], ["Sun", "5p", "lobby-hero-window", "The Lobby", 0]];
+  ["Fri", "6p", "founders-retreat", "Founders retreat", 0], ["Sat", "11a", "ces-agent-kitchen", "Agent kitchen", 0], ["Sun", "5p", "lobby-hero-window", "Hotel window", 0]];
 var pickEl;
 WEEK.forEach(function (d) {
   var f = FILMS[d[2]] || forest, li = document.createElement("li");

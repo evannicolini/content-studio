@@ -330,7 +330,7 @@
   };
 
   /* ---------- the real Studio Home, drawn at the app's own size (1440 x 900) for the sign-ups' stage (900-early, 910-start).
-     Taken from the app (Studio_App web/vista home.js, home.css, shell.css): the full nav with its counts, the greeting, Ask Studio
+     Taken from the app (Studio_App web/vista home.js, home.css, shell.css): the full nav with made-up demo counts, the greeting, Ask Studio
      (Studio x Claude, mic, send), the brand chips, Set up your Studio, To review, Post next, Crushing it and Going out. Real stills
      from the selects. SK.appHome(host, { name, brand }) -> { name(n), brands(list), typeAsk(text) }. CSS: .ah in 900-early. ---------- */
   SK.appHome = function (host, o) {
@@ -361,7 +361,7 @@
     var date = now.toLocaleDateString("en-US", { weekday: "long" }) + " · " + now.toLocaleDateString("en-US", { month: "long", day: "numeric" });
     var rv = [["dinner-toast", "Review v02"], ["coffee-friend-arrives", "Review v04"], ["cofounder-whiteboard", "Review v03"], ["surfing", "Review v01"]];
     var pk = ["run-club", "coastal-highway", "investor-intro", "tennis-forehand", "yacht", "golf", "house-party", "beach-volleyball"];
-    var cr = [["court-dap", "202× avg", "1,210 views", YT + IG], ["get-together", "142× avg", "75,755 views", IG + TT], ["mountain-biking", "33× avg", "17,530 views", IG]];
+    var cr = [["court-dap", "48× avg", "12,400 views", YT + IG], ["get-together", "31× avg", "8,900 views", IG + TT], ["mountain-biking", "12× avg", "3,150 views", IG]];   /* made-up demo numbers */
     var cal = "", sched = { 2: "private-jet", 5: "real-connections", 9: "race-track" };
     for (var d = 0; d < 14; d++) {
       var dt = new Date(now.getTime() + d * 864e5), s = sched[d];
@@ -374,9 +374,9 @@
         '<p class="ah-sbh">' + MARK + "<span>Studio</span>" + sv("pin") + "</p>" +
         '<p class="ah-allb">' + sv("grid") + '<span data-ah-allb>All brands</span>' + sv("car") + "</p>" +
         ni("home", "Home", null, true) +
-        '<p class="ah-ng">Create</p>' + ni("aes", "Aesthetic", 482) + ni("edits", "Full edits", 180) + ni("con", "Concepts", 79) + ni("lib", "AI Library", 460) +
-        '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 18) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 23) + ni("cre", "Creators", 441) +
-        '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
+        '<p class="ah-ng">Create</p>' + ni("aes", "Aesthetic", 128) + ni("edits", "Full edits", 36) + ni("con", "Concepts", 24) + ni("lib", "AI Library", 210) +
+        '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 12) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 9) + ni("cre", "Creators", 64) +
+        '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 18) + ni("ui", "App UI", 12) + ni("ref", "References", 15) + ni("mus", "Music", 90) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
         '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
@@ -388,9 +388,9 @@
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
           '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
-          '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">11 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
+          '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">9 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
           '<div class="ah-row">' +
-            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
+            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>6</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
               rv.map(function (x) { return '<span class="ah-vt"><img src="' + M + x[0] + '.jpg" alt=""><span class="ah-st"><i class="ah-dot"></i>' + x[1] + "</span></span>"; }).join("") + "</div></section>" +
             '<section class="ah-w"><header class="ah-wh"><b>Post next</b><span class="ah-ws">Studio\'s picks</span><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-strip" data-ah-pk>' +
               pk.map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; }).join("") + "</div></section>" +
@@ -438,7 +438,7 @@
         var rv = host.querySelector("[data-ah-rv]"), old = rv.querySelector(".ah-new"); if (old) old.remove();
         if (!item) return;
         var t = document.createElement("span"); t.className = "ah-vt ah-new"; t.innerHTML = '<img src="' + esc(item.img) + '" alt=""><span class="ah-st"><i class="ah-dot"></i>Review v01</span><span class="ah-mfl"><em>' + esc(item.kicker) + "</em><b>" + esc(item.title) + "</b></span>";
-        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "21";
+        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "7";
       }
     };
     ctl.name(o.name || "");
@@ -476,8 +476,9 @@
   };
 
 
-  /* the three brands every Studio on the site shows: Studio, MIRRA, Custom Esignature (their own logos, assets/brands/) */
-  SK.BRANDS = [{ n: "Studio", img: "assets/brands/studio.svg" }, { n: "MIRRA", img: "assets/brands/mirra.png" }, { n: "Custom Esignature", img: "assets/brands/ces.png" }];
+  /* the three brands every Studio on the site shows: made-up demo brands, never a real Studio's (tools/test_demo.js checks it) */
+  SK.BRANDS = [{ n: "Northwind", m: "N", bg: "linear-gradient(140deg, #6E8FD8, #1D2F63)", ink: "#F5F3EE" }, { n: "Lowtide Coffee", m: "L", bg: "linear-gradient(140deg, #D9A86C, #6B3F1D)", ink: "#FFF7EC" },
+               { n: "Fieldnote", m: "F", bg: "linear-gradient(140deg, #BED2C3, #2F5D50)", ink: "#05090A" }];
 
   /* SK.appStory(ctl, o): the Home at work, on a loop. Your footage is dragged into the composer, the request types itself and goes,
      Ask Studio opens on the right and answers while the full editor cuts it (clips land on the timeline, music, captions, the brand),
@@ -1094,7 +1095,7 @@
     sec.querySelectorAll("[data-sk-rest]").forEach(function (el) { el.removeAttribute("data-sk-rest"); });
   }
 
-  /* ---------- scroll focus (as on the Custom Esignature site): a section is dim and soft at the edge of the screen and comes to
+  /* ---------- scroll focus (as on another site): a section is dim and soft at the edge of the screen and comes to
      full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
   function focusSections() {
     if (SK.reduced) return;

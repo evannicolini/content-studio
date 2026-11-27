@@ -6,7 +6,6 @@
 <title>Studio. If you can dream it, you can post it.</title>
 <meta name="description" content="One prompt takes the idea in your head to a finished video. Studio is a content studio for Mac that you run by talking to Claude.">
 <meta name="color-scheme" content="dark">
-<!-- no theme-color: on iPhone it paints a solid band behind the status bar; the page runs edge to edge under it instead (kit.js SK.edges keeps the overscroll the page's own colour) -->
 <meta property="og:title" content="Studio. If you can dream it, you can post it.">
 <meta property="og:description" content="One prompt takes the idea in your head to a finished video.">
 <meta property="og:type" content="website">
@@ -25,22 +24,11 @@
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-<!-- Hero intro (src/sections/010-hero): the nav is part of the hero's opening, so it starts hidden and arrives with the button and
-     the composer. The classes go on here, before any stylesheet, so the nav is never painted first; the hero's section.js takes
-     them off again (after 7 s they come off by themselves if that script never runs). Not with reduced motion. -->
-<!-- The waitlist and the sign-up are pages of their own now (build.py PAGES): an old #early-access / #signup / #paywall link goes
-     straight there, before anything of this page loads, with its ?ref= / ?confirm= / ?pass= kept. -->
 <script>(function (l) {
-  /* #early-access, #early, #signup, #paywall, with their extras after & or ? (#early-access?ref=CODE, #early-access&ref=CODE): the
-     extras join the address's own ?query, so ?ref, ?confirm, ?pass and ?i always reach the page */
   var m = l.hash.match(/^#(early-access|early|signup|paywall)([?&].*)?$/); if (!m) return;
   var extra = (m[2] || "").replace(/^[?&]/, ""), q = l.search + (extra ? (l.search ? "&" : "?") + extra : "");
   l.replace((m[1] === "signup" || m[1] === "paywall" ? "start/" : "early-access/") + q + "#" + (m[1] === "early" ? "early-access" : m[1]));
 })(location);</script>
-<!-- the lite tier (html.lite): in-app browsers (Instagram, Facebook, Messenger, TikTok, Snapchat, LinkedIn, Pinterest, Line) and weak
-     devices (4 GB of memory or less, or 4 cores or fewer that aren't Apple's). Their web view has far less headroom than Safari or Chrome,
-     so the page does the same look with less work: sections far off screen aren't drawn, the beams turn a little less often, sounds are
-     decoded on the first tap. ?lite=1 / ?lite=0 forces it either way (to test). kit.js: SK.lite, SK.inApp. -->
 <script>(function (r) { var ua = navigator.userAgent || "", m = location.search.match(/[?&]lite=([01])/), app = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|FB4A|Messenger|musical_ly|Bytedance|TikTok|Snapchat|LinkedInApp|Pinterest|\bLine\//i.test(ua), weak = (navigator.deviceMemory > 0 && navigator.deviceMemory <= 4) || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4 && !/iPhone|iPad|Macintosh/.test(ua)), on = m ? m[1] === "1" : app || weak; window.SK_INAPP = app; window.SK_LITE = on; if (on) r.classList.add("lite"); })(document.documentElement);</script>
 <script>(function (r) { if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return; r.classList.add("hx-pre", "hx-intro"); window.__hxSafe = setTimeout(function () { r.classList.remove("hx-pre", "hx-intro"); var h = document.getElementById("hero"); if (h) h.className = "hx"; }, 7000); })(document.documentElement);</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,19 +37,17 @@
 <link rel="preconnect" href="https://api.fontshare.com">
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap">
-<link rel="stylesheet" href="site.css?v=f7917a4e">
+<link rel="stylesheet" href="site.css?v=d0c179c1">
 <noscript><style>[data-reveal]{opacity:1!important;transform:none!important}</style></noscript>
 </head>
 <body>
 
-<!-- the Studio mark, drawn once and reused -->
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id="mk-l" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".62"/><stop offset=".55" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".46"/></linearGradient>
     <linearGradient id="mk-r" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset=".4" stop-color="#fff" stop-opacity=".36"/><stop offset="1" stop-color="#fff" stop-opacity=".24"/></linearGradient>
     <linearGradient id="mk-s" x1="336" y1="62" x2="200" y2="452" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".38" stop-color="#fff" stop-opacity=".85"/><stop offset=".7" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
     <linearGradient id="mk-e" x1="60" y1="130" x2="453" y2="352" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#fff" stop-opacity=".3"/><stop offset=".7" stop-color="#fff" stop-opacity=".3"/><stop offset="1" stop-color="#fff" stop-opacity=".8"/></linearGradient>
-    <!-- the same mark in ink, for light sections -->
     <linearGradient id="mk-dl" x1="60" y1="130" x2="300" y2="322" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".78"/><stop offset="1" stop-color="#15171b" stop-opacity=".5"/></linearGradient>
     <linearGradient id="mk-dr" x1="240" y1="352" x2="453" y2="200" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#15171b" stop-opacity=".95"/><stop offset="1" stop-color="#15171b" stop-opacity=".42"/></linearGradient>
   </defs>
@@ -92,11 +78,7 @@
 
 <main id="top">
 
-<!-- 010-hero -->
 <section class="hx" id="hero" aria-labelledby="h-hero">
-<!-- The approved "Hero A · App leans back": a 1440 artboard (390 on phones) that scales as one piece (--k, see section.css).
-     The opening state goes on here, before any of the hero is painted (shell.html has already hidden the nav the same way).
-     Without JavaScript, or with reduced motion, the hero is simply shown settled. -->
 <script>(function (d) { if (d.documentElement.classList.contains("hx-pre")) d.currentScript.parentNode.className = "hx pre w0"; })(document);</script>
 <svg class="hx-defs" width="0" height="0" aria-hidden="true" focusable="false">
 <symbol id="hx-mark" viewBox="36 36 440 440"><path fill="url(#mk-l)" d="M82 130H309.500L242.500 322H82a22 22 0 0 1-22-22V152a22 22 0 0 1 22-22Z"/><path fill="url(#mk-r)" d="M295.500 187H431a22 22 0 0 1 22 22V330a22 22 0 0 1-22 22H238Z"/><path fill="url(#mk-s)" d="M336 62L272 258.500L200 452L264 255.500Z"/></symbol>
@@ -123,7 +105,6 @@
 <a class="hx-btn hx-dl" href="#pricing" data-download data-beam-auto="md" data-beam-variant="mirra" data-beam-boost="2.4" data-beam-radius="999"><svg aria-hidden="true"><use href="#apple"/></svg><span>Download for Mac</span></a>
 <p class="hx-send-help" data-send-help>Studio runs on your Mac. Send this page there to download it.</p>
 
-<!-- the composer: section.js types the prompts into it; each one opens the app screen that answers it -->
 <div class="cp" role="img" aria-label="What you can ask Claude to make">
 <p class="cp-ask"><span class="cp-t ph">What should we make?</span><i class="cp-caret"></i></p>
 <div class="cp-row">
@@ -138,7 +119,6 @@
 </div>
 </div>
 
-<!-- the Studio app, drawn in markup at its own size (1440 x 900) and scaled; the class on .sa picks the screen -->
 <div class="hx-stage" aria-hidden="true">
 <div class="hx-app3d"><div class="hx-appfit">
 <div class="sa v-home">
@@ -173,7 +153,6 @@
 
 <div class="sa-home">
 
-<!-- ===================== Full edits: the editor ===================== -->
 <div class="scr scr-edit">
 <div class="ed">
 <div class="ed-top">
@@ -231,7 +210,6 @@
 </div>
 </div>
 
-<!-- ===================== Aesthetic ===================== -->
 <div class="scr scr-aes">
 <div class="sae">
 <h2 class="ui-h in-up">Aesthetic</h2>
@@ -258,7 +236,6 @@
 </div>
 </div>
 
-<!-- ===================== Social: the calendar ===================== -->
 <div class="scr scr-social">
 <div class="so">
 <h2 class="ui-h in-up">Social</h2>
@@ -269,7 +246,6 @@
 </div>
 </div>
 
-<!-- ===================== Ask Claude ===================== -->
 <div class="scr scr-ask">
 <div class="ak">
 <div class="ak-col">
@@ -293,7 +269,6 @@
 </div>
 </div>
 
-<!-- ===================== Home ===================== -->
 <div class="scr scr-home">
 <p class="sa-coord sa-mono"><span>⌜ 30.5200° N</span><span>119.6400° W</span><span class="sa-dim">ELEV 2316 M</span></p>
 <div class="sa-hbtns">
@@ -377,11 +352,8 @@
 </div>
 </section>
 
-<!-- 020-phone -->
 <section class="sh-sec" id="shoot" aria-labelledby="h-shoot">
-<!-- SCREEN ONE (kept as it was): people filming on a phone, the headline, the "Your footage" card -->
 <div class="frame tall sh">
-  <!-- BACKGROUND: one reel of people filming on their phones (reel.mp4 / reel-m.mp4 for phones / reel.jpg) -->
   <video class="bg" data-play data-src="assets/media/people/reel.mp4" data-src-m="assets/media/people/reel-m.mp4" poster="assets/media/people/reel.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade"></div>
   <span class="sh-pbs" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -394,7 +366,6 @@
         <p class="lede" data-reveal style="--i:2">Drop in what you filmed. It finds the best takes, cuts them, captions them and scores them.</p>
       </header>
 
-      <!-- raw clips drop into the tray, the four jobs tick off, the finished film plays -->
       <div class="sh-card" data-reveal="scale" style="--i:3" aria-hidden="true">
         <div class="sh-left">
           <div class="sh-top"><b>Your footage</b><span class="mono sh-status">Drop clips here</span></div>
@@ -424,7 +395,6 @@
   </div>
 </div>
 
-<!-- SCREEN TWO: the whole camera roll goes into Studio, a set of finished videos comes out -->
 <div class="sho" id="shoot-out">
   <header class="sho-head">
     <div class="sho-ttl">
@@ -480,15 +450,11 @@ set.</span></span></figure>
 </div>
 </section>
 
-<!-- 030-chat -->
 <section class="frame tall ch" id="chat" aria-labelledby="h-chat">
-  <!-- BACKGROUND: one reel of people working from anywhere (chatreel.mp4 / chatreel-m.mp4 for phones / chatreel.jpg) -->
   <video class="bg" data-play data-src="assets/media/people/chatreel.mp4" data-src-m="assets/media/people/chatreel-m.mp4" poster="assets/media/people/chatreel.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade"></div>
   <span class="ch-pbs" aria-hidden="true"><i></i><i></i><i></i></span>
 
-  <!-- words top left, Kayla under them; the Mac window and the phone side by side, bottom right. Nothing between the footage and the glass may fade,
-       filter, mask or clip (that would stop the glass blurring the footage), so the panels are direct children here. -->
   <div class="ch-in">
     <header class="ch-head">
       <p class="ch-lock" data-reveal aria-label="Studio and Claude Code">
@@ -502,7 +468,6 @@ set.</span></span></figure>
     </header>
     <div class="ch-vo"><div class="vo" data-src="assets/audio/kayla-chat.mp3" data-label="Kayla on just saying it"></div></div>
 
-    <!-- the same chat, on the Mac … -->
     <div class="ch-mac ch-panel" aria-hidden="true">
       <div class="ch-bar">
         <span class="ch-dots3"><i></i><i></i><i></i></span>
@@ -520,7 +485,6 @@ set.</span></span></figure>
       </div>
     </div>
 
-    <!-- … and on the phone -->
     <div class="ch-phone ch-panel" aria-hidden="true">
       <div class="ch-status">
         <b>9:41</b>
@@ -551,19 +515,16 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 040-statement -->
 <section class="frame st" id="why" aria-labelledby="h-why">
   <video class="bg" data-play data-src="assets/media/people/want.mp4" data-src-m="assets/media/people/want-m.mp4" poster="assets/media/people/want.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade" aria-hidden="true"></div>
   <span class="st-pbs" aria-hidden="true"><i></i><i></i><i></i></span>
 
-  <!-- one line, one sentence at a time: each types out in the same spot, holds, erases, and the next one takes the story further -->
   <div class="st-copy">
     <p class="label st-label">The attention economy</p>
     <h2 id="h-why" class="st-h" aria-label="Your content has one job. Make people think: “F*ck, I need that.” That thought is what sells. Great content earns it. Every single day. That’s hard to keep up. Studio does it for you."><span class="st-lead" aria-hidden="true">Your content has one job. Make people think:</span><span class="st-big" aria-hidden="true"><span class="st-typed">“F*ck, I need that.”</span><i class="st-caret"></i></span></h2>
   </div>
 
-  <!-- her phone, in glass (030's phone): the feed swipes past three posts and stops on a Studio film; the heart fills -->
   <div class="st-ph">
     <div class="st-phone" aria-hidden="true">
       <div class="st-status"><b>9:41</b><i class="st-island"></i><svg viewBox="0 0 46 12"><path d="M1 8.5h2.2V11H1zM5 6.5h2.2V11H5zM9 4.2h2.2V11H9zM13 1.6h2.2V11H13z"/><rect class="o" x="22.6" y="1.6" width="19" height="9.4" rx="2.8"/><rect x="24.4" y="3.4" width="12.6" height="5.8" rx="1.3"/><path d="M43 4.6c.9.3 1.4.9 1.4 1.7s-.5 1.4-1.4 1.7z"/></svg></div>
@@ -584,11 +545,9 @@ set.</span></span></figure>
     </div>
   </div>
 
-  <!-- the thought, rising off the phone: a glass pill that types -->
   <p class="st-think" aria-hidden="true"><span class="st-think-t"></span><i class="st-caret"></i></p>
 </section>
 
-<!-- 050-work -->
 <section class="sec on-paper wk" id="work" aria-labelledby="h-work">
   <div class="wrap wk-top">
     <div class="sec-head left">
@@ -664,7 +623,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 060-carry -->
 <section class="frame tall cy" id="anywhere" aria-labelledby="h-anywhere">
   <video class="bg" data-play data-src="assets/media/people/go.mp4" data-src-m="assets/media/people/go-m.mp4" poster="assets/media/people/go.jpg" loop muted playsinline aria-hidden="true"></video>
   <div class="shade"></div>
@@ -677,7 +635,6 @@ set.</span></span></figure>
         <h2 id="h-anywhere" class="h-lg cy-h">A whole studio.<br><span class="two">In your carry-on.</span></h2>
       </header>
 
-      <!-- people working on the go (a travel terminal, a harbour promenade): each request is typed into the composer, each answer lands as a real result -->
       <div class="cy-work" data-reveal="fade" style="--i:2" aria-hidden="true">
         <div class="cy-stage">
           <article class="cy-r cy-r-film">
@@ -745,7 +702,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 070-library -->
 <section class="sec lb" id="library" aria-labelledby="h-library">
   <div class="wrap">
     <div class="sec-head">
@@ -762,11 +718,9 @@ set.</span></span></figure>
     </div>
   </div>
 
-  <!-- the clips. Each one keeps its prompt: hover a clip (or stop on it, on a phone) and the prompt types out -->
   <div class="lb-wall" id="lb-wall" data-reveal="fade" style="--i:3" aria-label="Clips from the AI Library"></div>
   <p class="lb-count" data-reveal><span class="label">246 clips in the library</span></p>
 
-  <!-- you type a scene, you get footage -->
   <div class="frame lb-stage" id="lb-stage">
     <img class="bg lb-sky" src="assets/media/wallpapers/above-the-clouds.jpg" alt="" width="2560" height="1428" loading="lazy" decoding="async">
     <div class="shade"></div>
@@ -781,14 +735,12 @@ set.</span></span></figure>
         <div class="lb-ask-top"><span class="label bare">Describe a scene</span><span class="label bare lb-step" id="lb-step" aria-hidden="true">01 / 03</span></div>
         <div class="brk"><i></i><i></i><i></i><i></i><div id="lb-field" aria-label="Examples of scenes you can ask for"></div></div>
       </div>
-      <!-- the beat in between: Studio matches the line against the library, then writes the prompt -->
       <p class="lb-match" id="lb-match" aria-hidden="true"><span class="lb-match-th"><i></i><i></i><i></i><i></i></span><span class="lb-match-t"><span class="lb-m1">Matching 246 winning clips</span><span class="lb-m2">Prompt written</span></span></p>
       <div class="lb-deck" id="lb-deck" aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
-<!-- 080-viral -->
 <section class="sec on-paper vl" id="viral" aria-labelledby="h-viral">
   <div class="wrap">
     <header class="sec-head">
@@ -799,7 +751,6 @@ set.</span></span></figure>
     </header>
   </div>
 
-  <!-- one graphic, three beats: a video goes in, Claude studies it, it comes back remade with your footage -->
   <div class="vl-stage" data-reveal="scale">
     <img class="vl-bg" src="assets/media/wallpapers/orange-clouds-blue-sky.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
 
@@ -852,7 +803,6 @@ set.</span></span></figure>
     </ol>
   </div>
 
-  <!-- the library: the app's Viral Lab tab. A video is added, Claude studies it once, the study is kept, and it can be remade for your brand any time -->
   <div class="wrap vlb-head">
     <div class="vlb-head-l">
       <h3 class="h-md">Build a library<br><span class="two">of what works.</span></h3>
@@ -925,7 +875,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 090-notes -->
 <section class="frame tall nt" id="notes" aria-labelledby="h-notes">
   <img class="bg" src="assets/media/wallpapers/lake-tahoe-blue-hour.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
   <div class="shade"></div>
@@ -940,7 +889,6 @@ set.</span></span></figure>
       <p class="lede" data-reveal style="--i:2">Click the frame, say what's off, send it to Claude. A new version comes back. No timeline to learn.</p>
     </header>
 
-    <!-- Studio's editor as it is in the app: glass bar, glass panels, same controls. One loop: two notes on the frame, send, v02 comes back. -->
     <div class="nt-ed" data-s="idle" data-reveal="scale" style="--i:2" role="img" aria-label="Studio's editor. Two notes are left on the frame and sent to Claude. Version two comes back with the logo on the beat and warmer music under the intro.">
       <div class="nt-bar" aria-hidden="true">
         <span class="nt-ic"><svg viewBox="0 0 16 16"><path d="M13 8H3M7 4 3 8l4 4"/></svg></span>
@@ -955,7 +903,6 @@ set.</span></span></figure>
       </div>
 
       <div class="nt-panes" aria-hidden="true">
-        <!-- timeline panel -->
         <div class="nt-pane nt-keys">
           <p class="nt-khead"><b>Video</b><em>Saved</em><span class="nt-zoom"><i></i></span><span class="nt-zoom nt-zoom2"><i></i></span><span class="nt-hide">Hide</span></p>
           <div class="nt-tl">
@@ -978,7 +925,6 @@ set.</span></span></figure>
           </div>
         </div>
 
-        <!-- player panel -->
         <div class="nt-pane nt-play">
           <p class="nt-toggles"><span><i></i>Instagram UI</span><span><i></i>Reels crop</span></p>
           <div class="nt-stage">
@@ -993,7 +939,6 @@ set.</span></span></figure>
           <p class="nt-ctl"><span class="nt-playb"><svg viewBox="0 0 16 16"><path d="M5.2 3.1v9.8a.5.5 0 0 0 .76.43l8-4.9a.5.5 0 0 0 0-.86l-8-4.9a.5.5 0 0 0-.76.43z"/></svg></span><span class="nt-tp">-1s</span><span class="nt-tp">+1s</span><span class="nt-tp nt-loop"><svg viewBox="0 0 16 16"><path d="M2.5 7.5V6.6a2.1 2.1 0 0 1 2.1-2.1h8.9M11.5 2.5l2 2-2 2M13.5 8.5v.9a2.1 2.1 0 0 1-2.1 2.1H2.5M4.5 13.5l-2-2 2-2"/></svg></span><span class="nt-tp">1.0x</span><span class="nt-tc"><b>00:00:44:00</b><small>00:00:48:17</small></span></p>
         </div>
 
-        <!-- comments panel -->
         <div class="nt-pane nt-side">
           <p class="nt-tabs"><b>Comments</b><span>Mix</span><span>SFX</span><span>Media</span></p>
           <p class="nt-ptools"><span class="nt-n">0 comments</span><span>Clear all</span></p>
@@ -1022,7 +967,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 100-aesthetic -->
 <section class="sec on-paper ae" id="aesthetic" aria-labelledby="h-aesthetic">
   <div class="wrap">
     <header class="sec-head">
@@ -1033,7 +977,6 @@ set.</span></span></figure>
     </header>
   </div>
 
-  <!-- the app's Aesthetic tab: pick a style, its tiles play -->
   <div class="ae-stage" data-reveal="scale">
     <img class="ae-bg" src="assets/media/wallpapers/pebble-beach-cypress-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
 
@@ -1085,7 +1028,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 110-social -->
 <section class="sec soc" id="social" aria-labelledby="h-social">
   <div class="wrap">
     <header class="sec-head">
@@ -1096,7 +1038,6 @@ set.</span></span></figure>
     </header>
   </div>
 
-  <!-- the app's Social calendar: you ask once, every post finds its day -->
   <div class="frame soc-stage" id="soc-stage" data-reveal="fade">
     <img class="bg" src="assets/media/wallpapers/lake-tahoe-blue-hour.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
     <div class="shade"></div>
@@ -1121,8 +1062,8 @@ set.</span></span></figure>
           <div class="soc-calh">
             <span class="soc-chip sq">&#8249;</span><b class="soc-month" id="soc-month">This month</b><span class="soc-chip sq">&#8250;</span><span class="soc-chip soc-now">Today</span>
             <span class="soc-brands">
-              <span class="soc-chip on"><img src="assets/media/social/brand-mirra.png" alt="" width="16" height="16" loading="lazy" decoding="async">MIRRA</span>
-              <span class="soc-chip on"><img src="assets/media/social/brand-ces.png" alt="" width="16" height="16" loading="lazy" decoding="async"><em>Custom Esignature</em></span>
+              <span class="soc-chip on"><img src="assets/media/social/brand-northwind.svg" alt="" width="16" height="16" loading="lazy" decoding="async">Northwind</span>
+              <span class="soc-chip on"><img src="assets/media/social/brand-lowtide.svg" alt="" width="16" height="16" loading="lazy" decoding="async"><em>Lowtide Coffee</em></span>
             </span>
             <ul class="soc-nets" id="soc-nets">
               <li data-net="ig"><img src="assets/logos/social/ig.svg" alt="" width="18" height="18" loading="lazy" decoding="async"></li>
@@ -1142,7 +1083,6 @@ set.</span></span></figure>
     </div>
   </div>
 
-  <!-- second beat: a post from the calendar becomes a Meta ad. Ask, the ad is built and shown as people will see it, the app's Ads tab reports on it -->
   <div class="wrap sad-head">
     <div class="sad-head-l">
       <p class="sad-lock" data-reveal aria-label="Studio and Meta"><svg class="sad-mk" aria-hidden="true"><use href="#studio-mark"/></svg><b>Studio</b><i aria-hidden="true">×</i><img src="assets/logos/svg/meta.svg" alt="" width="22" height="22" loading="lazy" decoding="async"><b>Meta</b></p>
@@ -1162,13 +1102,11 @@ set.</span></span></figure>
       </div>
 
       <div class="sad-board">
-        <!-- the post, where it sits in the calendar -->
         <div class="sad-week glass deep">
           <p class="sad-h"><b>This week</b><small>7 posts</small></p>
           <ol class="sad-days" id="sad-days"></ol>
         </div>
 
-        <!-- the ad, as people will see it -->
         <div class="sad-prev">
           <p class="sad-tag"><b>Ad preview</b><span><img src="assets/logos/social/ig.svg" alt="" width="14" height="14" loading="lazy" decoding="async"><img src="assets/logos/social/facebook.svg" alt="" width="14" height="14" loading="lazy" decoding="async"></span></p>
           <div class="brk sad-pbrk"><i></i><i></i><i></i><i></i>
@@ -1177,13 +1115,12 @@ set.</span></span></figure>
               <video data-play loop muted playsinline></video>
               <span class="sad-pv-top"><img src="assets/logos/social/ig.svg" alt="" width="13" height="13" loading="lazy" decoding="async">Reels ad</span>
               <span class="sad-pv-ic"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10.2-7.5 10.2Z"/></svg><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.7 7.1L4 20l1.3-4.3A8 8 0 1 1 20 11.6Z"/></svg><svg viewBox="0 0 24 24"><path d="M20.5 3.5 3.5 10.2l6.8 3.5m10.2-10.2-6.7 17-3.5-6.8m10.2-10.2-10.2 10.2"/></svg></span>
-              <span class="sad-pv-who"><img src="assets/media/social/brand-ces.png" alt="" width="28" height="28" loading="lazy" decoding="async"><span><b>Custom Esignature</b><em>Sponsored</em></span></span>
+              <span class="sad-pv-who"><img src="assets/media/social/brand-lowtide.svg" alt="" width="28" height="28" loading="lazy" decoding="async"><span><b>Lowtide Coffee</b><em>Sponsored</em></span></span>
               <span class="sad-pv-cta">Learn more<svg viewBox="0 0 16 16"><path d="m6 3.5 4.5 4.5-4.5 4.5"/></svg></span>
             </div>
           </div>
         </div>
 
-        <!-- the app's Ads tab -->
         <div class="sad-ads glass deep" id="sad-ads">
           <div class="sad-ah sad-g">
             <span class="sad-meta"><img src="assets/logos/svg/meta.svg" alt="Meta" width="28" height="28" loading="lazy" decoding="async"></span>
@@ -1208,8 +1145,8 @@ set.</span></span></figure>
                 <span class="sad-c sp"><em>Spent</em><b>$0</b></span><span class="sad-c re"><em>Results</em><b>0</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>—</b></span>
                 <span class="sad-next">Your next ad</span>
               </div>
-              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-company-becoming/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Look like the company you're becoming</b><small>Day 6 · Instagram and Facebook</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,22 14,20 28,21 42,15 57,13 71,9 85,10 100,5"/></svg><span class="sad-c sp"><em>Spent</em><b>$236</b></span><span class="sad-c re"><em>Results</em><b>21</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$11.24</b></span></div>
-              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-sea-cliffs/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Signature anatomy · sea cliffs</b><small>Day 4 · Instagram</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,23 14,22 28,18 42,19 57,14 71,15 85,11 100,10"/></svg><span class="sad-c sp"><em>Spent</em><b>$148</b></span><span class="sad-c re"><em>Results</em><b>11</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$13.45</b></span></div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-company-becoming/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Slow mornings, done right</b><small>Day 6 · Instagram and Facebook</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,22 14,20 28,21 42,15 57,13 71,9 85,10 100,5"/></svg><span class="sad-c sp"><em>Spent</em><b>$236</b></span><span class="sad-c re"><em>Results</em><b>21</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$11.24</b></span></div>
+              <div class="sad-row"><i class="sad-tg on"></i><span class="sad-th"><img src="assets/media/films/ces-sea-cliffs/poster.jpg" alt="" width="540" height="960" loading="lazy" decoding="async"></span><span class="sad-an"><b>Sea cliffs · 15-second cut</b><small>Day 4 · Instagram</small></span><svg class="sad-sp" viewBox="0 0 100 28" preserveAspectRatio="none"><polyline points="0,23 14,22 28,18 42,19 57,14 71,15 85,11 100,10"/></svg><span class="sad-c sp"><em>Spent</em><b>$148</b></span><span class="sad-c re"><em>Results</em><b>11</b></span><span class="sad-c cp"><em><u>Cost </u>per result</em><b>$13.45</b></span></div>
             </div>
           </div>
         </div>
@@ -1218,7 +1155,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 120-sound -->
 <section class="frame snd" id="sound" aria-labelledby="h-sound">
   <img class="bg" src="assets/media/wallpapers/big-sur-coast.jpg" alt="" width="2560" height="1429" loading="lazy" decoding="async">
   <div class="shade"></div>
@@ -1234,7 +1170,6 @@ set.</span></span></figure>
     <p class="sr">Three parts of Studio: the Music list with a track playing, an editor timeline where each sound effect sits under the cut, word or logo it belongs to, and the saved Voices.</p>
     <div class="snd-grid" id="snd-grid" aria-hidden="true">
 
-      <!-- Music: the app's Music tab -->
       <div class="snd-p snd-music glass deep" data-reveal style="--i:1">
         <div class="snd-ph"><h3>Music</h3>
           <ul class="snd-chips"><li class="on">All <span>305</span></li><li>Cinematic <span>28</span></li><li>Lo-Fi <span>41</span></li><li>Ambient <span>16</span></li><li>Upbeat <span>14</span></li></ul>
@@ -1242,7 +1177,6 @@ set.</span></span></figure>
         <ul class="snd-list" id="snd-list"></ul>
       </div>
 
-      <!-- Sound: the editor's tracks. One sound under every visible action -->
       <div class="snd-p snd-fx glass deep" data-reveal style="--i:2">
         <div class="snd-ph"><h3>Sound <span>1,419</span></h3><p class="snd-note">One sound for every action on screen</p></div>
         <div class="snd-tl" id="snd-tl">
@@ -1259,7 +1193,6 @@ set.</span></span></figure>
         </div>
       </div>
 
-      <!-- Voices: the app's saved voices -->
       <div class="snd-p snd-voices glass deep" data-reveal style="--i:3">
         <div class="snd-ph"><h3>Voices <span>34</span></h3><p class="snd-note">Saved</p></div>
         <ul class="snd-vs" id="snd-vs"></ul>
@@ -1268,7 +1201,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 130-steps -->
 <section class="sec on-paper gs" id="start" aria-labelledby="h-start">
   <div class="wrap">
     <header class="sec-head">
@@ -1277,7 +1209,6 @@ set.</span></span></figure>
     </header>
 
     <ol class="gs-grid">
-      <!-- 1. drag it to Applications, it lands in the Dock, it opens; then again -->
       <li class="gs-card card" data-reveal style="--i:1">
         <div class="gs-stage gs-s1" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -1306,7 +1237,6 @@ set.</span></span></figure>
         </div>
       </li>
 
-      <!-- 2. Claude asks, the brand answers, the kit builds piece by piece; then again -->
       <li class="gs-card card" data-reveal style="--i:2">
         <div class="gs-stage gs-s2" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -1337,7 +1267,6 @@ set.</span></span></figure>
         </div>
       </li>
 
-      <!-- 3. a request is typed, the cut lands in Full edits, then the next request -->
       <li class="gs-card card" data-reveal style="--i:3">
         <div class="gs-stage gs-s3" aria-hidden="true">
           <img class="gs-wall" src="assets/media/wallpapers/lake-tahoe-blue-hour-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
@@ -1374,9 +1303,7 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 140-views -->
 <section class="frame tall vw" id="views" aria-labelledby="h-views">
-  <!-- the frame's background is the wallpaper: two layers that cross-fade -->
   <div class="bg vw-bg" aria-hidden="true">
     <img class="vw-img on top" src="assets/media/wallpapers/pebble-beach-cypress-thumb.jpg" alt="" width="640" height="357" loading="lazy" decoding="async">
     <img class="vw-img" alt="" width="2560" height="1428" decoding="async">
@@ -1391,7 +1318,6 @@ set.</span></span></figure>
       <div class="vo" data-src="assets/audio/kayla-views.mp3" data-label="Kayla on your view"></div>
     </header>
 
-    <!-- a light echo of the app's Home, so it reads as "this is your studio" -->
     <div class="vw-home" data-reveal="scale" style="--i:3">
       <div class="vw-top" aria-hidden="true">
         <p class="mono vw-date">Today</p>
@@ -1409,7 +1335,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 150-integrations -->
 <section class="sec tight con" id="connect" aria-labelledby="h-connect">
   <div class="wrap">
     <header class="sec-head">
@@ -1438,10 +1363,7 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 155-creator -->
 <section class="cr frame crb" id="creator" aria-labelledby="h-cr">
-  <!-- The creator (approved canvas "Creator B"). Desktop is the 1404 x 1010 board scaled to the frame (section.js); narrow screens stack it.
-       The wallpaper switcher is Evan's, for choosing on the real site: it goes once he picks one. -->
   <img class="bg cr-bg" src="assets/media/wallpapers/cr/sea-cliffs-haze.jpg" alt="" loading="lazy" decoding="async" width="1920" height="1072">
   <div class="shade cr-shade"></div>
   <audio id="evan-why" src="assets/media/creator/evan-why.mp3" preload="none"></audio>
@@ -1465,7 +1387,6 @@ set.</span></span></figure>
   <div class="cr-wp" aria-label="Wallpaper"><button type="button" data-wp="-1" aria-label="Previous wallpaper"><svg viewBox="0 0 16 16"><path d="M10 3.5 5.5 8l4.5 4.5"></path></svg></button><span data-wp-name>Sea cliffs in haze<i>1/5</i></span><button type="button" data-wp="1" aria-label="Next wallpaper"><svg viewBox="0 0 16 16"><path d="M6 3.5 10.5 8 6 12.5"></path></svg></button></div>
 </section>
 
-<!-- 160-pricing -->
 <section class="pr frame" id="pricing" aria-labelledby="h-pr" data-period="year" data-own-focus>
   <img class="bg pr-bg" src="assets/media/wallpapers/orange-dune-blue-sky.jpg" alt="" loading="lazy" decoding="async" width="2560" height="1429">
   <div class="shade"></div>
@@ -1476,7 +1397,6 @@ set.</span></span></figure>
       <div class="vo" data-src="assets/audio/kayla-pricing.mp3" data-label="Kayla on what it costs"></div>
     </div>
 
-    <!-- the anchor: what this work costs when people do it (Pricing D: five jobs, trim-path bars, the shimmering line) -->
     <div class="pd-anchor pd-glass" data-pd-group="1">
       <header class="pd-a-head"><h3>What this costs without Studio</h3><span class="pd-mono">Every month</span></header>
       <ul class="pd-rows">
@@ -1494,7 +1414,6 @@ set.</span></span></figure>
       <p class="pd-agency">Or an agency: $5,000 to $15,000 a month, for three to five edits.</p>
     </div>
 
-    <!-- Early access (900-early): shown only while sign-ups are on (src/waitlist.json). The button opens the full-screen sign-up. -->
     <div class="pd-early" data-pd-group="1b" data-early-band hidden>
       <span class="pd-fbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>
       <div class="el"><span class="pd-fe">Early access · 14 days free</span><h3>Get early access to Studio.</h3><p>Join the list. When your invite lands, every feature and every brand is yours for 14 days, free.</p></div>
@@ -1505,18 +1424,15 @@ set.</span></span></figure>
       </div>
     </div>
 
-    <!-- Monthly | Yearly: the app's period switch. The whole section follows it. -->
     <div class="pd-switch" data-pd-group="2"><div class="pr-period" role="group" aria-label="Billing">
       <span class="pr-knob" aria-hidden="true"></span>
       <button type="button" class="mo" data-period="month">Monthly</button>
       <button type="button" class="yr" data-period="year">Yearly<span class="pr-save">Save 20%</span></button>
     </div></div>
 
-    <!-- the plans: written from the app's pricing.json at build time (pricing.py): a panel on wide screens, cards on narrow ones -->
     <div class="pd-plans" data-pd-group="2"><div class="pd-panel pd-glass" style="--n:3; --rows:10"><div class="pd-pro" style="grid-column:3; grid-row:1 / 12"><span class="pd-pbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span></div><div class="pd-h lead" style="grid-column:1; grid-row:1"><span class="pd-brand"><svg aria-hidden="true"><use href="#studio-mark"/></svg>Studio</span><span class="pd-mono">Same rows, read across</span><p>Every plan does the work. <span>Pick by how many brands you run.</span></p></div><div class="pd-h" style="grid-column:2; grid-row:1"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Creator</span></div><p class="pd-pr"><span class="was pd-num" data-pv="creator.was">$99</span><span class="pd-num" data-pv="creator.per">$79</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="creator.bill">Billed $948 yearly</span><span class="pd-save pd-num" data-pv="creator.save">Save $240</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-creator.mp3" hidden aria-label="Kayla: why Creator?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Creator?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon" aria-disabled="true" data-plan="creator">Coming soon</span></div><div class="pd-h" style="grid-column:3; grid-row:1"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Pro</span><span class="pd-tag" data-beam-auto="sm" data-beam-boost="1.6" data-beam-radius="13"><span class="tx">Most popular</span></span></div><p class="pd-pr"><span class="was pd-num" data-pv="pro.was">$199</span><span class="pd-num" data-pv="pro.per">$159</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="pro.bill">Billed $1,908 yearly</span><span class="pd-save pd-num" data-pv="pro.save">Save $480</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-pro.mp3" hidden aria-label="Kayla: why Pro?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Pro?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon best" aria-disabled="true" data-plan="pro">Coming soon</span></div><div class="pd-h" style="grid-column:4; grid-row:1"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Unlimited</span></div><p class="pd-pr"><span class="was pd-num" data-pv="unlimited.was">$299</span><span class="pd-num" data-pv="unlimited.per">$239</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="unlimited.bill">Billed $2,868 yearly</span><span class="pd-save pd-num" data-pv="unlimited.save">Save $720</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-unlimited.mp3" hidden aria-label="Kayla: why Unlimited?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Unlimited?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon" aria-disabled="true" data-plan="unlimited">Coming soon</span></div><div class="pd-c lab z first" style="grid-column:1; grid-row:2"><span>Brands</span></div><div class="pd-c big z" style="grid-column:2; grid-row:2"><span>1 brand</span></div><div class="pd-c big z" style="grid-column:3; grid-row:2"><span>3 brands</span></div><div class="pd-c big z last" style="grid-column:4; grid-row:2"><span>Every brand you run</span></div><div class="pd-c lab" style="grid-column:1; grid-row:3"><span>Run any edit as a Meta ad from Studio</span><img class="lg" src="assets/logos/svg/meta.svg" alt="" width="16" height="16" loading="lazy"></div><div class="pd-c n" style="grid-column:2; grid-row:3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg></div><div class="pd-c" style="grid-column:3; grid-row:3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:4; grid-row:3"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab z first" style="grid-column:1; grid-row:4"><span>One calendar across your brands</span></div><div class="pd-c n z" style="grid-column:2; grid-row:4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg></div><div class="pd-c z" style="grid-column:3; grid-row:4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z last" style="grid-column:4; grid-row:4"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab" style="grid-column:1; grid-row:5"><span>Full edits with takes and reviews</span></div><div class="pd-c" style="grid-column:2; grid-row:5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:3; grid-row:5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:4; grid-row:5"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab z first" style="grid-column:1; grid-row:6"><span>The AI library and Selects</span></div><div class="pd-c z" style="grid-column:2; grid-row:6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z" style="grid-column:3; grid-row:6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z last" style="grid-column:4; grid-row:6"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab" style="grid-column:1; grid-row:7"><span>Claude, Higgsfield and ElevenLabs built in</span><img class="lg" src="assets/logos/svg/claude.svg" alt="" width="16" height="16" loading="lazy"><img class="lg" src="assets/logos/svg/higgsfield.svg" alt="" width="16" height="16" loading="lazy"><img class="lg g" src="assets/logos/svg/elevenlabs.svg" alt="" width="16" height="16" loading="lazy"></div><div class="pd-c" style="grid-column:2; grid-row:7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:3; grid-row:7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:4; grid-row:7"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab z first" style="grid-column:1; grid-row:8"><span>Viral Lab</span></div><div class="pd-c z" style="grid-column:2; grid-row:8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z" style="grid-column:3; grid-row:8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z last" style="grid-column:4; grid-row:8"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab" style="grid-column:1; grid-row:9"><span>Social calendar: schedule and post</span></div><div class="pd-c" style="grid-column:2; grid-row:9"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:3; grid-row:9"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:4; grid-row:9"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab z first" style="grid-column:1; grid-row:10"><span>Comment to DM</span><img class="lg g" src="assets/logos/metricool.png" alt="" width="16" height="16" loading="lazy"></div><div class="pd-c z" style="grid-column:2; grid-row:10"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z" style="grid-column:3; grid-row:10"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c z last" style="grid-column:4; grid-row:10"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c lab" style="grid-column:1; grid-row:11"><span>Updates install by themselves</span></div><div class="pd-c" style="grid-column:2; grid-row:11"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:3; grid-row:11"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div><div class="pd-c" style="grid-column:4; grid-row:11"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg></div></div><div class="pd-cards"><article class="pd-card pd-glass"><div class="pd-ch"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Creator</span></div><p class="pd-pr"><span class="was pd-num" data-pv="creator.was">$99</span><span class="pd-num" data-pv="creator.per">$79</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="creator.bill">Billed $948 yearly</span><span class="pd-save pd-num" data-pv="creator.save">Save $240</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-creator.mp3" hidden aria-label="Kayla: why Creator?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Creator?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon" aria-disabled="true" data-plan="creator">Coming soon</span></div><ul class="pd-clist"><li class="pd-cr big"><span>1 brand</span></li><li class="pd-cr n"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg><span>Run any edit as a Meta ad from Studio</span><img class="lg" src="assets/logos/svg/meta.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr n"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 8h8"/></svg><span>One calendar across your brands</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Full edits with takes and reviews</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>The AI library and Selects</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Claude, Higgsfield and ElevenLabs built in</span><img class="lg" src="assets/logos/svg/claude.svg" alt="" width="16" height="16" loading="lazy"><img class="lg" src="assets/logos/svg/higgsfield.svg" alt="" width="16" height="16" loading="lazy"><img class="lg g" src="assets/logos/svg/elevenlabs.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Viral Lab</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Social calendar: schedule and post</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Comment to DM</span><img class="lg g" src="assets/logos/metricool.png" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Updates install by themselves</span></li></ul></article><article class="pd-card pd-glass best"><span class="pd-pbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><div class="pd-ch"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Pro</span><span class="pd-tag" data-beam-auto="sm" data-beam-boost="1.6" data-beam-radius="13"><span class="tx">Most popular</span></span></div><p class="pd-pr"><span class="was pd-num" data-pv="pro.was">$199</span><span class="pd-num" data-pv="pro.per">$159</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="pro.bill">Billed $1,908 yearly</span><span class="pd-save pd-num" data-pv="pro.save">Save $480</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-pro.mp3" hidden aria-label="Kayla: why Pro?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Pro?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon best" aria-disabled="true" data-plan="pro">Coming soon</span></div><ul class="pd-clist"><li class="pd-cr big"><span>3 brands</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Run any edit as a Meta ad from Studio</span><img class="lg" src="assets/logos/svg/meta.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>One calendar across your brands</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Full edits with takes and reviews</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>The AI library and Selects</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Claude, Higgsfield and ElevenLabs built in</span><img class="lg" src="assets/logos/svg/claude.svg" alt="" width="16" height="16" loading="lazy"><img class="lg" src="assets/logos/svg/higgsfield.svg" alt="" width="16" height="16" loading="lazy"><img class="lg g" src="assets/logos/svg/elevenlabs.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Viral Lab</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Social calendar: schedule and post</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Comment to DM</span><img class="lg g" src="assets/logos/metricool.png" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Updates install by themselves</span></li></ul></article><article class="pd-card pd-glass"><div class="pd-ch"><div class="pd-nm"><span class="nmx"><svg class="pd-mk" aria-hidden="true"><use href="#studio-mark"/></svg>Unlimited</span></div><p class="pd-pr"><span class="was pd-num" data-pv="unlimited.was">$299</span><span class="pd-num" data-pv="unlimited.per">$239</span><small>/ month</small></p><p class="pd-billed"><span class="pd-num" data-pv="unlimited.bill">Billed $2,868 yearly</span><span class="pd-save pd-num" data-pv="unlimited.save">Save $720</span></p><button type="button" class="pd-k" data-clip="assets/audio/kayla-why-unlimited.mp3" hidden aria-label="Kayla: why Unlimited?"><img src="assets/kayla.jpg" alt="" width="72" height="72" loading="lazy"><span class="t"><b>Why Unlimited?</b><svg class="wv" viewBox="0 0 222 16" preserveAspectRatio="none" aria-hidden="true"></svg></span><span class="pl"><svg class="p1" viewBox="0 0 11 12" aria-hidden="true"><path d="M2 1.6 9.4 6 2 10.4Z"/></svg><svg class="p2" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.5h2.4v9H2.5zM7.1 1.5h2.4v9H7.1z"/></svg></span></button><span class="pd-btn soon" aria-disabled="true" data-plan="unlimited">Coming soon</span></div><ul class="pd-clist"><li class="pd-cr big"><span>Every brand you run</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Run any edit as a Meta ad from Studio</span><img class="lg" src="assets/logos/svg/meta.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>One calendar across your brands</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Full edits with takes and reviews</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>The AI library and Selects</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Claude, Higgsfield and ElevenLabs built in</span><img class="lg" src="assets/logos/svg/claude.svg" alt="" width="16" height="16" loading="lazy"><img class="lg" src="assets/logos/svg/higgsfield.svg" alt="" width="16" height="16" loading="lazy"><img class="lg g" src="assets/logos/svg/elevenlabs.svg" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Viral Lab</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Social calendar: schedule and post</span></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Comment to DM</span><img class="lg g" src="assets/logos/metricool.png" alt="" width="16" height="16" loading="lazy"></li><li class="pd-cr"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3.5 8.4 2.9 2.9 6.1-6.6"/></svg><span>Updates install by themselves</span></li></ul></article></div></div>
-    <p class="pd-trial" data-pd-group="2">Every plan starts with 14 days of everything, free. Card required. You won't be charged for 14 days. On a smaller plan, extra brands are locked, never deleted.</p>
+    <p class="pd-trial" data-pd-group="2">Every plan starts with 14 days of everything, free, with no card. Pick your plan when you're ready. On a smaller plan, extra brands are locked, never deleted.</p>
 
-    <!-- Private beta, founders edition: the invite code unlocks the download (section.js) -->
     <div class="pd-founders" data-pd-group="3">
       <span class="pd-fbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>
       <div class="fl"><span class="pd-fe">Private beta · Founders edition</span><h3>Free, for people in Evan's network.</h3><p data-pr-sub>Invite only. Every feature and every brand, on the house while the beta runs.</p></div>
@@ -1539,7 +1455,6 @@ set.</span></span></figure>
       </div>
     </div>
 
-    <!-- the whole bill: who you pay. Studio is the only line paid to us; everything else bills you directly. -->
     <div class="pd-bill" data-pd-group="4">
       <h3>The whole bill. Nothing hidden.</h3>
       <p>Studio is the car. Claude is the engine. You pay us for Studio; Claude and any tools you add bill you directly.</p>
@@ -1563,11 +1478,6 @@ set.</span></span></figure>
   </div>
 </section>
 
-<!-- 900-early -->
-<!-- Early access: the full-screen sign-up, laid out like the app's opening film. Opened by every "Get early access" button and by
-     links ending in #early-access (a ?ref= link is a friend's invite). The question big on the left; the live Studio app on the right,
-     answering it and using the whole screen; the film's bar at the bottom (back, progress, Continue) with Kayla beside it.
-     Then "You're in": the 3D pass and the link to share. section.js; off until src/waitlist.json says where sign-ups go. -->
 <div class="wl" id="early-access" role="dialog" aria-modal="true" aria-labelledby="wl-h" hidden>
   <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
   <div class="wl-top">
@@ -1580,7 +1490,6 @@ set.</span></span></figure>
   </div>
 
   <div class="wl-in">
-    <!-- ===== the question ===== -->
     <div class="wl-left">
       <p class="wl-ref" data-wl-ref hidden><span class="wl-ri" data-wl-ri>S</span><span data-wl-ref-t>A friend saved you a spot.</span></p>
       <h2 id="wl-h" class="sr">Get early access to Studio</h2>
@@ -1624,8 +1533,6 @@ set.</span></span></figure>
               <button type="button" class="wl-opt big" data-v="2-3" aria-pressed="false"><b>2–3</b><small>brands</small></button>
               <button type="button" class="wl-opt big" data-v="4+" aria-pressed="false"><b>4+</b><small>brands</small></button>
             </div>
-            <!-- where their work lives (Evan): both optional, never in the way of Continue. A pasted instagram.com link becomes the handle;
-                 brand.com becomes https://brand.com -->
             <p class="wl-wk" id="wl-wk">Where can we see your work? <span class="wl-help">Optional</span></p>
             <div class="wl-fields wl-work" role="group" aria-labelledby="wl-wk">
               <label class="wl-f wl-ig"><span>Instagram</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><span class="wl-at" aria-hidden="true">@</span><input writingsuggestions="false" autocorrect="off" name="instagram" type="text" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" maxlength="120" aria-label="Instagram handle"></span></label>
@@ -1657,7 +1564,6 @@ set.</span></span></figure>
                   <span class="wl-box wl-cc"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><select name="cc" aria-label="Country code" autocomplete="tel-country-code"></select><span class="wl-ccv" aria-hidden="true">+1</span></span>
                   <span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input writingsuggestions="false" autocorrect="off" id="wl-phone" name="phone" type="tel" autocomplete="tel-national" inputmode="tel" enterkeyhint="done" maxlength="24"></span>
                 </div>
-                <!-- two separate opt-ins (the carriers' rule), never ticked for you, never required; the carriers' words verbatim beneath -->
                 <div class="wl-smsbox">
                   <label class="wl-sms"><input type="checkbox" name="sms_notify" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsn>Text me when my Studio invite is ready</b> <em>(optional)</em></span></label>
                   <label class="wl-sms"><input type="checkbox" name="sms_marketing" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><b data-wl-smsm>Text me Studio news and offers</b> <em>(optional)</em></span></label>
@@ -1670,7 +1576,6 @@ set.</span></span></figure>
             <p class="wl-legal">By joining, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a>, <a href="privacy/" target="_blank" rel="noopener">Privacy</a> and emails from Studio. Unsubscribe anytime.</p>
           </div>
 
-          <!-- the email's code (or its button) holds the place: nothing counts until it is confirmed -->
           <div class="wl-q" data-q="check" role="group" aria-labelledby="wl-q-check">
             <p class="wl-k">Early access · Confirm</p>
             <h3 class="wl-qh" id="wl-q-check"><b data-wl-hi="Check your email, {first}.">Check your email.</b><span>Your spot is waiting.</span></h3>
@@ -1691,7 +1596,6 @@ set.</span></span></figure>
           </div>
         </div>
 
-        <!-- the opening film's bar: back, where you are, Continue; Kayla beside it -->
         <div class="wl-dock">
           <div class="wl-bar">
             <button type="button" class="wl-back" data-wl-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
@@ -1704,18 +1608,14 @@ set.</span></span></figure>
       </form>
     </div>
 
-    <!-- ===== the right: the real Studio app (kit.js SK.appHome), answering each question as you go (drawn at 1440 x 900, scaled to the space) ===== -->
     <div class="wl-stage" aria-hidden="true">
       <div class="wl-fit">
-        <!-- Home: greets you, makes things for who you are, and its All brands menu answers question 3 -->
         <div class="wl-sc on" data-sc="home">
           <div class="wl-appwin wl-real">
             <div class="wl-ah" data-wl-ah></div>
-            <!-- All brands, open on question 3 -->
             <div class="wl-menu" data-wl-menu data-frost><p class="wl-mono">All brands</p><ul class="wl-bl" data-wl-bl></ul></div>
           </div>
         </div>
-        <!-- Claude: clips dragged into the composer, a request, the launch film builds itself and v01 lands -->
         <div class="wl-sc" data-sc="claude">
           <div class="wl-comp" data-wl-comp><span class="wl-cbeam" data-beam="cx"><span data-beam-bloom></span></span>
             <div class="wl-att" data-wl-att></div>
@@ -1739,7 +1639,6 @@ set.</span></span></figure>
           </div>
           <div class="wl-fly" data-wl-fly></div>
         </div>
-        <!-- the pass, written as you type -->
         <div class="wl-sc" data-sc="you">
           <div class="p3"><div class="pass" data-wl-pass1></div></div>
         </div>
@@ -1747,20 +1646,16 @@ set.</span></span></figure>
     </div>
   </div>
 
-  <!-- ===== You're in: the pass, your place, and the link to share ===== -->
   <div class="wl-done" data-wl-done tabindex="-1">
     <div class="wl-dwrap">
       <div class="wl-dl">
         <p class="wl-k">You're on the list</p>
-        <h3 class="wl-dh"><span data-wl-dhi>You're in, Evan.</span><span class="wl-dpos" data-wl-dpos></span></h3>
+        <h3 class="wl-dh"><span data-wl-dhi>You're in.</span><span class="wl-dpos" data-wl-dpos></span></h3>
         <p class="wl-dsub">When your invite lands, you get 14 days of everything, free. We'll email and text you the moment it's ready.</p>
         <div class="wl-refbox">
           <div class="wl-rtop"><div class="wl-rhead"><b data-wl-rhead>Get 3 friends on the list. You all skip to the front.</b></div><span data-wl-rboost>When 3 friends join with your link, you and all 3 of them move to the front of the line for early access.</span></div>
-          <!-- the tally (Evan, after MIRRA's Invite Friends): a big "1 of 3 friends joined", three dashes under it (joined, invited, open), a tiny legend -->
           <div class="wl-tally" data-wl-tally><p class="wl-tn"><b data-wl-tn>0</b><span data-wl-tt>of 3 friends joined</span></p><div class="wl-dash" data-wl-dash aria-hidden="true"><i></i><i></i><i></i></div><p class="wl-leg" aria-hidden="true"><span class="j">Joined</span><span class="v">Invited</span></p></div>
-          <!-- each friend, a row with a status pill: Invite (not invited yet), Invited (you sent your link), Confirming (signed up, email not confirmed yet), Joined (their first name) -->
           <ol class="wl-slots" data-wl-slots><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 1</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 2</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li><li class="st-empty"><i></i><span class="wl-fw"><b>Friend 3</b><small>Not invited yet</small></span><em class="wl-st">Invite</em></li></ol>
-          <!-- text-first (Evan): Text a friend first; Copy link and the Story next; X, Email and the rest under More -->
           <button type="button" class="wl-text" data-wl-text><span class="wl-msgic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 5.2c-4.5 0-8 2.9-8 6.5 0 2 1.1 3.8 2.9 5-.1.9-.6 2.1-1.5 2.9 1.7 0 3.2-.7 4.1-1.4.8.2 1.6.3 2.5.3 4.5 0 8-2.9 8-6.5s-3.5-6.8-8-6.8Z"/></svg></span><span class="t"><b>Text a friend</b><small>A quick message with your link</small></span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
           <div class="wl-share" data-wl-share>
             <button type="button" class="wl-s2" data-wl-copy><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.2 13.8a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.1 1.1M13.8 10.2a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.1-1.1"/></svg><span>Copy link</span></button>
@@ -1774,7 +1669,6 @@ set.</span></span></figure>
             </div>
           </div>
           <p class="wl-urlline"><span class="wl-url" data-wl-url>studio</span></p>
-          <!-- where to come back (Evan: "where do I go to come back to see if my friends sign up") -->
           <div class="wl-comeback" data-wl-comeback><svg class="wl-bi" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5.5" width="17.6" height="13" rx="2.6"/><path d="m4 7.2 8 6 8-6"/></svg>
             <span class="wl-bt"><b>We'll email you the moment a friend joins.</b><span data-wl-backt>Check back here anytime, or open your pass link on any device.</span></span>
             <button type="button" class="wl-pchip" data-wl-plink hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.2 13.8a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.1 1.1M13.8 10.2a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.1-1.1"/></svg><span>Copy pass link</span></button></div>
@@ -1785,7 +1679,6 @@ set.</span></span></figure>
       <div class="wl-dstage p3"><div class="pass big" data-wl-pass2></div><p class="wl-hint"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 0 1 9.4-3.9M13.5 8a5.5 5.5 0 0 1-9.4 3.9M11.9 1.6v2.5H9.4M4.1 14.4v-2.5h2.5"/></svg><span data-wl-fliph>Tap to flip</span></p></div>
     </div>
   </div>
-  <!-- Text a friend: our own preview of the message (editable), then Messages -->
   <div class="wl-ov" data-wl-tsheet hidden role="dialog" aria-modal="true" aria-labelledby="wl-tsh">
     <div class="wl-ovc wl-tsheet">
       <div class="wl-ovh"><b id="wl-tsh">Text a friend</b><button type="button" class="wl-ovx" data-wl-ovx aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div>
@@ -1795,7 +1688,6 @@ set.</span></span></figure>
       <div class="wl-ova"><a class="wl-sendb" data-wl-sms data-gx href="#"><span class="wl-msgic" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#fff" d="M12 5.2c-4.5 0-8 2.9-8 6.5 0 2 1.1 3.8 2.9 5-.1.9-.6 2.1-1.5 2.9 1.7 0 3.2-.7 4.1-1.4.8.2 1.6.3 2.5.3 4.5 0 8-2.9 8-6.5s-3.5-6.8-8-6.8Z"/></svg></span><span>Open Messages</span></a><button type="button" class="wl-s2 wl-copym" data-wl-copym><span>Copy message</span></button></div>
     </div>
   </div>
-  <!-- Share to your Story: the image, big, then Save to Photos and Open Instagram -->
   <div class="wl-ov wl-ovs-story" data-wl-story hidden role="dialog" aria-modal="true" aria-labelledby="wl-stt">
     <div class="wl-ovc wl-storyc">
       <div class="wl-ovh"><b id="wl-stt">Share to your Story</b><button type="button" class="wl-ovx" data-wl-ovx aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></div>
@@ -1807,11 +1699,6 @@ set.</span></span></figure>
   <p class="wl-toast" data-wl-toast role="status" aria-live="polite"></p>
 </div>
 
-<!-- 910-start -->
-<!-- Start: the website sign-up (14 days for $1), in the early-access sign-up's own design: the question big on the left, the live
-     Studio app on the right answering it, a wallpaper per step, the film's bar at the bottom. Sign in (Google, Apple or an email
-     code), pick a plan, pay $1 inside the page (Stripe's Payment Element in our glass), then "You're in": the pass, and the download.
-     The friend-invite version skips the plan and the card. Opened by #signup; off on the live site until sales open (section.js). -->
 <div class="wl st" id="signup" role="dialog" aria-modal="true" aria-labelledby="st-h" hidden>
   <div class="wl-bg" aria-hidden="true"><img class="wl-sky" alt="" decoding="async"></div>
   <div class="st-intro" data-st-intro aria-hidden="true" hidden></div>
@@ -1827,12 +1714,11 @@ set.</span></span></figure>
 
   <div class="wl-in">
     <div class="wl-left">
-      <p class="wl-ref st-from" data-st-from hidden><span class="wl-ri" data-st-fi>E</span><span data-st-ft>Evan invited you.</span></p>
+      <p class="wl-ref st-from" data-st-from hidden><span class="wl-ri" data-st-fi>S</span><span data-st-ft>Sam invited you.</span></p>
       <h2 id="st-h" class="sr">Start Studio</h2>
       <form class="wl-form" id="st-form" novalidate>
         <div class="wl-steps">
 
-          <!-- 1: sign in -->
           <div class="wl-q on" data-q="in" role="group" aria-labelledby="st-q-in">
             <p class="wl-k" data-st-k>Start · 1 of 2</p>
             <h3 class="wl-qh" id="st-q-in" data-st-in-h>Start free.<span>Studio, on your Mac.</span></h3>
@@ -1851,7 +1737,6 @@ set.</span></span></figure>
             <p class="st-fine" data-st-fine>By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
           </div>
 
-          <!-- 2: the email code -->
           <div class="wl-q" data-q="code" role="group" aria-labelledby="st-q-code">
             <p class="wl-k" data-st-k>Start · 2 of 2</p>
             <h3 class="wl-qh" id="st-q-code"><b data-st-hi="Check your email, {first}.">Check your email.</b><span>Type the 6-digit code.</span></h3>
@@ -1870,7 +1755,6 @@ set.</span></span></figure>
             <p class="st-hint" data-st-hint hidden>Didn't get it? It can take a minute. Check spam or promotions, or send a new code.</p>
           </div>
 
-          <!-- 3-6 (v3): who they are, waitlist-style and quick, saved to their Studio profile so the app skips these in onboarding -->
           <div class="wl-q" data-q="roles" data-multi role="group" aria-labelledby="st-q-roles">
             <p class="wl-k" data-st-k>Start · 3 of 6</p>
             <h3 class="wl-qh" id="st-q-roles"><b data-st-hi="Nice to meet you, {first}.">Nice to meet you.</b><span>What do you do?</span></h3>
@@ -1919,7 +1803,6 @@ set.</span></span></figure>
             </div>
           </div>
 
-          <!-- 3: the plan -->
           <div class="wl-q" data-q="plan" role="group" aria-labelledby="st-q-plan">
             <p class="wl-k" data-st-k>Start · 3 of 4</p>
             <h3 class="wl-qh" id="st-q-plan"><b data-st-hi="Pick your plan, {first}.">Pick your plan.</b><span>Change it anytime.</span></h3>
@@ -1929,14 +1812,12 @@ set.</span></span></figure>
             <p class="st-line" data-st-line></p>
           </div>
 
-          <!-- 4: pay $1, inside the page (consent copy b: summary, the renewal box, the line under the button) -->
           <div class="wl-q" data-q="pay" role="group" aria-labelledby="st-q-pay">
             <p class="wl-k" data-st-k>Start · 4 of 4</p>
-            <h3 class="wl-qh" id="st-q-pay"><b data-st-payh>14 days for $1.</b><span data-st-then>Then $199 a month.</span></h3>
+            <h3 class="wl-qh" id="st-q-pay"><b data-st-payh>Keep your Studio.</b><span data-st-then>Studio Pro is $199/month.</span></h3>
             <div class="st-sum" data-st-sum>
               <div class="r"><span class="wl-app xs"><svg><use href="#studio-mark"/></svg></span><span><b data-st-sname>Studio Pro</b> · <span data-st-seats2>3 seats · up to 2 Macs each</span></span><button type="button" class="st-link" data-st-change>Change</button></div>
-              <div class="r"><span data-st-today><b>$1 today</b> for a 14-day trial. Then <b data-st-sprice>$199/month</b> plus tax, starting <b data-st-sdate>December 4, 2026</b>, until you cancel.</span></div>
-              <!-- a friends' code (STUDIOK7): the first month free, monthly plans only -->
+              <div class="r"><span data-st-today><b>$199 today</b>, then <b data-st-sprice>$199/month</b> plus tax every month, until you cancel.</span></div>
               <div class="r st-promo" data-st-promo>
                 <button type="button" class="st-link" data-st-havecode>Have a code?</button>
                 <span class="st-pfield" data-st-pfield hidden>
@@ -1949,28 +1830,26 @@ set.</span></span></figure>
             <div class="st-pscroll">
             <label class="wl-f st-name" data-st-name hidden><span>Your name, for your pass</span><span class="wl-box"><span class="wl-fb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><input writingsuggestions="false" autocorrect="off" name="pname" type="text" autocomplete="name" autocapitalize="words" maxlength="80" enterkeyhint="next"></span></label>
             <div class="st-card"><span class="wl-fb st-cb" data-beam="cx" aria-hidden="true"><span data-beam-bloom></span></span><div class="st-pe" data-st-pe><div class="st-load"><i></i><i></i><i></i></div></div></div>
-            <label class="wl-sms st-agree" data-st-agree><input type="checkbox" name="renew_ok" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><small data-st-agree-t>I agree that after my 14-day trial for $1, Studio Pro renews automatically at $199/month plus tax, starting December 4, 2026 and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before December 4, 2026, I won't be charged $199.</small></span></label>
+            <label class="wl-sms st-agree" data-st-agree><input type="checkbox" name="renew_ok" class="wl-cbx"><span class="bx" aria-hidden="true"></span><span class="tx"><small data-st-agree-t>I agree that Studio Pro starts today at $199/month plus tax and renews automatically every month, until I cancel. I can cancel anytime in the app or online, and if I cancel before December 4, 2026, I won't be charged $199.</small></span></label>
             <p class="wl-err" role="alert" aria-live="assertive"></p>
             <p class="st-under" data-st-under></p>
             </div>
           </div>
         </div>
 
-        <!-- the film's bar: back, where you are, Continue -->
         <div class="wl-dock st-dock">
           <button type="button" class="st-look" data-st-look hidden>Look around first</button>
           <div class="wl-bar">
             <button type="button" class="wl-back" data-st-back disabled aria-label="Back"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3.5M7.5 4l-4 4 4 4"/></svg></button>
             <span class="wl-seg" aria-hidden="true" data-st-seg><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></span>
             <button type="button" class="wl-next" data-st-next data-gx disabled><span data-st-next-t>Continue</span><svg class="arw" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></button>
-            <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Start 14 days for $1</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
+            <button type="submit" form="st-form" class="wl-go" data-gx="hot" hidden><span class="t" data-st-go-t>Subscribe</span><span class="go"><span class="spin" aria-hidden="true"></span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 4l4 4-4 4"/></svg></span></button>
           </div>
           <button type="button" class="wl-kay" data-st-kay aria-label="Play Kayla again"><img src="assets/kayla.jpg" alt="" width="80" height="80"><span class="wl-kp" aria-hidden="true"><svg class="pl" viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><span class="wl-kw" data-st-kw aria-hidden="true"></span><span class="wl-kt" data-st-kt></span></button>
         </div>
       </form>
     </div>
 
-    <!-- ===== the right: the real Studio Home (kit.js SK.appHome), drawn at the app's own 1440 x 900 and scaled to the space ===== -->
     <div class="wl-stage" aria-hidden="true">
       <div class="wl-fit">
         <div class="wl-sc on" data-sc="home">
@@ -1986,18 +1865,15 @@ set.</span></span></figure>
     </div>
   </div>
 
-  <!-- ===== You're in: the pass, the download, Open Studio ===== -->
   <div class="wl-done" data-st-done tabindex="-1">
     <div class="wl-dwrap">
       <div class="wl-dl">
         <p class="wl-k" data-st-dk>Trial started</p>
-        <h3 class="wl-dh"><span data-st-dhi>You're in, Evan.</span><span class="wl-dpos" data-st-dsub2>Studio is downloading.</span></h3>
+        <h3 class="wl-dh"><span data-st-dhi>You're in.</span><span class="wl-dpos" data-st-dsub2>Studio is downloading.</span></h3>
         <p class="wl-dsub" data-st-dsub>Your 14 days run until Dec 4. We'll remind you 3 days before.</p>
-        <!-- v3: no surprise download. A big Download button; the file comes down on the page with a live progress bar, then the steps -->
         <div class="st-get" data-st-get-box>
           <button type="button" class="st-getb" data-st-get data-gx="hot"><svg class="apple" aria-hidden="true"><use href="#apple"/></svg><span data-st-get-t>Download Studio for Mac</span></button>
           <div class="st-prog" data-st-prog hidden><i><b data-st-bar></b></i><p><span data-st-prog-t>Starting…</span><em data-st-pct>0%</em></p></div>
-          <!-- where it went (Evan: "I should be able to know where it downloaded"): the folder, where this browser shows it, Show me -->
           <div class="st-where" data-st-where>
             <span class="st-wi" aria-hidden="true"><svg class="st-finder" viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="14" height="14" rx="3.4" fill="#5fb0ff"/><path d="M8.7 1h2.9A3.4 3.4 0 0 1 15 4.4v7.2a3.4 3.4 0 0 1-3.4 3.4H7.4c.4-1.5.7-3.3.7-5.2H6.9C7 6.4 7.7 3.4 8.7 1Z" fill="#eaf4ff"/><path d="M5.2 5.3v1.5M10.8 5.3v1.5M4.5 10.5c2.1 1.5 4.9 1.5 7 0" fill="none" stroke="#17324d" stroke-width="1.05" stroke-linecap="round"/></svg></span>
             <p><b data-st-where-t>Studio.dmg is in your Downloads folder.</b><span data-st-where-s>Your browser shows it in its downloads list.</span></p>
@@ -2005,7 +1881,6 @@ set.</span></span></figure>
           </div>
           <p class="st-retry" data-st-retry hidden>Download didn't start? <a data-st-retry-a href="#" rel="noopener">Try again</a></p>
         </div>
-        <!-- v3 on a phone: Studio is for Mac, so the link goes to their email (and a Copy link) -->
         <div class="st-mac" data-st-mac hidden>
           <p class="st-macp" data-st-mac-t>Studio is for Mac. We emailed you a link to download it on your Mac.</p>
           <button type="button" class="st-copy" data-st-mac-copy data-gx><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.6"/><path d="M10.5 3.3V3a1 1 0 0 0-1-1H3.4a1 1 0 0 0-1 1v6.1a1 1 0 0 0 1 1h.3"/></svg><span>Copy link</span></button>
@@ -2025,7 +1900,6 @@ set.</span></span></figure>
     </div>
   </div>
   <p class="wl-toast" data-st-toast role="status" aria-live="polite"></p>
-  <!-- the pointer to the browser's own downloads button: top right (Chrome, Safari, Firefox, Edge), Arc's sidebar bottom left -->
   <div class="st-ptr" data-st-ptr hidden aria-hidden="true"><i class="st-pring"></i><svg class="st-parw" viewBox="0 0 24 24"><path d="M12 20V5M6 11l6-6 6 6"/></svg><span class="st-ptx"><b>Studio.dmg is in here</b><kbd data-st-pkbd hidden></kbd></span></div>
 </div>
 
@@ -2041,7 +1915,6 @@ set.</span></span></figure>
   </div>
 </footer>
 
-<!-- Kayla: listen while you scroll -->
 <aside class="kp" data-src="assets/audio/kayla.mp3" aria-label="Kayla explains Studio in under a minute">
   <span class="kp-tag">Listen while you scroll</span>
   <div class="kp-pill">
@@ -2056,6 +1929,6 @@ set.</span></span></figure>
 
 <script src="vendor/beam_styles.js"></script>
 <script src="vendor/orb_engine.js"></script>
-<script src="site.js?v=4f7f5041"></script>
+<script src="site.js?v=d0c179c1"></script>
 </body>
 </html>

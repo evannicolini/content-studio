@@ -27,8 +27,6 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <script>document.documentElement.classList.add("js");</script>
 <style>
-/* Studio legal pages (terms/, privacy/). Built by build.py into each page. Same look as the site: dark page,
-   Hanken Grotesk light and tight, IBM Plex Mono labels, glass with a highlight on the edge, never a stroke. */
 :root {
   --ink: #090c11;
   --sand: #f5f3ee;
@@ -60,7 +58,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .label::before { content: "["; opacity: .55; }
 .label::after { content: "]"; opacity: .55; }
 
-/* ---------- header ---------- */
 .lg-nav { position: fixed; z-index: 60; top: 14px; left: 50%; transform: translateX(-50%); width: min(1180px, calc(100% - 28px)); height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; color: var(--sand); }
 .brand .mark { width: 28px; height: 28px; overflow: visible; }
@@ -70,12 +67,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-links a[aria-current] { color: #fff; background: rgba(255, 255, 255, .08); box-shadow: var(--rim-soft); }
 .lg-links .home svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* ---------- the sky, faint, fading into the page ---------- */
 .sky { position: absolute; z-index: 0; inset: 0 0 auto; height: min(720px, 92vh); background: url(../assets/hero/sky.jpg) center 30% / cover no-repeat; opacity: .42; pointer-events: none;
   -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .6) 42%, transparent 100%); }
 .sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9, 12, 17, 0), rgba(9, 12, 17, .5) 62%, var(--ink)); }
 
-/* ---------- page ---------- */
 .lg { position: relative; z-index: 1; width: 100%; max-width: 1180px; margin-inline: auto; padding: 0 var(--gut); }
 .lg-head { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding: clamp(150px, 16vw, 210px) 0 clamp(56px, 7vw, 96px); }
 .lg-head h1 { font: 300 clamp(46px, 7vw, 104px)/.98 var(--sans); letter-spacing: -.045em; color: var(--sand); text-wrap: balance; }
@@ -87,7 +82,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .lg-grid { display: grid; grid-template-columns: 250px minmax(0, 68ch); justify-content: space-between; gap: 72px; align-items: start; padding-bottom: clamp(80px, 10vw, 140px); }
 @media (min-width: 1100px) { .lg-grid { grid-template-columns: 270px minmax(0, 68ch); justify-content: start; gap: clamp(72px, 9vw, 150px); } }
 
-/* ---------- contents ---------- */
 .toc { position: sticky; top: var(--top); max-height: calc(100vh - var(--top) - 24px); overflow: auto; overscroll-behavior: contain; scrollbar-width: none; margin-left: -12px; }
 .toc::-webkit-scrollbar { display: none; }
 .toc-pill { display: none; }
@@ -98,7 +92,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .toc-list a.on { color: #fff; background: rgba(255, 255, 255, .07); box-shadow: var(--rim-soft); }
 .toc-list a.on b { color: var(--sand-2); }
 
-/* ---------- the document ---------- */
 .doc { min-width: 0; font-size: 17px; line-height: 1.7; text-wrap: pretty; }
 .doc > * + * { margin-top: 1.05em; }
 .doc strong { font-weight: 500; color: var(--sand); }
@@ -130,10 +123,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .doc .callout { position: relative; padding: 22px 26px; border-radius: 20px; font-size: 16px; line-height: 1.62; color: var(--sand); background: linear-gradient(135deg, rgba(191, 227, 255, .1), rgba(255, 255, 255, .025) 60%), var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); }
 .doc .callout > * + * { margin-top: .8em; }
 
-/* placeholders still to fill in: visible on purpose */
 mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; background: rgba(255, 184, 77, .14); padding: .22em .5em; border-radius: 6px; box-shadow: inset 1px 1px 1px -1px rgba(255, 214, 150, .7), inset -1px -1px 1px -1px rgba(255, 214, 150, .45); white-space: normal; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
-/* tables: glass rows */
 .tbl { margin-top: 1.4em !important; margin-bottom: .4em; }
 .tbl table { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 15px; line-height: 1.55; }
 .tbl th { padding: 0 18px 4px; font: 500 10.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--sand-3); text-align: left; vertical-align: bottom; }
@@ -145,16 +136,14 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 .tbl.cols-3 td:first-child { width: 24%; }
 .tbl.cols-2 td:first-child { width: 42%; }
 
-/* ---------- footer ---------- */
 .lg-foot { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; width: 100%; max-width: 1180px; margin-inline: auto; padding: 40px var(--gut) 72px; font-size: 14px; color: var(--sand-3); }
 .lg-foot .brand { font-size: 17px; }
 .lg-foot .brand .mark { width: 26px; height: 26px; }
 .lg-foot .links { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 .lg-foot .links a:hover { color: var(--sand); }
 
-/* ---------- tablet and phone ---------- */
 @media (max-width: 960px) {
-  :root { --top: 142px; } /* the header plus the sticky Contents pill */
+  :root { --top: 142px; }  
   .lg-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .toc { z-index: 40; top: 82px; max-height: none; overflow: visible; margin: 0 0 40px; justify-self: start; max-width: 100%; }
   .toc-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 44px; padding: 0 14px 0 18px; border-radius: 999px; background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); font: 500 14px/1 var(--sans); color: var(--sand); white-space: nowrap; }
@@ -182,7 +171,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
   .doc h2 { gap: 12px; margin-bottom: 20px; }
   .doc .callout { padding: 18px 20px; border-radius: 18px; font-size: 15.5px; }
   .doc ol > li { padding-left: 2.2em; }
-  /* tables become stacked glass cards */
   .tbl table, .tbl tbody, .tbl tr, .tbl td { display: block; width: auto !important; }
   .tbl thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .tbl table { border-spacing: 0; }
@@ -199,7 +187,6 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 </style>
 </head>
 <body>
-<!-- Built by build.py from src/legal/ (page.html, legal.css, legal.js and the .md text). Edit those, not this file. -->
 
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -232,7 +219,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
     <h1>Privacy Policy</h1>
     <dl class="dates">
 <div><dt>Effective date</dt><dd>November 20, 2026</dd></div>
-<div><dt>Last updated</dt><dd>November 22, 2026</dd></div>
+<div><dt>Last updated</dt><dd>November 26, 2026</dd></div>
     </dl>
   </header>
 
@@ -275,6 +262,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <ol><li>Your licence key, which holds the name and email you gave at checkout, your plan, and its dates.</li><li>An anonymous machine id: a short one-way code made on your Mac, so we can count how many Macs a key is used on. It is not your serial number, and your Mac's name, your user name and your files are not sent.</li><li>A hardware code: a second one-way code, made from your Mac's hardware id, that cannot be turned back into it. It is only used to remember that a Mac has had its free trial.</li><li>A device key: the public half of a key made on this Mac, and a short proof made with it (a signature), that tie this Mac to your account. No computer name is sent.</li><li>The version of Studio you are running.</li></ol>
 <p>When Studio shows you the plans, it sends the same two codes, and nothing else, to ask whether this Mac can still have a free trial. For each Mac of a key, our server keeps that code, the version, and when it first and last checked in. A Mac that hasn't checked in for 30 days is removed.</p>
 <p><strong>Consent records.</strong> When you agree to auto-renewal at checkout, or to receive texts from us, we record the IP address you agreed from, the country it points to, your browser (its user agent), the exact wording shown to you, and the date and time you agreed. We keep these records as proof of your consent, for the periods in <a class="xref" href="#8-how-long-we-keep-information">Section 8</a>.</p>
+<p><strong>Refused requests to copy Studio.</strong> When Studio refuses a request to copy or rebuild Studio itself, we record the time and the kind of request against the licence, never what was asked. Under the Terms, a second such request suspends the licence automatically; you can appeal by email.</p>
 <h3 id="2-3-information-from-others"><span class="n">2.3</span>Information from others</h3>
 <ul><li><strong>Google or Apple</strong>, if you sign in with them: your name, email and account identifier. With Apple, you may get a private relay email instead.</li><li><strong>Stripe</strong>: payment status, fraud-risk signals, and the card details described above.</li><li><strong>Referrers</strong>: if a friend invites you, we learn that they referred you.</li></ul>
 <h2 id="3-what-stays-on-your-mac"><span class="n">3</span><span class="t">What stays on your Mac</span></h2>
@@ -300,7 +288,7 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <ul><li><strong>with your direction or consent</strong>, for example when you ask us to;</li><li><strong>with the person who referred you</strong>: only that you joined, never your contact details;</li><li><strong>for legal reasons</strong>: to comply with law, legal process or lawful government requests; to enforce our Terms; or to protect the rights, property or safety of Studio, our users or the public;</li><li><strong>in a business transfer</strong>: in a merger, acquisition, financing, reorganization or sale of assets, subject to this policy's protections;</li><li><strong>in aggregate or de-identified form</strong> that can't reasonably identify you. We don't try to re-identify it.</li></ul>
 <p>All the above categories exclude text messaging originator opt-in data and consent; this information won't be shared with any third parties.</p>
 <h2 id="8-how-long-we-keep-information"><span class="n">8</span><span class="t">How long we keep information</span></h2>
-<div class="tbl cols-2"><table><thead><tr><th scope="col">Data</th><th scope="col">How long</th></tr></thead><tbody><tr><td data-th="Data">Account, licence and device data</td><td data-th="How long">While your account is open, then deleted within 30 days of account deletion</td></tr><tr><td data-th="Data">Billing and transaction records</td><td data-th="How long">As long as tax and accounting law requires (typically 7 years)</td></tr><tr><td data-th="Data">Waitlist data</td><td data-th="How long">Until you join Studio, ask to be removed, or 24 months after you sign up, whichever comes first</td></tr><tr><td data-th="Data">SMS and email consent and opt-out records</td><td data-th="How long">For as long as we message you, plus 5 years as proof of consent</td></tr><tr><td data-th="Data">Usage and diagnostic data</td><td data-th="How long">Up to 12 months, then deleted or de-identified</td></tr><tr><td data-th="Data">Support messages</td><td data-th="How long">Up to 24 months after your issue is resolved</td></tr><tr><td data-th="Data">Backups</td><td data-th="How long">Overwritten on a rolling cycle of up to 90 days</td></tr></tbody></table></div>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">Data</th><th scope="col">How long</th></tr></thead><tbody><tr><td data-th="Data">Account, licence and device data</td><td data-th="How long">While your account is open, then deleted within 30 days of account deletion</td></tr><tr><td data-th="Data">Refused-request records (time and kind only, <a class="xref" href="#2-information-we-collect">Section 2.2</a>)</td><td data-th="How long">While your account is open, then deleted within 30 days of account deletion</td></tr><tr><td data-th="Data">Billing and transaction records</td><td data-th="How long">As long as tax and accounting law requires (typically 7 years)</td></tr><tr><td data-th="Data">Waitlist data</td><td data-th="How long">Until you join Studio, ask to be removed, or 24 months after you sign up, whichever comes first</td></tr><tr><td data-th="Data">SMS and email consent and opt-out records</td><td data-th="How long">For as long as we message you, plus 5 years as proof of consent</td></tr><tr><td data-th="Data">Usage and diagnostic data</td><td data-th="How long">Up to 12 months, then deleted or de-identified</td></tr><tr><td data-th="Data">Support messages</td><td data-th="How long">Up to 24 months after your issue is resolved</td></tr><tr><td data-th="Data">Backups</td><td data-th="How long">Overwritten on a rolling cycle of up to 90 days</td></tr></tbody></table></div>
 <p>We may keep information longer where the law requires it, or to resolve disputes, prevent fraud or enforce our agreements.</p>
 <h2 id="9-notice-for-california-and-other-us-state-residents"><span class="n">9</span><span class="t">Notice for California and other US state residents</span></h2>
 <p>This section is for residents of California and other US states with consumer privacy laws (such as Colorado, Connecticut, Oregon, Texas and Virginia). It supplements the rest of this policy.</p>
@@ -312,10 +300,10 @@ mark.ph { font: 500 .8em/1 var(--mono); letter-spacing: .02em; color: #ffd28a; b
 <p id="9-6" class="clause"><strong>9.6 Shine the Light.</strong> California residents may ask once a year whether we've disclosed personal information to third parties for their own direct marketing. We haven't.</p>
 <h2 id="10-notice-for-people-in-the-eu-uk-and-switzerland"><span class="n">10</span><span class="t">Notice for people in the EU, UK and Switzerland</span></h2>
 <p id="10-1" class="clause"><strong>10.1 Legal bases.</strong> We process your personal information on these grounds:</p>
-<div class="tbl cols-2"><table><thead><tr><th scope="col">Purpose</th><th scope="col">Legal basis</th></tr></thead><tbody><tr><td data-th="Purpose">Providing your account, licence and subscription</td><td data-th="Legal basis">Performance of a contract</td></tr><tr><td data-th="Purpose">Billing, tax and accounting records</td><td data-th="Legal basis">Legal obligation</td></tr><tr><td data-th="Purpose">Security, fraud prevention, diagnostics, product improvement, waitlist and referral operation</td><td data-th="Legal basis">Our legitimate interests in running a secure, working, improving service. We balance these against your rights</td></tr><tr><td data-th="Purpose">Marketing emails</td><td data-th="Legal basis">Consent, or legitimate interests for existing customers where the law allows. You can opt out anytime</td></tr><tr><td data-th="Purpose">SMS messages</td><td data-th="Legal basis">Consent</td></tr><tr><td data-th="Purpose">Non-essential cookies (if we ever use them)</td><td data-th="Legal basis">Consent</td></tr></tbody></table></div>
+<div class="tbl cols-2"><table><thead><tr><th scope="col">Purpose</th><th scope="col">Legal basis</th></tr></thead><tbody><tr><td data-th="Purpose">Providing your account, licence and subscription</td><td data-th="Legal basis">Performance of a contract</td></tr><tr><td data-th="Purpose">Billing, tax and accounting records</td><td data-th="Legal basis">Legal obligation</td></tr><tr><td data-th="Purpose">Security, fraud prevention, enforcing our Terms (including refused-request records), diagnostics, product improvement, waitlist and referral operation</td><td data-th="Legal basis">Our legitimate interests in running a secure, working, improving service. We balance these against your rights</td></tr><tr><td data-th="Purpose">Marketing emails</td><td data-th="Legal basis">Consent, or legitimate interests for existing customers where the law allows. You can opt out anytime</td></tr><tr><td data-th="Purpose">SMS messages</td><td data-th="Legal basis">Consent</td></tr><tr><td data-th="Purpose">Non-essential cookies (if we ever use them)</td><td data-th="Legal basis">Consent</td></tr></tbody></table></div>
 <p id="10-2" class="clause"><strong>10.2 Your rights.</strong> You have the right to access, correct, delete, restrict or object to our processing of your personal information, and to data portability. Where we rely on consent, you can withdraw it at any time; this doesn't affect processing already done. You can complain to your local data protection authority (in the UK, the ICO). We'd appreciate the chance to resolve your concern first: hello@askstudio.ai.</p>
 <p id="10-3" class="clause"><strong>10.3 International transfers.</strong> We're based in the United States, and our processors may handle data in the US and other countries. When we transfer personal information from the EU, UK or Switzerland, we rely on appropriate safeguards, such as the European Commission's Standard Contractual Clauses (with the UK Addendum where applicable), or a provider's certification under the EU-US Data Privacy Framework and its UK and Swiss extensions.</p>
-<p id="10-4" class="clause"><strong>10.4 Automated decisions.</strong> We don't make decisions that have legal or similarly significant effects on you based solely on automated processing. Waitlist position and referral rank are calculated automatically, but they don't have those effects.</p>
+<p id="10-4" class="clause"><strong>10.4 Automated decisions.</strong> Waitlist position and referral rank are calculated automatically, but they don't have legal or similarly significant effects on you. One decision is automatic and does: under <a class="xref" href="#4-how-we-use-information">Section 4.5</a> of our Terms, a second request to use Studio to copy or rebuild Studio itself suspends the licence automatically, as part of the contract you agreed to. You can contest it and have a person review it by emailing hello@askstudio.ai with "Appeal" in the subject within 30 days; if it was a mistake, we restore your access. We make no other decisions with those effects based solely on automated processing.</p>
 <h2 id="sms-terms"><span class="alias" id="11-sms-terms"></span><span class="n">11</span><span class="t">SMS terms</span></h2>
 <p>These terms apply if you opt in to text messages from Studio.</p>
 <ul><li><strong>Who we are:</strong> Studio, by Nicolini Productions LLC. Texts come from Studio's registered SMS number, shown in your confirmation text.</li><li><strong>What the texts are:</strong> account notifications (for example, when your Studio invite is ready) if you check "Text me when my Studio invite is ready", and news and offers about Studio if you check "Text me Studio news and offers". Each is a separate, optional choice. Messages may be sent using automated technology.</li><li><strong>Consent:</strong> we text you only if you've checked an SMS consent box. <strong>Consent is not a condition of any purchase.</strong> You confirm that you are the subscriber or customary user of the number you provide.</li><li><strong>Frequency:</strong> message frequency varies, up to 4 messages per month.</li><li><strong>Cost:</strong> <strong>Message and data rates may apply.</strong> Check with your mobile carrier.</li><li><strong>Opt out:</strong> <strong>Reply STOP</strong> to any message to stop all texts. We'll send one confirmation, and then no more texts unless you opt in again. You can also email <a href="mailto:hello@askstudio.ai">hello@askstudio.ai</a>.</li><li><strong>Help:</strong> <strong>Reply HELP</strong> for help, or contact support at <a href="mailto:hello@askstudio.ai">hello@askstudio.ai</a>.</li><li><strong>Carriers are not liable for any delayed or undelivered messages.</strong></li><li><strong>Privacy:</strong> we use your number and consent record only to send you Studio texts, through our SMS provider Brevo. <strong>Your mobile information will not be sold or shared with third parties.</strong> Text messaging originator opt-in data and consent are never shared with any third parties. See our Privacy Policy (this page).</li><li><strong>Quiet hours:</strong> we aim to send texts only between 8 a.m. and 8 p.m. in your local time.</li></ul>
@@ -340,12 +328,6 @@ Contact: hello@askstudio.ai</p>
 </footer>
 
 <script>
-/* The site's one click sound (window.SKClick): the pass flip's own take (assets/sfx/app/ask-open.mp3), on every button, link and
-   [role=button] the main page and the legal pages have. One tiny Web Audio player: fetched and decoded a beat after the page has loaded, the
-   context is made and resumed inside that press, presses closer than 70 ms apart play once, nothing plays with reduced motion or
-   with the speaker off on the sign-ups (localStorage studio-wl-sound), and a blocked or missing audio stack is simply silent.
-   The sign-ups (900-early, 910-start) play the same file through their own mixer; SKClick.own is true there (window.SK_PAGE), so it never doubles.
-   build.py puts this file before kit.js on every page; legal.py puts it before legal.js. */
 (function () {
   "use strict";
   if (window.SKClick) return;
@@ -353,7 +335,6 @@ Contact: hello@askstudio.ai</p>
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = null, loading = false, last = 0;
   var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function off() { try { return localStorage.getItem("studio-wl-sound") === "off"; } catch (e) { return false; } }
-  /* decoded off to the side (an OfflineAudioContext needs no gesture and logs no autoplay warning), once the page has settled */
   function load() {
     if (loading || reduced || !AC || SKClick.own) return; loading = true;
     var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
@@ -376,8 +357,7 @@ Contact: hello@askstudio.ai</p>
     try { var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buf; g.gain.value = gain || GAIN; s.connect(g); g.connect(ctx.destination); s.start(); } catch (e) {}
   }
   var HIT = "button, a[href], [role=button], summary, input[type=checkbox], input[type=radio], input[type=submit], input[type=button]";
-  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };   /* a sign-up page (SK_PAGE) clicks through its own mixer */
-  /* the first press only warms it up (fetch + decode take a beat); every press after that clicks */
+  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };    
   document.addEventListener("pointerdown", function (e) {
     if (SKClick.own) return;
     var t = e.target && e.target.closest && e.target.closest(HIT);
@@ -387,7 +367,6 @@ Contact: hello@askstudio.ai</p>
   document.addEventListener("keydown", function (e) { if (!SKClick.own && (e.key === "Enter" || e.key === " ") && e.target && e.target.closest && e.target.closest(HIT)) play(); }, true);
 })();
 
-/* Studio legal pages: the contents list follows the reader (current section highlighted), and on phones it folds into a pill. */
 (function () {
   var toc = document.querySelector(".toc"), pill = toc && toc.querySelector(".toc-pill"), cur = toc && toc.querySelector("[data-cur]");
   if (!toc) return;
@@ -419,7 +398,6 @@ Contact: hello@askstudio.ai</p>
     var a = links[on];
     a.classList.add("on");
     a.setAttribute("aria-current", "location");
-    /* keep the highlighted entry in view inside the sticky list (desktop), without moving the page */
     var box = getComputedStyle(toc).overflowY === "auto" ? toc : null;
     if (box) {
       var t = a.offsetTop, b = t + a.offsetHeight;

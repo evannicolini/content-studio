@@ -1,15 +1,12 @@
-/* Studio site. Shared look. Sections add their own rules in src/sections/NN-name/section.css.
-   Type: Hanken Grotesk (light, tight) + IBM Plex Mono labels. One accent: pearl. No lime, no green, no teal, no drop shadows on phones.
-   Everything is fluid: design at 1440, check at 390. */
 
 :root {
-  --ink: #090c11;            /* dark page */
+  --ink: #090c11;             
   --ink-2: #10151c;
   --ink-3: #171d26;
-  --paper: #f2f0eb;          /* light sections */
+  --paper: #f2f0eb;           
   --paper-2: #e9e6df;
-  --pink: #15171b;           /* text on paper */
-  --sand: #f5f3ee;           /* text on dark */
+  --pink: #15171b;            
+  --sand: #f5f3ee;            
   --sand-2: rgba(245, 243, 238, .72);
   --sand-3: rgba(245, 243, 238, .46);
   --sand-4: rgba(245, 243, 238, .24);
@@ -20,7 +17,7 @@
   --glass-2: rgba(var(--tint), .62);
   --blur: blur(28px) saturate(150%) contrast(1.05);
   --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .55), inset -1px -1px 1px -1px rgba(255, 255, 255, .42);
-  --rim-soft: inset 1px 1px 1px -1px rgba(255, 255, 255, .42), inset -1px -1px 1px -1px rgba(255, 255, 255, .3); /* a highlight on the edge, never a stroke */
+  --rim-soft: inset 1px 1px 1px -1px rgba(255, 255, 255, .42), inset -1px -1px 1px -1px rgba(255, 255, 255, .3);  
   --sans: "Hanken Grotesk", "Helvetica Neue", Helvetica, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -46,14 +43,12 @@ input { font: inherit; color: inherit; }
 .defs { position: absolute; width: 0; height: 0; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ---------- type ---------- */
 .h-xl { font: 300 clamp(44px, 7.4vw, 112px)/.98 var(--sans); letter-spacing: -.042em; text-wrap: balance; }
 .h-lg { font: 300 clamp(38px, 5.6vw, 84px)/1 var(--sans); letter-spacing: -.04em; text-wrap: balance; }
 .h-md { font: 400 clamp(26px, 3vw, 44px)/1.06 var(--sans); letter-spacing: -.03em; text-wrap: balance; }
 .h-sm { font: 500 clamp(18px, 1.5vw, 22px)/1.2 var(--sans); letter-spacing: -.015em; }
 .dim { color: var(--sand-3); }
 .on-paper .dim { color: rgba(21, 23, 27, .38); }
-/* the second line of a headline, in a quiet gradient (works on dark and on paper) */
 .two { color: rgba(245, 243, 238, .46); }
 .on-paper .two { color: #8f95a0; }
 .lede { font: 400 clamp(16px, 1.32vw, 20px)/1.45 var(--sans); letter-spacing: -.008em; color: var(--sand-2); text-wrap: pretty; max-width: 34em; }
@@ -65,26 +60,21 @@ input { font: inherit; color: inherit; }
 .on-paper .label { color: rgba(21, 23, 27, .6); }
 .mono { font: 500 11px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
 
-/* ---------- layout ---------- */
 .wrap { width: 100%; max-width: 1320px; margin-inline: auto; padding-inline: var(--gut); }
 .sec { position: relative; padding-block: clamp(84px, 11vw, 168px); }
 .sec.tight { padding-block: clamp(56px, 7vw, 104px); }
 .on-paper { background: var(--paper); color: var(--pink); color-scheme: light; }
-/* a light section is a rounded sheet on the dark page, so every hand-over between sections is soft */
 .sec.on-paper { border-radius: var(--frame-r); }
 .sec-head { display: flex; flex-direction: column; align-items: center; text-align: center; gap: clamp(16px, 1.6vw, 24px); margin-bottom: clamp(36px, 5vw, 72px); }
 .sec-head.left { align-items: flex-start; text-align: left; }
-/* a full-bleed rounded media frame (video or wallpaper behind, content on top) */
 .frame { position: relative; margin-inline: var(--frame-m); border-radius: var(--frame-r); overflow: hidden; isolation: isolate; background: var(--ink-2); }
 .frame.tall { min-height: min(94svh, 1020px); display: flex; }
 .frame > .bg, .frame > video.bg, .frame > img.bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
 .frame > .shade { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(180deg, rgba(6, 9, 13, .28), rgba(6, 9, 13, 0) 30%, rgba(6, 9, 13, 0) 55%, rgba(6, 9, 13, .5)); }
 
-/* ---------- glass ---------- */
 .glass { background: var(--glass); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); border-radius: 22px; }
 .glass.deep { background: var(--glass-2); }
 .on-paper .card { background: #fff; border-radius: 24px; box-shadow: 0 1px 2px rgba(21, 23, 27, 0.06), 0 10px 28px -16px rgba(21, 23, 27, .28); }
-/* corner brackets around a thing: <div class="brk"><i></i><i></i><i></i><i></i> … </div> */
 .brk { position: relative; }
 .brk > i { position: absolute; width: 14px; height: 14px; border: 1.5px solid currentColor; opacity: .75; pointer-events: none; }
 .brk > i:nth-child(1) { left: -12px; top: -12px; border-right: 0; border-bottom: 0; }
@@ -92,11 +82,9 @@ input { font: inherit; color: inherit; }
 .brk > i:nth-child(3) { left: -12px; bottom: -12px; border-right: 0; border-top: 0; }
 .brk > i:nth-child(4) { right: -12px; bottom: -12px; border-left: 0; border-top: 0; }
 
-/* ---------- buttons ---------- */
 .btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 54px; padding: 0 26px; border-radius: 999px; font: 500 16px/1 var(--sans); letter-spacing: -.01em; white-space: nowrap; transition: transform .25s var(--ease), background-color .25s var(--ease); }
 .btn:active { transform: scale(.975); }
 .btn svg { width: 18px; height: 18px; flex: none; }
-/* see-through glass, for on top of footage */
 .btn-glass { color: #fff; background: rgba(255, 255, 255, .07); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); box-shadow: var(--rim); }
 .btn-glass:hover { background: rgba(255, 255, 255, .14); }
 .btn-dark { color: #fff; background: #14171c; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.45), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.32); }
@@ -109,10 +97,8 @@ input { font: inherit; color: inherit; }
 .btn-sm .apple { width: 14px; height: 14px; margin-top: -2px; }
 [data-beam] > [data-beam-bloom] { pointer-events: none; }
 
-/* ---------- nav ---------- */
 .nav { position: fixed; z-index: 60; top: max(14px, calc(env(safe-area-inset-top) + 6px)); left: 50%; width: min(1180px, calc(100% - 28px)); height: var(--nav-h); transform: translateX(-50%); display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 10px 0 18px; border-radius: 20px; background: rgba(var(--tint), .34); -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur); box-shadow: var(--rim); transition: background-color .4s var(--ease), transform .5s var(--ease), opacity .4s; }
 .nav.solid { background: rgba(var(--tint), .62); }
-/* out of the way while scrolling down, back on a deliberate scroll up (kit.js) */
 .nav { transition: background-color .4s var(--ease), transform .55s cubic-bezier(.22, 1, .36, 1), opacity .4s ease; }
 .nav.away { transform: translate3d(-50%, calc(-100% - 24px), 0); opacity: 0; pointer-events: none; }
 .nav .brand { display: inline-flex; align-items: center; gap: 9px; font: 600 18px/1 var(--sans); letter-spacing: -.012em; }
@@ -122,13 +108,6 @@ input { font: inherit; color: inherit; }
 .nav-links a:hover { color: #fff; }
 @media (max-width: 860px) { .nav-links { display: none; } .nav { top: max(10px, calc(env(safe-area-inset-top) + 4px)); width: calc(100% - 20px); border-radius: 18px; --nav-h: 54px; padding-left: 14px; padding-right: 8px; } }
 
-/* ---------- the approved hero (sections/010-hero) and the nav ----------
-   The hero is drawn on a 1440 artboard (390 on phones) and scales as one piece. --hx-u is one artboard pixel, as a length:
-   desktop = window width / 1440 (never under .8, never over 1920 wide, eased off in very short windows); phones = window
-   width / 390 (held at the 430 size on wider windows unless the window is tall enough for more).
-   The nav is part of that artboard: its width follows the app's width, and on windows wider than 1440 it grows with the hero.
-   In the hero's opening it starts hidden and drops in with the button and the composer (html.hx-pre / .hx-intro are put on
-   by the hero before the first paint and taken off by its section.js). The Kayla pill waits until the hero has settled. */
 @property --hx-u { syntax: "<length>"; inherits: true; initial-value: 1px; }
 :root { --hx-u: min(100vw / 390, max(100vh / 844, 1.1026px)); }
 @supports (height: 100svh) { :root { --hx-u: min(100vw / 390, max(100svh / 844, 1.1026px)); } }
@@ -147,21 +126,16 @@ html.hx-intro.hx-quick .nav { transition: opacity .45s var(--ease) .05s, transfo
 html.hx-pre .nav { opacity: 0; transform: translate3d(-50%, -18px, 0); pointer-events: none; }
 html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
 
-/* ---------- headings: words reveal left to right, from out of focus to sharp (added by kit.js) ---------- */
 .bl .bw { display: inline-block; opacity: 0; filter: blur(14px); transform: translate3d(-.22em, 0, 0); transition: opacity .75s var(--ease), filter .95s var(--ease), transform .95s var(--ease); transition-delay: calc(var(--n) * var(--step, 70ms)); will-change: filter, opacity, transform; }
 .bl.bl-in .bw { opacity: 1; filter: blur(0); transform: none; }
-.bl.bl-done .bw { will-change: auto; }   /* once in, a word is plain text again: every word of every heading was its own layer for good */
+.bl.bl-done .bw { will-change: auto; }    
 
-/* ---------- reveal ---------- */
 [data-reveal] { opacity: 0; transform: translate3d(0, 22px, 0); transition: opacity .9s var(--ease), transform 1.1s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); will-change: opacity, transform; }
-[data-reveal].in { opacity: 1; transform: none; will-change: auto; } /* will-change: opacity makes an element its own backdrop root, so glass inside it would stop blurring the picture behind */
+[data-reveal].in { opacity: 1; transform: none; will-change: auto; }  
 [data-reveal="fade"] { transform: none; }
 [data-reveal="scale"] { transform: scale(.965); }
 .no-js [data-reveal] { opacity: 1; transform: none; }
 
-/* ---------- the prompt field: the app kit's AI field, to the pixel, scaled by --k (1 = the kit's 54px field) ----------
-   kit geometry: 54 high, radius 16, padding 0 8 0 15, gap 11, orb 20, Switzer 14.5/400, trailing 38 with an 18px glyph at .6,
-   caret 2x18 #0A84FF, bevel = two inset hairlines at .5, dark glass with a real backdrop blur, md border beam around the edge */
 .pf { --k: 1.3; position: relative; width: 100%; border-radius: calc(16px * var(--k)); }
 .pf-field { position: relative; display: flex; align-items: center; gap: calc(11px * var(--k)); width: 100%; height: calc(54px * var(--k)); padding: 0 calc(8px * var(--k)) 0 calc(15px * var(--k)); border-radius: calc(16px * var(--k)); overflow: hidden; background-color: var(--pf-fill, rgba(14, 20, 28, .34)); -webkit-backdrop-filter: blur(30px) saturate(160%); backdrop-filter: blur(30px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .5), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); transition: background-color .24s var(--ease-io); }
 .pf[data-state="focus"] .pf-field { background-image: linear-gradient(rgba(255, 255, 255, .05), rgba(255, 255, 255, .05)); }
@@ -181,7 +155,6 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 @keyframes pf-dot { 0%, 100% { opacity: .25; transform: scale(.8); } 50% { opacity: 1; transform: scale(1); } }
 .pf[data-state="processing"] .pf-trail svg { display: none; }
 .pf[data-state="processing"] .pf-trail i { display: block; }
-/* the tactical frame the field sits in: mono tags above, corner brackets around */
 .ask { position: relative; }
 .ask-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .92); }
 .ask-top b { font-weight: 500; display: inline-flex; align-items: center; gap: 7px; }
@@ -190,7 +163,6 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .ask-top em { font-style: normal; opacity: 0; transition: opacity .3s; }
 .ask[data-busy] .ask-top em { opacity: 1; }
 
-/* ---------- chat bubbles (the "it is just a chat" look), used by several sections ---------- */
 .chat { display: flex; flex-direction: column; gap: 10px; font: 400 15px/1.4 var(--sans); }
 .chat .msg { max-width: 86%; padding: 11px 15px; border-radius: 18px; opacity: 0; transform: translateY(10px) scale(.98); transition: opacity .5s var(--ease), transform .6s var(--ease); }
 .chat .msg.in { opacity: 1; transform: none; }
@@ -202,7 +174,6 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .chat .typing i { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .5; animation: pf-dot 1.1s ease-in-out infinite; }
 .chat .typing i:nth-child(2) { animation-delay: .18s; } .chat .typing i:nth-child(3) { animation-delay: .36s; }
 
-/* ---------- film modal ---------- */
 .fm { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 24px; background: rgba(4, 6, 9, .82); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); opacity: 0; pointer-events: none; transition: opacity .35s var(--ease); }
 .fm.open { opacity: 1; pointer-events: auto; }
 .fm video { max-width: min(100%, 1200px); max-height: calc(100svh - 110px); border-radius: 20px; background: #000; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); }
@@ -210,7 +181,6 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .fm-x svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 1.8; fill: none; stroke-linecap: round; }
 .fm-cap { position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; color: var(--sand-2); }
 
-/* ---------- Kayla: the listen pill. Fixed at the bottom centre, glass lit like a selected tab in the app; it turns to ink glass over light sections (kit.js sets .light). ---------- */
 .kp { --kp-ink: 255, 255, 255; position: fixed; z-index: 70; left: 50%; bottom: max(clamp(12px, 1.8vw, 24px), calc(env(safe-area-inset-bottom) + 4px)); transform: translate3d(-50%, 0, 0); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgb(var(--kp-ink)); transition: transform .6s var(--ease), opacity .5s; }
 .kp.light { --kp-ink: 21, 23, 27; }
 .kp.hide { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-events: none; }
@@ -234,13 +204,11 @@ html.hx-intro .kp { transform: translate3d(-50%, 140%, 0); opacity: 0; pointer-e
 .kp-play svg { width: 15px; height: 15px; fill: currentColor; }
 .kp-play .pa { display: none; } .kp.playing .kp-play .pl { display: none; } .kp.playing .kp-play .pa { display: block; }
 .kp-rate { height: 30px; padding: 0 10px; border-radius: 10px; font: 500 11px/1 var(--mono); color: rgba(var(--kp-ink), .82); background: rgba(var(--kp-ink), .07); margin-right: 4px; }
-/* once the reader is past the hero the pill tucks into a small face + play, and opens again on hover or while playing */
 .kp-wave, .kp-time, .kp-rate { transition: max-width .5s var(--ease), opacity .3s, margin .5s var(--ease), padding .5s var(--ease); max-width: 180px; overflow: hidden; }
 .kp.mini:not(.playing):not(:hover) .kp-wave, .kp.mini:not(.playing):not(:hover) .kp-time, .kp.mini:not(.playing):not(:hover) .kp-rate { max-width: 0; min-width: 0; opacity: 0; margin: 0 -6px; padding: 0; }
 .kp.mini .kp-tag { opacity: 0; }
-/* close: a small x on the pill's corner (on hover with a mouse, always on touch screens); closed stays closed (kit.js, html.kp-off) */
 .kp-x { position: absolute; right: -9px; bottom: 44px; z-index: 3; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #fff; background: rgba(12, 16, 22, .82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, 0.99), inset -1px -1px 1px -1px rgba(255, 255, 255, 0.7), 0 4px 12px -4px rgba(0, 0, 0, .5); opacity: 0; transform: scale(.8); transition: opacity .2s, transform .25s var(--ease), background-color .2s; }
-.kp-x::before { content: ""; position: absolute; inset: -9px; } /* a bigger target than it looks */
+.kp-x::before { content: ""; position: absolute; inset: -9px; }  
 .kp-x svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 .kp:hover .kp-x, .kp:focus-within .kp-x { opacity: 1; transform: none; }
 .kp-x:hover { background: rgba(30, 36, 46, .95); }
@@ -251,8 +219,6 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
   .kp-wave { width: 96px; } .kp-rate { display: none; } .kp-pill { height: 56px; gap: 10px; border-radius: 20px; } .kp-face, .kp-play { width: 40px; height: 40px; }
 }
 
-/* ---------- an inline Kayla clip: <div class="vo" data-src="assets/audio/x.mp3" data-label="Kayla on …"></div> ---------- */
-/* A voice message from Kayla: one glass pill, lit like a selected tab in the app (bright rim, soft inner glow, the border beam), with her face, play, the waveform and the length inside it. */
 .vo { position: relative; display: inline-flex; max-width: 100%; vertical-align: top; color: var(--sand); text-align: left; }
 .vo-pill { position: relative; display: inline-flex; align-items: center; gap: 10px; height: 56px; max-width: 100%; padding: 0 18px 0 7px; border-radius: 50px;
   background: rgba(255, 255, 255, .1); -webkit-backdrop-filter: blur(30px) saturate(170%); backdrop-filter: blur(30px) saturate(170%);
@@ -263,7 +229,6 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
 .vo-face img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: 50% 20%; }
 .vo-play { position: relative; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none; color: #fff; background: rgba(255, 255, 255, .2); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .6); transition: transform .2s var(--ease), background-color .3s var(--ease); }
 .vo-play:hover { background: rgba(255, 255, 255, .3); }
-/* until someone has played a clip: a soft ring breathes out of the play button and a small glass tag points at it */
 .vo-play::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .45); opacity: 0; animation: vo-ring 2.4s var(--ease) infinite; pointer-events: none; }
 @keyframes vo-ring { 0% { transform: scale(1); opacity: .7; } 70%, 100% { transform: scale(1.42); opacity: 0; } }
 .vo-nudge { position: absolute; z-index: 2; right: 18px; top: -14px; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px 0 8px; border-radius: 999px; font: 500 11px/1 var(--sans); letter-spacing: -.005em; color: #fff; white-space: nowrap; background: rgba(255, 255, 255, .2); -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .6); pointer-events: none; animation: vo-bob 2.4s ease-in-out infinite; transition: opacity .4s var(--ease); }
@@ -281,8 +246,6 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
 .vo-wave i.on, .kp-wave i.on { background: #fff; }
 .vo-time { position: relative; font: 500 11px/1 var(--mono); letter-spacing: .06em; color: rgba(255, 255, 255, .82); min-width: 30px; text-align: right; pointer-events: none; }
 .on-paper .vo { color: var(--ink); }
-/* glass on a light page: there is nothing behind it to blur, so the glass is drawn: a clear body that is brighter at the top, a hard white
-   highlight along the upper edge, a darker lower lip, a faint cool and warm tint inside the rim (as in the app), and a soft contact shadow so it lifts off the paper */
 .on-paper .vo-pill { background: linear-gradient(180deg, rgba(255, 255, 255, .82), rgba(255, 255, 255, .34) 46%, rgba(255, 255, 255, .5)); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
   box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 1), inset 1px 1px 1px -1px rgba(255, 255, 255, 1), inset -1px -1px 1px -1px rgba(255, 255, 255, 1), inset 0 -1.5px 1px rgba(21, 23, 27, .07), inset 3px 3px 8px -3px rgba(150, 180, 225, .5), inset -3px -3px 8px -3px rgba(235, 200, 185, .5),
     0 1px 2px rgba(21, 23, 27, 0.07), 0 10px 28px -16px rgba(21, 23, 27, .28), 0 1px 2px rgba(21, 23, 27, .06), 0 10px 26px -10px rgba(21, 23, 27, .28), 0 3px 8px -2px rgba(21, 23, 27, .08); }
@@ -297,7 +260,6 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
 .on-paper .vo-face { box-shadow: 0 1px 2px rgba(21, 23, 27, 0.08), 0 10px 28px -16px rgba(21, 23, 27, .28); }
 .vo-play .pa { display: none; } .vo.playing .vo-play .pl { display: none; } .vo.playing .vo-play .pa { display: block; }
 
-/* ---------- footer ---------- */
 .foot { position: relative; padding: clamp(40px, 5vw, 72px) 0 clamp(96px, 9vw, 120px); color: var(--sand-3); font-size: 14px; }
 .foot .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px; }
 .foot .brand { display: inline-flex; align-items: center; gap: 9px; font: 600 17px/1 var(--sans); color: var(--sand); }
@@ -311,20 +273,15 @@ html.kp-off .kp { transform: translate3d(-50%, 160%, 0) !important; opacity: 0 !
   *, *::before, *::after { animation-duration: .001s !important; animation-iteration-count: 1 !important; }
 }
 
-/* no page scrollbar (Chrome, Safari, Edge, Firefox); the page still scrolls with the wheel, trackpad, keys and touch */
 html { scrollbar-width: none; -ms-overflow-style: none; }
 html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
 
-/* endless loops rest while their section is more than a screen away (kit.js, restLoops): e = the box, b = ::before, a = ::after */
 [data-sk-rest~="e"], [data-sk-rest~="b"]::before, [data-sk-rest~="a"]::after { animation-play-state: paused !important; }
-/* a beam rests while what it's on is slid away and faded out (the nav, the floating early-access button, Kayla's pill under Pricing or
-   closed): still inside the margin its in-view check allows, so it was spinning out of sight */
 .nav.away [data-beam], .nav.away [data-beam]::before, .nav.away [data-beam]::after,
 .ea-float.away [data-beam], .ea-float.away [data-beam]::before, .ea-float.away [data-beam]::after,
 html.kp-away .kp:not(.playing) [data-beam], html.kp-away .kp:not(.playing) [data-beam]::before, html.kp-away .kp:not(.playing) [data-beam]::after,
 html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .kp [data-beam]::after { animation-play-state: paused !important; }
 
-/* the Ask Claude composer's border beam (Studio_App composer.css). Used by pricing, the creator, the waitlist and .gx buttons., copied verbatim from Studio_App web/product/composer.css ("cx") */
 @property --beam-angle-cx { syntax: "<angle>"; initial-value: 0deg; inherits: true; }
 @property --beam-opacity-cx { syntax: "<number>"; initial-value: 0; inherits: true; }
 [data-beam="cx"] { position: relative; border-radius: 26px; overflow: hidden; }
@@ -340,39 +297,32 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
 @keyframes beam-hue-shift-cx { 0% { filter: hue-rotate(calc(var(--beam-hue-base, 0deg) - 6deg)) brightness(1.30) saturate(1.20); } 50% { filter: hue-rotate(calc(var(--beam-hue-base, 0deg) + 6deg)) brightness(1.30) saturate(1.20); } 100% { filter: hue-rotate(calc(var(--beam-hue-base, 0deg) - 6deg)) brightness(1.30) saturate(1.20); } }
 [data-beam="cx"][data-paused], [data-beam="cx"][data-paused]::after, [data-beam="cx"][data-paused]::before, [data-beam="cx"][data-paused] [data-beam-bloom] { animation-play-state: paused !important; }
 
-/* ---------- .gx: the glass button with the composer's border beam (Continue, Get early access, the floating button).
-   Markup: <a class="gx"><span class="gx-beam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span> … </a>
-   (SK.gx(el) adds the beam layer). .gx.hot runs the beam harder (the submit button); .gx.paper sits on light sections. ---------- */
 .gx { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: 54px; padding: 0 26px; border-radius: 999px; font: 500 16px/1 var(--sans); letter-spacing: -.01em; color: #fff; white-space: nowrap; text-decoration: none; cursor: pointer;
   background: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .05) 52%, rgba(255, 255, 255, .09)), rgba(10, 14, 20, .5); -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
   box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .6), inset 0 0 18px rgba(160, 200, 255, .1);
   transition: transform .25s var(--ease), background-color .25s var(--ease), opacity .25s, box-shadow .3s; }
 .gx > :not(.gx-beam) { position: relative; z-index: 4; }
-@media (hover: hover) { .gx:hover { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 0 0 22px rgba(170, 210, 255, .2); } }   /* not on touch: a phone would keep it stuck on after a tap */
+@media (hover: hover) { .gx:hover { box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .95), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 0 0 22px rgba(170, 210, 255, .2); } }    
 .gx:active { transform: scale(.975); }
 .gx[disabled], .gx[aria-disabled="true"] { opacity: .42; cursor: default; }
 .gx[disabled] > .gx-beam, .gx[aria-disabled="true"] > .gx-beam { display: none; }
 .gx svg { width: 17px; height: 17px; flex: none; }
 .gx .ea-ic, .gx svg.fill { fill: currentColor; }
 .gx .arw { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .3s var(--ease); }
-@media (hover: hover) { .gx:hover .arw { transform: translateX(3px); } }   /* not on touch: a phone would keep it stuck on after a tap */
-/* the beam layer follows the button's pill shape */
+@media (hover: hover) { .gx:hover .arw { transform: translateX(3px); } }    
 .gx > .gx-beam { position: absolute !important; inset: 0; z-index: 0; border-radius: inherit !important; overflow: hidden; pointer-events: none; --beam-strength: 1.15; }
 .gx > .gx-beam::after, .gx > .gx-beam::before, .gx > .gx-beam [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .gx.hot > .gx-beam { --beam-strength: 1.9; }
 .gx.hot { background: linear-gradient(180deg, rgba(255, 255, 255, .22), rgba(255, 255, 255, .06) 50%, rgba(190, 220, 255, .14)), rgba(12, 18, 28, .46); box-shadow: inset 1px 1px 1px -1px #fff, inset -1px -1px 1px -1px rgba(255, 255, 255, .75), inset 0 0 26px rgba(150, 200, 255, .22), 0 10px 40px -12px rgba(60, 140, 255, .45); }
-/* the round pearl end, like the composer's send button */
 .gx .go { display: grid; place-items: center; width: 40px; height: 40px; margin-right: -18px; margin-left: 4px; border-radius: 50%; color: #10151c; background: var(--pearl); box-shadow: inset 1px 1px 1px -1px #fff; transition: transform .3s var(--ease); }
-@media (hover: hover) { .gx:hover .go { transform: translateX(2px); } }   /* not on touch: a phone would keep it stuck on after a tap */
+@media (hover: hover) { .gx:hover .go { transform: translateX(2px); } }    
 .gx .go svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 .gx.sm { height: 44px; padding: 0 18px; font-size: 15px; gap: 8px; }
 .gx.sm .go { width: 32px; height: 32px; margin-right: -12px; }
-/* on light sections: the same glass, darker so the beam and the words read on paper */
 .gx.paper { background: linear-gradient(180deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 55%), rgba(16, 20, 28, .9); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .7), inset -1px -1px 1px -1px rgba(255, 255, 255, .4), 0 14px 34px -14px rgba(20, 60, 140, .55), 0 2px 6px -2px rgba(16, 20, 28, .3); }
 .gx.paper > .gx-beam { --beam-strength: 1.7; }
 @media (prefers-reduced-motion: reduce) { .gx > .gx-beam { display: none; } }
 
-/* ---------- SK.guideTap: Kayla's guide dot, the app tour's cursor (Studio_App web/product/askintro.css #ai-cur) ---------- */
 .sk-cur { position: fixed; z-index: 400; left: 0; top: 0; width: 0; height: 0; pointer-events: none; transition-property: transform; transition-timing-function: cubic-bezier(.45, 0, .2, 1); will-change: transform; }
 .sk-cur .in { position: absolute; left: 0; top: 0; opacity: 0; transform: scale(.6); transition: opacity .32s ease, transform .4s cubic-bezier(.2, .8, .2, 1); }
 .sk-cur.on .in { opacity: 1; transform: none; }
@@ -386,14 +336,9 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
 .sk-cur .tag .fc { width: 20px; height: 20px; border-radius: 50%; overflow: hidden; }
 .sk-cur .tag .fc img { width: 100%; height: 100%; object-fit: cover; }
 
-/* ---------- sections off screen aren't drawn (every browser) ----------
-   A section well off screen isn't styled, laid out or painted, and keeps no layers, until it's near (content-visibility: auto, as
-   customesignature.com does); before, the page kept 550 to 800 compositor layers for sections all the way down. Each keeps the height
-   it had the last time it was drawn (auto), and starts from about its height at this size. Before a jump down the page everything is
-   laid out for a moment (kit.js SK.fullRender), so jumps land where they did. */
 main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
-html.cv-full main > section { content-visibility: visible !important; }   /* a jump is coming: everything laid out for real */
-main > section.cv-near:not(#hero) { content-visibility: visible; }   /* within two screens: drawn ahead of the scroll (kit.js drawAhead) */
+html.cv-full main > section { content-visibility: visible !important; }    
+main > section.cv-near:not(#hero) { content-visibility: visible; }    
 #shoot { --cis: 1920px; } #chat { --cis: 850px; } #why { --cis: 860px; } #work { --cis: 1400px; } #anywhere { --cis: 850px; } #library { --cis: 2330px; }
 #viral { --cis: 2560px; } #notes { --cis: 1060px; } #aesthetic { --cis: 1420px; } #social { --cis: 2520px; } #sound { --cis: 870px; } #start { --cis: 1180px; }
 #views { --cis: 850px; } #connect { --cis: 1030px; } #creator { --cis: 1010px; } #pricing { --cis: 3030px; }
@@ -403,20 +348,11 @@ main > section.cv-near:not(#hero) { content-visibility: visible; }   /* within t
   #views { --cis: 700px; } #connect { --cis: 910px; } #creator { --cis: 1690px; } #pricing { --cis: 5540px; }
 }
 
-/* ---------- the lite tier (html.lite: in-app browsers and weak devices, shell.html) ---------- */
-/* the beams turn 30 times a second instead of 60 (each beam's spin is 1.96 s: 59 steps), and their slow colour drift (a 12° hue swing
-   over 12 s) moves in 0.3° steps: Safari's engine only redraws a stepped animation when it steps, so each beam's huge gradients and
-   masks are worked out half as often. The order matches every beam's animation list: the spin, then its fade in or out. */
 html.lite [data-beam][data-active], html.lite [data-beam][data-fading] { animation-timing-function: steps(59), ease !important; }
 html.lite [data-beam][data-active]::before, html.lite [data-beam][data-active]::after, html.lite [data-beam][data-fading]::before, html.lite [data-beam][data-fading]::after,
 html.lite [data-beam] [data-beam-bloom] { animation-timing-function: steps(36) !important; }
 
 
-/* ===== 900-early ===== */
-/* Early access: the full-screen sign-up (section.js), laid out like the app's opening film: the question big on the left, the live
-   Studio app on the right using the whole screen, the film's bar at the bottom with Kayla beside it. The glass is the app's own
-   (Studio_App vista/shell.css): a light tint, a 30px frost, the plain rim; the bevel only on the selected row, as in the app.
-   Colour beyond pearl comes from the brand references: vampire black, chinese black, jet stream, platinum, celadon, blue slate. Prefix wl-. */
 .wl { --tint: 12, 19, 28; --v-g: rgba(255, 255, 255, .045); --v-g-h: rgba(255, 255, 255, .075); --v-on: rgba(255, 255, 255, .1);
   --v-rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
   --v-rim-on: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 5px -2px rgba(196, 214, 238, .62), inset -2px -2px 5px -2px rgba(242, 226, 220, .62);
@@ -426,36 +362,28 @@ html.lite [data-beam] [data-beam-bloom] { animation-timing-function: steps(36) !
   position: fixed; inset: 0; z-index: 95; overflow: hidden; overflow: clip; color: var(--sand); opacity: 0; transition: opacity .45s var(--ease); }
 .wl[hidden] { display: none; }
 .wl.open { opacity: 1; }
-html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }   /* nothing behind the sheet scrolls, or rubber-bands */
+html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }    
 .wl .gx[hidden], .wl [hidden] { display: none !important; }
-.wl-bg { position: absolute; inset: 0 0 auto; height: var(--lvh, 100lvh); min-height: 100%; overflow: hidden; background: var(--edge, var(--vampire)); }   /* pinned to the tallest the screen has been: the keyboard never moves or resizes the wallpaper */   /* the root carries the sky's colour (kit.js SK.edges): nothing paints a band under the iPhone's bars */
-/* a slow 3% push-in on every wallpaper; the next one crossfades in and starts its own */
+.wl-bg { position: absolute; inset: 0 0 auto; height: var(--lvh, 100lvh); min-height: 100%; overflow: hidden; background: var(--edge, var(--vampire)); }        
 .wl-sky { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; transform: scale(1); transition: transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl.open .wl-sky { transform: scale(1.03); }
-/* the next step's wallpaper, already decoded, drifts in over the last one: the same sky feel, a new place */
 .wl .wl-sky.nx { opacity: 0; transform: scale(1); transition: opacity 1.5s var(--ease), transform 14s cubic-bezier(.25, .6, .3, 1), filter 2.4s var(--ease); }
 .wl .wl-sky.nx.in { opacity: 1; transform: scale(1.03); }
 .wl { --wl-dim: 0; }
 .wl[data-step="name"]:not(.done) { --wl-dim: .2; } .wl[data-step="roles"]:not(.done) { --wl-dim: .2; } .wl[data-step="brands"]:not(.done) { --wl-dim: .14; } .wl[data-step="claude"]:not(.done) { --wl-dim: .14; } .wl[data-step="you"]:not(.done) { --wl-dim: .16; } .wl[data-step="check"]:not(.done) { --wl-dim: .16; }
 .wl-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5, 9, 10, .5), rgba(5, 9, 10, .14) 46%, rgba(5, 9, 10, 0) 70%), linear-gradient(180deg, rgba(5, 9, 10, .3), rgba(5, 9, 10, 0) 26%, rgba(5, 9, 10, 0) 70%, rgba(5, 9, 10, .4)); background-color: rgba(5, 9, 10, var(--wl-dim)); transition: background-color 1.2s var(--ease); }
 
-/* Fading without breaking the glass. backdrop-filter only sees up to the nearest ancestor with opacity below 1, so a panel inside a
-   fading column was clear (no frost) until the fade ended. The columns, steps and scenes fade these numbers instead, and only the
-   leaves (the glass itself and the plain text beside it) take the product as their opacity. The first frame is already frosted. */
 @property --wl-dim { syntax: "<number>"; inherits: true; initial-value: 0; }
 @property --wl-o0 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o1 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o2 { syntax: "<number>"; inherits: true; initial-value: 1; }
 @property --wl-o3 { syntax: "<number>"; inherits: false; initial-value: 1; }
 .wl-q > :not(.wl-opts):not(.wl-fields):not(.wl-other):not(.wl-count):not(.wl-otp), .wl-otp > i, .wl-f > span:first-child, .wl-tel > label, .wl-fly, .wl-sc > .p3 { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
-/* the glass itself comes up 3x faster than the fade, so the clear-sky blend lasts a blink, then it is all frost */
 .wl-ref, .wl-count, .wl-opt, .wl-f input:not(.wl-hp), .wl-otp input, .wl-ccv, .wl-smsbox, .wl-dock > *, .wl-sc > .wl-comp, .wl-appwin > *, .wl-cl2 > * { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
 
-/* ---------- top: the app's mark, then sound and close ---------- */
 .wl-top { position: absolute; z-index: 8; left: 0; right: 0; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: max(18px, env(safe-area-inset-top)) var(--pad) 0; pointer-events: none; }
 .wl-top > * { pointer-events: auto; }
 .wl-brand { display: inline-flex; align-items: center; gap: 11px; font: 500 17px/1 var(--sans); letter-spacing: -.01em; }
-/* the site's own transparent glass mark (the nav's #studio-mark), never on a tile */
 .wl-app { display: grid; place-items: center; width: 32px; height: 32px; flex: none; }
 .wl-app svg { display: block; width: 32px; height: 32px; overflow: visible; }
 .wl-app.sm svg { width: 24px; height: 24px; }
@@ -473,7 +401,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-snd[aria-pressed="false"] .off { display: block; }
 .wl-restart { height: 36px; padding: 0 14px; border-radius: 999px; font: 500 12.5px/1 var(--sans); color: #fff; background: var(--vglass); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); box-shadow: var(--v-rim); }
 
-/* ---------- the stage: question left, the app right, the whole screen ---------- */
 .wl-in { position: absolute; inset: 0; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); align-items: center; gap: clamp(24px, 3.5vw, 72px); padding: 96px 0 118px var(--pad); transition: --wl-o0 .5s var(--ease), transform .7s var(--ease); }
 .wl.done .wl-in { --wl-o0: 0; transform: scale(.97); pointer-events: none; }
 .wl-left { position: relative; z-index: 2; min-width: 0; --wl-o1: 0; transform: translateY(22px); transition: transform .8s var(--ease) .1s, --wl-o1 .6s var(--ease) .1s; }
@@ -483,7 +410,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-cnb { position: absolute !important; inset: 0; border-radius: inherit !important; pointer-events: none; --beam-strength: 1.1; }
 .wl-cnb::after, .wl-cnb::before, .wl-cnb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .wl-count b { display: inline-flex; font: 500 30px/1 var(--sans); letter-spacing: -.03em; color: #fff; font-variant-numeric: tabular-nums; }
-/* the count rolls up like a slot machine: each digit a column that spins and lands, left to right */
 .wl-count .dg { position: relative; display: inline-block; height: 1em; overflow: hidden; }
 .wl-count .dg > span { display: flex; flex-direction: column; transform: translateY(calc(var(--to, 0) * -1em)); }
 .wl-count .dg > span > em { display: block; height: 1em; font-style: normal; text-align: center; }
@@ -498,16 +424,13 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-q.past { transform: translateX(-90px); }
 .wl-q.on { position: relative; --wl-o2: 1; visibility: visible; transform: none; transition: --wl-o2 .5s var(--ease) .12s, transform .7s var(--ease) .08s, visibility 0s; }
 .wl-k { font: 500 10.5px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--wl-l2); }
-/* the film's two-tone headline: what it is, then the question */
 .wl-qh { margin: 16px 0 0; font: 300 clamp(40px, 4.3vw, 70px)/1 var(--sans); letter-spacing: -.045em; color: #fff; text-wrap: balance; text-shadow: 0 2px 30px rgba(5, 9, 10, .25); }
 .wl-qh b { font-weight: 300; }
-/* the hero's word reveal (hx-bw): each word from a 20px blur into focus, 60ms apart */
 .wl-bw { display: inline-block; transition: opacity .6s cubic-bezier(.2, .8, .2, 1), filter .8s cubic-bezier(.2, .8, .2, 1), transform .8s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--n, 0) * 60ms + 80ms); }
 .wl-q.w0 .wl-bw, .wl-done.w0 .wl-dh .wl-bw { opacity: 0; filter: blur(20px); transform: translate3d(-.32em, 0, 0); transition: none; }
 .wl-qh > span:not(.wl-bw) { display: block; color: rgba(245, 243, 238, .6); }
 .wl-qs { margin: 18px 0 26px; max-width: 30em; font-size: clamp(15.5px, 1.15vw, 17.5px); line-height: 1.5; color: var(--wl-l2); text-wrap: pretty; text-shadow: 0 1px 16px rgba(5, 9, 10, .35); }
 
-/* answers: the app's glass on the sky; the chosen one is pearl */
 .wl-opts { display: grid; gap: 10px; }
 .wl-opts.two { grid-template-columns: 1fr 1fr; }
 .wl-opts.three { grid-template-columns: repeat(3, 1fr); }
@@ -535,7 +458,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-other:not([hidden]) { animation: wl-rise .5s var(--ease) both; }
 @keyframes wl-rise { from { transform: translateY(16px) scale(.94); } }
 
-/* fields: the composer's glass; its border beam runs round the one you're in, and turns auburn when one needs you */
 .wl-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 12px; }
 .wl-f { display: block; min-width: 0; }
 .wl-f.wide { grid-column: 1 / -1; }
@@ -548,15 +470,10 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-f input, .wl-ccv { position: relative; z-index: 1; display: block; width: 100%; height: 60px; padding: 0 20px; border: 0; outline: 0; border-radius: 18px; font: 400 17px/1 var(--sans); letter-spacing: -.005em; color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .06)), rgba(var(--tint), .38); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: var(--v-rim), inset 0 8px 16px -10px rgba(0, 0, 0, .42), inset 0 -1px 0 rgba(255, 255, 255, .05); transition: background-color .2s; -webkit-appearance: none; appearance: none; caret-color: #fff; }
 .wl-f input::placeholder { color: rgba(245, 243, 238, .38); }
 .wl-f input:focus { background: linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .03)), rgba(5, 7, 11, .62); }
-/* the placeholder that types itself, like the hero's prompt: left to right with a caret. In the field, the real caret replaces
-   the drawn one; the first letter you type clears it */
 .wl-ty { position: absolute; z-index: 3; left: 20px; right: 16px; top: 50%; transform: translateY(-50%); display: flex; align-items: center; font: 400 17px/1 var(--sans); letter-spacing: -.005em; color: rgba(245, 243, 238, .46); white-space: nowrap; overflow: hidden; pointer-events: none; transition: opacity .2s; }
 .wl-ty i { flex: none; width: 2px; height: 1.1em; margin-left: 2px; border-radius: 1px; background: #fff; animation: wl-blink 1.06s steps(1) infinite; }
 .wl-ty.still i { display: none; }
 .wl-box.filled .wl-ty { opacity: 0; }
-/* autofill (Safari, Chrome on iOS, Chrome): the glass stays glass. Two rules, so a browser that doesn't know one selector still gets the other */
-/* the browser's own fill colour and its "no background image" are held off for good (a transition that never ends), so a filled-in
-   field keeps the same glass, rim and white type as one you typed into: no tint, no slate box */
 .wl input:-webkit-autofill, .wl input:-webkit-autofill:hover, .wl input:-webkit-autofill:focus, .wl input:-webkit-autofill:active, .wl select:-webkit-autofill {
   -webkit-text-fill-color: #fff !important; caret-color: #fff; transition: background-color 99999s step-end, background-image 99999s step-end, color 99999s step-end; transition-behavior: allow-discrete; }
 .wl input:autofill { -webkit-text-fill-color: #fff !important; caret-color: #fff; transition: background-color 99999s step-end, background-image 99999s step-end, color 99999s step-end; transition-behavior: allow-discrete; }
@@ -571,15 +488,13 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .wl-err { margin-top: 12px; font-size: 14px; line-height: 1.45; color: #ffcfa8; }
 .wl-err:empty { display: none; }
-/* consent (Studio legal, consent copy c): an optional, unticked SMS box in our glass, and the email line; at least 13px, full contrast */
 .wl-help { margin-left: 6px; font: 400 12px/1 var(--sans); letter-spacing: 0; text-transform: none; color: var(--wl-l3); }
-/* the brands step's second half: where their work lives (Instagram with a fixed @, the website) */
 .wl-wk { margin: 30px 0 14px 4px; font-size: 16px; line-height: 1.3; letter-spacing: -.01em; color: #fff; }
 .wl-wk .wl-help { margin-left: 8px; font-size: 13px; }
 .wl-ig .wl-at { position: absolute; z-index: 3; left: 20px; top: 50%; transform: translateY(-52%); font: 400 17px/1 var(--sans); color: rgba(245, 243, 238, .62); pointer-events: none; }
 .wl-ig input { padding-left: 40px; }
 .wl-ig .wl-ty { left: 40px; }
-@media (max-width: 700px) { .wl-work { grid-template-columns: 1fr; gap: 12px; } .wl-wk { margin: 24px 0 12px 4px; } }   /* phones: one above the other, each the full width */
+@media (max-width: 700px) { .wl-work { grid-template-columns: 1fr; gap: 12px; } .wl-wk { margin: 24px 0 12px 4px; } }    
 .wl-sms { position: relative; display: grid; grid-template-columns: 22px 1fr; gap: 11px; align-items: center; cursor: pointer; }
 .wl-sms .wl-cbx { position: absolute; opacity: 0; width: 22px; height: 22px; margin: 0; cursor: pointer; }
 .wl-sms .bx { width: 22px; height: 22px; border-radius: 7px; background: rgba(var(--tint), .5); box-shadow: var(--v-rim), inset 0 4px 10px -6px rgba(0, 0, 0, .5); transition: background-color .2s, box-shadow .2s, transform .2s var(--ease); }
@@ -596,7 +511,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-legal { margin-top: 12px; font-size: 12.5px; line-height: 1.4; color: var(--wl-l3); }
 .wl-fine { margin-top: 16px; max-width: 34em; font-size: 12.5px; line-height: 1.5; color: var(--wl-l3); text-wrap: pretty; }
 
-/* ---------- the film's bar at the bottom, Kayla beside it ---------- */
 .wl-dock { position: fixed; z-index: 7; left: 50%; bottom: max(clamp(18px, 3.2vh, 30px), env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 12px; transform: translate(-50%, 30px); --wl-o1: 0; transition: transform .9s var(--ease) .35s, --wl-o1 .7s var(--ease) .35s; }
 .wl.open .wl-dock { transform: translate(-50%, 0); --wl-o1: 1; }
 .wl.done .wl-bar { display: none; }
@@ -620,7 +534,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-go.busy .go svg { display: none; }
 .wl-go.busy .spin { display: block; }
 @keyframes wl-spin { to { transform: rotate(360deg); } }
-/* Kayla: her face, play, her voice as a waveform; what she says floats above the bar, like a film's subtitle */
 .wl-kay { position: relative; display: flex; align-items: center; gap: 10px; height: 62px; padding: 0 16px 0 9px; border-radius: 22px; text-align: left; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .wl-kay img { width: 44px; height: 44px; border-radius: 14px; object-fit: cover; object-position: 50% 20%; flex: none; }
 .wl-kp { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; flex: none; background: rgba(255, 255, 255, .14); box-shadow: var(--v-rim); }
@@ -635,7 +548,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-kt span.on { opacity: 1; }
 .wl-dock .wl-kt { left: 50%; }
 
-/* ---------- the app, on the right: drawn at 980 x 680 and scaled to the space (section.js sets --s) ---------- */
 .wl-stage { position: relative; align-self: stretch; min-width: 0; --wl-o1: 0; transform: translateX(40px); transition: transform 1s var(--ease) .5s, --wl-o1 .8s var(--ease) .5s; }
 .wl.open .wl-stage { --wl-o1: 1; transform: none; }
 .wl-fit { position: absolute; left: 0; top: 50%; width: 980px; height: 680px; margin-top: -340px; transform: scale(var(--s, 1)); transform-origin: 0 50%; transition: transform .7s var(--ease), top .7s var(--ease), margin-top .7s var(--ease); }
@@ -650,7 +562,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-out-a { animation: wl-out .5s var(--ease) both; animation-delay: calc(var(--i, 0) * 50ms); }
 @keyframes wl-out { to { opacity: 0; transform: translateY(-10px) scale(.95); } }
 
-/* the app window: sidebar and Home, the app's panel glass */
 .wl-appwin { position: absolute; inset: 0 -40px 0 0; display: flex; gap: 16px; }
 .wl-sb { flex: none; width: 236px; padding: 18px 12px; border-radius: 26px; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .wl-sbh { display: flex; align-items: center; gap: 10px; margin: 2px 6px 16px; font: 500 18px/1 var(--sans); }
@@ -695,7 +606,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-crush span b { display: block; font: 500 14px/1.2 var(--sans); }
 .wl-crush span small { font-size: 11.5px; color: rgba(245, 243, 238, .55); }
 .wl-crush i { margin-left: auto; padding: 6px 10px; border-radius: 999px; font-size: 11px; font-style: normal; background: var(--v-g); box-shadow: var(--v-rim); white-space: nowrap; }
-/* All brands, open over Home on question 3 */
 .wl-menu { position: absolute; left: 12px; top: 116px; z-index: 3; width: 380px; padding: 14px 10px 10px; border-radius: 22px; background: linear-gradient(180deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .02)), rgba(var(--tint), .42); -webkit-backdrop-filter: blur(30px) saturate(145%) contrast(1.06); backdrop-filter: blur(30px) saturate(145%) contrast(1.06); box-shadow: var(--v-rim), 0 24px 48px -22px rgba(0, 0, 0, .45); --wl-o3: 0; visibility: hidden; transform: translateY(-8px) scale(.98); transform-origin: 20% 0; transition: --wl-o3 .35s var(--ease), transform .45s var(--ease), visibility 0s linear .45s; }
 .wl-menu > .wl-mono { margin: 0 8px 10px; }
 .wl-sc.menu .wl-menu { --wl-o3: 1; visibility: visible; transform: none; transition: --wl-o3 .35s var(--ease), transform .5s var(--ease), visibility 0s; }
@@ -711,7 +621,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-sw i { width: 12px; height: 20px; border-radius: 5px; box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .7); }
 .wl-more { padding: 8px 10px 4px; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 243, 238, .6); }
 
-/* Studio × Claude: clips dragged into the composer, a request, the launch film builds itself, v01 lands */
 .wl-comp { position: absolute; left: 0; right: 40px; top: 0; padding: 20px 16px 16px 24px; border-radius: 28px; background: rgba(5, 7, 11, .62); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%); box-shadow: var(--v-rim); transition: transform .35s var(--ease), background-color .3s; }
 .wl-comp > :not(.wl-cbeam):not(.wl-drop) { position: relative; z-index: 4; }
 .wl-cbeam { position: absolute !important; inset: 0; border-radius: 28px; pointer-events: none; --beam-strength: 1.1; }
@@ -746,7 +655,7 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-comp.work .wl-cgo .up { display: none; }
 .wl-comp.work .wl-cgo i { display: block; }
 .wl-cl2 { position: absolute; left: 0; right: 40px; top: 186px; bottom: 0; display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 16px; align-items: start; }
-.wl-cl2 .wl-v01 { order: -1; } /* the finished film on the side you can always see; the plan runs off the edge */
+.wl-cl2 .wl-v01 { order: -1; }  
 .wl-plan { padding: 18px 18px 8px; border-radius: 26px; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); --wl-o3: 0; transform: translateY(20px); transition: --wl-o3 .6s var(--ease), transform .8s var(--ease); }
 .wl-plan.on { --wl-o3: 1; transform: none; }
 .wl-plan ul { display: grid; }
@@ -789,9 +698,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-sc[data-sc="you"] .p3 { position: absolute; inset: 0; }
 .wl-sc[data-sc="you"] .pass { --w: 560px; }
 
-/* ---------- the pass: the clean card (deep glass, the composer's beam round its edge), as a 3D object. A glow plate behind it,
-   and the mark, words and barcode each lifted off it in Z, so they part as it turns. It follows the mouse (or a finger), flips on a
-   tap, and spins in once. The light on it is soft and wide, moving with the turn. ---------- */
 .p3 { perspective: 1500px; perspective-origin: 50% 42%; display: grid; place-items: center; }
 .pass { --w: 460px; position: relative; width: var(--w); height: calc(var(--w) * .62); transform-style: preserve-3d; will-change: transform; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; outline: 0; }
 .pass:active { cursor: grabbing; }
@@ -800,10 +706,9 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .pass .side * { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .pass .plate { position: absolute; inset: 10% 6%; border-radius: 40px; transform: translateZ(-80px); background: radial-gradient(ellipse at 50% 60%, rgba(83, 104, 120, .7), rgba(14, 25, 30, 0) 70%); filter: blur(34px); opacity: .8; }
 .pass .card { position: absolute; inset: 0; border-radius: calc(var(--w) * .066); overflow: hidden; background: linear-gradient(150deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .05) 46%, rgba(160, 200, 255, .12)), rgba(14, 19, 28, .78); box-shadow: var(--v-rim), 0 40px 90px -36px rgba(0, 0, 0, .75); }
-.pass .card .frost { position: absolute; inset: -20%; width: 140%; height: 140%; max-width: none; object-fit: cover; opacity: .5; }   /* pre-blurred (*-frost.jpg): no live filter in the 3D card */
+.pass .card .frost { position: absolute; inset: -20%; width: 140%; height: 140%; max-width: none; object-fit: cover; opacity: .5; }    
 .pass .card .pbeam { position: absolute !important; inset: 0; z-index: 2; border-radius: inherit !important; pointer-events: none; --beam-strength: 1.25; }
 .pass .card .pbeam::after, .pass .card .pbeam::before, .pass .card .pbeam [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
-/* the light: wide and soft, a long gentle band that slides across as it turns */
 .pass .card .foil { position: absolute; inset: 0; background: radial-gradient(140% 110% at calc(var(--mx, .3) * 100%) calc(var(--my, .2) * 100%), rgba(255, 255, 255, .11), rgba(255, 255, 255, .035) 42%, rgba(255, 255, 255, 0) 72%), linear-gradient(112deg, rgba(255, 255, 255, 0) calc(var(--mx, .3) * 100% - 34%), rgba(255, 255, 255, .055) calc(var(--mx, .3) * 100%), rgba(255, 255, 255, 0) calc(var(--mx, .3) * 100% + 34%)); }
 .pass .card .sweep { position: absolute; inset: -40% -60%; background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, .14) 49%, rgba(255, 255, 255, .03) 54%, transparent 60%); transform: translateX(-70%); }
 .pass.sweep .card .sweep { animation: wl-sweep 1.8s var(--ease) both; }
@@ -840,10 +745,8 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
   background: linear-gradient(100deg, #fff 0%, #fff 38%, #cfe6ff 46%, #ffffff 50%, #ffe9d6 54%, #fff 62%, #fff 100%) 0 0 / 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: wl-shim 4.8s cubic-bezier(.45, 0, .25, 1) infinite; }
 @keyframes wl-shim { 0% { background-position: 100% 0; } 70%, 100% { background-position: 0% 0; } }
 
-/* ---------- You're in: the words and the share on the left, the pass big on the right ---------- */
 .wl-done { position: absolute; inset: 0; z-index: 5; display: none; overflow-y: auto; padding: 96px var(--pad) 120px; outline: 0; }
 .wl.done .wl-done { display: block; }
-/* on You're in, Kayla and her caption sit bottom right, under the pass: clear of Back to Studio and Start over */
 @media (min-width: 961px) {
   .wl.done .wl-dock { left: auto; right: var(--pad); transform: none !important; }
   .wl.done .wl-kt { left: auto; right: 0; transform: none; max-width: min(460px, 36vw); text-align: right; }
@@ -866,7 +769,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-rhead { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
 .wl-rtop span { display: block; margin-top: 6px; font-size: 14.5px; color: var(--wl-l2); }
 .wl-rtop span.wl-prog { color: #fff; font-weight: 500; }
-/* the tally (after MIRRA's Invite Friends, in Studio's glass): a big "1 of 3 friends joined", three dashes, a tiny legend */
 .wl-tally { margin-top: 18px; }
 .wl-tn { display: flex; align-items: baseline; gap: 9px; color: var(--wl-l2); font-size: 16px; letter-spacing: -.01em; }
 .wl-tn b { font: 300 40px/1 var(--sans); letter-spacing: -.03em; color: #fff; font-variant-numeric: tabular-nums; }
@@ -878,7 +780,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-leg span { display: inline-flex; align-items: center; gap: 7px; }
 .wl-leg span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--pearl); }
 .wl-leg .v::before { border-radius: 2px; background: rgba(255, 255, 255, .42); }
-/* each friend: a row, their initial or an icon, the name, and a status pill */
 .wl-slots { display: grid; gap: 6px; margin-top: 16px; }
 .wl-slots li { display: flex; align-items: center; gap: 12px; min-width: 0; height: 54px; padding: 0 10px 0 12px; border-radius: 16px; color: var(--wl-l3); background: rgba(255, 255, 255, .05); box-shadow: var(--v-rim); transition: background-color .4s, box-shadow .4s, transform .2s var(--ease); }
 .wl-fw { flex: 1; }
@@ -888,7 +789,6 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-slots li.st-invited .wl-st { color: #fff; background: rgba(255, 255, 255, .16); }
 .wl-slots li.st-confirming .wl-st { color: #fff; background: rgba(255, 255, 255, .18); }
 .wl-slots li.got .wl-st { color: var(--vampire); background: var(--pearl); box-shadow: none; }
-/* a friend slot: the circle (an initial once they've signed up), their name or Friend n, and where they are, in mono */
 .wl-slots li[role=button] { cursor: pointer; }
 .wl-slots li[role=button]:hover { background: rgba(255, 255, 255, .1); }
 .wl-slots li[role=button]:active { transform: scale(.97); }
@@ -899,23 +799,19 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-fw b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 14.5px/1.15 var(--sans); letter-spacing: -.005em; color: var(--wl-l2); }
 .wl-fw small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12.5px; line-height: 1.2; color: var(--wl-l3); }
 .wl-slots li.st-empty i { color: rgba(245, 243, 238, .55); }
-/* Invited: the link went out; the circle is lit, a paper plane in it */
 .wl-slots li.st-invited { background: rgba(255, 255, 255, .09); }
 .wl-slots li.st-invited i { background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim-on); }
 .wl-slots li.st-invited small { color: var(--wl-l2); }
-/* Confirming: they signed up; the ring turns while their email is confirmed */
 .wl-slots li.st-confirming { color: #fff; background: rgba(255, 255, 255, .11); box-shadow: var(--v-rim-on); }
 .wl-slots li.st-confirming i { background: rgba(255, 255, 255, .2); box-shadow: none; }
 .wl-slots li.st-confirming i::after { content: ""; position: absolute; inset: -3px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(255, 255, 255, 0) 0 55%, rgba(255, 255, 255, .85) 100%); -webkit-mask: radial-gradient(closest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); mask: radial-gradient(closest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px)); animation: wl-spin 1.6s linear infinite; }
 .wl-slots li.st-confirming b, .wl-slots li.got b { color: #fff; }
 .wl-slots li.st-confirming small { color: var(--wl-l2); }
 @keyframes wl-spin { to { transform: rotate(360deg); } }
-/* Joined: pearl, their initial, a check */
 .wl-slots li.got { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .07)); box-shadow: var(--v-rim-on); }
 .wl-slots li.got i { background: var(--pearl); color: var(--vampire); box-shadow: none; }
 .wl-slots li.got i::after { content: ""; position: absolute; right: -3px; bottom: -3px; width: 14px; height: 14px; border-radius: 50%; background: var(--vampire) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%23F5F3EE' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 9px no-repeat; }
 .wl-slots li.got small { color: rgba(245, 243, 238, .82); }
-/* where to come back: the email, and the private pass link (any device) */
 .wl-comeback { display: flex; align-items: center; gap: 12px; margin-top: 14px; padding: 12px 12px 12px 14px; border-radius: 18px; background: rgba(255, 255, 255, .05); box-shadow: var(--v-rim); }
 .wl-bi { width: 20px; height: 20px; flex: none; fill: none; stroke: rgba(245, 243, 238, .8); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .wl-bt { flex: 1; min-width: 0; }
@@ -944,10 +840,8 @@ html.wl-open, html.wl-open body { overflow: hidden; overscroll-behavior: none; }
 .wl-toast { position: fixed; left: 50%; bottom: 110px; z-index: 9; transform: translate(-50%, 20px); padding: 12px 18px; border-radius: 999px; font-size: 14px; color: var(--vampire); background: var(--pearl); opacity: 0; pointer-events: none; transition: opacity .3s, transform .4s var(--ease); }
 .wl-toast.on { opacity: 1; transform: translate(-50%, 0); }
 
-/* ---------- the buttons that open it ---------- */
 .ea-ic { width: 16px; height: 16px; flex: none; fill: currentColor; }
 
-/* ---------- the floating Get early access: bottom right, or centred when Kayla's pill is closed. Phones: beside Kayla. ---------- */
 .ea-float { position: fixed; z-index: 71; right: max(clamp(14px, 1.8vw, 24px), env(safe-area-inset-right)); bottom: max(clamp(12px, 1.8vw, 24px), env(safe-area-inset-bottom)); height: 56px; padding: 0 8px 0 22px; transform: translate3d(0, 0, 0); transition: transform .6s var(--ease), opacity .45s var(--ease), right .5s var(--ease); }
 .ea-float .go { margin-right: 0; }
 .ea-float.away { transform: translate3d(0, 150%, 0); opacity: 0; pointer-events: none; }
@@ -955,7 +849,7 @@ html.kp-off .ea-float { right: 50%; transform: translate3d(50%, 0, 0); }
 html.kp-off .ea-float.away { transform: translate3d(50%, 150%, 0); }
 html.wl-open .ea-float { opacity: 0; pointer-events: none; }
 .ea-float { touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; }
-.ea-float.press, .ea-float.busy { scale: .97; }   /* under the finger at once (scale, so the slide-in transform is kept) */
+.ea-float.press, .ea-float.busy { scale: .97; }    
 .ea-float.busy .go > svg { opacity: 0; }
 .ea-float.busy .go::after { content: ""; position: absolute; inset: 0; margin: auto; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; border: 2px solid rgba(16, 21, 28, .22); border-top-color: #10151c; animation: wl-spin .7s linear infinite; }
 @media (max-width: 640px) {
@@ -964,15 +858,12 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   html.ea-on:not(.kp-off) .kp { left: max(12px, env(safe-area-inset-left)); transform: translate3d(0, 0, 0); }
   html.ea-on:not(.kp-off) .kp.hide, html.ea-on:not(.kp-off).kp-away .kp:not(.playing) { transform: translate3d(0, 140%, 0); }
   html.ea-on:not(.kp-off) .kp .kp-tag { display: none; }
-  /* one row, never overlapping (Evan, iPhone 17 Pro Max): Kayla folds to her face and play (the waveform and time slide shut), and
-     the button fills the rest of the row, from her right edge to the margin; both sit on the same line above the home indicator */
   html.ea-on:not(.kp-off) .kp .kp-wave, html.ea-on:not(.kp-off) .kp .kp-time { max-width: 0; min-width: 0; opacity: 0; margin: 0 -5px; padding: 0; }
   html.ea-on:not(.kp-off) .ea-float { left: calc(max(12px, env(safe-area-inset-left)) + var(--kp-mini, 104px) + 8px); right: max(12px, env(safe-area-inset-right)); bottom: max(12px, calc(env(safe-area-inset-bottom) + 4px)); justify-content: flex-start; }
   html.ea-on:not(.kp-off) .ea-float > span:not([class]) { flex: 1; overflow: hidden; text-overflow: ellipsis; }
 }
 @media (max-width: 352px) { .ea-float .ea-ic { display: none; } }
 
-/* ---------- smaller laptops: a little tighter ---------- */
 @media (max-height: 820px) and (min-width: 961px) {
   .wl-qh { font-size: clamp(38px, 3.8vw, 58px); }
   .wl-qs { margin: 14px 0 20px; }
@@ -981,7 +872,6 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-f input, .wl-ccv { height: 54px; }
 }
 
-/* ---------- phones and narrow windows: the app small on top, the question, the bar fixed at the bottom ---------- */
 @media (max-width: 960px) {
   .wl-count { height: 44px; gap: 10px; padding: 0 16px 0 14px; font-size: 14px; margin-bottom: 18px; }
   .wl-count b { font-size: 24px; }
@@ -991,8 +881,7 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-app { width: 28px; height: 28px; }
   .wl-app:not(.sm):not(.xs) svg { width: 28px; height: 28px; }
   .wl-in { display: block; padding: 70px 16px 0; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
-  .wl-in::after { content: ""; display: block; height: calc(104px + var(--kbh, 0px)); }   /* room for the bar; and, only while the keyboard is up, for it */
-  /* the app, as on the site's phone hero: large, from the left margin, running off the right edge on purpose */
+  .wl-in::after { content: ""; display: block; height: calc(104px + var(--kbh, 0px)); }    
   .wl-stage { height: var(--stage-h, 300px); margin: 22px -16px 0 0; overflow: hidden; transform: none !important; -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent); mask-image: linear-gradient(180deg, #000 72%, transparent); transition: height .5s var(--ease), --wl-o1 .4s, margin .5s var(--ease); }
   .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { height: 0; --wl-o1: 0; margin-top: 0; }
   .wl-fit, .wl[data-step="claude"] .wl-fit { left: 0; top: 0; margin: 0; transform-origin: 0 0; }
@@ -1007,9 +896,8 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-opt.big::after { top: 12px; }
   .wl-opt.row small { display: none; }
   .wl-f input, .wl-ccv { height: 56px; }
-  /* the dock: Kayla above, the bar the full width */
   .wl-dock { left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); flex-direction: column-reverse; align-items: stretch; gap: 8px; transform: translateY(30px); transition: transform .5s var(--ease), opacity .3s, --wl-o1 .5s var(--ease); }
-  .wl-kay { align-self: flex-end; }   /* phones: Kayla's pill above the bar, at the right (Evan: keep her on phones) */
+  .wl-kay { align-self: flex-end; }    
   .wl.done .wl-dock { display: none; }
   .wl.open .wl-dock { transform: none; }
   .wl-bar { height: 60px; gap: 10px; }
@@ -1027,8 +915,6 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-dwrap { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .wl-dstage { order: -1; min-height: 0; gap: 12px; padding: 10px 0 6px; }
   .wl-dstage .pass { --w: min(350px, 88vw); }
-  /* You're in, on a phone: the same fix as the compact pass. A slightly taller card, rows spaced, so "#1,392", the trial and the
-     friends never sit on the dashed line or the barcode (Evan's iPhone) */
   .wl-dstage .pass { height: calc(var(--w) * .7); }
   .wl-dstage .pass.big .who { top: 17%; }
   .wl-dstage .pass.big .row { top: 51%; }
@@ -1047,7 +933,7 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-share { gap: 6px; }
   .wl-dfoot { flex-wrap: wrap; }
   .wl-opts.two .wl-opt b { overflow-wrap: anywhere; }
-  .wl-steps { overflow-x: clip; overflow-clip-margin: 12px; }   /* the steps waiting off to the side never widen the page */
+  .wl-steps { overflow-x: clip; overflow-clip-margin: 12px; }    
   .wl-dstage::before { width: 100%; }
   .wl-dstage { overflow-x: clip; overflow-clip-margin: 16px; }
 }
@@ -1058,31 +944,25 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-ph { animation: none; }
 }
 
-/* ---------- You're in: the moment (under 2.5 s, then a calm hold) ---------- */
 .wl-roll { display: inline-flex; font-variant-numeric: tabular-nums; }
 .wl-roll .dg { position: relative; display: inline-block; height: 1em; overflow: hidden; }
 .wl-roll .dg > span { display: flex; flex-direction: column; transform: translateY(calc(var(--to, 0) * -1em)); }
 .wl-roll .dg > span > em { display: block; height: 1em; line-height: 1em; font-style: normal; text-align: center; }
 .wl-roll .dg.roll > span { transition: transform var(--d, 1s) cubic-bezier(.2, 1.35, .35, 1); transition-delay: var(--dl, 0s); }
-/* the sky: a little dim as it lands, then it brightens slowly */
 .wl.done .wl-sky { filter: brightness(.84) saturate(.96); }
 .wl.done.shown .wl-sky { filter: brightness(1.05) saturate(1.04); }
 .wl.done .wl-bg::after { transition: background-color 2.4s var(--ease); }
-/* a soft bloom behind the pass when it lands: as wide as the stage, so at its peak (1.08, blurred) it stays inside the page's side
-   padding and never makes the page scroll sideways (it was 120%: 7 to 52 px too wide on desktop) */
 .wl-dstage { position: relative; }
 .wl-dstage::before { content: ""; position: absolute; left: 50%; top: 46%; width: 100%; aspect-ratio: 1.6; transform: translate(-50%, -50%) scale(.7); border-radius: 50%; pointer-events: none; opacity: 0;
   background: radial-gradient(closest-side, rgba(255, 246, 230, .42), rgba(255, 255, 255, .14) 55%, rgba(255, 255, 255, 0) 100%); filter: blur(10px); }
 .wl-dstage.bloom::before { animation: wl-bloom 2.2s cubic-bezier(.2, .8, .2, 1) both; }
 @keyframes wl-bloom { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 22% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: .22; transform: translate(-50%, -50%) scale(1.08); } }
-/* the three friend slots breathe, one after another */
 .wl.done.shown .wl-slots li.st-empty i { animation: wl-slot 2.8s ease-in-out infinite; }
 .wl.done.shown .wl-slots li.st-empty:nth-child(2) i { animation-delay: .35s; }
 .wl.done.shown .wl-slots li.st-empty:nth-child(3) i { animation-delay: .7s; }
 @keyframes wl-slot { 0%, 100% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .3); } 50% { box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .62); } }
 @media (prefers-reduced-motion: reduce) { .wl.done .wl-sky { filter: none; } .wl-dstage.bloom::before, .wl.done.shown .wl-slots li i, .wl-slots li.st-confirming i::after { animation: none; } }
 
-/* ---------- Check your email: six glass boxes (the app's sign-in code), a wrong code runs the auburn beam round them ---------- */
 .wl-cmail { font-weight: 500; color: #fff; word-break: break-all; }
 .wl-otp { position: relative; display: inline-flex; max-width: 100%; align-items: center; gap: 10px; margin-top: 4px; }
 .wl-otp input { position: relative; z-index: 1; width: 64px; height: 78px; padding: 0; border: 0; outline: 0; border-radius: 18px; text-align: center; font: 300 36px/1 var(--sans); color: #fff; caret-color: #fff;
@@ -1110,25 +990,19 @@ html.wl-open .ea-float { opacity: 0; pointer-events: none; }
   .wl-otp > i { width: 6px; }
 }
 
-/* ---------- while the sheet is open, the page behind it is hidden and its loops are paused (kit.js pauses its videos) ---------- */
 html.wl-still main > :not(#early-access), html.wl-still main > :not(#early-access) *, html.wl-still .nav, html.wl-still .nav *, html.wl-still .kp, html.wl-still .kp *, html.wl-still footer, html.wl-still footer *, html.wl-still .ea-float { visibility: hidden !important; }
 html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-access), html.wl-still .nav *, html.wl-still .kp *, html.wl-still footer * { animation-play-state: paused !important; }
 
-/* ---------- typing on a phone: the bar steps aside so the field stays in view above the keyboard ---------- */
 .wl.kb .wl-dock { opacity: 0; pointer-events: none; transform: translateY(140%) !important; transition: opacity .2s, transform .3s var(--ease); }
 
-/* the SMS boxes sit inside the phone's field group: their hidden inputs never take the fields' glass (it showed over the words) */
 .wl .wl-sms .wl-cbx { position: absolute; left: 0; top: 50%; width: 22px; height: 22px; margin: -11px 0 0; padding: 0; border: 0; opacity: 0 !important; background: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; display: block; z-index: 2; }
 .wl-smsbox .wl-sms + .wl-sms .wl-cbx { margin-top: -6px; }
-/* phones: the header has its own frosted backing, so anything scrolled up fades under it instead of sliding beneath the buttons */
 @media (max-width: 960px) {
   .wl-top::before { content: ""; position: absolute; z-index: -1; left: 0; right: 0; top: 0; height: calc(100% + 30px); pointer-events: none;
     background: linear-gradient(180deg, rgba(8, 13, 17, .42), rgba(8, 13, 17, .18) 70%, rgba(8, 13, 17, 0)); -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
     -webkit-mask-image: linear-gradient(180deg, #000 58%, transparent); mask-image: linear-gradient(180deg, #000 58%, transparent); }
   .wl-top { padding-bottom: 12px; }
 }
-/* ---------- the real Studio Home (kit.js SK.appHome), at the app's own size: 1440 x 900, scaled by the stage. Measurements from the
-   app (Studio_App web/vista home.css, shell.css): panel glass, 24px corners, the band at the bottom, the 14-day Going out. ---------- */
 .ah { --tint: 12, 19, 28; --v-g: rgba(255, 255, 255, .045); --v-g-h: rgba(255, 255, 255, .075); --v-on: rgba(255, 255, 255, .1);
   --v-rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5);
   --v-rim-on: inset 1px 1px 1px -1px rgba(255, 255, 255, .9), inset -1px -1px 1px -1px rgba(255, 255, 255, .7), inset 2px 2px 5px -2px rgba(196, 214, 238, .62), inset -2px -2px 5px -2px rgba(242, 226, 220, .62);
@@ -1244,19 +1118,16 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-mfl em { display: block; font: 500 8.5px/1 var(--mono); font-style: normal; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .78); }
 .ah-mfl b { display: block; margin-top: 4px; font: 500 12.5px/1.15 var(--sans); letter-spacing: -.01em; }
 
-/* ---------- the app on the stage is the real Studio Home (kit.js SK.appHome), at its own 1440 x 900 ---------- */
 .wl-fit { width: 1440px; height: 900px; margin-top: -450px; }
 .wl-appwin.wl-real { inset: 0; display: block; }
 .wl-ah { position: absolute; inset: 0; }
 .wl-real .wl-menu { left: 12px; top: 104px; z-index: 5; }
-/* the Claude scene keeps its own drawing, larger in the bigger frame; the pass too */
 .wl-sc[data-sc="claude"] { transform-origin: 0 0; }
 .wl-sc[data-sc="claude"].on { transform: scale(1.32); }
 .wl-sc[data-sc="claude"]:not(.on) { transform: translateX(110px) scale(1.28); }
 .wl-sc[data-sc="you"] .pass { --w: 760px; }
 @media (max-width: 960px) { .wl-sc[data-sc="claude"].on { transform: scale(1.32); } }
 
-/* Ask Studio at work (the Claude step on the real Home): clips attached, the request typing, Working now, the cut landing in To review */
 .ah-att { display: flex; align-items: flex-end; gap: 7px; }
 .ah-att:not(:empty) { margin-bottom: 12px; }
 .ah-att span { width: 44px; height: 58px; border-radius: 10px; overflow: hidden; box-shadow: var(--v-rim); }
@@ -1275,26 +1146,22 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-new { animation: ah-land .9s cubic-bezier(.2, 1.2, .3, 1) both; box-shadow: 0 0 0 2px rgba(191, 227, 255, .55), 0 18px 34px -16px rgba(0, 0, 0, .7); }
 .ah-new::before { content: ""; position: absolute; inset: 42% 0 0; z-index: 1; background: linear-gradient(180deg, transparent, rgba(5, 9, 10, .82)); }
 @keyframes ah-land { from { opacity: 0; transform: translateY(26px) scale(.86); } }
-/* phones: the 1440 frame sits at the top left of the stage (the desktop centring doesn't apply) */
 @media (max-width: 960px) { .wl-fit, .wl[data-step="claude"] .wl-fit { margin-top: 0; top: 0; } }
-@media (min-width: 961px) { .wl[data-step="claude"] .wl-fit { top: 50%; margin-top: -450px; transform-origin: 0 50%; } }   /* step 4 is the real Home now, centred like the rest */
+@media (min-width: 961px) { .wl[data-step="claude"] .wl-fit { top: 50%; margin-top: -450px; transform-origin: 0 50%; } }    
 .ah [hidden] { display: none !important; }
 
-/* ---------- the Home, round 5 (Evan): real frost on the main panel, the composer's border beam, round brand logos, white Scheduled,
-   and the story (SK.appStory): footage dragged in, the full editor cutting, Ask Studio answering from the right ---------- */
 .ah-main { -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); background: rgba(var(--tint), .22); }
 .ah-comp, .ah-ask, .ah-apc { position: relative; }
 .ah-cb { position: absolute !important; inset: 0; z-index: 2; border-radius: inherit !important; pointer-events: none; --beam-strength: 1.15; }
 .ah-cb::after, .ah-cb::before, .ah-cb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .ah-ask .ah-cb { --beam-strength: .9; }
-@media (prefers-reduced-motion: reduce) { .ah-comp > .ah-cb { display: none; } }   /* like .gx: no moving beam */
+@media (prefers-reduced-motion: reduce) { .ah-comp > .ah-cb { display: none; } }    
 .ah-chip { padding: 0 15px 0 4px; gap: 9px; animation: ah-chip .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 90ms); }
 .ah-bm { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14); }
 @keyframes ah-chip { from { opacity: 0; transform: translateY(6px) scale(.96); } }
 .ah-dot.sc { background: #fff; }
 .ah-dg.on { color: #fff; }
 
-/* footage, dragged in on the pointer */
 .ah-drag { position: absolute; left: 0; top: 0; z-index: 40; width: 0; height: 0; opacity: 0; pointer-events: none; transition: transform 1.25s cubic-bezier(.3, .7, .2, 1), opacity .3s; }
 .ah-drag.on { opacity: 1; }
 .ah-dst { position: absolute; left: 0; top: 0; }
@@ -1305,7 +1172,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-comp.over .ah-drop { opacity: 1; }
 .ah-comp.over { transform: scale(1.015); }
 
-/* the Home steps back while the editor works */
 .ah-top, .ah-hi, .ah-band { transition: opacity .55s var(--ease), filter .55s var(--ease), transform .7s var(--ease); }
 .ah.editing .ah-top, .ah.editing .ah-hi, .ah.editing .ah-band { opacity: 0; filter: blur(14px); transform: scale(.985); pointer-events: none; }
 .ah-ed { position: absolute; top: 22px; bottom: 22px; left: 22px; right: calc(22px + var(--cut, 0px)); display: grid; grid-template-rows: 46px minmax(0, 1fr) 222px; gap: 14px; opacity: 0; visibility: hidden; transform: scale(1.015); transition: opacity .6s var(--ease) .1s, transform .8s var(--ease) .1s, visibility 0s linear .8s, right .7s var(--ease); }
@@ -1345,7 +1211,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah.ed-play .ah-ph { opacity: 1; animation: ah-ph 3.6s linear both; }
 @keyframes ah-ph { to { left: calc(100% - 18px); } }
 
-/* Ask Studio, from the right */
 .ah-ap { position: absolute; z-index: 30; top: 0; right: var(--cut, 0px); bottom: 0; width: 432px; display: flex; flex-direction: column; padding: 18px 16px 16px; border-radius: 30px; background: rgba(var(--tint), .5); -webkit-backdrop-filter: var(--ab); backdrop-filter: var(--ab); box-shadow: var(--v-rim), -30px 0 60px -30px rgba(0, 0, 0, .55); transform: translateX(calc(100% + 40px + var(--cut, 0px))); transition: transform .8s cubic-bezier(.2, .9, .2, 1); }
 .ah.asking .ah-ap { transform: none; }
 .ah-aph { display: flex; align-items: center; gap: 10px; height: 34px; margin: 0 2px 14px; }
@@ -1366,7 +1231,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-apc { display: flex; align-items: center; gap: 10px; height: 56px; margin-top: 14px; padding: 0 8px 0 16px; border-radius: 22px; font-size: 14px; color: var(--s2); background: rgba(5, 7, 11, .45); box-shadow: var(--v-rim); }
 .ah-apc .ah-mic, .ah-apc .ah-send { width: 34px; height: 34px; }
 @media (prefers-reduced-motion: reduce) { .ah-ap, .ah-ed, .ah-drag { transition: none; } }
-/* while the editor works the sidebar tucks away (as the app does in the editor), so the cut and Ask Studio both have room */
 .ah-sb { transition: width .7s var(--ease), padding .7s var(--ease), opacity .4s var(--ease), margin .7s var(--ease); overflow: hidden; }
 .ah.editing .ah-sb { width: 0; padding-left: 0; padding-right: 0; margin-right: -16px; opacity: 0; }
 .ah-ap { width: 400px; }
@@ -1375,7 +1239,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .ah-edt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ah-pv { justify-self: start; }
 
-/* ---------- Chapters (review only, this Mac): kit.js SK.chapters. The app's Fresh Studio pill, at the top in the middle ---------- */
 .sk-ch { --rim: inset 1px 1px 1px -1px rgba(255, 255, 255, .6), inset -1px -1px 1px -1px rgba(255, 255, 255, .5); position: fixed; z-index: 300; top: max(20px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 6px; font-family: var(--sans); color: #fff; }
 .sk-chp, .sk-chb { height: 36px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; color: #fff; background: rgba(14, 16, 20, .5); -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%); box-shadow: var(--rim), 0 10px 26px -12px rgba(0, 0, 0, .55); transition: background-color .2s; }
 .sk-chp:hover, .sk-chb:hover:not([disabled]) { background: rgba(14, 16, 20, .66); }
@@ -1403,8 +1266,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .sk-chm .t b { font: 500 11px/1.2 var(--sans); padding: 0 2px 2px; }
 @media (max-width: 700px) { .sk-ch { top: auto; bottom: 110px; } .sk-chp .k { display: none; } .sk-chm { top: auto; bottom: calc(100% + 8px); width: min(340px, calc(100vw - 24px)); max-height: 62vh; } }
 
-/* ---------- round 5: the dock and Kayla in real glass (the app's lit rim, a light sheen, more frost), the fields with the
-   composer's border beam always on (brighter when you're in one) ---------- */
 .wl-bar, .wl-kay { background: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .04) 58%), rgba(var(--tint), .2); -webkit-backdrop-filter: blur(30px) saturate(175%) brightness(1.06); backdrop-filter: blur(30px) saturate(175%) brightness(1.06); box-shadow: var(--v-rim-on), 0 22px 44px -20px rgba(0, 0, 0, .6); }
 .wl-back, .wl-kp { background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .07)); box-shadow: var(--v-rim-on); }
 .wl-kay img { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3), 0 6px 14px -6px rgba(0, 0, 0, .5); }
@@ -1412,9 +1273,6 @@ html.wl-still main > :not(#early-access) *, html.wl-still main > :not(#early-acc
 .wl-q.on .wl-box:focus-within > .wl-fb { opacity: 1; }
 .wl-f input, .wl-ccv { -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%); }
 
-/* ---------- round 5: the entrance (a page of its own, html.pg-in): no preloader. The sky comes up out of a soft push-in, the top bar
-   settles, the question builds line by line, the app swings in from the right in depth, the bar rises last. Transforms only on
-   anything holding glass, so the frost is there from the first frame. ---------- */
 html.pg-in .wl.open .wl-sky:not(.nx) { animation: pg-sky 2.4s cubic-bezier(.2, .7, .2, 1) both; }
 @keyframes pg-sky { from { transform: scale(1.16); filter: brightness(.5) saturate(.75); } }
 html.pg-in .wl.open .wl-top { animation: pg-top 1s var(--ease) .3s both; }
@@ -1433,41 +1291,30 @@ html.pg-in .wl.open .ah-sb { animation: pg-side 1.2s var(--ease) .7s both; }
 html.pg-in .wl.open .ah-band > * { animation: pg-band 1.1s var(--ease) both; }
 html.pg-in .wl.open .ah-band > :nth-child(2) { animation-delay: .8s; } html.pg-in .wl.open .ah-band > :nth-child(3) { animation-delay: .9s; } html.pg-in .wl.open .ah-band > :nth-child(4) { animation-delay: 1s; }
 @keyframes pg-band { from { transform: translateY(30px); } }
-/* the bar rises last, once: an entrance animation, not a slow transition (a delayed transition also slowed the bar coming back after the keyboard) */
 html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 1) .75s backwards; }
 @keyframes pg-dock { from { transform: translate(-50%, 46px); } }
 @media (max-width: 960px) { @keyframes pg-dock { from { transform: translateY(46px); } } }
 @media (prefers-reduced-motion: reduce) { html.pg-in .wl.open * { animation: none !important; } html.pg-in .wl-stage { transform: none; } }
 
-/* You're in: the questions behind it are gone once it has faded (phones showed them through) */
 .wl.done .wl-in { visibility: hidden; transition: --wl-o0 .5s var(--ease), transform .7s var(--ease), visibility 0s linear .55s; }
 .wl.done .wl-ty, .wl.done .wl-fb { visibility: hidden !important; }
-/* phones: the Chapters pill at the bottom left, clear of Kayla at the right; its menu opens upward */
 @media (max-width: 700px) { .sk-ch { left: 12px; transform: none; } .sk-chm { left: 0; transform: none; } @keyframes sk-chm { from { opacity: 0; } } }
 
-/* ---------- frost on every device (kit.js SK.frost): the top-level glass shows a pre-blurred copy of the wallpaper, lined up with the
-   screen, under its own tint; no live backdrop blur needed (iPhone's WebKit draws none inside the phone stage's fade) ---------- */
 .ah [data-frost], .wl [data-frost] { background-color: transparent; background-image: linear-gradient(rgba(var(--tint), var(--fz-a, .38)), rgba(var(--tint), var(--fz-a, .38))), var(--fz-img, none); background-size: 100% 100%, var(--fz-w, 100%) var(--fz-h, 100%); background-position: 0 0, var(--fz-x, 0) var(--fz-y, 0); background-repeat: no-repeat; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .ah .ah-sb { --fz-a: .4; } .ah .ah-main { --fz-a: .2; } .ah .ah-ap { --fz-a: .5; } .wl .wl-menu[data-frost] { --fz-a: .46; }
-/* phones and tablets: the glass inside those panels sits on frost already, so it keeps its tint and rim and skips the live blur (cooler) */
 @media (hover: none) { .ah *:not([data-frost]), .wl-appwin *:not([data-frost]) { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; } }
 
-/* the pass: its glow plate is a soft gradient, not a live blur; the light sweep is its own layer, moved by one transform (section.js Pass) */
 .pass .plate { filter: none; background: radial-gradient(ellipse at 50% 60%, rgba(120, 130, 140, .38), rgba(14, 25, 30, 0) 72%); inset: -2% -4%; }
 .pass .card .spec { position: absolute; inset: 0; overflow: hidden; pointer-events: none; mix-blend-mode: screen; }
 .pass .card .spec i { position: absolute; top: -20%; bottom: -20%; left: 25%; width: 50%; background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .17) 46%, rgba(255, 255, 255, .06) 58%, rgba(255, 255, 255, 0)); transform: translate3d(0, 0, 0) skewX(-14deg); will-change: transform; }
 @media (prefers-reduced-motion: reduce) { .pass .card .spec { display: none; } }
 
-/* ---------- phones: the pass on "Where should we send your invite?" and "Check your email" (Evan: "such a cool thing"). Compact, at the
-   top above the question; it folds away while the keyboard is up (.wl.kb), so the fields never sit under it ---------- */
 @media (max-width: 960px) {
   .wl[data-step="you"]:not(.done) .wl-in, .wl[data-step="check"]:not(.done) .wl-in { display: flex; flex-direction: column; }
   .wl[data-step="you"] .wl-stage, .wl[data-step="check"] .wl-stage { order: -1; flex: none; align-self: center; width: min(66vw, 280px); height: calc(min(66vw, 280px) * .7 + 26px); margin: 4px 0 10px; --wl-o1: 1; overflow: visible; -webkit-mask-image: none; mask-image: none; transition: height .45s var(--ease), margin .45s var(--ease), opacity .3s; }
   .wl[data-step="you"] .wl-fit, .wl[data-step="check"] .wl-fit { width: 100%; height: 100%; transform: none; }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .p3, .wl[data-step="check"] .wl-sc[data-sc="you"] .p3 { position: absolute; inset: 0; display: grid; place-items: center; perspective: 1100px; }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass { --w: min(66vw, 280px); }
-  /* compact, the labels sit at the browser's smallest type and grow taller than their slot: a slightly taller card, rows spaced
-     so the barcode never runs over "14 days, free" (Evan's iPhone) */
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass { height: calc(var(--w) * .7); }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .who, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .who { top: 20%; }
   .wl[data-step="you"] .wl-sc[data-sc="you"] .pass .row, .wl[data-step="check"] .wl-sc[data-sc="you"] .pass .row { top: 54%; }
@@ -1476,8 +1323,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl.kb[data-step="you"] .wl-stage, .wl.kb[data-step="check"] .wl-stage { height: 0; margin: 0; opacity: 0; }
 }
 
-/* ---------- phones: one row at the bottom, nothing floating over the form (lead): the bar, and Kayla beside it as a round glass
-   button (her face, play/pause), not a pill above it. The Chapters pill (this Mac only) sits in the top bar instead. ---------- */
 @media (max-width: 960px) {
   .wl-dock { flex-direction: row; align-items: center; gap: 8px; }
   .wl-dock > .wl-bar { flex: 1; min-width: 0; }
@@ -1489,7 +1334,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl-seg { gap: 4px; }
   .wl-next { padding: 0 14px 0 16px; font-size: 14.5px; }
   .wl-go { font-size: 14.5px; gap: 10px; }
-  /* Chapters (this Mac): in the top bar, a compact pill; Restart and Test mode make way for it */
   html.sk-ch-on .wl-restart, html.sk-ch-on .st-mode { display: none !important; }
   .sk-ch.in-bar { position: static; transform: none; z-index: auto; }
   .sk-ch.in-bar .sk-chb, .sk-ch.in-bar .sk-chp .k { display: none; }
@@ -1498,7 +1342,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .sk-ch.in-bar .sk-chm { top: calc(100% + 8px); bottom: auto; left: auto; right: 0; transform: none; }
 }
 @media (max-width: 380px) { .sk-ch.in-bar .sk-chp .c { display: none; } }
-/* phones: the questions scroll in the space above the bottom row, so no field, checkbox or label is ever under it (lead) */
 @media (max-width: 960px) {
   .wl:not(.done) .wl-in { bottom: calc(max(12px, env(safe-area-inset-bottom)) + 68px); }
   .wl .wl-in::after { height: 14px; }
@@ -1506,22 +1349,18 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl.kb .wl-in::after { height: calc(104px + var(--kbh, 0px)); }
 }
 
-/* You're in, the share buttons (Evan): icons only, smaller, all six on one line. The words stay for screen readers and as tooltips. */
 .wl-share { display: flex; flex-wrap: nowrap; gap: 8px; margin-top: 12px; }
 .wl-sh { flex: none; display: grid; place-items: center; width: 48px; height: 48px; padding: 0; gap: 0; border-radius: 16px; }
 .wl-sh > span:not(.ic) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .wl-sh .ic { width: 48px; height: 48px; border-radius: 16px; }
 .wl-sh .ic svg { width: 20px; height: 20px; }
 @media (max-width: 960px) { .wl-share { gap: 7px; justify-content: space-between; } .wl-sh, .wl-sh .ic { width: 46px; height: 46px; border-radius: 15px; } }
-/* phones: the steps and scenes that are hidden (absolute, invisible) don't stretch the scroll: it ends where what you see ends
-   (Evan's iPhone: a long empty run of wallpaper after the content) */
 @media (max-width: 960px) {
   .wl-steps { overflow-y: clip; overflow-clip-margin: 24px; }
   .wl-stage { overflow-y: clip; overflow-clip-margin: 24px; }
-  .wl[data-step="you"] .wl-sc:not([data-sc="you"]), .wl[data-step="check"] .wl-sc:not([data-sc="you"]) { display: none; }   /* there the stage shows only the pass (it overflows on purpose, so the hidden app can't hang below) */
+  .wl[data-step="you"] .wl-sc:not([data-sc="you"]), .wl[data-step="check"] .wl-sc:not([data-sc="you"]) { display: none; }    
 }
 
-/* ---------- share, text-first (Evan): Text a friend; then Copy link, Share to your Story, More ---------- */
 .wl-text { position: relative; display: flex; align-items: center; gap: 14px; width: 100%; margin-top: 14px; padding: 12px 18px 12px 12px; border-radius: 22px; text-align: left; color: #fff; background: rgba(255, 255, 255, .1); box-shadow: var(--v-rim); transition: background-color .2s var(--ease), transform .2s var(--ease); }
 .wl-text:hover { background: rgba(255, 255, 255, .15); }
 .wl-text:active { transform: scale(.985); }
@@ -1547,7 +1386,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .wl-more svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .wl-urlline { margin-top: 10px; text-align: center; }
 .wl-urlline .wl-url { font: 400 12px/1.3 var(--mono); letter-spacing: .02em; color: rgba(245, 243, 238, .5); }
-/* the two sheets: Text a friend, Share to your Story */
 .wl-ov { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 20px; background: rgba(4, 7, 10, .5); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity .3s var(--ease); }
 .wl-ov[hidden] { display: none; }
 .wl-ov.on { opacity: 1; }
@@ -1585,51 +1423,32 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl-storyimg { max-height: 54vh; }
 }
 
-/* ==========================================================================================================================
-   Smooth on phones (2026-11-21). The look is unchanged; what moved is how it's drawn.
-   ========================================================================================================================== */
-/* The sheet no longer fades itself in: a cover of the page's own colour fades off it instead (the same picture, frame for frame). An
-   opacity on the whole sheet switched every live frost inside it off for the fade and made the phone composite it all again. */
 .wl, .wl.open { opacity: 1; transition: none; }
 .wl::after { content: ""; position: absolute; inset: 0; z-index: 60; pointer-events: none; background: var(--edge, #1b1a19); opacity: 1; transition: opacity .45s var(--ease); }
 .wl.open::after { opacity: 0; }
 .wl:not(.open)::after { pointer-events: auto; }
-/* iPhone Safari (iOS 26) paints a band under the status bar and the toolbar in the colour of a fixed box that touches those edges;
-   the sheet was that box, with no colour of its own, so the band came out light grey (or black). It's an ordinary box at the top of
-   the page now, one large screen tall: the toolbar floats over the wallpaper, and the band under the status bar takes the page's own
-   colour (kit.js SK.edgeTint: the top of the wallpaper as it shows there). The bar, the header and the overlays keep their insets. */
 .wl { position: absolute; inset: 0 auto auto 0; width: 100%; height: 100vh; height: 100lvh; min-height: 100%; }
 .wl-bg { height: max(var(--lvh, 100lvh), 100lvh); }
-.wl { --wl-vb: 0px; }   /* how much of the page sits under the browser's own bottom bar (the large screen minus the small one) */
+.wl { --wl-vb: 0px; }    
 @supports (height: 100lvh) { .wl { --wl-vb: max(0px, calc(100lvh - 100svh)); } }
 
-/* The steps: kit.js SK.stepSwap moves them (out of focus the way you're going, the next one in, its controls rising up from lying
-   flat). No transition of their own here, and the ones not on screen take no room, so nothing needs clipping: Safari has no
-   overflow-clip-margin, so the old clip cut the fields and answers off flat while they moved (Evan's iPhone, every step). */
 .wl-q, .wl-q.past, .wl-q.on { transform: none; transition: none; }
 .wl-q.out { --wl-o2: 1; visibility: visible; pointer-events: none; }
 .wl-q:not(.on):not(.out) { display: none; }
 @media (max-width: 960px) {
   .wl-steps { overflow: visible; }
-  .wl-dstage { overflow: visible; }   /* its glow ran into a hard vertical line 16px in from each side (Safari ignores the clip margin) */
-  /* the questions scroll the full height of the screen, under the bar: the app runs on down behind it and fades out, no hard line */
+  .wl-dstage { overflow: visible; }    
   .wl:not(.done) .wl-in { bottom: auto; height: 100%; }
   .wl .wl-in::after { height: calc(max(12px, env(safe-area-inset-bottom)) + 82px + var(--wl-vb)); }
   .wl.kb .wl-in::after { height: calc(104px + var(--kbh, 0px)); }
   .wl-done { padding-bottom: calc(28px + env(safe-area-inset-bottom) + var(--wl-vb)); }
 }
-/* Phones: the app preview comes in on its own opacity (the compositor's job) instead of a fade number every one of its few hundred
-   parts recomputed each frame. Nothing inside it uses a live blur on a touch screen (its glass is the pre-blurred frost, which a fade
-   on the box can't switch off), so it looks the same. */
 @media (max-width: 960px) and (hover: none) {
   html.pg-in .wl-stage, .wl-stage { --wl-o1: 1; opacity: 0; transition: opacity .9s var(--ease) .45s, height .5s var(--ease), margin .5s var(--ease); }
   html.pg-in .wl.open .wl-stage, .wl.open .wl-stage { opacity: 1; }
   .wl.kb[data-step="you"] .wl-stage, .wl.kb[data-step="check"] .wl-stage { opacity: 0; transition: opacity .3s, height .45s var(--ease), margin .45s var(--ease); }
 }
 
-/* ---------- Text a friend and Share to your Story (Evan): Studio glass, whites and blacks only. The dim and blur of the page are their
-   own layer (::before), not the overlay box, so the sheet's frost sees the blurred page through it (a blur on the box around it
-   turned the sheet into a flat navy slab). The bubble is a sent iMessage: Apple's blue, white type, the tail on the right. ---------- */
 .wl-ov { position: absolute; background: none; -webkit-backdrop-filter: none; backdrop-filter: none; opacity: 1; transition: none; }
 .wl-ov::before { content: ""; position: absolute; inset: 0; background: rgba(4, 6, 8, .42); -webkit-backdrop-filter: blur(14px) saturate(120%); backdrop-filter: blur(14px) saturate(120%); opacity: 0; transition: opacity .3s var(--ease); }
 .wl-ov.on::before { opacity: 1; }
@@ -1644,7 +1463,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); box-shadow: inset 1px 1px 1px -1px rgba(255, 255, 255, .85), inset -1px -1px 1px -1px rgba(255, 255, 255, .55); }
 .wl-ova .wl-s2 { border-radius: 999px; min-height: 54px; padding: 0 20px; }
 .wl-ova .wl-s2:hover, .wl-ovx:hover { background-color: rgba(40, 40, 44, .34); }
-/* Open Messages and Save to Photos: the site's glass primary (SK.gx, like Continue), not a solid white block */
 .wl-sendb.gx { flex: 1; height: auto; min-height: 54px; padding: 0 18px; border-radius: 999px; color: #fff; font: 500 16px/1 var(--sans);
   background: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .05) 52%, rgba(255, 255, 255, .09)), rgba(10, 14, 20, .5); }
 .wl-sendb.gx .wl-msgic { box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35); }
@@ -1657,8 +1475,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
   .wl-ov { padding-bottom: calc(max(10px, env(safe-area-inset-bottom)) + var(--wl-vb)); }
 }
 
-/* ---------- "Tap to flip" under the pass on You're in (Evan: make it obvious): a small glass pill in white type, its arrows turning
-   as the pass starts to turn (section.js Pass nudge), until the first flip; then it goes back to a quiet line ---------- */
 .wl-dstage .wl-hint { padding: 8px 14px 8px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; color: rgba(255, 255, 255, .94); text-shadow: none;
   background: linear-gradient(180deg, rgba(255, 255, 255, .17), rgba(255, 255, 255, .05) 55%, rgba(255, 255, 255, .08)), rgba(22, 22, 24, .26);
   -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
@@ -1670,20 +1486,15 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 @media (prefers-reduced-motion: reduce) { .wl-dstage .wl-hint svg { animation: none; } }
 
 
-/* ===== 910-start ===== */
-/* Start: the website sign-up. It is the early-access sheet (.wl, 900-early/section.css) in every way that shows: the sky, the glass,
-   the bar, the stage, the pass. Only what is new is here, prefix st-. */
 
-/* the glass fades as a leaf, like the early-access options (900-early explains why: a fading parent cuts glass off from the sky) */
 .st .wl-q > :is(.st-ways, .st-plans, .st-otp) { opacity: 1 !important; }
-.st-agree .bx { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }   /* holders of glass: their glass fades itself */
+.st-agree .bx { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }    
 .st-way, .st-plan, .st-otp input, .st-sum, .st-card, .st-per, .st-me { opacity: min(1, calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3) * 3)); }
 .st-or, .st-link, .st-links .dot { opacity: calc(var(--wl-o0) * var(--wl-o1) * var(--wl-o2) * var(--wl-o3)); }
 
 .st-mode { white-space: nowrap; height: 30px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 999px; font: 500 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: #0b0c0e; background: #f2d59b; }
 .st-from .wl-ri { background: linear-gradient(140deg, #f5f3ee, #bdbdb9); }
 
-/* 1: the ways in */
 .st-ways { display: grid; gap: 10px; max-width: 460px; }
 .st-way { position: relative; display: flex; align-items: center; gap: 14px; height: 60px; padding: 0 20px 0 16px; border-radius: 18px; text-align: left; color: #fff; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); transition: background-color .2s var(--ease), transform .25s var(--ease); }
 .st-way:hover { background: rgba(var(--tint), .6); }
@@ -1705,7 +1516,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .st-fine { max-width: 460px; margin-top: 14px; text-align: center; font-size: 13px; line-height: 1.5; color: var(--wl-l2); text-wrap: pretty; }
 .st-fine a, .st-under a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .35); text-underline-offset: 3px; }
 
-/* the logo opens it */
 .st-intro { position: absolute; inset: 0; z-index: 30; display: grid; place-items: center; background: radial-gradient(ellipse at 50% 50%, rgba(5, 9, 10, .35), rgba(5, 9, 10, .78) 70%); -webkit-backdrop-filter: blur(24px) saturate(130%); backdrop-filter: blur(24px) saturate(130%); transition: opacity .85s var(--ease), -webkit-backdrop-filter .85s var(--ease), backdrop-filter .85s var(--ease); }
 .st-intro .lg { width: min(640px, 78vw); aspect-ratio: 2187 / 1230; transition: transform .9s var(--ease), filter .9s var(--ease), opacity .7s var(--ease); }
 .st-intro .lg svg { width: 100%; height: 100%; display: block; }
@@ -1717,7 +1527,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .wl.st[data-step="pay"] .wl-qs { margin: 12px 0 16px; }
 .wl.st[data-step="pay"] .wl-in { align-items: start; padding-top: 104px; }
 
-/* 2: six glass boxes */
 .st-otp { display: flex; align-items: center; gap: 10px; }
 .st-otp input { width: 64px; height: 78px; padding: 0; border: 0; outline: 0; border-radius: 18px; text-align: center; font: 300 36px/1 var(--sans); color: #fff; caret-color: #fff;
   background: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .06)), rgba(var(--tint), .38); -webkit-backdrop-filter: blur(26px) saturate(130%); backdrop-filter: blur(26px) saturate(130%);
@@ -1735,7 +1544,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .st-link[disabled] { cursor: default; text-decoration: none; color: var(--wl-l3); }
 .st-links .dot { color: var(--wl-l3); }
 
-/* 3: plans */
 .st-per { position: relative; display: inline-flex; padding: 4px; margin: 0 0 14px; border-radius: 999px; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .st-per button { position: relative; z-index: 1; height: 36px; padding: 0 16px; border-radius: 999px; font: 500 13.5px/1 var(--sans); color: var(--wl-l2); transition: color .25s; }
 .st-per button[aria-checked="true"] { color: var(--vampire); }
@@ -1764,7 +1572,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .st-line { margin-top: 14px; max-width: 34em; font-size: 13.5px; line-height: 1.5; color: var(--wl-l2); text-shadow: 0 1px 14px rgba(5, 9, 10, .35); }
 .st-line b { color: #fff; font-weight: 500; }
 
-/* 4: the summary and the card, in our glass */
 .st-sum { display: grid; gap: 0; max-width: 460px; padding: 6px 18px; border-radius: 20px; background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .st-sum .r { display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 14px; color: var(--wl-l2); }
 .st-sum .r + .r { border-top: 1px solid rgba(255, 255, 255, .08); }
@@ -1784,7 +1591,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 .st-secure { display: flex; align-items: center; gap: 8px; }
 .st-secure svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; flex: none; }
 
-/* checkout consent: the renewal box (unticked; Pay waits for it) and the line under the button */
 .st-agree { margin-top: 12px; max-width: 460px; }
 .st-agree .tx small { margin-top: 2px; font-size: 13px; line-height: 1.5; color: rgba(245, 243, 238, .9); }
 .st-agree.bad .bx { animation: wl-shake .4s var(--ease); box-shadow: var(--v-rim), 0 0 0 1px rgba(255, 150, 110, .7), 0 0 22px -6px rgba(255, 140, 90, .6); }
@@ -1792,7 +1598,6 @@ html.pg-in .wl.open .wl-dock { animation: pg-dock 1.1s cubic-bezier(.2, .8, .2, 
 mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); color: #f6dca5; background: rgba(242, 213, 155, .14); }
 .wl.st .wl-go.off { filter: saturate(.4) brightness(.78); }
 
-/* the stage: who's signed in, and what the plan unlocks */
 .st-me { position: absolute; left: 12px; right: 12px; bottom: 14px; display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 16px; background: var(--v-g); box-shadow: var(--v-rim); transition: background-color .4s; }
 .wl-sb { position: relative; }
 .st-me .av { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; font: 600 13px/1 var(--sans); color: var(--vampire); background: linear-gradient(140deg, #f5f3ee, #bdbdb9); flex: none; }
@@ -1806,7 +1611,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-seats span i:nth-child(3) { background: linear-gradient(140deg, #c4c4c0, #3a3a3c); }
 .st-seats span i.more { display: grid; place-items: center; font: 600 9px/1 var(--sans); letter-spacing: 0; color: var(--vampire); background: var(--pearl); }
 
-/* the done screen: how to start, then Open Studio */
 .st-how { display: grid; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; max-width: 30em; }
 .st-how li { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; font-size: 14.5px; color: var(--wl-l2); background: rgba(var(--tint), .42); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .st-how b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font: 600 12px/1 var(--sans); color: var(--vampire); background: var(--pearl); flex: none; }
@@ -1820,9 +1624,7 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .wl.st.done.shown .wl-dl > .st-how { transition-delay: .32s; }
 .wl.st.done.shown .wl-dl > .st-acts { transition-delay: .42s; }
 
-/* phones */
 @media (max-width: 960px) {
-  /* phones: the app is there too, under the question, as on the waitlist (Evan: never cut it on phones) */
   .st-mode { height: 26px; padding: 0 9px; font-size: 9px; letter-spacing: .1em; }
   .st-plans { grid-template-columns: 1fr; gap: 8px; }
   .st-plan { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 10px; padding: 14px 16px; }
@@ -1846,7 +1648,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st .wl-toast { white-space: nowrap; max-width: calc(100vw - 32px); }
 
 
-/* ---------- selected = brighter glass, the inner rim and the border beam; never a solid white fill (Evan's rule) ---------- */
 .st-sb { position: absolute !important; inset: 0; z-index: 0; border-radius: inherit !important; pointer-events: none; opacity: 0; transition: opacity .35s var(--ease); --beam-strength: 1.15; }
 .st-sb::after, .st-sb::before, .st-sb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
 .st-way > :not(.st-sb), .st-plan > :not(.st-sb) { position: relative; z-index: 1; }
@@ -1865,7 +1666,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st .wl-sms .wl-cbx:checked + .bx { box-shadow: var(--v-rim-on); background: rgba(255, 255, 255, .18) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat; }
 .st-how b { color: #fff; background: rgba(255, 255, 255, .12); box-shadow: var(--v-rim); }
 
-/* a wrong code: the glass stays, an auburn beam runs round the boxes (the waitlist's error) */
 .st-otp { position: relative; }
 .st-otpb { position: absolute !important; inset: -7px -8px; z-index: 0; border-radius: 24px !important; pointer-events: none; opacity: 0; transition: opacity .3s; filter: hue-rotate(165deg) saturate(1.6) brightness(1.05); --beam-strength: 1.6; }
 .st-otpb::after, .st-otpb::before, .st-otpb [data-beam-bloom] { border-radius: inherit !important; clip-path: none !important; }
@@ -1873,7 +1673,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-otp > input, .st-otp > i { position: relative; z-index: 1; }
 .st-otp.bad input { box-shadow: var(--v-rim); }
 
-/* the pay step fits: headline and summary hold still, the card, the box and the line scroll inside on a short screen */
 .wl.st[data-step="pay"] .wl-qh { font-size: clamp(32px, 3vw, 48px); }
 .st-sum .r span b { color: #fff; font-weight: 500; }
 .st-sum .r:last-child { padding: 8px 0; line-height: 1.45; }
@@ -1886,11 +1685,9 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
   .st-pscroll::-webkit-scrollbar { display: none; }
 }
 
-/* the in-app paywall: the same plan and pay, opened from Studio when someone exports */
 .wl.st.paywall .st-how, .wl.st.paywall .st-dl { display: none; }
 
 
-/* working states: the button says what it's doing and spins; a slow network gets a calm line, not an error */
 .st .wl-next { position: relative; }
 .st .wl-next.busy .arw { opacity: 0; }
 .st .wl-next.busy::after, .st-way.busy::after { content: ""; position: absolute; top: 50%; width: 15px; height: 15px; margin-top: -7.5px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .22); border-top-color: #fff; animation: wl-spin .8s linear infinite; }
@@ -1902,13 +1699,11 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-hint { margin-top: 12px; max-width: 30em; font-size: 13.5px; line-height: 1.5; color: var(--wl-l2); }
 .st-hint:not([hidden]) { animation: wl-rise .5s var(--ease) both; }
 
-/* the paywall in Studio's iframe: a quiet "Look around first" beside the bar on the plan step */
 .st-look { height: 46px; padding: 0 18px; border-radius: 999px; font: 500 14px/1 var(--sans); color: var(--wl-l2); background: var(--vglass); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); align-self: center; }
 .st-look:hover { color: #fff; background: rgba(var(--tint), .62); }
-.st-look { flex: none; white-space: nowrap; }   /* one line, always (it wrapped to three beside the bar in Studio's window) */
+.st-look { flex: none; white-space: nowrap; }    
 .wl.st.embed [data-st-snd] { display: none; }
 
-/* the plan on Home: chips that wrap, never clipped */
 .wl.st .wl-chips { flex-wrap: wrap; row-gap: 8px; }
 .wl-chip.more { color: var(--wl-l2); }
 .wl-chip.seats .av { display: inline-flex; margin-right: 8px; }
@@ -1918,7 +1713,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .wl-chip.more { padding: 0 14px; }
 .wl-chip.seats { padding: 0 14px 0 10px; }
 
-/* ---------- a friends' code on the pay step: a text link, then one glass field and Apply, then a chip ---------- */
 .st-sum .st-promo { flex-wrap: wrap; padding: 4px 0; }
 .st-pfield { display: flex; align-items: center; gap: 8px; width: 100%; padding: 4px 0 6px; }
 .st-pfield[hidden], .st-pchip[hidden], .st-promo [hidden] { display: none; }
@@ -1937,13 +1731,11 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-pchip button:hover { background: rgba(255, 255, 255, .22); }
 .st-pchip svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
-/* ---------- the real Studio Home on the stage (kit.js SK.appHome): 1440 x 900, scaled by sizeStage ---------- */
 .st .wl-fit { width: 1440px; height: 900px; margin-top: -450px; }
 .st .st-app { inset: 0; display: block; }
 .st .st-ah { position: absolute; inset: 0; }
 .st .st-app .wl-menu { left: 12px; top: 104px; z-index: 5; }
 
-/* ---------- the plans, big, after the website's pricing table: the price large, Kayla's "Why Pro?", the table's rows ---------- */
 .st .wl-in { transition: grid-template-columns .7s var(--ease), --wl-o0 .5s var(--ease), transform .7s var(--ease); }
 .st[data-step="plan"] .wl-in { grid-template-columns: minmax(0, calc(880px * var(--uz, 1))) minmax(0, 1fr); }
 .st[data-step="plan"] .wl-stage { transform: translateX(60px); }
@@ -1966,43 +1758,34 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-feats { max-height: 186px; overflow-y: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent); mask-image: linear-gradient(180deg, #000 82%, transparent); }
 .st-feats::-webkit-scrollbar { display: none; }
 .st-plan li { font-size: 13px; }
-/* a chosen plan: the app's glass, brighter, with the beam (never flat pearl) */
 .st-plan.sel { color: #fff; background: linear-gradient(180deg, rgba(255, 255, 255, .2), rgba(255, 255, 255, .07)), rgba(var(--tint), .44); box-shadow: var(--v-rim-on), 0 18px 40px -20px rgba(0, 0, 0, .5); }
 .st-plan.sel .pr small, .st-plan.sel .bl, .st-plan.sel li { color: var(--wl-l2); }
 .st-plan.sel ul { border-top-color: rgba(255, 255, 255, .12); }
 .st-plan.sel::after { background: var(--pearl) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.4l2.6 2.6 5.4-6' fill='none' stroke='%2305090A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat; }
 .st-plan.sel .tag { color: var(--vampire); background: linear-gradient(120deg, #f5f3ee, #c9c9c5); }
-/* big screens (5K and up): the words, the bar and You're in grow with the screen; the app is already scaled by the stage */
-@media (min-width: 961px) {   /* desktop only: on phones these beat the one-column rules and squeezed You're in into a sliver */
+@media (min-width: 961px) {    
   .st .wl-in { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
   .st .wl-left, .st .wl-top, .st .wl-dock, .st .wl-done .wl-dl { zoom: var(--uz, 1); }
   .st .wl-dwrap { grid-template-columns: minmax(0, calc(560px * var(--uz, 1))) minmax(0, 1fr); }
   .st .wl-dstage .pass { --w: min(calc(640px * var(--uz, 1)), 44vw); }
 }
 @media (max-width: 960px) { .st[data-step="plan"] .wl-in { grid-template-columns: none; } .st[data-step="plan"] .wl-stage { transform: none; } .st-feats { max-height: none; } }
-.st[data-step="plan"] [data-st-line] { display: none; }   /* desktop: the heading and the cards already say it */
+.st[data-step="plan"] [data-st-line] { display: none; }    
 @media (max-height: 940px) and (min-width: 961px) { .st-feats { max-height: 118px; } .st-plan .pr { font-size: 46px; } .st[data-step="plan"] .wl-qh { font-size: clamp(38px, 3.6vw, 56px); } }
 @media (max-width: 960px) { .st[data-step="plan"] [data-st-line] { display: block; } }
 
-/* ---------- Kayla beside the bar (as in early access): her face, play, her voice; no captions; none on phones ---------- */
 .st .wl-kt { display: none !important; }
 .st .wl-dock { display: flex; align-items: center; gap: 12px; }
-/* phones: Kayla stays (the waitlist's compact pill above the bar) */
 
 .st-name { margin: 0 0 12px; max-width: 460px; }
-/* checkout: the pass large and whole, in the part of the stage you can see */
 .st .wl-sc[data-sc="pass"] .p3 { position: absolute; left: 0; top: 0; bottom: 0; right: auto; width: 920px; }
 .st .wl-sc[data-sc="pass"] .pass { --w: 640px; }
 
 @media (max-width: 960px) { .st-plan > * { min-width: 0; } .st-why { max-width: 100%; } .st-why .wv { width: 56px; } }
-/* phones: the app sits at the top left of its box, as on the waitlist (the desktop centring above pushed it out of view) */
 @media (max-width: 960px) { .st .wl-fit { top: 0; margin-top: 0; transform-origin: 0 0; } }
-/* phones: "Look around first" under the plans, a full-width quiet glass button */
 .st-look.inline { display: flex; align-items: center; justify-content: center; width: 100%; margin: 14px 0 4px; }
 .st-look.inline[hidden] { display: none; }
 
-/* ---------- v3: the finish. A big glass Download button (the file comes down on the page, a live bar), the steps after it; on a
-   phone, the Mac link by email and a Copy link ---------- */
 .st-get { margin: 26px 0 8px; max-width: 460px; }
 .st-getb { display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; height: 64px; padding: 0 28px; border-radius: 999px; font: 500 18px/1 var(--sans); color: #fff; }
 .st-getb .apple { width: 20px; height: 20px; fill: currentColor; margin-top: -3px; }
@@ -2015,7 +1798,6 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-done-get .st-how, .st-done-get .st-acts { display: none; }
 .st-done-get.got .st-how, .st-done-get.got .st-acts { display: grid; animation: wl-pop .6s var(--ease) both; }
 .st-done-get.got .st-acts { display: flex; }
-/* where it went: the folder in words, where this browser shows downloads, Show me (and its shortcut); then a way to try again */
 .st-where { display: none; align-items: center; gap: 14px; margin-top: 16px; padding: 12px 12px 12px 14px; border-radius: 20px; background: rgba(var(--tint), .46); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim); }
 .st-done-get.got .st-where { display: flex; animation: wl-pop .6s var(--ease) both; }
 .st-wi { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, .1); box-shadow: var(--v-rim); }
@@ -2030,10 +1812,9 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 .st-retry a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .4); text-underline-offset: 3px; }
 .st-fin { display: inline-flex; align-items: center; gap: 5px; color: #fff; white-space: nowrap; }
 .st-fin .st-finder { width: 15px; height: 15px; margin-bottom: -1px; }
-/* the pointer: a glass tag with an arrow at the browser's downloads button, a soft ring pulsing behind it, for a few seconds */
 .st-ptr { position: fixed; z-index: 80; top: 12px; right: 22px; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; pointer-events: none; opacity: 0; transform: translateY(10px); transition: opacity .45s var(--ease), transform .55s var(--ease); }
 .st-ptr.on { opacity: 1; transform: none; }
-.st-ptr:not(.arc) .st-ptx { margin-top: 26px; }   /* the tag sits under the page's own Restart, sound and close; the arrow stays at the edge */
+.st-ptr:not(.arc) .st-ptx { margin-top: 26px; }    
 .st-parw { width: 26px; height: 26px; margin-right: 10px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 2px 8px rgba(0, 0, 0, .45)); animation: st-nudge 1.1s ease-in-out infinite; }
 .st-pring { position: absolute; top: -18px; right: -6px; width: 58px; height: 58px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255, 255, 255, .7); animation: st-ring 1.6s ease-out infinite; }
 .st-ptx { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 16px; font: 500 14px/1 var(--sans); color: #fff; background: rgba(var(--tint), .72); -webkit-backdrop-filter: var(--vblur); backdrop-filter: var(--vblur); box-shadow: var(--v-rim), 0 18px 40px -18px rgba(0, 0, 0, .7); }
@@ -2047,8 +1828,8 @@ mark.ph { padding: 1px 5px; border-radius: 5px; font: 500 11px/1.4 var(--mono); 
 @media (max-width: 520px) { .st-where { flex-wrap: wrap; } .st-show { margin-left: 54px; } }
 .st-mac { margin: 22px 0 6px; max-width: 460px; }
 .st-macp { margin: 0 0 14px; font-size: 16px; line-height: 1.5; color: var(--wl-l2); }
-.wl.st .st-copy {   /* scoped: 040 (the statement) has its own .st-copy, and this one squeezed its words to 48px on the home page */  display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
+.wl.st .st-copy {      display: inline-flex; align-items: center; gap: 9px; height: 48px; padding: 0 20px; border-radius: 999px; font: 500 15px/1 var(--sans); color: #fff; }
 .wl.st .st-copy svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; }
 .st-done-mac .st-how, .st-done-mac .st-acts { display: none; }
-.st-done-mac .wl-fine { display: none; }   /* the Mac line above already says it */
-.st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }   /* five chips: Something else takes the last row */
+.st-done-mac .wl-fine { display: none; }    
+.st .wl-q[data-q="make"] .wl-opt:last-child { grid-column: 1 / -1; }    

@@ -2,14 +2,8 @@ window.SK_MEDIA = {"generated":"2026-11-17","note":"All paths are relative to th
 
 window.SK_WAITLIST = {"api":"https://studio-waitlist.studio-licence.workers.dev","brevo_form":"","webhook":"","count_offset":1224,"signup_open":false};
 
-window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""}};
+window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79","bar":"0.80%","range":"$79 to $239","allin":"$99","founders":"$239","creator.per":"$79","creator.was":"$99","creator.bill":"Billed $948 yearly","creator.save":"Save $240","creator.url":"","pro.per":"$159","pro.was":"$199","pro.bill":"Billed $1,908 yearly","pro.save":"Save $480","pro.url":"","unlimited.per":"$239","unlimited.was":"$299","unlimited.bill":"Billed $2,868 yearly","unlimited.save":"Save $720","unlimited.url":""},"month":{"from":"$99","bar":"0.80%","range":"$99 to $299","allin":"$119","founders":"$299","creator.per":"$99","creator.was":"","creator.bill":"Billed monthly · Cancel anytime","creator.save":"","creator.url":"","pro.per":"$199","pro.was":"","pro.bill":"Billed monthly · Cancel anytime","pro.save":"","pro.url":"","unlimited.per":"$299","unlimited.was":"","unlimited.bill":"Billed monthly · Cancel anytime","unlimited.save":"","unlimited.url":""},"copy":{"trial":{"title":"Your trial ended.","line":"Keep your Studio.","sub":"Everything you made is still here. Pick a plan and carry on where you left off.","dismiss":"Not now"}},"trial_fee":0,"trial_days":14,"plans":[{"id":"creator","name":"Creator","note":"One brand.","best":null,"tag":null,"brands":1,"seats":1,"macs":1},{"id":"pro","name":"Pro","note":"Three brands.","best":true,"tag":"Most popular","brands":3,"seats":3,"macs":2},{"id":"unlimited","name":"Unlimited","note":"Every brand you run.","best":null,"tag":null,"brands":null,"seats":10,"macs":2}],"rows":[{"label":"Brands","values":{"creator":"1 brand","pro":"3 brands","unlimited":"Every brand you run"}},{"label":"Run any edit as a Meta ad from Studio","values":{"creator":false,"pro":true,"unlimited":true}},{"label":"One calendar across your brands","values":{"creator":false,"pro":true,"unlimited":true}},{"label":"Full edits with takes and reviews","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"The AI library and Selects","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"Claude, Higgsfield and ElevenLabs built in","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"Viral Lab","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"Social calendar: schedule and post","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"Comment to DM","values":{"creator":true,"pro":true,"unlimited":true}},{"label":"Updates install by themselves","values":{"creator":true,"pro":true,"unlimited":true}}]};
 
-/* The site's one click sound (window.SKClick): the pass flip's own take (assets/sfx/app/ask-open.mp3), on every button, link and
-   [role=button] the main page and the legal pages have. One tiny Web Audio player: fetched and decoded a beat after the page has loaded, the
-   context is made and resumed inside that press, presses closer than 70 ms apart play once, nothing plays with reduced motion or
-   with the speaker off on the sign-ups (localStorage studio-wl-sound), and a blocked or missing audio stack is simply silent.
-   The sign-ups (900-early, 910-start) play the same file through their own mixer; SKClick.own is true there (window.SK_PAGE), so it never doubles.
-   build.py puts this file before kit.js on every page; legal.py puts it before legal.js. */
 (function () {
   "use strict";
   if (window.SKClick) return;
@@ -17,7 +11,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = null, loading = false, last = 0;
   var reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function off() { try { return localStorage.getItem("studio-wl-sound") === "off"; } catch (e) { return false; } }
-  /* decoded off to the side (an OfflineAudioContext needs no gesture and logs no autoplay warning), once the page has settled */
   function load() {
     if (loading || reduced || !AC || SKClick.own) return; loading = true;
     var OC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
@@ -40,8 +33,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     try { var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = buf; g.gain.value = gain || GAIN; s.connect(g); g.connect(ctx.destination); s.start(); } catch (e) {}
   }
   var HIT = "button, a[href], [role=button], summary, input[type=checkbox], input[type=radio], input[type=submit], input[type=button]";
-  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };   /* a sign-up page (SK_PAGE) clicks through its own mixer */
-  /* the first press only warms it up (fetch + decode take a beat); every press after that clicks */
+  var SKClick = window.SKClick = { play: play, wake: wake, own: !!window.SK_PAGE };    
   document.addEventListener("pointerdown", function (e) {
     if (SKClick.own) return;
     var t = e.target && e.target.closest && e.target.closest(HIT);
@@ -52,23 +44,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
 })();
 
 
-/* Studio site kit: window.SK. Shared behaviour every section builds on.
-   SK.beam(el, opts)            live border beam on any element (the app's beam engine)
-   SK.orb(canvas, opts)         the thinking orb; returns { set(state) }
-   SK.promptField(host, opts)   the app's AI input field, live: orb, typing, send, processing
-   SK.chat(host, script, opts)  plays a short chat between "you" and Claude
-   SK.type(el, text, opts)      human-speed typing into any element
-   SK.onView(el, enter, leave)  run when a thing enters / leaves the viewport
-   SK.film(slugOrObj)           opens a film with sound in the modal
-   SK.sleep(ms), SK.reduced, SK.mobile(), SK.media (the media manifest)
-   Markup hooks handled for you:
-     <video data-play data-src="…" [data-src-m="…"] poster="…" muted playsinline loop>   loads near the viewport, plays only in view
-     [data-reveal] (+ style="--i:2")                                                    fades up once in view
-     [data-beam-auto="md|sm|line"] [data-beam-boost="1.8"] [data-beam-radius="999"]      gets a beam
-     [data-gx] (+ data-gx="hot" / "paper")                                               the glass button with the composer's border beam (SK.gx)
-     [data-download]                                                                    scrolls to pricing and focuses the invite code (phones: Send to my Mac)
-     [data-vo-play="kayla-pricing"]                                                     on click, plays that section's Kayla clip from the top
-     [data-film="slug"]                                                                 opens that film from the manifest on click */
 (function () {
   "use strict";
   var SK = (window.SK = window.SK || {});
@@ -76,16 +51,11 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   SK.media = window.SK_MEDIA || {};
   SK.reduced = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   SK.mobile = function () { return matchMedia("(max-width: 700px)").matches; };
-  SK.lite = !!window.SK_LITE; SK.inApp = !!window.SK_INAPP;   /* the lite tier (shell.html, page.html): same look, less work */
+  SK.lite = !!window.SK_LITE; SK.inApp = !!window.SK_INAPP;    
   SK.sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
   SK.CLAUDE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg>';
   SK.APPLE = '<svg class="apple" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>';
 
-  /* ---------- in-view ----------
-     One IntersectionObserver per (margin, thresholds), shared by every element that asks with them: there are a few hundred of these
-     calls on the home page, and one observer each made the browser check every one of them on every frame that anything moved (in a
-     slow phone's in-app browser, about 4% of the main thread). An element can be watched more than once (a video: load near, play in
-     view); each watch keeps its own in/out state, and a new watch on an element already watched gets its first report like before. */
   var viewPools = {};
   SK.onView = function (el, enter, leave, opts) {
     opts = opts || {};
@@ -109,13 +79,12 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var rec = { enter: enter, leave: leave, ratio: opts.ratio || 0, once: !!opts.once, inside: false };
     rec.off = function () { var l = pool.subs.get(el); if (!l) return; var i = l.indexOf(rec); if (i >= 0) l.splice(i, 1); if (!l.length) { pool.subs.delete(el); pool.io.unobserve(el); } };
     var list = pool.subs.get(el);
-    if (list) { list.push(rec); pool.io.unobserve(el); }   /* observed again, it is reported again: the new watch hears where it is */
+    if (list) { list.push(rec); pool.io.unobserve(el); }    
     else pool.subs.set(el, [rec]);
     pool.io.observe(el);
     return { disconnect: rec.off };
   };
 
-  /* ---------- border beam ---------- */
   var beamN = 0;
   SK.beam = function (el, o) {
     if (!el || !BS) return el;
@@ -140,7 +109,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return el;
   };
 
-  /* ---------- .gx: the glass button with the composer's border beam (base.css). The beam runs only while the button is on screen. ---------- */
   SK.gx = function (el, o) {
     if (!el) return el;
     o = o || {};
@@ -155,7 +123,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return el;
   };
 
-  /* ---------- thinking orb ---------- */
   var orbs = [], orbRAF = 0;
   function orbTick(now) {
     orbRAF = 0;
@@ -182,7 +149,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return { set: function (s) { rec.state = s; if (SK.reduced && !orbRAF) orbRAF = requestAnimationFrame(orbTick); } };
   };
 
-  /* ---------- typing ---------- */
   SK.type = function (el, text, o) {
     o = o || {};
     var token = (el._skType = (el._skType || 0) + 1), i = o.append ? 0 : 0, base = o.append ? el.textContent : "";
@@ -215,9 +181,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
   };
 
-  /* ---------- the prompt field ----------
-     host: an empty element. opts: { placeholder, scale (1 = the kit's 54px field; default 1.3) or height (px), prompts: [..], loop, hold (ms), beam: {..}|false, onSend(text, ctl, i), auto: true }
-     ctl: { el, state(s), set(text), type(text), clear(), send(), run(), stop() }  states: idle | focus | processing */
   SK.promptField = function (host, o) {
     o = Object.assign({ placeholder: "What should we make?", scale: 1.3, prompts: [], loop: true, hold: 1500, auto: true }, o || {});
     if (o.height) o.scale = o.height / 54;
@@ -273,7 +236,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         return ctl;
       },
       stop: function () { runId++; alive = false; host.removeAttribute("data-typing"); return ctl; },
-      /* types each prompt, taps send, calls onSend (may return a promise), then moves on */
       run: async function () {
         if (alive || !o.prompts.length) return;
         alive = true;
@@ -301,8 +263,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return ctl;
   };
 
-  /* ---------- chat ----------
-     script: [{ who: "you" | "claude", text, html, wait (ms before), think (ms of dots) }]   opts: { loop, gap, onStep(i, el) } */
   SK.chat = function (host, script, o) {
     o = o || {};
     host.classList.add("chat");
@@ -335,28 +295,23 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return { replay: play };
   };
 
-  /* ---------- videos: load near the viewport, play only in view ---------- */
   function armVideo(v) {
     if (v._sk) return;
     v._sk = true;
     v.muted = true; v.playsInline = true;
     v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
     if (!v.hasAttribute("preload")) v.preload = "none";
-    /* a phone plays the -m clip (portrait): its poster is that clip's first frame (-m.jpg beside it), so the frame is there before the
-       clip buffers and the hand-over is seamless; the wide poster showed the wrong part of the scene */
     var m = SK.mobile() && v.getAttribute("data-src-m");
     if (m && v.hasAttribute("poster")) v.poster = m.replace(/\.mp4$/, ".jpg");
     SK.onView(v, function () {
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
     }, null, { margin: "500px 0px", once: true });
     SK.onView(v, function () {
-      if (SK.reduced || SK.hushed) return;   /* the early-access sheet is over the page: nothing behind it plays */
+      if (SK.reduced || SK.hushed) return;    
       if (!v.src && !v.currentSrc) { var s = (SK.mobile() && v.getAttribute("data-src-m")) || v.getAttribute("data-src"); if (s) v.src = s; }
       vPlay(v);
     }, function () { vStop(v); }, { ratio: 0.2, threshold: [0, 0.2, 0.6] });
   }
-  /* lite tier: at most 3 play at once (the shoot section's row of six clip thumbnails is the only place more are on screen); the ones
-     in view first play, the others hold their frame and start as a playing one leaves */
   var vLive = [], vWait = [], V_MAX = 3;
   function vPlay(v) {
     if (SK.lite && vLive.indexOf(v) < 0) { if (vLive.length >= V_MAX) { if (vWait.indexOf(v) < 0) vWait.push(v); return; } vLive.push(v); }
@@ -370,8 +325,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     if (vWait.length && !SK.hushed) vPlay(vWait.shift());
   }
   SK.videos = function (root) { (root || document).querySelectorAll("video[data-play]").forEach(armVideo); };
-  /* SK.hush(true) while a full-screen sheet covers the page: every video behind it pauses and none starts; SK.hush(false) plays the
-     ones that were playing again, if they are still on screen. (900-early: phones ran warm with the page playing behind it.) */
   var hushedVids = [];
   SK.hushed = false;
   SK.hush = function (on) {
@@ -383,10 +336,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     }
   };
 
-  /* ---------- the real Studio Home, drawn at the app's own size (1440 x 900) for the sign-ups' stage (900-early, 910-start).
-     Taken from the app (Studio_App web/vista home.js, home.css, shell.css): the full nav with its counts, the greeting, Ask Studio
-     (Studio x Claude, mic, send), the brand chips, Set up your Studio, To review, Post next, Crushing it and Going out. Real stills
-     from the selects. SK.appHome(host, { name, brand }) -> { name(n), brands(list), typeAsk(text) }. CSS: .ah in 900-early. ---------- */
   SK.appHome = function (host, o) {
     o = o || {};
     var M = "assets/media/selects/", esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
@@ -408,14 +357,14 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var ni = function (k, t, n, on) { return '<p class="ah-ni' + (on ? " on" : "") + '">' + sv(k) + "<span>" + t + "</span>" + (n != null ? "<em>" + n + "</em>" : "") + "</p>"; };
     var MARK = '<svg class="ah-mk" viewBox="36 36 440 440" aria-hidden="true"><use href="#studio-mark"/></svg>';
     var CLA = '<svg class="ah-cl" aria-hidden="true"><use href="#claude"/></svg>';
-    var BEAM = '<span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>';   /* the composer's border beam */
+    var BEAM = '<span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>';    
     var IG = '<i class="ah-p ig"></i>', TT = '<i class="ah-p tt"></i>', YT = '<i class="ah-p yt"></i>', LI = '<i class="ah-p li"></i>';
     var now = new Date(), DAYS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
     var hour = now.getHours(), greet = hour < 5 ? "Good evening" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
     var date = now.toLocaleDateString("en-US", { weekday: "long" }) + " · " + now.toLocaleDateString("en-US", { month: "long", day: "numeric" });
     var rv = [["dinner-toast", "Review v02"], ["coffee-friend-arrives", "Review v04"], ["cofounder-whiteboard", "Review v03"], ["surfing", "Review v01"]];
     var pk = ["run-club", "coastal-highway", "investor-intro", "tennis-forehand", "yacht", "golf", "house-party", "beach-volleyball"];
-    var cr = [["court-dap", "202× avg", "1,210 views", YT + IG], ["get-together", "142× avg", "75,755 views", IG + TT], ["mountain-biking", "33× avg", "17,530 views", IG]];
+    var cr = [["court-dap", "48× avg", "12,400 views", YT + IG], ["get-together", "31× avg", "8,900 views", IG + TT], ["mountain-biking", "12× avg", "3,150 views", IG]];    
     var cal = "", sched = { 2: "private-jet", 5: "real-connections", 9: "race-track" };
     for (var d = 0; d < 14; d++) {
       var dt = new Date(now.getTime() + d * 864e5), s = sched[d];
@@ -428,9 +377,9 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         '<p class="ah-sbh">' + MARK + "<span>Studio</span>" + sv("pin") + "</p>" +
         '<p class="ah-allb">' + sv("grid") + '<span data-ah-allb>All brands</span>' + sv("car") + "</p>" +
         ni("home", "Home", null, true) +
-        '<p class="ah-ng">Create</p>' + ni("aes", "Aesthetic", 482) + ni("edits", "Full edits", 180) + ni("con", "Concepts", 79) + ni("lib", "AI Library", 460) +
-        '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 18) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 23) + ni("cre", "Creators", 441) +
-        '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 46) + ni("ui", "App UI", 35) + ni("ref", "References", 20) + ni("mus", "Music", 345) +
+        '<p class="ah-ng">Create</p>' + ni("aes", "Aesthetic", 128) + ni("edits", "Full edits", 36) + ni("con", "Concepts", 24) + ni("lib", "AI Library", 210) +
+        '<p class="ah-ng">Grow</p>' + ni("soc", "Social", 12) + ni("ads", "Ads", "0 live") + ni("lab", "Viral Lab", 9) + ni("cre", "Creators", 64) +
+        '<p class="ah-ng">Library</p>' + ni("kit", "Brand kit", 18) + ni("ui", "App UI", 12) + ni("ref", "References", 15) + ni("mus", "Music", 90) +
         '<div class="ah-sbf">' + ni("plus", "Build a tab") +
         '<p class="ah-ask"><span class="ah-cb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + "</span><span>Ask Studio…</span>" + sv("mic") + '<b>2</b></p>' +
         ni("plug", "Integrations") + ni("set", "Settings") + "</div>" +
@@ -442,9 +391,9 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
           '<div class="ah-chips" data-ah-chips></div></div>' +
         '<div class="ah-band">' +
           '<div class="ah-wk" data-ah-wk hidden><b>Working now</b><span class="ah-wn">1</span><span class="ah-card"><i class="ah-spin"></i>' + MARK + '<span data-ah-wkt>Studio · Launch film</span><em data-ah-wks>Cutting 3 clips…</em></span><span class="ah-fl"></span><b class="ah-pill">All chats</b></div>' +
-          '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">11 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
+          '<div class="ah-setup"><b>Set up your Studio</b><span class="ah-wn">9 of 12</span><i class="ah-bar"><i></i></i><span class="ah-fl"></span><span class="ah-nx">Next: Bring in your business folder</span><b class="ah-pill">Show' + sv("car") + "</b></div>" +
           '<div class="ah-row">' +
-            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>20</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
+            '<section class="ah-w"><header class="ah-wh"><b>To review</b><span class="ah-wn" data-ah-rvn>6</span><span class="ah-fl"></span><b class="ah-pill">' + sv("chk") + 'Mark all read</b><span class="ah-arr">' + sv("l") + sv("r") + '</span></header><div class="ah-strip" data-ah-rv>' +
               rv.map(function (x) { return '<span class="ah-vt"><img src="' + M + x[0] + '.jpg" alt=""><span class="ah-st"><i class="ah-dot"></i>' + x[1] + "</span></span>"; }).join("") + "</div></section>" +
             '<section class="ah-w"><header class="ah-wh"><b>Post next</b><span class="ah-ws">Studio\'s picks</span><span class="ah-fl"></span><b class="ah-pill">See all</b></header><div class="ah-strip" data-ah-pk>' +
               pk.map(function (x) { return '<span class="ah-vt"><img src="' + M + x + '.jpg" alt=""><span class="ah-bl">' + MARK + "</span></span>"; }).join("") + "</div></section>" +
@@ -453,27 +402,21 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
           "</div>" +
           '<section class="ah-calw"><header class="ah-wh"><b>Going out</b><span class="ah-ws">Next 14 days</span><span class="ah-wn">3 going out · 11 empty days</span><span class="ah-fl"></span><b class="ah-pill">' + sv("cal") + 'Calendar</b></header><div class="ah-days">' + cal + "</div></section>" +
         "</div>" +
-        /* the full editor: the preview, and the timeline filling as Studio cuts (SK.appStory) */
         '<div class="ah-ed" aria-hidden="true"><div class="ah-edh">' + sv("l") + '<span class="ah-edt"><b>Launch commercial</b><em data-ed-v>v01 · Cutting…</em></span><span class="ah-fl"></span><span class="ah-edb">16:9</span><span class="ah-edb">0:30</span><b class="ah-pill on">Export</b></div>' +
           '<div class="ah-pv"><img alt="" data-ed-pv><p class="ah-cap" data-ed-cap></p><span class="ah-pvl">' + MARK + 'Studio</span><span class="ah-pvt" data-ed-t>0:00</span></div>' +
           '<div class="ah-tln"><p class="ah-trk"><em>Video</em><span data-ed-trk="v"></span></p><p class="ah-trk"><em>Captions</em><span data-ed-trk="c"></span></p><p class="ah-trk"><em>Music</em><span data-ed-trk="m"></span></p><p class="ah-trk"><em>Brand</em><span data-ed-trk="b"></span></p><i class="ah-ph" data-ed-ph></i></div>' +
         "</div>" +
       "</div>" +
-      /* Ask Studio, the chat that slides in from the right */
       '<aside class="ah-ap" data-frost aria-hidden="true"><header class="ah-aph"><span class="ah-lk">' + MARK + "<em>×</em>" + CLA + '</span><b>Ask Studio</b><span class="ah-fl"></span><b class="ah-pill">New chat</b></header><div class="ah-msgs" data-ap-m></div>' +
         '<div class="ah-apc">' + BEAM + '<span>Reply to Studio…</span><span class="ah-fl"></span><b class="ah-mic">' + sv("mic") + '</b><b class="ah-send">' + sv("up") + "</b></div></aside>" +
-      /* the footage you drag in */
       '<div class="ah-drag" aria-hidden="true"><span class="ah-dst" data-ah-dst></span><svg class="ah-cur" viewBox="0 0 24 24"><path d="M5 3l14 8.2-6.3 1.4L9.6 19z"/></svg></div>' +
       "</div>";
-    /* the composer's beam runs like the app's whenever the composer is on screen (SK.onView: off screen it stops, so a phone pays for it
-       only while it is seen); Ask Studio's only while its panel is open (each moving beam costs a style pass a frame) */
     var cbs = host.querySelectorAll(".ah-cb"); for (var ci = 0; ci < cbs.length; ci++) cbs[ci].setAttribute("data-paused", "");
     var beamRun = function (sel, on) { var b = host.querySelector(sel); if (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); } };
     SK.onView(host.querySelector(".ah-comp"), function () { beamRun(".ah-comp > .ah-cb", true); }, function () { beamRun(".ah-comp > .ah-cb", false); }, { margin: "60px" });
     var hello = host.querySelector("[data-ah-hello]"), chips = host.querySelector("[data-ah-chips]"), ask = host.querySelector("[data-ah-ask]"), pkEl = host.querySelector("[data-ah-pk]"), pkWs = pkEl.parentNode.querySelector(".ah-ws");
     var ctl = {
-      name: function (n, typing) { var h = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); if (hello._h !== h) { hello._h = h; hello.innerHTML = h; } },   /* unchanged: left alone (a step change redrew it, and replayed its chips, every time) */
-      /* Post next, made for who you are: [{ img, kicker, title, fresh }] lead the strip, labelled; label replaces "Studio's picks" */
+      name: function (n, typing) { var h = esc(greet) + (n ? ", " + esc(n) : "") + (typing ? '<i class="ah-caret"></i>' : ""); if (hello._h !== h) { hello._h = h; hello.innerHTML = h; } },    
       picks: function (items, label) {
         pkWs.textContent = label || "Studio's picks";
         var tiles = (items || []).map(function (x, i) { return '<span class="ah-vt ah-mf' + (x.fresh ? " wl-in-a" : "") + '" style="--i:' + i + '"><img src="' + esc(x.img) + '" alt=""><span class="ah-bl">' + MARK + '</span><span class="ah-mfl"><em>' + esc(x.kicker) + "</em><b>" + esc(x.title) + "</b></span></span>"; });
@@ -492,15 +435,14 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         var rv = host.querySelector("[data-ah-rv]"), old = rv.querySelector(".ah-new"); if (old) old.remove();
         if (!item) return;
         var t = document.createElement("span"); t.className = "ah-vt ah-new"; t.innerHTML = '<img src="' + esc(item.img) + '" alt=""><span class="ah-st"><i class="ah-dot"></i>Review v01</span><span class="ah-mfl"><em>' + esc(item.kicker) + "</em><b>" + esc(item.title) + "</b></span>";
-        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "21";
+        rv.insertBefore(t, rv.firstChild); host.querySelector("[data-ah-rvn]").textContent = "7";
       }
     };
     ctl.name(o.name || "");
-    /* ---- the story pieces (SK.appStory): footage dragged in, the editor, the Ask Studio panel ---- */
     var root = host.querySelector(".ah"), comp = host.querySelector(".ah-comp"), drag = host.querySelector(".ah-drag"), msgs = host.querySelector("[data-ap-m]");
     var ed = host.querySelector(".ah-ed"), trk = function (k) { return host.querySelector('[data-ed-trk="' + k + '"]'); };
     var at = function (el) { var x = 0, y = 0; while (el && el !== root) { x += el.offsetLeft; y += el.offsetTop; el = el.offsetParent; } return { x: x, y: y }; };
-    ctl.drag = function (imgs) {   /* the clips fly in from off the bottom right, on the pointer, and drop into the composer */
+    ctl.drag = function (imgs) {    
       host.querySelector("[data-ah-dst]").innerHTML = imgs.map(function (u, i) { return '<img src="' + esc(u) + '" alt="" style="--i:' + i + '">'; }).join("");
       var c = at(comp), tx = c.x + comp.offsetWidth * .42, ty = c.y + 18;
       drag.style.transition = "none"; drag.style.transform = "translate(1500px, 960px)"; drag.className = "ah-drag on"; void drag.offsetWidth;
@@ -508,7 +450,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       setTimeout(function () { comp.classList.add("over"); }, 700);
       return SK.sleep(SK.reduced ? 0 : 1300).then(function () { drag.classList.add("drop"); comp.classList.remove("over"); ctl.attach(imgs); return SK.sleep(SK.reduced ? 0 : 380); }).then(function () { drag.className = "ah-drag"; });
     };
-    /* the app runs off the right edge of the screen: the editor and Ask Studio keep to the part you can see (--cut, app pixels) */
     var fitCut = function () { var r = root.getBoundingClientRect(), k = r.width / 1440 || 1, vis = (window.innerWidth - r.left) / k; root.style.setProperty("--cut", Math.max(0, Math.round(1440 - vis + 28)) + "px"); };
     ctl.editor = function (on) { if (on) fitCut(); root.classList.toggle("editing", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) { ["v", "c", "m", "b"].forEach(function (k) { trk(k).innerHTML = ""; }); host.querySelector("[data-ed-cap]").textContent = ""; host.querySelector("[data-ed-v]").textContent = "v01 · Cutting…"; root.classList.remove("ed-play"); } };
     ctl.clip = function (u, i) { trk("v").insertAdjacentHTML("beforeend", '<i class="ah-tc wl-in-a" style="--i:0;flex:' + (i === 1 ? 1.5 : 1) + '"><img src="' + esc(u) + '" alt=""></i>'); host.querySelector("[data-ed-pv]").src = u; };
@@ -519,7 +460,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     ctl.caption = function (t) { host.querySelector("[data-ed-cap]").textContent = t; };
     ctl.play = function (on) { root.classList.toggle("ed-play", !!on); if (on) host.querySelector("[data-ed-v]").textContent = "v01 · Ready to review"; };
     ctl.panel = function (on) { if (on) fitCut(); root.classList.toggle("asking", !!on); beamRun(".ah-apc > .ah-cb", !!on); beamRun(".ah-ask > .ah-cb", !!on); if (SK.frost) SK.frost.nudge(1000); if (!on) setTimeout(function () { if (!root.classList.contains("asking")) msgs.innerHTML = ""; }, 600); };
-    ctl.msg = function (who, html, imgs) {   /* who: "you" | "studio" | "step" (a line that turns from a spinner to a tick) */
+    ctl.msg = function (who, html, imgs) {    
       var m = document.createElement("div"); m.className = "ah-m " + who + " wl-in-a";
       m.innerHTML = who === "studio" ? '<span class="ah-av">' + MARK + "</span><p>" + html + "</p>" : who === "step" ? '<i class="ah-spin"></i><span>' + html + "</span>" :
         (imgs && imgs.length ? '<span class="ah-mi">' + imgs.map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join("") + "</span>" : "") + "<p>" + html + "</p>";
@@ -530,13 +471,9 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   };
 
 
-  /* the three brands every Studio on the site shows: Studio, MIRRA, Custom Esignature (their own logos, assets/brands/) */
-  SK.BRANDS = [{ n: "Studio", img: "assets/brands/studio.svg" }, { n: "MIRRA", img: "assets/brands/mirra.png" }, { n: "Custom Esignature", img: "assets/brands/ces.png" }];
+  SK.BRANDS = [{ n: "Northwind", m: "N", bg: "linear-gradient(140deg, #6E8FD8, #1D2F63)", ink: "#F5F3EE" }, { n: "Lowtide Coffee", m: "L", bg: "linear-gradient(140deg, #D9A86C, #6B3F1D)", ink: "#FFF7EC" },
+               { n: "Fieldnote", m: "F", bg: "linear-gradient(140deg, #BED2C3, #2F5D50)", ink: "#05090A" }];
 
-  /* SK.appStory(ctl, o): the Home at work, on a loop. Your footage is dragged into the composer, the request types itself and goes,
-     Ask Studio opens on the right and answers while the full editor cuts it (clips land on the timeline, music, captions, the brand),
-     the film plays, then it lands at the front of To review and it all starts again. o.sfx(name) for the app's own sounds, o.prompts
-     (the requests it cycles), o.clips (sets of three images). Returns { stop() }. Reduced motion: nothing moves. */
   SK.appStory = function (ctl, o) {
     o = o || {}; var tok = { on: true }, sfx = o.sfx || function () {}, M = "assets/media/selects/";
     var prompts = o.prompts || ["Create a new launch commercial for my company", "Cut a 15-second ad from my newest clips", "Make this week's reel for every channel"];
@@ -577,41 +514,33 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return { stop: function () { tok.on = false; ctl.editor(false); ctl.panel(false); } };
   };
 
-  /* ---------- the edges (iPhone): the page runs under the status bar and the home indicator (viewport-fit=cover, no theme-color).
-     What shows when you pull past the top or bottom (and what Safari tints its bars from) is the root's background, so it is kept
-     the colour of the page at that edge: the hero's sky near the top, the page's ink further down. On the waitlist and the
-     sign-up it is the colour of the top of the current wallpaper (SK.edgeTint, sampled from the image itself). ---------- */
   var tints = {};
   SK.edgeTint = function (src) {
     if (!src) return;
     var put = function (col) { document.documentElement.style.backgroundColor = col; document.documentElement.style.setProperty("--edge", col); };
-    if (tints[src]) { put(tints[src]); return; }   /* each wallpaper is read once: drawing it to a canvas cost a phone a frame or two mid-transition */
+    if (tints[src]) { put(tints[src]); return; }    
     var im = new Image(); im.onload = function () { setTimeout(function () {
       try {
         var c = document.createElement("canvas"); c.width = 16; c.height = 4; var g = c.getContext("2d");
         g.drawImage(im, 0, 0, im.naturalWidth, im.naturalHeight * .06, 0, 0, 16, 4);
         var d = g.getImageData(0, 0, 16, 4).data, r = 0, gg = 0, b = 0, n = d.length / 4;
         for (var i = 0; i < d.length; i += 4) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; }
-        /* as it shows at the top of the screen: under the sheet's shade (section.css .wl-bg::after) and, on a phone, the header's own
-           backing (.wl-top::before), together about 70% of the way to the near-black they're made of (half on a wide screen) */
         var k = matchMedia("(max-width: 960px)").matches ? .7 : .5, mix = function (v, d) { return Math.round(v / n * (1 - k) + d * k); };
         var col = "rgb(" + mix(r, 6) + "," + mix(gg, 10) + "," + mix(b, 12) + ")";
-        tints[src] = col; put(col);   /* the sheet's own base takes it too */
+        tints[src] = col; put(col);    
       } catch (e) {}
-    }, tints.first ? 700 : 0); tints.first = 1; };   /* after the first, a beat later: out of the way of the step change */
+    }, tints.first ? 700 : 0); tints.first = 1; };    
     im.src = src;
   };
   function edges() {
-    if (window.SK_PAGE) return;   /* the sheets set their own (SK.edgeTint) */
+    if (window.SK_PAGE) return;    
     var hero = document.getElementById("hero"); if (!hero) return;
     var root = document.documentElement, top = "#18436a", ink = "", on = null;
     var set = function () { var near = window.scrollY < (hero.offsetHeight || innerHeight) * .6; if (near === on) return; on = near; root.style.backgroundColor = near ? top : ink; };
     set(); window.addEventListener("scroll", set, { passive: true });
-    SK.edges = function () { on = null; set(); };   /* a sheet closed over the site: back to the site's edge */
+    SK.edges = function () { on = null; set(); };    
   }
 
-  /* ---------- SK.afterReveal(fn): work that can wait until the page has come in (the rest of Kayla's lines, their timings): runs ~2.4 s
-     after load, or on the first press or key if that is sooner. Once each. ---------- */
   var laterFns = [], laterDone = false;
   function runLater() { if (laterDone) return; laterDone = true; laterFns.splice(0).forEach(function (fn) { try { fn(); } catch (e) {} }); }
   SK.afterReveal = function (fn) { if (laterDone) { setTimeout(fn, 0); return; } laterFns.push(fn); };
@@ -621,9 +550,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     ["pointerdown", "keydown"].forEach(function (t) { window.addEventListener(t, function () { setTimeout(runLater, 60); }, { once: true, capture: true, passive: true }); });
   })();
 
-  /* ---------- SK.sheetIn(sheet, sky, before, after): the sign-ups' entrance. The wallpaper is decoded before the first frame of it
-     (at most 700 ms: the page is never held for a slow network), then .open starts it and .entering runs the question's own build
-     (section.css html.pg-in) until it has played once; a step change ends it early (SK.stepSwap). ---------- */
   SK.sheetIn = function (sheet, sky, before, after) {
     var went = false, go = function () {
       if (went) return; went = true;
@@ -635,16 +561,11 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     if (sky && sky.decode && sky.getAttribute("src") && !sky.complete) { sky.decode().then(go, go); setTimeout(go, 700); } else go();
   };
 
-  /* ---------- SK.stepSwap(box, cur, next, dir): one question to the next on the sign-ups (900-early, 910-start). The question you
-     leave drifts the way you're going and goes out of focus; the next one's words come into focus as they slide in (the word reveal,
-     .wl-bw), and its controls (fields, answers, buttons) rise up from lying a little flat, one after another. Back runs it the other
-     way. Only transform, opacity and a blur on text: the glass fades itself (an opacity or a filter on a box around glass would
-     switch its live blur off), and nothing is ever clipped. dir: 1 forward, -1 back. ---------- */
   var SW_EASE = "cubic-bezier(.2, .8, .2, 1)", SW_OUT = "cubic-bezier(.4, 0, .7, .4)", SW_OUT_MS = 340;
   var SW_GROUP = ".wl-opts, .wl-fields, .wl-otp, .st-otp, .st-ways, .st-plans, .wl-telrow";
   function swGlassy(el) { var cs = getComputedStyle(el), b = cs.backdropFilter || cs.webkitBackdropFilter; return !!b && b !== "none"; }
   function swHasGlass(el) { if (swGlassy(el)) return true; for (var c = el.firstElementChild; c; c = c.nextElementSibling) if (swHasGlass(c)) return true; return false; }
-  function swLeaves(el, out) {   /* the pieces that can fade on their own: glass fades itself, never a box around it */
+  function swLeaves(el, out) {    
     if (swGlassy(el) || !swHasGlass(el)) { out.push(el); return out; }
     for (var c = el.firstElementChild; c; c = c.nextElementSibling) swLeaves(c, out);
     return out;
@@ -664,7 +585,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   function swStop(step) { (step._sw || []).forEach(function (a) { try { a.cancel(); } catch (e) {} }); step._sw = []; }
   function swRun(step, el, kf, o) { var a = el.animate(kf, o); step._sw.push(a); return a; }
   SK.stepSwap = function (box, cur, nx, dir, onShow) {
-    var sheet = box.closest(".wl"); if (sheet) sheet.classList.remove("entering");   /* the page's own entrance stops at the first step change */
+    var sheet = box.closest(".wl"); if (sheet) sheet.classList.remove("entering");    
     swStop(cur); swStop(nx);
     var h0 = box.offsetHeight;
     cur.classList.remove("on"); cur.classList.toggle("past", dir > 0);
@@ -673,7 +594,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     box.style.height = h0 + "px"; void box.offsetHeight; box.style.height = h1 + "px";
     clearTimeout(box._t); box._t = setTimeout(function () { box.style.height = ""; }, 560);
     if (SK.reduced || !nx.animate) { cur.classList.remove("out"); return; }
-    /* out: the way you're going, out of focus (text) or just away (glass) */
     cur.classList.add("out"); clearTimeout(cur._out); cur._out = setTimeout(function () { cur.classList.remove("out"); swStop(cur); }, SW_OUT_MS + 60);
     var a = swParts(cur), dx = -dir;
     [a.head].concat(a.text).forEach(function (el, i) {
@@ -684,7 +604,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       swRun(cur, el, [{ transform: "none" }, { transform: "translate3d(" + dx * 34 + "px, 6px, 0)" }], { duration: SW_OUT_MS, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" });
       swLeaves(el, []).forEach(function (l) { swRun(cur, l, [{ opacity: 0 }], { duration: SW_OUT_MS - 60, delay: Math.min(i, 6) * 14, easing: SW_OUT, fill: "forwards" }); });
     });
-    /* in: the headline slides in as its words come into focus; the rest after it; the controls rise up from lying flat */
     var b = swParts(nx), dI = dir;
     if (b.head) swRun(nx, b.head, [{ transform: "translate3d(" + dI * 34 + "px, 0, 0)" }, { transform: "none" }], { duration: 900, delay: 60, easing: SW_EASE, fill: "backwards" });
     b.text.forEach(function (el, i) {
@@ -697,16 +616,10 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
   };
 
-  /* ---------- frost that works on every device: the glass over the wallpaper ([data-frost]) gets a pre-blurred copy of the current
-     wallpaper (assets/.../*-frost.jpg, 360 px, blurred) as its background, lined up with where the wallpaper sits on the screen, under
-     its tint and rim. iPhone's WebKit draws no live backdrop blur inside a masked or faded box, and it costs a phone far less than a
-     live 30 px blur. SK.frost(src) on a wallpaper change; it re-aligns on resize and while things move (SK.frost.nudge()). ---------- */
   SK.frost = (function () {
     var src = "", t = 0, until = 0;
-    /* every box measured first, then only the values that changed written (it ran every frame of the reveal, measuring and writing in
-       turn: a forced layout per box per frame, the main cost of the load-in on a phone) */
     function place() {
-      if (!document.querySelector(".wl.open")) return;   /* no sheet open (the home page): nothing of it is on screen */
+      if (!document.querySelector(".wl.open")) return;    
       var els = document.querySelectorAll("[data-frost]"); if (!src || !els.length) return;
       var sky = document.querySelector(".wl.open .wl-sky:not(.nx)") || document.querySelector(".wl-sky"), vw = innerWidth, vh = innerHeight;
       var a = sky && sky.naturalWidth ? sky.naturalWidth / sky.naturalHeight : 16 / 9, dw = vw / vh > a ? vw : vh * a, dh = vw / vh > a ? vw / a : vh, dx = (vw - dw) * .5, dy = (vh - dh) * .4;
@@ -726,16 +639,11 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     function loop() { place(); if (performance.now() < until) t = requestAnimationFrame(loop); else t = 0; }
     function nudge(ms) { until = Math.max(until, performance.now() + (ms || 1800)); if (!t) t = requestAnimationFrame(loop); }
     window.addEventListener("resize", function () { nudge(400); });
-    var f = function (wall) { if (!wall) return; src = new URL(wall.replace(/(-m)?\.jpg$/, function (m, mm) { return (mm || "") + "-frost.jpg"; }), document.baseURI).href;   /* absolute: a url() in a custom property resolves against the stylesheet that uses it */ var im = new Image(); im.src = src; nudge(2600); };
+    var f = function (wall) { if (!wall) return; src = new URL(wall.replace(/(-m)?\.jpg$/, function (m, mm) { return (mm || "") + "-frost.jpg"; }), document.baseURI).href;     var im = new Image(); im.src = src; nudge(2600); };
     f.nudge = nudge; f.place = place;
     return f;
   })();
 
-  /* ---------- Chapters (review only: this Mac): a glass pill at the top, like Fresh Studio's in the app (Studio_App web/fresh/fresh.js).
-     Every step of the page in order, the one on screen marked, any one a press away with sample answers filled in (no real email, no
-     code, no card); Back and Next beside it; and the background, from the app's own wallpapers, kept on this browser.
-     SK.chapters({ list: [[id, name]], now: () => id, go: (id) => {}, walls: true, wall: (src or "") => {}, wallDefault: "Orange dune" })
-     SK.wallPick() is the background picked here ("" = the page's own). ---------- */
   SK.WALLS = [["su/done", "Orange dune"], ["wl/name", "Lone tree"], ["wl/in", "Peach dawn"], ["wl/roles", "Dune grass"], ["wl/claude", "Coast pine"], ["wl/you", "Pebble Beach"], ["su/code", "Tahoe morning"], ["su/plan", "Tahoe turquoise"], ["su/pay", "Open ocean"], ["su/in", "Clouds"]];
   SK.wallPick = function () { try { return localStorage.getItem("studio-wall-" + (window.SK_PAGE || "site")) || ""; } catch (e) { return ""; } };
   SK.chapters = function (o) {
@@ -748,7 +656,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       '<div class="sk-chm" role="menu" hidden></div>';
     document.body.appendChild(el);
     document.documentElement.classList.add("sk-ch-on");
-    /* phones: in the sheet's top bar (nothing floats over the form); desktops: centred at the top */
     var mq = matchMedia("(max-width: 960px)");
     var dock = function () { var bar = document.querySelector(".wl .wl-tr"); if (mq.matches && bar) { el.classList.add("in-bar"); bar.insertBefore(el, bar.firstChild); } else { el.classList.remove("in-bar"); if (el.parentNode !== document.body) document.body.appendChild(el); } };
     dock(); if (mq.addEventListener) mq.addEventListener("change", dock);
@@ -777,7 +684,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     return { paint: paint };
   };
 
-  /* ---------- film modal ---------- */
   var fm;
   SK.film = function (x) {
     var f = typeof x === "string" ? ((SK.media.films || []).filter(function (a) { return a.slug === x; })[0] || null) : x;
@@ -800,10 +706,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     var p = v.play(); p && p.catch(function () {});
   };
 
-  /* ---------- Send to my Mac: on phones every Download button (the nav, the hero, the steps, the unlocked Private beta card) becomes
-     "Send to my Mac" and opens the phone's share sheet (AirDrop on an iPhone) with this page's #pricing link. When the invite code is
-     unlocked on the phone, the code rides along in the hash only (#pricing&invite=CODE), never in the query, and the Mac lands
-     unlocked (160-pricing). Without a share sheet, or when it fails, the link is copied instead. Desktop is unchanged. ---------- */
   var SEND_ICON = '<svg class="send-ic" viewBox="0 0 18 18" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><path d="M6.2 7.4H5.1A1.6 1.6 0 0 0 3.5 9v5.4A1.6 1.6 0 0 0 5.1 16h7.8a1.6 1.6 0 0 0 1.6-1.6V9a1.6 1.6 0 0 0-1.6-1.6h-1.1"/><path d="M9 10.6V2.4M6.2 5.2 9 2.4l2.8 2.8"/></svg>';
   var SEND = "Send to my Mac", SEND_HELP = "Studio runs on your Mac. Send this page there to download it.";
   function sendLabel(b) { return b.querySelector(":scope > span:not([data-beam-bloom])"); }
@@ -835,7 +737,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         var q = navigator.share({ title: "Studio", text: "Open this on your Mac to download Studio.", url: url });
         if (q && q.catch) q.catch(function (err) { if (!err || err.name !== "AbortError") copyLink(btn, url); });
         return;
-      } catch (err) { /* fall through to copying the link */ }
+      } catch (err) {   }
     }
     copyLink(btn, url);
   }
@@ -851,9 +753,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, old); else old();
   }
 
-  /* ---------- Kayla: the listen pill (fixed, .kp) and inline clips (.vo[data-src]) ----------
-     Waveform bars and the length come from <audio file name>.json next to the mp3. Only one clip plays at a time. */
-  var audios = []; SK.audios = audios; /* a section with its own players adds them here so only one clip plays at a time */
+  var audios = []; SK.audios = audios;  
   var fmt = function (s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); };
   function player(box, src, bars) {
     var a = new Audio(), wave = box.querySelector("[data-wave]"), time = box.querySelector("[data-time]"), rateB = box.querySelector("[data-rate]"), els = [], dur = 0;
@@ -893,22 +793,18 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     if (kp) {
       var a = player(kp, kp.getAttribute("data-src"), SK.mobile() ? 26 : 46);
       SK.kayla = { audio: a, pause: function () { audios.forEach(function (o) { o.pause(); }); } };
-      /* Kayla starts by herself, from the beginning. Browsers only allow sound without a gesture on some visits, so when the
-         first try is refused she starts on the reader's first click, tap or key press anywhere (unless they chose a clip themselves). */
       a.preload = "auto";
       SK.beam(kp.querySelector(".kp-pill"), { size: "sm", variant: "mirra", boost: 2, radius: 22 });
       var started = false, tryPlay = function () { if (started) return; var q = a.play(); if (q && q.then) q.then(function () { started = true; off(); }).catch(function () {}); };
       var onGesture = function (e) {
         if (started) return off();
-        if (e.target && e.target.closest && e.target.closest(".wl, [data-early]")) return; /* early access sign-up: not a reason to start her (900-early) */
+        if (e.target && e.target.closest && e.target.closest(".wl, [data-early]")) return;  
         if (e.target && e.target.closest && e.target.closest(".vo, .kp, .fm, [data-vo-play], [data-enter], [data-note]")) { started = true; return off(); }
         if (audios.some(function (o) { return !o.paused; })) { started = true; return off(); }
         tryPlay();
       };
       var EV = ["pointerdown", "keydown", "touchend"], off = function () { EV.forEach(function (t) { window.removeEventListener(t, onGesture, true); }); };
       a.addEventListener("play", function () { started = true; off(); });
-      /* she can be closed (the x on her pill), and stays closed for the rest of this visit (this tab); a later visit hears her again.
-         (It used to be every later visit, undone by Enter site; with that gone, nothing would ever bring her back. The old key is cleared.) */
       var OFFK = "studio-kayla-off", root = document.documentElement, isOff = false;
       try { localStorage.removeItem(OFFK); isOff = sessionStorage.getItem(OFFK) === "1"; } catch (e) {}
       SK.kaylaOff = function () { audios.forEach(function (o) { o.pause(); }); root.classList.add("kp-off"); started = true; off(); try { sessionStorage.setItem(OFFK, "1"); } catch (e) {} };
@@ -918,7 +814,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       if (isOff) { root.classList.add("kp-off"); started = true; }
       else {
         EV.forEach(function (t) { window.addEventListener(t, onGesture, true); });
-        if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay)); /* holdSound: the hero's Enter site starts her */
+        if (!SK.reduced && !SK.holdSound) (document.readyState === "complete" ? tryPlay() : window.addEventListener("load", tryPlay));  
       }
     }
     document.querySelectorAll(".vo[data-src]").forEach(function (box) {
@@ -929,14 +825,10 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
         '<span class="vo-wave" data-wave></span><span class="vo-time" data-time></span></span>' +
         '<span class="vo-nudge" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M4.2 2.6v6.8L9.4 6z"/></svg>Tap to listen</span>';
       var va = player(box, box.getAttribute("data-src"), 34), paper = !!box.closest(".on-paper");
-      /* on paper the beam has to be drawn much stronger to read: the colour run, on the light preset, with its stroke and bloom set by hand */
       SK.beam(box.querySelector(".vo-pill"), paper ? { size: "sm", variant: "mirra", theme: "light", stroke: 1, inner: 0.34, bloom: 0.75, width: 1.5, radius: 50 } : { size: "sm", variant: "mirra", boost: 2, radius: 50 });
       va.addEventListener("play", function () { document.documentElement.classList.add("vo-heard"); try { sessionStorage.setItem("vo-heard", "1"); } catch (e) {} });
       box._audio = va;
     });
-    /* a link with data-vo-play="<clip name>" starts that section's clip from the top as it scrolls there (the Pricing links).
-       It plays inside the click so Safari and iOS count it as the visitor's gesture, even with reduced motion; a clip already
-       playing is left alone. Everything after is the clip's own play: wave, time, vo-heard, and Kayla's intro stays quiet. */
     document.querySelectorAll("[data-vo-play]").forEach(function (link) {
       link.addEventListener("click", function () {
         var box = document.querySelector('.vo[data-src*="' + link.getAttribute("data-vo-play") + '"]'), va = box && box._audio;
@@ -948,7 +840,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
   }
 
-  /* ---------- frames grow into place as they scroll in: size and corner radius ease to rest ---------- */
   function growFrames() {
     if (SK.reduced) return;
     var frames = [].slice.call(document.querySelectorAll(".frame:not(.hero):not([data-nogrow])")).map(function (f) {
@@ -956,8 +847,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
     if (!frames.length) return;
     var queued = false;
-    /* only the frames within a screen of the view are measured each frame (the rest are left as they are, as before): measuring a frame
-       in a section the lite tier hasn't laid out would lay it out */
     frames.forEach(function (f) { f.near = false; SK.onView(f.el, function () { f.near = true; req(); }, function () { f.near = false; }, { margin: "100% 0px" }); });
     function upd() {
       queued = false;
@@ -980,7 +869,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     upd();
   }
 
-  /* ---------- headings: split into words, reveal left to right from blurred to sharp ---------- */
   function blurHeads() {
     if (SK.reduced) return;
     document.querySelectorAll(".h-xl, .h-lg, .h-md, [data-blur]").forEach(function (h) {
@@ -1010,30 +898,21 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
   }
 
-  /* ---------- SK.fullRender(): before a jump down the page (an in-page link, Download to Pricing, a Pricing link), every section is laid
-     out for real for a moment, so the jump lands where it should: a section not yet drawn stands at about its height (base.css,
-     content-visibility), and a jump past several of them landed up to 600 px off. Each keeps its real height after (auto), so it's
-     needed once; it's one full layout, at the moment of a press. ---------- */
   SK.fullRender = function () {
     var r = document.documentElement; r.classList.add("cv-full"); void document.body.offsetHeight;
     clearTimeout(SK.fullRender.t); SK.fullRender.t = setTimeout(function () { r.classList.remove("cv-full"); }, 3000);
   };
   document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest('a[href^="#"]:not([href="#"]), a[href^="./#"], [data-vo-play]')) SK.fullRender(); }, true);
 
-  /* ---------- drawn ahead: a section within two screens of what's visible is laid out and painted for real (.cv-near, base.css),
-     so its poster, video frame and tiles are ready before it scrolls in. The browser's own content-visibility: auto only drew a
-     section just before it arrived: on a fast flick in Instagram's browser it came in black, and a video's frame came in as an empty
-     blur until its clip buffered. Farther than that, sections are still skipped. ---------- */
   function drawAhead() {
     if (!("IntersectionObserver" in window)) return;
-    var go = function () { if (go.done) return; go.done = true; removeEventListener("scroll", go); clearTimeout(t);   /* not during the first load: it starts on the first scroll (or 3 s in), so the intro isn't slowed */
+    var go = function () { if (go.done) return; go.done = true; removeEventListener("scroll", go); clearTimeout(t);    
     var io = new IntersectionObserver(function (es) { es.forEach(function (e) { e.target.classList.toggle("cv-near", e.isIntersecting); }); }, { rootMargin: "200% 0px" });
     document.querySelectorAll("main > section:not(#hero)").forEach(function (s) { io.observe(s); });
     };
     var t = setTimeout(go, 3000); addEventListener("scroll", go, { passive: true });
   }
 
-  /* ---------- start ---------- */
   SK.start = function () {
     document.documentElement.classList.remove("no-js");
     drawAhead();
@@ -1047,10 +926,8 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       var r = el.getAttribute("data-beam-radius");
       SK.beam(el, { size: el.getAttribute("data-beam-auto") || "md", boost: parseFloat(el.getAttribute("data-beam-boost")) || 1, radius: r != null ? parseFloat(r) : undefined, variant: el.getAttribute("data-beam-variant") || "mono" });
     });
-    /* the beams written straight into a section's HTML (data-active from the start: Pricing's, the creator's) spin only while on screen,
-       like every other beam; paused, not stopped, so they never fade in again */
     document.querySelectorAll('main [data-beam="cx"][data-active]:not([data-paused]):not(.gx-beam)').forEach(function (el) {
-      el.setAttribute("data-paused", "");   /* paused until seen: a section not yet drawn never tells its beams they're off screen */
+      el.setAttribute("data-paused", "");    
       SK.onView(el, function () { el.removeAttribute("data-paused"); }, function () { el.setAttribute("data-paused", ""); }, { margin: "60px" });
     });
     sendLabels();
@@ -1072,14 +949,11 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     });
     var nav = document.querySelector(".nav");
     var kpEl = document.querySelector(".kp");
-    /* once a frame at most: it hit-tests the page under Kayla's pill (elementsFromPoint), which lays the page out */
     if (nav || kpEl) { var onQ = 0, on = function () { onQ = 0; var y = window.scrollY; nav && nav.classList.toggle("solid", y > 40); kpEl && kpEl.classList.toggle("mini", y > window.innerHeight * 0.7);
       if (kpEl) { var pr = kpEl.getBoundingClientRect(), stack = document.elementsFromPoint ? document.elementsFromPoint(window.innerWidth / 2, Math.min(window.innerHeight - 2, pr.bottom - 30)) : [], hit = null;
         for (var hi = 0; hi < stack.length; hi++) { if (!kpEl.contains(stack[hi])) { hit = stack[hi]; break; } }
         var sec = hit && hit.closest ? hit.closest("section, footer") : null, fr = hit && hit.closest ? hit.closest(".frame") : null;
         kpEl.classList.toggle("light", !!(sec && sec.classList.contains("on-paper") && !(fr && fr !== sec))); } }; on(); window.addEventListener("scroll", function () { if (!onQ) onQ = requestAnimationFrame(on); }, { passive: true }); }
-    /* the nav slides away while scrolling down and returns only on a deliberate scroll up: the upward travel has to add up to
-       14% of the screen (at least 110px) with no downward movement in between. Always shown near the top. */
     if (nav) (function () {
       var lastY = window.scrollY, up = 0, raf = 0;
       window.addEventListener("scroll", function () {
@@ -1096,23 +970,18 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       nav.addEventListener("focusin", function () { nav.classList.remove("away"); });
     })();
     if (!window.SK_PAGE) kayla();
-    edges();   /* the site's narrator; a page of its own (the waitlist, the sign-up) has its own voice */
+    edges();    
     growFrames();
     focusSections();
     restLoops();
   };
 
-  /* ---------- endless loops rest far off screen: a section more than a screen away pauses its endless CSS loops (beams, dots,
-     rings, drifts) and they carry on before it is a screen away again, so nothing on screen changes; the browser just stops
-     recomputing them every frame. Only endless loops are paused: a box that also runs a one-off animation (which JS may be timing)
-     is left alone. The hero pauses its own (.off, 010-hero). CSS: [data-sk-rest] in base.css. ---------- */
   function restLoops() {
     if (!("IntersectionObserver" in window) || !document.documentElement.getAnimations) return;
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { e.target._far = !e.isIntersecting; if (e.isIntersecting) wakeLoops(e.target); else restSection(e.target); });
     }, { rootMargin: "100% 0px" });
     document.querySelectorAll("main > section:not(#hero)").forEach(function (s) { io.observe(s); });
-    /* a jump (a link, a restored scroll) can land on a resting section before the observer reports it: wake it in the same frame */
     window.addEventListener("scroll", function () {
       if (!rested.length) return;
       var vh = window.innerHeight || 1;
@@ -1132,8 +1001,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       if (!b) boxes.push((b = { t: t, k: k, loop: false, once: false }));
       if (ef.getTiming().iterations === Infinity) b.loop = true; else b.once = true;
     });
-    /* a loop that is still running a one-off with it (a beam's fade-in: every beam, while the page loads) is left for now and looked at
-       again a moment later, if the section is still far away (before, it was left running for good) */
     if (boxes.some(function (b) { return b.loop && b.once; }) && !sec._restAgain) sec._restAgain = setTimeout(function () { sec._restAgain = 0; if (sec._far) restSection(sec); }, 1500);
     boxes.forEach(function (b) {
       if (!b.loop || b.once) return;
@@ -1148,11 +1015,9 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     sec.querySelectorAll("[data-sk-rest]").forEach(function (el) { el.removeAttribute("data-sk-rest"); });
   }
 
-  /* ---------- scroll focus (as on the Custom Esignature site): a section is dim and soft at the edge of the screen and comes to
-     full strength as it enters; it fades again as it leaves. Opacity floor 15%, up to 8px blur (blur on desktop only). ---------- */
   function focusSections() {
     if (SK.reduced) return;
-    var els = [].slice.call(document.querySelectorAll("main > section:not([data-own-focus])")), /* [data-own-focus]: the section dims its own groups (pricing) */ blur = !SK.mobile() && matchMedia("(pointer: fine)").matches, queued = false;
+    var els = [].slice.call(document.querySelectorAll("main > section:not([data-own-focus])")),   blur = !SK.mobile() && matchMedia("(pointer: fine)").matches, queued = false;
     if (!els.length) return;
     var clamp = function (x) { return Math.min(1, Math.max(0, x)); };
     function paint() {
@@ -1175,12 +1040,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   }
 })();
 
-/* ---------- SK.keyboard: is a phone's on-screen keyboard actually up? ----------
-   iOS keeps the field focused after the keyboard's Done (or the swipe down), so "focused" isn't "keyboard up". This watches the
-   visual viewport: the keyboard is up only while a field is focused AND the visible height is well short of the full height.
-   It sets .kb on the sheet (the bar steps aside), --kbh (room under the content so the field can rise above the keyboard; 0 the
-   moment it's down), --lvh (the tallest the screen has been: the wallpaper is pinned to it, so the keyboard never moves it), moves
-   the focused field into view before iOS pans the page, and undoes any pan iOS leaves behind. */
 (function () {
   var SK = (window.SK = window.SK || {});
   SK.keyboard = function (sheet, o) {
@@ -1189,7 +1048,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     root.style.setProperty("--lvh", Math.round(full) + "px");
     var isField = function (a) { return a && sheet.contains(a) && a.matches && a.matches("input:not([type=checkbox]):not([type=radio]):not([type=button]), select, textarea"); };
     function scroller() { return o.scroller ? o.scroller() : sheet; }
-    function keep(est) {   /* the field (a code row: the whole row) centred in what's visible above the keyboard, a touch high */
+    function keep(est) {    
       var a = document.activeElement; if (!isField(a)) return;
       var box = (a.closest && a.closest(".wl-otp, .st-otp")) || a;
       var vh = est ? full - est : h0(), top = vv ? vv.offsetTop : 0, r = box.getBoundingClientRect();
@@ -1201,7 +1060,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       var h = h0(), f = isField(document.activeElement);
       if (!f && h > full) { full = h; root.style.setProperty("--lvh", Math.round(full) + "px"); }
       var up = f && h < full - 150, kbh = up ? Math.round(full - h) + "px" : "0px";
-      if (kbh !== check.kbh) { check.kbh = kbh; sheet.style.setProperty("--kbh", kbh); }   /* only when it changes: every resize wrote it, a style pass each */
+      if (kbh !== check.kbh) { check.kbh = kbh; sheet.style.setProperty("--kbh", kbh); }    
       if (up !== on) { on = up; sheet.classList.toggle("kb", on); if (!on) unpan(); if (o.change) o.change(on); }
       if (on) keep();
     }
@@ -1209,7 +1068,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     window.addEventListener("resize", check);
     sheet.addEventListener("focusin", function (e) {
       if (!isField(e.target)) return;
-      check.kbh = Math.round(full * .45) + "px"; sheet.style.setProperty("--kbh", check.kbh);   /* room before the keyboard arrives, so the field can rise now */
+      check.kbh = Math.round(full * .45) + "px"; sheet.style.setProperty("--kbh", check.kbh);    
       keep(full * .45);
       [60, 350, 800, 1400].forEach(function (t) { setTimeout(check, t); });
     });
@@ -1220,13 +1079,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
 })();
 
 
-/* ---------- SK.audioKeep: sound that keeps working on an iPhone ----------
-   1. The page asks iOS for the "playback" audio session (navigator.audioSession, WebKit 16.4+) before any AudioContext exists, so
-      the ringer switch on silent doesn't mute Web Audio.
-   2. Where that API isn't there (Chrome on iOS, older Safari): on the first touch a tiny silent <audio> loop starts; a playing media
-      element puts the page in the same playback session, so the clicks, music and Kayla are heard with the switch on silent.
-   3. Coming back (another app, a locked phone, another tab) leaves the AudioContext "interrupted" or "suspended": on visible,
-      pageshow, focus and every tap it's resumed, and if iOS closed it, rebuilt by the page (o.rebuild) from the decoded sounds. */
 (function () {
   var SK = (window.SK = window.SK || {});
   try { if (navigator.audioSession && navigator.audioSession.type !== "playback") navigator.audioSession.type = "playback"; } catch (e) {}
@@ -1255,11 +1107,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
 })();
 
 
-/* ---------- SK.away: no sound while the page isn't being looked at ----------
-   Another tab, the home screen, a locked phone, Chrome closed: the page goes hidden and every sound it makes stops (Evan: the
-   music and Kayla kept playing from his iPhone's home screen). Every AudioContext the page makes and every <audio>/<video>
-   that plays (detached new Audio() included) is tracked; on hidden (and pagehide) the contexts are suspended and the playing,
-   audible media paused; when the page is visible again, exactly those are resumed (what was playing picks up where it was). */
 (function () {
   var SK = (window.SK = window.SK || {});
   var ctxs = [], media = new Set(), held = null;
@@ -1274,7 +1121,7 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     MP.__skHush = true;
     MP.play = function () {
       media.add(this);
-      if (held && document.hidden && !this.muted) {   /* nothing starts while hidden: it starts when the page is back */
+      if (held && document.hidden && !this.muted) {    
         if (held.media.indexOf(this) < 0) held.media.push(this);
         return Promise.resolve();
       }
@@ -1302,9 +1149,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
 })();
 
 
-/* ---------- SK.guideTap: Kayla's guide dot (the app tour's cursor: a white dot, a ring on each press, her name beside it) ----------
-   Once per browser (key): it glides in from Kayla's pill, "presses" the target, calls onPress (the pass spins once, showing it can be
-   pressed), and fades. Nothing with reduced motion. */
 (function () {
   var SK = (window.SK = window.SK || {});
   SK.guideTap = function (target, o) {
@@ -1332,10 +1176,6 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
   };
 })();
 
-/* ---------- SK.keepTyping: a field that loses focus to nothing while someone is typing takes it straight back ----------
-   Seen in Studio's own window: the paywall's code field blurred 1 ms after the first key, focus went to the page itself (no
-   focusin anywhere, no focus call in our code), so the rest of STUDIOK7 was lost. If a field blurs within 600 ms of a key and
-   focus lands on nothing (body or none), it's refocused with the caret where it was. A real click or Tab elsewhere is untouched. */
 (function () {
   var SK = (window.SK = window.SK || {});
   SK.keepTyping = function (fields) {
@@ -1344,12 +1184,12 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
       var lastKey = 0, caret = null, down = false;
       el.addEventListener("keydown", function () { lastKey = Date.now(); });
       el.addEventListener("input", function () { lastKey = Date.now(); try { caret = el.selectionStart; } catch (e) {} });
-      document.addEventListener("pointerdown", function (e) { if (el.contains(e.target)) return; down = true; setTimeout(function () { down = false; }, 400); }, true);   /* a press somewhere else: they meant to leave */
+      document.addEventListener("pointerdown", function (e) { if (el.contains(e.target)) return; down = true; setTimeout(function () { down = false; }, 400); }, true);    
       el.addEventListener("blur", function (e) {
         if (down || e.relatedTarget || Date.now() - lastKey > 600 || el.offsetParent === null) return;
         setTimeout(function () {
           var a = document.activeElement;
-          if (a && a !== document.body && a !== document.documentElement) return;   /* focus went somewhere real: leave it */
+          if (a && a !== document.body && a !== document.documentElement) return;    
           try { el.focus({ preventScroll: true }); if (caret != null && el.setSelectionRange) el.setSelectionRange(caret, caret); } catch (x) {}
         }, 0);
       });
@@ -1358,32 +1198,25 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
 })();
 
 
-/* ===== 910-start ===== */
 ;(function () {
 try {
-/* Start: the website sign-up, 14 days for $1 (section.html). The early-access sheet's design, step for step:
-   1 sign in (Google, Apple, or email), 2 the email code, 3 the plan, 4 pay $1 inside the page (Stripe's Payment Element, in our glass),
-   then You're in: the pass, the download starts by itself, Open Studio. A friend's invite (?i=CODE#signup) skips the plan and the card.
-   The contract with the licence server (App & releases): scratchpad/accounts/WEB-SIGNUP.md.
-   Off on the live site: it opens only on this Mac, or with ?review. On this Mac it runs on a stand-in (no account, no charge) unless
-   ?live is in the address; Stripe's own test card (4242 4242 4242 4242) goes through the stand-in too. */
 var Q = new URLSearchParams(location.search), H = new URLSearchParams(location.hash.replace(/^#[^&]*&?/, ""));
 var local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 var sheet = document.getElementById("signup");
 if (!sheet) return;
 var EMBED = window.parent !== window, PAYWALL0 = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
-var OPEN = !!(window.SK_WAITLIST && SK_WAITLIST.signup_open);   /* the public switch (src/waitlist.json signup_open) */
-if (!(OPEN || local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {   /* not open yet: this Mac, ?review, or Studio's own window (?app#paywall) */
-  if (window.SK_PAGE === "start") { location.replace("early-access/" + location.search + "#early-access"); return; }   /* its own page (askstudio.ai/start/): until sign-up opens, early access is the way in */
+var OPEN = !!(window.SK_WAITLIST && SK_WAITLIST.signup_open);    
+if (!(OPEN || local || Q.has("review") || Q.has("app") || EMBED && PAYWALL0)) {    
+  if (window.SK_PAGE === "start") { location.replace("early-access/" + location.search + "#early-access"); return; }    
   sheet.remove(); return;
 }
 var LIVE = !local || Q.has("live"), MOCK = !LIVE;
 var CFG = {
   worker: "https://studio-licence.studio-licence.workers.dev",
-  supabase: "https://nxbnmwxyocbqcjwzxtxi.supabase.co", supakey: "sb_publishable_LRI7yb4xTKyN5VehjqxQuQ_vuSVY7Hk",   /* public keys, made for browsers */
+  supabase: "https://nxbnmwxyocbqcjwzxtxi.supabase.co", supakey: "sb_publishable_LRI7yb4xTKyN5VehjqxQuQ_vuSVY7Hk",    
   stripe: Q.get("pk") || "", oauth: Q.has("oauth")
 };
-var DEMO_PK = "pk_test_TYooMQauvdEDq54NiTphI7jx";   /* Stripe's public demo key: draws the real card form on the stand-in */
+var DEMO_PK = "pk_test_TYooMQauvdEDq54NiTphI7jx";    
 var html = document.documentElement, HASH = /^#paywall/.test(location.hash) ? "#paywall" : "#signup", DEEP = /^#(signup|paywall)(&|$)/;
 var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
 var M = "assets/media/", fine = matchMedia("(pointer: fine)").matches, PHONE = matchMedia("(max-width: 700px) and (max-aspect-ratio: 3/4)").matches;
@@ -1391,53 +1224,37 @@ var $ = function (s) { return sheet.querySelector(s); }, $$ = function (s) { ret
 var INV = (Q.get("i") || H.get("i") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 24);
 if (MOCK) $("[data-st-mode]").hidden = false;
 
-/* ---------- sound: the app's own takes, as in early access; the same speaker setting ---------- */
 var SOUND = true;
 try { SOUND = localStorage.getItem("studio-wl-sound") !== "off"; } catch (e) {}
-/* Kayla's sign-up lines that are recorded (assets/audio/<key>.mp3 + .json). Add a key here when its file lands; the rest stay silent.
-   su-in su-code su-ok su-done pw-plan pw-ok pw-pay pw-promo pw-notrial pw-done */
 var VO = ["su-in", "su-code", "su-ok", "su-done", "pw-plan", "pw-ok", "pw-pay", "pw-promo", "pw-notrial", "pw-done",
-  "wl-roles", "wl-brands", "wl-claude", "wl-b1", "wl-b2", "wl-b4", "wl-cpro", "wl-cfree", "wl-cno", "su-make", "su-dl", "su-mac"];   /* v3: the waitlist's own takes for the shared questions */
+  "wl-roles", "wl-brands", "wl-claude", "wl-b1", "wl-b2", "wl-b4", "wl-cpro", "wl-cfree", "wl-cno", "su-make", "su-dl", "su-mac"];    
 var SFX = (function () {
-  /* one audio context for the whole page, made at load (it starts paused until the first click or key); the sounds and Kayla's intro
-     are fetched and decoded right away, so the first click can play her at once */
   var AC = window.AudioContext || window.webkitAudioContext, ctx = null, buf = {}, last = {};
-  /* the Studio app's own UI sounds, the same files it plays (Studio_App web/audio/ui): hover, press, the Ask sheet opening (every
-     scene change here), send, done. They carry their own levels, so they play at 1 like in the app. */
   var FILE = { tick: "app/hover.wav", move: "app/ask-open.mp3", send: "app/send.mp3", done: "app/done.mp3", key: "key.wav", land: "land.wav" };
-  /* the app plays hover and press at 1, but here they sit under the music and Kayla: lifted (+6 / +9 dB) so every press is heard (Evan) */
   var GAIN = { tick: 2, click: .6, move: .8, ask: 1, send: 1, done: 1, key: .26, land: .45 };
-  /* only on the sheet's own page: on the home page the sheet never opens (open() goes to its page), and loading its sounds there fetched
-     5.6 MB and decoded every line and the music twice (the waitlist's and the sign-up's) into memory, for nothing */
   try { if (AC && window.SK_PAGE) ctx = new AC(); } catch (e) {}
-  /* the moment the context really runs (a tap, a key, or a browser that already allows sound, which still reports "suspended" for a
-     beat after it's made), whatever was waiting for it starts: the music, and a Kayla line that was held (SFX.onRun) */
   var runFns = [];
   function watch(c) { if (c && c.addEventListener) c.addEventListener("statechange", function () { if (c === ctx && c.state === "running") runFns.forEach(function (fn) { try { fn(); } catch (e) {} }); }); }
   watch(ctx);
-  var raw = {};   /* the files as fetched, kept so a context iOS closed can be rebuilt without fetching again */
-  /* lite tier (in-app browsers, weak devices): the music bed (97 s, about 34 MB once decoded) is fetched now but decoded only when
-     sound can first play (the first tap), so a web view short on memory isn't holding it from the start; it fades in a beat later */
+  var raw = {};    
   var dec = {}, c0 = function () { return ctx && ctx.state; };
-  runFns.push(function () { if (SK.lite) decode("bed"); });   /* the first tap: now it's decoded (and starts, if it was asked for) */
+  runFns.push(function () { if (SK.lite) decode("bed"); });    
   function decode(n) { if (!ctx || !raw[n]) return; if (n === "bed" && SK.lite && c0() !== "running") return; var c = ctx; if (dec[n] === c) return; dec[n] = c; c.decodeAudioData(raw[n].slice(0), function (b) { if (c !== ctx) return; buf[n] = b; if (n === "bed" && bedWant) bed.start(); }, function () {}); }
   function load(n, url) { if (!ctx) return; fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : null; }).then(function (d) { if (d) { raw[n] = d; decode(n); } }).catch(function () {}); }
-  var bedWant = false;   /* the music was asked for before it finished loading: it starts the moment it has */
+  var bedWant = false;    
   Object.keys(FILE).forEach(function (n) { load(n, "assets/sfx/" + FILE[n]); });
   load("bed", "assets/audio/bed-tides.mp3");
   VO.slice(0, 2).forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); });
-  SK.afterReveal(function () { VO.slice(2).forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); }); });   /* the rest once the page has come in (or on the first press) */   /* the sign-up's own lines; one that is not recorded yet stays silent */
-  /* iPhone: unlocked on every touch; resumed after another app, a locked phone or another tab; rebuilt if iOS closed it (SK.audioKeep) */
+  SK.afterReveal(function () { VO.slice(2).forEach(function (k) { load("vo:" + k, "assets/audio/" + k + ".mp3"); }); });        
   function rebuild() {
     var playing = !!bed.on(); try { ctx = new AC(); } catch (e) { return; }
     watch(ctx);
-    buf = {}; bed.reset(); if (playing) bedWant = true; Object.keys(raw).forEach(decode);   /* the music fades back in once it's decoded again; a finished Kayla line isn't replayed */
+    buf = {}; bed.reset(); if (playing) bedWant = true; Object.keys(raw).forEach(decode);    
   }
   var keeper = SK.audioKeep({ ctx: function () { return ctx; }, rebuild: rebuild });
   function wake() { keeper.wake(); }
   function play(n, o) {
     o = o || {};
-    /* a press, a scene change and the pass flip are one sound (the flip's, ask-open.mp3): one take per press, never two stacked */
     var b = buf[n] || (n === "click" || n === "ask" ? buf.move : null);
     if (!SOUND || !ctx || !b || SK.reduced && n === "tick") return;
     var now = performance.now(), gap = { tick: 60, key: 55 }[n] || 0, one = n === "click" || n === "move" || n === "ask";
@@ -1450,16 +1267,13 @@ var SFX = (function () {
     if (o.pan && ctx.createStereoPanner) { var p = ctx.createStereoPanner(); p.pan.value = o.pan; g.connect(p); p.connect(ctx.destination); } else g.connect(ctx.destination);
     s.connect(g); s.start();
   }
-  /* a voice line from a decoded buffer: starts now, inside the click (no network, no gap); null if it isn't ready */
   function voice(k, onend) {
     var b = buf["vo:" + k]; if (!ctx || !b) return null;
     var s = ctx.createBufferSource(), g = ctx.createGain(); s.buffer = b; g.gain.value = 1; s.connect(g); g.connect(ctx.destination);
     var t0 = ctx.currentTime, stopped = false; s.onended = function () { if (!stopped) onend && onend(); }; s.start();
     return { dur: b.duration, at: function () { return Math.max(0, ctx.currentTime - t0); }, stop: function () { stopped = true; try { s.stop(); } catch (e) {} } };
   }
-  function live() { var ua = navigator.userActivation; return !!ctx && (ctx.state === "running" || !ua || ua.isActive); }   /* a click or key is happening now (or already happened) */
-  /* the music bed (Theatre of Delays, "Tides", a seamless 97 s loop at about -24 LUFS): it fades in on the first click, sits about
-     10 dB lower while Kayla talks (300 ms ramps), swells a little on You're in, and fades out when the sheet closes */
+  function live() { var ua = navigator.userActivation; return !!ctx && (ctx.state === "running" || !ua || ua.isActive); }    
   var bed = (function () {
     var src = null, g = null, duckOn = false, swellT = 0, swellOn = false, BASE = .9;
     function level() { return BASE * (duckOn ? .316 : 1) * (swellOn ? 1.45 : 1); }
@@ -1482,7 +1296,6 @@ var SFX = (function () {
   return { wake: wake, play: play, voice: voice, live: live, bed: bed, state: function () { return ctx ? ctx.state : "none"; }, onRun: function (fn) { runFns.push(fn); }, has: function (k) { return !!buf["vo:" + k]; } };
 })();
 
-/* Kayla, inside the sign-up: one line per step, her face and her voice moving, the words as she says them. Tap her to hear it again. */
 var KAY = (function () {
   var LINES = {
     "su-in": "Hey, welcome to Studio. One prompt... and the idea in your head becomes a finished video. Let's get it on your Mac. It's free to start, so just tell me your name and your email.",
@@ -1504,12 +1317,12 @@ var KAY = (function () {
     "su-dl": "You're in. Download Studio, open it... and you're already signed in.",
     "su-mac": "Studio is for Mac, so I just emailed you a link. Open it on your Mac, and you're in."
   };
-  var UNRECORDED = {}, waits = {};   /* a line with no voice file yet: she shows the words and stays quiet */
+  var UNRECORDED = {}, waits = {};    
   var REACT = { b1: 1, b2: 1, b4: 1, cpro: 1, cfree: 1, cno: 1, "wl-b1": 1, "wl-b2": 1, "wl-b4": 1, "wl-cpro": 1, "wl-cfree": 1, "wl-cno": 1 }, reacting = false;
   var pill = $("[data-st-kay]"), cap = $("[data-st-kt]"), kw = $("[data-st-kw]"), a = new Audio(), queue = [], cur = null, blocked = false, tok = 0, dur = {}, peaks = {}, vo = null;
   a.preload = "auto";
   function meta(k) { if (!UNRECORDED[k] && VO.indexOf(k) > -1) fetch("assets/audio/" + k + ".json").then(function (r) { return r.json(); }).then(function (j) { dur[k] = j.duration; peaks[k] = j.peaks; }).catch(function () {}); }
-  VO.slice(0, 2).forEach(meta); SK.afterReveal(function () { Object.keys(LINES).forEach(function (k) { if (VO.indexOf(k) > 1 || VO.indexOf(k) < 0) meta(k); }); });   /* her timings: the first two now, the rest once the page has come in */
+  VO.slice(0, 2).forEach(meta); SK.afterReveal(function () { Object.keys(LINES).forEach(function (k) { if (VO.indexOf(k) > 1 || VO.indexOf(k) < 0) meta(k); }); });    
   function wave(k) {
     var p = peaks[k] || [], n = 34, out = "";
     for (var i = 0; i < n; i++) { var v = p.length ? p[Math.floor(i * p.length / n)] : .3 + .5 * Math.abs(Math.sin(i * 1.7)); out += '<i style="height:' + Math.max(12, Math.round(v * 100)) + '%"></i>'; }
@@ -1519,7 +1332,7 @@ var KAY = (function () {
   a.addEventListener("timeupdate", function () { bars(a.duration ? a.currentTime / a.duration : 0); });
   function words(k, all) { cap.innerHTML = LINES[k].split(" ").map(function (w) { return "<span" + (all ? ' class="on"' : "") + ">" + esc(w) + "</span>"; }).join(" "); }
   function reveal(k, my) {
-    var spans = cap.querySelectorAll("span"), d = Math.max(1, (dur[k] || 5) - .4) * 1000, step = d / Math.max(1, spans.length);   /* the clips start on the first word */
+    var spans = cap.querySelectorAll("span"), d = Math.max(1, (dur[k] || 5) - .4) * 1000, step = d / Math.max(1, spans.length);    
     spans.forEach(function (s, i) { setTimeout(function () { if (my === tok) s.classList.add("on"); }, 60 + i * step); });
   }
   function ended(my) { if (my === tok) setTimeout(next, 250); }
@@ -1529,12 +1342,11 @@ var KAY = (function () {
     cur = queue.shift();
     reacting = !!(cur && REACT[cur]);
     if (!cur) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
-    if (!SFX.has(cur) && VO.indexOf(cur) > -1 && (waits[cur] = (waits[cur] || 0) + 1) < 50) { var k0 = cur; queue.unshift(k0); setTimeout(function () { if (my === tok) next(); }, 100); return; }   /* recorded but still loading (a fresh page): wait for it, up to 5 s */
-    if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }   /* not recorded yet: skip it, quietly */
+    if (!SFX.has(cur) && VO.indexOf(cur) > -1 && (waits[cur] = (waits[cur] || 0) + 1) < 50) { var k0 = cur; queue.unshift(k0); setTimeout(function () { if (my === tok) next(); }, 100); return; }    
+    if (!SFX.has(cur)) { pill.classList.remove("talk"); SFX.bed.duck(false); setTimeout(function () { if (my === tok) next(); }, 60); return; }    
     words(cur, !SOUND || !!UNRECORDED[cur]); wave(cur);
     if (!SOUND || UNRECORDED[cur]) { pill.classList.remove("talk"); SFX.bed.duck(false); return; }
     a.pause();
-    /* the intro from its decoded buffer, started right now inside the click; the rest stream as before */
     if (SFX.has(cur) && SFX.live()) {
       vo = SFX.voice(cur, function () { ended(my); });
       if (vo) {
@@ -1543,7 +1355,7 @@ var KAY = (function () {
         return;
       }
     }
-    if (SFX.has(cur) && !SFX.live()) { block(my); return; }   /* a link opened with no click: she waits for the first tap or key */
+    if (SFX.has(cur) && !SFX.live()) { block(my); return; }    
     a.src = "assets/audio/" + cur + ".mp3";
     var p = a.play();
     pill.classList.add("talk"); pill.classList.remove("ask"); SFX.bed.duck(true);
@@ -1555,14 +1367,11 @@ var KAY = (function () {
   function say(keys) { queue = [].concat(keys); a.pause(); next(); }
   function stop() { tok++; queue = []; a.pause(); if (vo) { vo.stop(); vo = null; } pill.classList.remove("talk"); SFX.bed.duck(false); }
   pill.addEventListener("click", function () { if (cur) { blocked = false; SFX.wake(); say([cur].concat(queue)); } });
-  /* a sign-up opened by a link has had no click yet: the first tap or key anywhere in it plays her */
   function unblock(e) { if (blocked && cur && !(e.target && e.target.closest && e.target.closest("[data-wl-kay]"))) { blocked = false; SFX.wake(); SFX.bed.start(); say([cur].concat(queue)); } }
   sheet.addEventListener("pointerdown", unblock, true);
   sheet.addEventListener("keydown", unblock, true);
-  /* a pick: she answers it now; a step's own line waits for her answer to finish instead of cutting it off */
   function react(k) { if (!SOUND || !LINES[k]) return; say([k]); }
   function line(k) { if (reacting && pill.classList.contains("talk")) queue = [k]; else say([k]); }
-  /* sound became allowed without a tap in the sheet (SFX.onRun): a line she was holding plays now */
   function retry() { if (blocked && cur && SOUND) { blocked = false; say([cur].concat(queue)); } }
   return { say: say, stop: stop, react: react, line: line, retry: retry, text: function (k) { return LINES[k]; } };
 })();
@@ -1573,29 +1382,20 @@ function setSound(on) {
 }
 setSound(SOUND);
 sndB.addEventListener("click", function () { setSound(!SOUND); if (SOUND) { SFX.wake(); SFX.play("click"); } });
-var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";   /* every control clicks (Evan) */
+var HIT = ".st-way, .st-plan, .st-per button, .st-why, [role=button], button, a, input, label.wl-sms, .wl-kay, .pass";    
 sheet.addEventListener("pointerover", function (e) { if (!fine) return; var t = e.target.closest && e.target.closest(HIT); if (t && !t.contains(e.relatedTarget)) SFX.play("tick"); });
 sheet.addEventListener("pointerdown", function (e) { SFX.wake(); if (sheet.classList.contains("open")) SFX.bed.start(); if (e.target.closest && e.target.closest(HIT)) SFX.play("click"); });
-/* the music never depends on where the first tap or key lands: any one, anywhere on the page, makes sure it's playing while the
-   sheet is open; so does the context starting by itself, and coming back to the page (back button, bfcache) */
 function bedNow() { if (SOUND && sheet.classList.contains("open")) SFX.bed.start(); }
 ["pointerdown", "keydown", "touchend", "click"].forEach(function (t) { document.addEventListener(t, bedNow, true); });
 window.addEventListener("pageshow", function () { SFX.wake(); bedNow(); });
 SFX.onRun(function () { bedNow(); KAY.retry(); });
-if (local) window.__stSFX = SFX;   /* this Mac: the sound tests reach it */
+if (local) window.__stSFX = SFX;    
 sheet.addEventListener("input", function (e) { if (e.target.matches("input")) SFX.play("key"); });
 
-/* ---------- what we know ---------- */
 var me = { first: "", email: "", session: null, hand: null, plan: "pro", period: "month", invite: null, paid: null, promo: null, notrial: null };
 var form = $(".wl-form"), box = $(".wl-steps"), steps = $$(".wl-q");
 sheet.appendChild($(".wl-dock"));
-/* the website sign-up is free: sign in, the code, then You're in and the download. The plan and the $1 live in the paywall
-   (#paywall), which Studio opens at the first export ("Keep your Studio: 14 days for $1"). */
-var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code", "roles", "brands", "claude", "make"];   /* v3: who they are, after the code */
-/* the in-app paywall ("Unlock it: 14 days for $1"): only the plan and the pay steps, for someone already signed in to Studio.
-   Studio opens #paywall in its own window and calls window.StudioPaywall.open({ token, first, email, handoff }) with the session it
-   has; on this Mac #paywall alone opens it on the stand-in. When it's paid, it calls window.webkit.messageHandlers.studio (if there)
-   with { unlocked: true, plan, period }, and its button goes back to Studio. */
+var ORDER_ALL = ["in", "code", "plan", "pay"], ORDER = ["in", "code", "roles", "brands", "claude", "make"];    
 var PAYWALL = /^#paywall(&|$)/.test(location.hash) || Q.has("paywall");
 if (PAYWALL) { ORDER = ["plan", "pay"]; sheet.classList.add("paywall"); }
 var SCENE = { "in": "home", code: "home", roles: "home", brands: "home", claude: "home", make: "home", plan: "home", pay: "pass" };
@@ -1609,40 +1409,42 @@ function first() { return (me.first || val("first")).split(/\s+/)[0] || ""; }
 function stepEl(q) { return steps.filter(function (s) { return s.getAttribute("data-q") === q; })[0]; }
 function err(msg) { var e = stepEl(ORDER[at]).querySelector(".wl-err"); if (e) e.textContent = msg || ""; }
 
-/* plans: the site's own prices (pricing.py checks them against the app's pricing.json), people from the contract */
 var P = window.SK_PRICES || {}, NOW = new Date(), RENEW = new Date(NOW.getTime() + 14 * 864e5);
 var renew = RENEW.toLocaleDateString("en-US", { month: "short", day: "numeric" }), renewLong = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric" });
-/* a friends' code makes the first month free: the plan starts a calendar month from today instead of in 14 days */
 var MONTH = (function () { var d = new Date(NOW); d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); return d; })();
 function starts() { return me.promo ? MONTH : RENEW; }
 function startsShort() { return starts().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
 function startsLong() { return starts().toLocaleDateString("en-US", { month: "long", day: "numeric" }); }
 function trialWord() { return me.promo ? "First month · $0" : "14 days · $1"; }
-var PLANS = [
-  /* the rows of the website's pricing table (160-pricing), so the two always agree */
-  { id: "creator", name: "Creator", brands: 1, people: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "pro", name: "Pro", best: true, brands: 3, people: 3, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
-  { id: "unlimited", name: "Unlimited", brands: 99, people: 10, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
-];
+var PLANS = (function () {
+  var stand = [
+    { id: "creator", name: "Creator", brands: 1, people: 1, macs: 1, blurb: "One brand.", feats: [["1 brand, 1 person", 1], ["Run any edit as a Meta ad", 0], ["One calendar across your brands", 0], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "pro", name: "Pro", best: true, brands: 3, people: 3, macs: 2, blurb: "Three brands.", feats: [["3 brands, 3 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] },
+    { id: "unlimited", name: "Unlimited", brands: 99, people: 10, macs: 2, blurb: "Every brand you run.", feats: [["Every brand you run, 10 people", 1], ["Run any edit as a Meta ad", 1], ["One calendar across your brands", 1], ["Full edits with takes and reviews", 1], ["The AI library and Selects", 1], ["Claude, Higgsfield and ElevenLabs built in", 1], ["Viral Lab", 1], ["Social calendar: schedule and post", 1], ["Comment to DM", 1], ["Updates install by themselves", 1]] }
+  ];
+  if (!P.plans || !P.plans.length || !P.rows || !P.rows.length) return stand;
+  return P.plans.map(function (p) {
+    return { id: p.id, name: p.name, best: !!p.best, tag: p.tag || "", brands: p.brands == null ? 99 : p.brands, people: p.seats || 1, macs: p.macs, blurb: p.note || "",
+      feats: P.rows.map(function (r) { var v = (r.values || {})[p.id]; return [typeof v === "string" ? v : r.label, v === true || (typeof v === "string" && v) ? 1 : 0]; }) };
+  });
+})();
 function price(id, per) { var v = (P[per] || {})[id + ".per"]; return v || { creator: "$99", pro: "$199", unlimited: "$299" }[id]; }
 function bill(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "Billed yearly") : "Billed monthly"; }
 function then(id, per) { return per === "year" ? ((P.year || {})[id + ".bill"] || "").replace(/^Billed\s*/, "").replace(/\s*yearly$/, "/yr") || price(id, per) + "/mo" : price(id, per) + "/mo"; }
 function planOf(id) { return PLANS.filter(function (p) { return p.id === id; })[0] || PLANS[1]; }
 
-/* ---------- the stage: the app, signing you in ---------- */
 var BRANDS = [
-  { n: "Studio", s: "Brand kit ready", img: "assets/brands/studio.svg", sw: ["#000000", "#2c3038", "#BBC9C7", "#F5F3EE"] },
-  { n: "MIRRA", s: "Social app", img: "assets/brands/mirra.png", sw: ["#000000", "#1d4ed8", "#60a5fa", "#F3F4F6"] },
-  { n: "Custom Esignature", s: "E-signatures", img: "assets/brands/ces.png", sw: ["#000000", "#0e7490", "#22d3ee", "#E6EAE3"] },
+  { n: "Northwind", s: "Brand kit ready", m: "N", bg: "linear-gradient(140deg, #6E8FD8, #1D2F63)", ink: "#F5F3EE", sw: ["#0B1430", "#1D2F63", "#6E8FD8", "#EEF1F8"] },
+  { n: "Lowtide Coffee", s: "Coffee roasters", m: "L", bg: "linear-gradient(140deg, #D9A86C, #6B3F1D)", ink: "#FFF7EC", sw: ["#2A1708", "#6B3F1D", "#D9A86C", "#F6EEE3"] },
+  { n: "Fieldnote", s: "Outdoor goods", m: "F", bg: "linear-gradient(140deg, #BED2C3, #2F5D50)", ink: "#05090A", sw: ["#0E1F1A", "#2F5D50", "#BED2C3", "#EEF3EF"] },
   { n: "Fourth brand", s: "Ready when you are", m: "4", bg: "linear-gradient(140deg, #BBC9C7, #536878)", ink: "#05090A", sw: ["#05090A", "#536878", "#BBC9C7", "#DFEAE8"] },
   { n: "Fifth brand", s: "Ready when you are", m: "5", bg: "linear-gradient(140deg, #BED2C3, #0E191E)", ink: "#05090A", sw: ["#0E191E", "#536878", "#BED2C3", "#E5E4E2"] }
 ];
 function greet() { var h = new Date().getHours(); return h < 5 ? "Good evening" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; }
-function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }   /* Studio, MIRRA, Custom Esignature first: real brands, their own logos */
+function brandList(n) { return BRANDS.slice(0, Math.min(5, n)); }    
 function mono(b) { return '<span class="bm" style="background:' + (b.bg || "#0E191E") + ";color:" + (b.ink || "#fff") + '">' + (b.img ? '<img src="' + b.img + '" alt="">' : esc(b.m)) + "</span>"; }
 var MADE = [["cofounder-whiteboard", "Film", "Your launch film"], ["surfing", "Reels", "A reel a day"], ["tennis-forehand", "Ads", "Five to test"], ["get-together", "Social", "The month, planned"]];
 var AH = SK.appHome($("[data-st-ah]"), {});
-/* the Home at work while you sign in (SK.appStory): footage dragged in, the request, the editor, Ask Studio; it rests on the plan and pay steps */
 var STORY = null;
 function story(on) { if (on && !STORY) STORY = SK.appStory(AH, { sfx: function (n) { SFX.play(n === "key" ? "key" : n, { gain: n === "key" ? .5 : .4 }); } }); else if (!on && STORY) { STORY.stop(); STORY = null; } }
 function drawHome(typing) {
@@ -1668,20 +1470,15 @@ function sizeStage() {
   sheet.style.setProperty("--uz", uz.toFixed(3));
   var r = stage.getBoundingClientRect(); if (!r.width) return;
   var mob = SK.mobile() || innerWidth <= 960;
-  /* the app at its own 1440 x 900: as tall as the space allows (up to 5K), running off the right edge like the opening film */
-  if (mob) { var sm = Math.max(.38, Math.min(.5, innerWidth * 1.55 / 1440)); stage.style.setProperty("--stage-h", Math.round(Math.min(370, 760 * sm)) + "px"); fit.style.setProperty("--s", sm.toFixed(3)); return; }   /* phones: as on the waitlist */
+  if (mob) { var sm = Math.max(.38, Math.min(.5, innerWidth * 1.55 / 1440)); stage.style.setProperty("--stage-h", Math.round(Math.min(370, 760 * sm)) + "px"); fit.style.setProperty("--s", sm.toFixed(3)); return; }    
   var s = mob ? Math.min(r.width / 1440, 220 / 900) : Math.min((r.height || 900) / 860, (r.width + 300) / 1440, 1.75);
-  if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);   /* the plans take the room; the app stays tall and runs off the edge */
+  if (!mob && ORDER[at] === "plan") s = Math.min(1.75, (r.height || 900) / 900);    
   fit.style.setProperty("--s", Math.max(.2, s).toFixed(3));
 }
 window.addEventListener("resize", function () { requestAnimationFrame(sizeStage); });
 
-/* ---------- a wallpaper per step, decoded ahead and crossfaded (as in early access) ---------- */
-/* clean and bright, from the app's own wallpapers (never the film-grain or dark ones): cumulus sky, Lake Tahoe soft morning, Lake
-   Tahoe turquoise day, open ocean, and the orange dune (the app's default, so Unlocked hands straight into Studio) */
 var WALL = {};
-/* Evan: the orange dune on every step (the app's default wallpaper); the Chapters pill can try any other (SK.wallPick) */
-var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };   /* v3: a wallpaper per step, the dune at both ends */
+var WALLSET = { "in": "su/done", code: "wl/in", roles: "wl/roles", brands: "wl/name", claude: "wl/claude", make: "wl/you", plan: "su/code", pay: "su/pay", done: "su/done" };    
 function setWalls(src) { Object.keys(WALLSET).forEach(function (k) { var u = src || "assets/" + WALLSET[k] + ".jpg"; WALL[k] = PHONE ? u.replace(/\.jpg$/, "-m.jpg") : u; }); }
 setWalls(SK.wallPick() ? "assets/" + SK.wallPick() + ".jpg" : "");
 var wallCache = {}, wallTok = 0, wallNow = "";
@@ -1700,9 +1497,8 @@ function wall(k) {
     $$(".pass .frost").forEach(function (f) { f.src = frostOf(u); });
   });
 }
-function frostOf(u) { return String(u).replace(/(-frost)?\.jpg$/, "-frost.jpg"); }   /* the pre-blurred wallpaper for the pass's glass (no live blur in its 3D card) */
+function frostOf(u) { return String(u).replace(/(-frost)?\.jpg$/, "-frost.jpg"); }    
 
-/* ---------- the pass (the same 3D object as early access, written for a member) ---------- */
 function passHTML() {
   var frost = '<img class="frost" src="' + frostOf(sky.getAttribute("src") || WALL["in"]) + '" alt="">';
   return '<div class="side front"><div class="plate"></div><div class="card">' + frost + '<div class="foil"></div><div class="spec"><i></i></div><div class="sweep"></div><span class="pbeam" data-beam="cx" data-active><span data-beam-bloom></span></span></div>' +
@@ -1724,12 +1520,12 @@ function Pass(el, opts) {
   opts = opts || {};
   el.innerHTML = passHTML();
   var st = { rx: 0, ry: 0, z: 0, s: 1, trx: 0, try_: 0, flip: 0, drag: null, intro: null, live: false };
-  function flipped() { if (st.flipped) return; st.flipped = true; if (opts.hint) opts.hint.classList.add("done"); }   /* the hint goes quiet after the first flip */
+  function flipped() { if (st.flipped) return; st.flipped = true; if (opts.hint) opts.hint.classList.add("done"); }    
   var lerp = function (a, b, t) { return a + (b - a) * t; }, easeOut = function (t) { return 1 - Math.pow(1 - t, 3); }, easeIO = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
   var foils = [].slice.call(el.querySelectorAll(".foil")), specs = [].slice.call(el.querySelectorAll(".spec i")), lastMx = -1, lastMy = -1, fr = 0, vis = true;
   function frame(now) {
     if (!st.live) return;
-    if (fr++ % 20 === 0) vis = !!el.offsetParent;   /* a layout read 3 times a second, not 60 */
+    if (fr++ % 20 === 0) vis = !!el.offsetParent;    
     if (vis) {
       if (st.intro) {
         var t = Math.min(1, (now - st.intro.t0) / st.intro.ms), e = easeOut(t);
@@ -1737,10 +1533,9 @@ function Pass(el, opts) {
         if (t >= 1) { st.intro = null; el.classList.add("sweep"); setTimeout(function () { el.classList.remove("sweep"); }, 1700); opts.onLanded && opts.onLanded(); }
       } else {
         var k = st.drag ? .35 : .09;
-        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }   /* touch: a slow, subtle drift */
+        if (!fine && !st.drag && !SK.reduced) { st.try_ = Math.sin(now / 2600) * 6; st.trx = Math.cos(now / 3400) * 3.5; }    
         st.rx = lerp(st.rx, st.trx, k); st.ry = lerp(st.ry, st.try_ + st.flip, k); st.z = lerp(st.z, 0, .1); st.s = lerp(st.s, 1, .1);
       }
-      /* "Tap to flip", shown, not just said: until the first flip, every few seconds the pass starts to turn and settles back */
       var nd = 0;
       if (opts.nudge && !st.flipped && !st.intro && !st.drag && !SK.reduced) { st.nd0 = st.nd0 || now; var np = ((now - st.nd0) % 3600) / 1000 - 1.2; if (np > 0 && np < 1) nd = 26 * Math.sin(np * Math.PI) * (1 - np * .35); }
       el.style.transform = "translateZ(" + st.z.toFixed(1) + "px) rotateX(" + st.rx.toFixed(2) + "deg) rotateY(" + (st.ry + nd).toFixed(2) + "deg) scale(" + st.s.toFixed(3) + ")";
@@ -1766,14 +1561,13 @@ function Pass(el, opts) {
   el.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); st.flip += 180; } });
   el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", "Your Studio pass. Press to flip it.");
   var q = function (k) { return el.querySelector('[data-p="' + k + '"]'); };
-  /* the pass's beam moves only while the pass is on screen */
   function beamsRun(on) { el.querySelectorAll(".pbeam").forEach(function (b) { if (on) b.removeAttribute("data-paused"); else b.setAttribute("data-paused", ""); }); }
   beamsRun(false);
   return {
     start: function () { if (!st.live) { st.live = true; requestAnimationFrame(frame); } beamsRun(true); },
     stop: function () { st.live = false; beamsRun(false); },
     enter: function (ms) { st.flip = 0; st.intro = SK.reduced ? null : { t0: performance.now(), ms: ms || 2000, ry0: -385 }; this.start(); },
-    spin: function () { st.flip += 360; flipped(); SFX.play("move", { gain: .8 }); },   /* one full turn: it can be pressed */
+    spin: function () { st.flip += 360; flipped(); SFX.play("move", { gain: .8 }); },    
     set: function (d) {
       ["kind", "mail", "no", "tk", "trial", "k3", "v3", "sig"].forEach(function (k) { if (k in d) q(k).textContent = d[k]; });
       if ("name" in d) q("name").innerHTML = d.name ? esc(d.name) : '<span class="ph">Your name</span>';
@@ -1782,17 +1576,16 @@ function Pass(el, opts) {
     }
   };
 }
-$("[data-st-fliph]").textContent = fine ? "Drag to turn it · click to flip" : "Tap to flip";   /* a phone has no click and nothing to drag with a mouse */
+$("[data-st-fliph]").textContent = fine ? "Drag to turn it · click to flip" : "Tap to flip";    
 var pass1 = Pass($("[data-st-pass1]")), pass2 = Pass($("[data-st-pass2]"), { nudge: true, hint: $(".wl-dstage .wl-hint"), onLanded: function () { SFX.play("land"); } });
 function drawPass(p) {
   var pl = planOf(me.plan), nm = (me.full || me.first || val("first") || "").trim();
   p.set(me.invite ? { kind: "Pro · Invite", name: nm, mail: me.email || "", no: "Pro", trial: "On " + ((me.invite.from || "a friend").split(/\s+/)[0]), k3: "Card", v3: "None", sig: "No card · nothing to cancel", seed: (nm + me.email) || "studio", list: ["Studio Pro, on a friend", "No card, nothing to cancel", "Claude does the work"] }
-    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days for $1 when you keep it"] }
+    : !PAYWALL ? { kind: "Studio · Member", name: nm, mail: me.email || "", no: "Free", trial: "Start free", k3: "For", v3: "Mac", sig: "See you inside", seed: (nm + me.email) || "studio", list: ["Your first video, before you pay", "Claude does the work", "14 days free, no card"] }
     : paidStart() ? { kind: pl.name + " · " + (me.period === "year" ? "Yearly" : "Monthly"), name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, tk: "Price", trial: me.notrial.price + "/" + (me.period === "year" ? "yr" : "mo"), k3: "Renews", v3: renewsShort(), sig: "Studio " + pl.name, seed: (nm + me.email) || "studio" }
     : { kind: pl.name + (me.promo ? " · Friend's code" : " · Trial"), tk: "Trial", name: nm || (PAYWALL ? "Studio member" : ""), mail: me.email || "", no: pl.name, trial: trialWord(), k3: "Renews", v3: startsShort(), sig: "Then " + then(pl.id, me.period), seed: (nm + me.email) || "studio" });
 }
 
-/* ---------- the word reveal and the self-typing examples (as in early access) ---------- */
 function words(el, n) {
   var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), list = [], t;
   while ((t = w.nextNode())) if (!(t.parentNode.classList && t.parentNode.classList.contains("wl-bw")) && t.nodeValue.trim()) list.push(t);
@@ -1810,7 +1603,7 @@ function reveal(step) {
   step.classList.add("w0"); void step.offsetWidth;
   requestAnimationFrame(function () { step.classList.remove("w0"); });
 }
-var TY = { first: "Alex", email: "you@studio.com" }, tyTok = 0;   /* neutral examples on a public page */
+var TY = { first: "Alex", email: "you@studio.com" }, tyTok = 0;    
 form.querySelectorAll("input[name]").forEach(function (inp) {
   var t = TY[inp.name], bx = inp.closest(".wl-box"); if (!t || !bx) return;
   var o = document.createElement("span"); o.className = "wl-ty still"; o.setAttribute("aria-hidden", "true"); o.innerHTML = "<span></span><i></i>"; bx.appendChild(o);
@@ -1837,7 +1630,6 @@ function typeFields() {
 }
 $$(".wl-box").forEach(function (b) { var fb = b.querySelector(".wl-fb"); b.addEventListener("focusin", function () { fb.setAttribute("data-active", ""); }); b.addEventListener("focusout", function () { if (!b.closest(".wl-f.bad")) fb.removeAttribute("data-active"); }); });
 
-/* ---------- moving between steps ---------- */
 function personal() { var f = first(); $$("[data-st-hi]").forEach(function (h) { var t = h.getAttribute("data-st-hi"); h.textContent = f ? t.replace("{first}", f) : t.replace(", {first}", ""); }); }
 function ready() {
   var q = ORDER[at];
@@ -1849,8 +1641,7 @@ function ready() {
   return true;
 }
 var LINE = { "in": "su-in", code: "su-code", roles: "wl-roles", brands: "wl-brands", claude: "wl-claude", make: "su-make", plan: "pw-plan", pay: "pw-pay" };
-/* the fields carry the composer's border beam all the time (section.css shows it soft, and full in the field you're in) */
-function beamsOn() {   /* the fields of the step on screen carry the composer's beam: still, and moving only in the field you're typing in (21 always-moving beams made it hot and glitchy) */
+function beamsOn() {    
   sheet.querySelectorAll(".wl-fb").forEach(function (fb) {
     var here = !!fb.closest(".wl-q.on"), typing = fb.parentNode.contains(document.activeElement), bad = !!fb.closest(".wl-f.bad");
     if (here || bad) fb.setAttribute("data-active", ""); else fb.removeAttribute("data-active");
@@ -1858,18 +1649,18 @@ function beamsOn() {   /* the fields of the step on screen carry the composer's 
   });
 }
 sheet.addEventListener("focusin", beamsOn); sheet.addEventListener("focusout", function () { setTimeout(beamsOn, 0); });
-if (!fine && window.SK_PAGE) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });   /* the keyboard on a phone: the bar steps aside only while it's really up */
+if (!fine && window.SK_PAGE) SK.keyboard(sheet, { scroller: function () { return sheet.classList.contains("done") ? $("[data-st-done]") : sheet.querySelector(".wl-in"); } });    
 setTimeout(beamsOn, 0);
 function setStep(n, quiet, ack) {
   var cur = stepEl(ORDER[at]), q = ORDER[n], nx = stepEl(q), dir = n > at ? 1 : -1;
   personal();
   if (cur !== nx) {
-    SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });   /* kit.js: out of focus the way you're going, the next one in */
+    SK.stepSwap(box, cur, nx, dir, function () { reveal(nx); });    
     var a = scenes[SCENE[ORDER[at]]], b = scenes[SCENE[q]];
     if (a !== b) { a.classList.remove("on"); a.classList.toggle("past", n > at); b.classList.remove("past"); b.classList.add("on"); }
     if (!quiet) SFX.play("move", { pan: dir * .3 });
   }
-  at = n; setTimeout(beamsOn, 40); SK.frost.nudge(1600);   /* the scenes slide: the frost follows them */
+  at = n; setTimeout(beamsOn, 40); SK.frost.nudge(1600);    
   sheet.setAttribute("data-step", q);
   if (sheet.classList.contains("open") && !sheet.classList.contains("done")) { wall(q); want(ORDER[n + 1] || "done"); }
   segs.forEach(function (s, i) { s.hidden = i >= ORDER.length; s.classList.toggle("on", i === n); s.classList.toggle("ok", i < n); });
@@ -1885,7 +1676,7 @@ function setStep(n, quiet, ack) {
   story(sheet.classList.contains("open") && (q === "in" || q === "code"));
   if (SCENE[q] === "pass") { drawPass(pass1); pass1.start(); } else pass1.stop();
   if (q === "pay") payStep();
-  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? ["pw-notrial"] : [LINE[q]]));
+  if (!quiet && sheet.classList.contains("open")) KAY.say((ack ? [ack] : []).concat(q === "pay" && me.promo ? ["pw-promo"] : q === "pay" && me.notrial ? [FEE === 0 && !trialEnded() ? "pw-ok" : "pw-notrial"] : [LINE[q]]));
   if (!quiet) focusStep(SK.reduced ? 0 : 420);
 }
 function focusStep(delay) {
@@ -1909,14 +1700,13 @@ function advance() {
   if (q === "code") return verify();
   if (!ready()) return;
   if (q === "make") return finish();
-  setStep(at + 1, false, q === "plan" ? "pw-ok" : null);   /* "Good choice." */
+  setStep(at + 1, false, q === "plan" ? "pw-ok" : null);    
 }
 
-/* ---------- step 1: the ways in ---------- */
 var mailBox = $("[data-st-mail]"), emailWay = sheet.querySelector('[data-way="email"]');
 $$(".st-way").forEach(function (b) {
   var way = b.getAttribute("data-way");
-  if ((way === "google" || way === "apple") && !CFG.oauth) { b.disabled = true; b.querySelector(".soon").hidden = false; }   /* not wired to Supabase OAuth yet: a quiet "Soon", never a button that fails (?oauth turns them on) */
+  if ((way === "google" || way === "apple") && !CFG.oauth) { b.disabled = true; b.querySelector(".soon").hidden = false; }    
   b.addEventListener("click", function () {
     err("");
     if (way === "email") {
@@ -1928,8 +1718,6 @@ $$(".st-way").forEach(function (b) {
     oauth(way, b);
   });
 });
-/* Google and Apple only once Supabase OAuth is wired (?oauth on this Mac): until then they are not shown, and the email fields are
-   simply there, nothing to expand */
 if (!CFG.oauth) { $$('.st-way[data-way="google"], .st-way[data-way="apple"], .st-or').forEach(function (el) { el.hidden = true; }); emailWay.hidden = true; mailBox.hidden = false; emailWay.setAttribute("aria-expanded", "true"); }
 form.elements.first.addEventListener("input", function () { drawHome(true); clearTimeout(this._t); this._t = setTimeout(function () { drawHome(); }, 900); personal(); next.disabled = !ready(); });
 form.elements.email.addEventListener("input", function () { next.disabled = !ready(); });
@@ -1957,7 +1745,6 @@ function startEmail() {
   }, function (x) { err(say(x)); }).then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = ORDER[at] === "code" ? "Verify" : "Send my code"; });
 }
 
-/* ---------- step 2: six boxes; typing, paste and the phone's autofill all fill them ---------- */
 var otp = $$("[data-st-otp] input"), otpBox = $("[data-st-otp]");
 function code() { return otp.map(function (i) { return i.value; }).join("").replace(/\D/g, ""); }
 var otpBeam = $(".st-otpb");
@@ -1974,7 +1761,7 @@ function fill(from, digits) {
 otp.forEach(function (inp, i) {
   inp.addEventListener("input", function () {
     var v = inp.value.replace(/\D/g, "");
-    if (v.length > 1) { inp.value = ""; fill(i, v); return; }   /* autofill or a fast paste puts the whole code in one box */
+    if (v.length > 1) { inp.value = ""; fill(i, v); return; }    
     inp.value = v; inp.classList.toggle("has", !!v);
     if (v && i < 5) otp[i + 1].focus();
     next.disabled = !ready(); badOtp(false); err("");
@@ -1987,7 +1774,7 @@ otp.forEach(function (inp, i) {
     else if (e.key === "Enter") { e.preventDefault(); verify(); }
   });
   inp.addEventListener("paste", function (e) { var t = (e.clipboardData || window.clipboardData).getData("text") || ""; if (/\d/.test(t)) { e.preventDefault(); fill(0, t); } });
-  inp.addEventListener("focus", function () { setTimeout(function () { if (document.activeElement === inp) try { inp.select(); } catch (x) {} }, 0); });   /* only if still here: a fast typist has moved on */
+  inp.addEventListener("focus", function () { setTimeout(function () { if (document.activeElement === inp) try { inp.select(); } catch (x) {} }, 0); });    
 });
 var resendB = $("[data-st-resend]"), waitEl = $("[data-st-wait]"), resendT = 0;
 var hintT = 0;
@@ -2011,13 +1798,12 @@ function verify() {
   }).then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Verify"; });
 }
 
-/* signed in: hand the session to the server for the Mac app at once, then the plan (or, for an invite, redeem it) */
 function signedIn() {
   drawHome();
   if (me.invite) return redeem().then(function (r) { me.hand = r; me.invite.done = true; askOrDone(); });
   return handoff().then(function (h) {
     me.hand = h;
-    setTimeout(askOrDone, 520);   /* v3: who they are (unless answered before), then You're in and the Download button */
+    setTimeout(askOrDone, 520);    
   }, function (x) {
     if (x && x.state === "has_plan") { me.hand = x; showDone("has"); return; }
     if (x && /sales_off|test_mode_only/.test(x.code || "")) { err("Studio is not on sale yet. Join the waitlist and we'll tell you first."); return; }
@@ -2025,9 +1811,6 @@ function signedIn() {
   });
 }
 
-/* ---------- v3: who they are (roles, brands, Claude, what first), waitlist-style; saved to their Studio profile ----------
-   Supabase user_metadata.onboarding = { roles: [..], brands: "1"|"2-3"|"4+", claude: "Pro or Max"|"Free plan"|"Not yet", first_make: [..],
-   answered_at } (the app reads it and skips these in onboarding), and the Brevo contact (ROLE, BRANDS, CLAUDE) through the waitlist Worker. */
 var ans = { roles: [], brands: "", claude: "", make: [] };
 var WAITLIST = "https://studio-waitlist.studio-licence.workers.dev";
 function answered() { var md = me.session && me.session.user && me.session.user.user_metadata; return md && md.onboarding && md.onboarding.answered_at; }
@@ -2054,16 +1837,15 @@ function finish() {
     supa().then(function (c) { return c.auth.updateUser({ data: { onboarding: o } }); }).catch(function () {}),
     fetch(WAITLIST + "/signup/profile", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ access_token: me.session.access_token, roles: o.roles, brands: o.brands, claude: o.claude, first_make: o.first_make }) }).catch(function () {})
   ]);
-  save.then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Finish"; showDone(); });   /* never blocks You're in */
+  save.then(function () { busy = false; next.classList.remove("busy"); $("[data-st-next-t]").textContent = "Finish"; showDone(); });    
 }
 
-/* ---------- step 3: the plan ---------- */
 var plansEl = $("[data-st-plans]"), perEl = $("[data-st-per]");
 var TICK = '<svg viewBox="0 0 16 16"><path d="M3.5 8.4l2.8 2.8 6.2-6.4"/></svg>', DASH = '<svg viewBox="0 0 16 16"><path d="M4 8h8"/></svg>';
 function drawPlans() {
   plansEl.innerHTML = PLANS.map(function (p) {
     return '<div class="st-plan' + (p.id === me.plan ? " sel" : "") + '" data-plan="' + p.id + '" role="radio" tabindex="0" aria-checked="' + (p.id === me.plan) + '"><span class="st-sb" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>' +
-      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">Most picked</span>' : "") + "</span>" +
+      '<span class="nm">' + esc(p.name) + (p.best ? '<span class="tag">' + esc(p.tag || "Most popular") + "</span>" : "") + "</span>" +
       '<span class="pr">' + esc(price(p.id, me.period)) + "<small> /mo</small></span>" +
       '<span class="bl">' + esc(me.period === "year" ? bill(p.id, "year") : p.blurb) + "</span>" +
       '<span class="st-why" data-why="' + p.id + '" role="button" tabindex="0" aria-label="Why ' + esc(p.name) + '? Kayla explains"><img src="assets/kayla.jpg" alt=""><span class="pl"><svg viewBox="0 0 16 16"><path d="M4.5 2.8v10.4L13 8z"/></svg><svg class="pa" viewBox="0 0 16 16"><path d="M4 3h2.6v10H4zM9.4 3H12v10H9.4z"/></svg></span><em>Why ' + esc(p.name) + '?</em><span class="wv" data-wv></span></span>' +
@@ -2080,7 +1862,6 @@ function drawPlans() {
   });
   line();
 }
-/* "Why Creator / Pro / Unlimited?": Kayla's clips from the pricing section (assets/audio/kayla-why-*.mp3), one at a time, the bars filling */
 var whyA = new Audio(), whyOn = null, WHYP = {};
 whyA.preload = "none";
 function wave(w) {
@@ -2104,6 +1885,7 @@ whyA.addEventListener("pause", function () { if (whyOn) whyOn.classList.remove("
 whyA.addEventListener("ended", function () { if (whyOn) { whyOn.classList.remove("on"); whyOn.querySelectorAll("[data-wv] i").forEach(function (i) { i.classList.remove("on"); }); } });
 function line() {
   var pl = planOf(me.plan), t = then(pl.id, me.period);
+  if (straight() && !me.promo) { $("[data-st-line]").innerHTML = "<b>Studio " + esc(pl.name) + " is " + esc(t) + ", starting today.</b> Cancel anytime in Studio, in Settings → Billing."; return; }
   $("[data-st-line]").innerHTML = me.promo ? "<b>Your first month is free, then " + esc(t) + ".</b> Cancel anytime before " + esc(startsLong()) + " and you won't be charged. Your plan starts " + esc(startsLong()) + "."
     : "<b>14 days for $1, then " + esc(t) + ".</b> Cancel anytime before day 14 and you won't be charged again. Your plan starts " + esc(renewLong) + ".";
 }
@@ -2118,7 +1900,6 @@ perEl.querySelectorAll("button").forEach(function (b) {
 function slidePer() { var on = perEl.querySelector('[aria-checked="true"]'); if (!on || !on.offsetWidth) return; perEl.style.setProperty("--w", on.offsetWidth + "px"); perEl.style.setProperty("--x", (on.offsetLeft - 4) + "px"); }
 $("[data-st-save]").textContent = "Save " + ((P.save || 20)) + "%";
 
-/* ---------- step 4: $1, inside the page. Stripe's Payment Element in our glass (the Appearance API), never a redirect ---------- */
 var stripe = null, elements = null, peMounted = false, stripeP = null;
 function loadStripe() {
   if (stripeP) return stripeP;
@@ -2145,10 +1926,12 @@ var APPEARANCE = {
     ".Error": { fontSize: "13px" }
   }
 };
-/* the checkout words (Studio legal, consent copy b, checkout-v1): the real price and the real renewal date, never "in 14 days" */
 var RENEW_FULL = RENEW.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }), CONSENT = "checkout-v1";
 var MONTH_FULL = MONTH.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-function seats(pl) { return pl.people + (pl.people === 1 ? " seat · up to 2 Macs" : " seats · up to 2 Macs each"); }
+function seats(pl) {
+  var m = pl.macs || 2, macs = m === 1 ? "1 Mac" : "up to " + m + " Macs";
+  return pl.people === 1 ? "1 seat · " + macs : pl.people + " seats · " + macs + " each";
+}
 function priceWord(pl) { return me.period === "year" ? then(pl.id, "year").replace("/yr", "/year") : price(pl.id, "month") + "/month"; }
 var agree = form.elements.renew_ok, agreeL = $("[data-st-agree]");
 form.elements.pname.addEventListener("input", function () { me.first = val("pname").split(/\s+/)[0] || ""; me.full = val("pname"); drawPass(pass1); drawHome(); err(""); });
@@ -2156,18 +1939,17 @@ function payStep() {
   var pl = planOf(me.plan), pw = priceWord(pl), per = me.period === "year" ? "year" : "month", bare = pw.replace(/\/(month|year)$/, "");
   $("[data-st-sname]").textContent = "Studio " + pl.name;
   $("[data-st-seats2]").textContent = seats(pl);
-   /* the price and date live in the today row, written below */
   $("[data-st-then]").textContent = "Then " + bare + " a " + per + ".";
   var legal = ' By paying, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
-  if (me.notrial && !me.promo) {   /* this account or card already had its trial (checkout-notrial-v1): the full price today, every month after */
+  if (me.notrial && !me.promo) {    
     var np = me.notrial.price, npm = np + "/" + per, nextD = (function () { var d = new Date(NOW); if (per === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); })();
-    $("[data-st-payh]").textContent = "You've had your free trial.";
+    $("[data-st-payh]").textContent = trialEnded() ? PW.words.title : FEE === 0 ? "Keep your Studio." : "You've had your free trial.";
     $("[data-st-then]").textContent = "Studio " + pl.name + " is " + npm + ".";
     $("[data-st-today]").innerHTML = "<b>" + esc(np) + " today</b>, then <b>" + esc(npm) + "</b> plus tax every " + per + ", until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " starts today at " + npm + " plus tax and renews automatically every " + per + ", until I cancel. I can cancel anytime in the app or online; I won't be charged again after I cancel.";
     $("[data-st-under]").innerHTML = "You pay " + esc(np) + " today. It renews every " + per + " (next on " + esc(nextD) + ") until you cancel. Cancel anytime in Studio, in Settings → Billing." + legal;
     $("[data-st-go-t]").textContent = "Start for " + np;
-  } else if (me.promo) {   /* the friends' code (checkout-promo-v1): $0 today, the first charge a month from today */
+  } else if (me.promo) {    
     $("[data-st-payh]").textContent = "Your first month is free.";
     $("[data-st-today]").innerHTML = "<b>$0 today</b> for your first month. Then <b>" + esc(pw) + "</b> plus tax, starting <b>" + esc(MONTH_FULL) + "</b>, until you cancel.";
     $("[data-st-agree-t]").textContent = "I agree that Studio " + pl.name + " renews automatically at " + pw + " plus tax, starting " + MONTH_FULL + " and every month after that, until I cancel. I can cancel anytime in the app or online, and if I cancel before " + MONTH_FULL + ", I won't be charged.";
@@ -2181,18 +1963,16 @@ function payStep() {
     $("[data-st-go-t]").textContent = PAYWALL ? "Start for $1" : "Start 14 days for $1";
   }
   drawPromo();
-  $("[data-st-name]").hidden = !!first();   /* Studio sends the name it has; when it has none, the pass needs one */
-  agree.checked = false; go.classList.add("off");   /* the terms just changed (or are new): ask again */
+  $("[data-st-name]").hidden = !!first();    
+  agree.checked = false; go.classList.add("off");    
   reveal(stepEl("pay"));
   mountCard();
 }
-/* the card form: a $1 subscription, or with a code a setup (the card is kept, nothing is charged today). Stripe can't change that
-   mode on a live form, so a change of mode draws a new one. */
 var peMode = "", pe = null;
 function mountCard() {
   var cents = me.notrial && !me.promo ? me.notrial.cents : 100, mode = me.promo ? "setup" : "subscription";
   if (peMounted && peMode === mode + cents) return;
-  if (peMounted && elements && peMode.indexOf(mode) === 0 && mode === "subscription") { try { elements.update({ amount: cents }); peMode = mode + cents; return; } catch (x) {} }   /* same form, new amount: the card typed stays */
+  if (peMounted && elements && peMode.indexOf(mode) === 0 && mode === "subscription") { try { elements.update({ amount: cents }); peMode = mode + cents; return; } catch (x) {} }    
   var pk = MOCK ? DEMO_PK : CFG.stripe;
   if (!pk) { $("[data-st-pe]").innerHTML = '<p class="wl-fine">The card form opens once the payment key is set.</p>'; return; }
   if (pe) { try { pe.destroy(); } catch (x) {} pe = null; peMounted = false; elements = null; $("[data-st-pe]").innerHTML = '<div class="st-load"><i></i><i></i><i></i></div>'; }
@@ -2241,7 +2021,6 @@ function paid(c) {
 }
 $("[data-st-change]").addEventListener("click", function () { setStep(ORDER.indexOf("plan")); });
 
-/* ---------- a friends' code: "Have a code?" opens one field; an accepted code becomes a chip with ✕ ---------- */
 var pfield = $("[data-st-pfield]"), pin = form.elements.promo, applyB = $("[data-st-apply]");
 function drawPromo() {
   $("[data-st-havecode]").hidden = !!me.promo || !pfield.hidden;
@@ -2266,11 +2045,10 @@ function applyCode() {
 applyB.addEventListener("click", applyCode);
 pin.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); applyCode(); } });
 pin.addEventListener("input", function () { pfield.classList.remove("bad"); });
-SK.keepTyping([pin, form.elements.pname, form.elements.first, form.elements.email]);   /* a field that loses focus to nothing mid-typing takes it back */
-$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast("Code removed. Back to 14 days for $1."); });
+SK.keepTyping([pin, form.elements.pname, form.elements.first, form.elements.email]);    
+$("[data-st-pdel]").addEventListener("click", function () { setPromo(null); pfield.hidden = true; drawPromo(); toast(FEE ? "Code removed. Back to 14 days for $" + FEE + "." : "Code removed."); });
 agree.addEventListener("change", function () { go.classList.toggle("off", !agree.checked); agreeL.classList.remove("bad"); if (agree.checked) err(""); me.agreedAt = agree.checked ? new Date().toISOString() : null; });
 
-/* ---------- the server and Supabase (or, on this Mac, a stand-in that answers the same way) ---------- */
 function E(code, human, extra) { var e = new Error(code); e.code = code; e.human = human; return Object.assign(e, extra || {}); }
 function say(x) {
   if (x && x.human) return x.human;
@@ -2296,7 +2074,7 @@ function api(path, body) {
   }, function () { throw E("net"); });
 }
 var wait = function (ms) { return SK.sleep(SK.reduced ? 0 : ms); };
-var SLOW = Q.has("slow") ? 9000 : 0;   /* ?slow: the stand-in answers slowly, to see the slow-network states */
+var SLOW = Q.has("slow") ? 9000 : 0;    
 function slowly(promise, what) {
   if (navigator.onLine === false) return Promise.reject(E("net"));
   var el = stepEl(ORDER[at]).querySelector(".wl-err"), t1 = setTimeout(function () { el.classList.add("slow"); el.textContent = (what || "Still working") + "… your connection is slow. Hang on."; }, 6000);
@@ -2315,13 +2093,13 @@ function checkCode(token) {
 function oauth(way, b) {
   if (MOCK) {
     b.classList.add("busy"); b.querySelector(".t").textContent = "Opening " + (way === "apple" ? "Apple" : "Google") + "…"; SFX.play("send");
-    return wait(900).then(function () { me.first = "Evan"; me.email = "evan@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Evan"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
+    return wait(900).then(function () { me.first = "Alex"; me.email = "alex@" + (way === "apple" ? "icloud.com" : "gmail.com"); form.elements.first.value = "Alex"; me.session = { access_token: "mock", refresh_token: "mock" }; b.classList.remove("busy"); b.querySelector(".t").textContent = "Continue with " + (way === "apple" ? "Apple" : "Google"); toast("Signed in with " + (way === "apple" ? "Apple" : "Google") + " (stand-in)."); return signedIn(); });
   }
   return supa().then(function (c) { return c.auth.signInWithOAuth({ provider: way, options: { redirectTo: location.origin + location.pathname + location.search + HASH } }); });
 }
 function handoff() {
   if (MOCK) return slowly(wait(400), "Getting Studio ready").then(function () { return { code: "STANDIN", download: "#download", open: "studio://handoff?code=STANDIN", expires_in: 3600 }; });
-  var s = me.session; me.session = { access_token: s.access_token };   /* the refresh token is the app's now: never used here again */
+  var s = me.session; me.session = { access_token: s.access_token };    
   return slowly(api("/web/handoff", { access_token: s.access_token, refresh_token: s.refresh_token }), "Getting Studio ready");
 }
 function promoCheck(code) {
@@ -2329,7 +2107,7 @@ function promoCheck(code) {
   return api("/web/promo", { code: code, period: me.period });
 }
 function checkout() {
-  if (MOCK) return wait(1200).then(function () {   /* ?trialused / ?trialafter on this Mac: the server's two no-trial answers */
+  if (MOCK) return wait(1200).then(function () {    
     if (!me.promo && !me.notrial && Q.has("trialused")) throw E("trial_used", null, { status: 409, price: price(me.plan, me.period) });
     if (!me.promo && !me.notrial && Q.has("trialafter")) throw E("trial_used_after", null, { state: "failed", reason: "trial_used" });
     return { mock: true };
@@ -2339,16 +2117,15 @@ function checkout() {
   if (me.promo) body.promo = me.promo.code;
   else if (me.notrial) { body.trial = false; body.consent.renewal_date = new Date().toISOString().slice(0, 10); }
   return api("/web/checkout", body).catch(function (x) {
-    if (x && x.code === "bad_token" && EMBED) return freshToken().then(function (t) { body.token = t; return api("/web/checkout", body); });   /* once, quietly */
+    if (x && x.code === "bad_token" && EMBED) return freshToken().then(function (t) { body.token = t; return api("/web/checkout", body); });    
     throw x;
   }).then(function (c) {
     if (c.url && !c.client_secret) throw E("checkout_off", "Checkout is still on Stripe's page; the in-page card isn't switched on yet.");
     return c;
   });
 }
-/* after Stripe: the server asks Stripe itself, and gives the download and Open Studio links (it covers a bank's 3-D Secure return too) */
 function status(sub) {
-  var h = me.hand && me.hand.code, t0 = Date.now(), watch = !me.promo && !me.notrial;   /* a trial: hold ~8 s, the card check lands after the $1 */
+  var h = me.hand && me.hand.code, t0 = Date.now(), watch = !me.promo && !me.notrial;    
   function once() {
     return api("/web/checkout/status?subscription=" + encodeURIComponent(sub || "") + "&handoff=" + encodeURIComponent(h || "")).then(function (j) {
       if (j.state === "failed" && j.reason === "trial_used") throw E("trial_used_after", null, j);
@@ -2360,8 +2137,6 @@ function status(sub) {
   }
   return slowly(once(), "Confirming");
 }
-/* no trial for this account or card: the full price, the card form redrawn for it, the words changed, and the box asked again */
-/* a paid start (no trial): the pass and Unlocked show the price and the next charge, from the server's renews_at */
 function paidStart() { return !!(me.notrial && !me.promo); }
 function renewsDate() { if (me.renewsAt) return me.renewsAt; var d = new Date(NOW); if (me.period === "year") d.setFullYear(d.getFullYear() + 1); else { d.setMonth(d.getMonth() + 1); if (d.getDate() !== NOW.getDate()) d.setDate(0); } return d; }
 function renewsShort() { return renewsDate().toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
@@ -2375,7 +2150,7 @@ function noTrial(x) {
     : "You've had your free trial. Studio " + pl.name + " is " + me.notrial.price + "/" + (me.period === "year" ? "year" : "month") + ".";
 }
 function lookup(code) {
-  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Evan Nicolini", name: "", plan: "pro" }; });
+  if (MOCK) return wait(300).then(function () { var s = { used: "joined", gone: "revoked", old: "expired", nope: "unknown" }[code.toLowerCase()] || "open"; return { state: s, from: "Sam Rivera", name: "", plan: "pro" }; });
   return api("/web/invite?code=" + encodeURIComponent(code)).catch(function (x) { if (x.status === 404) return { state: "unknown" }; throw x; });
 }
 function redeem() {
@@ -2386,7 +2161,6 @@ function redeem() {
   });
 }
 
-/* ---------- a friend's invite: no plan, no card ---------- */
 function setInvite(inv) {
   me.invite = inv; var f = (inv.from || "").split(/\s+/)[0];
   var fromP = $("[data-st-from]"); fromP.hidden = false;
@@ -2405,10 +2179,9 @@ function setInvite(inv) {
   $("[data-st-fine]").innerHTML = esc(f ? f + " invited you to Studio." : "You're invited to Studio.") + ' By continuing, you agree to the <a href="terms/" target="_blank" rel="noopener">Terms</a> and <a href="privacy/" target="_blank" rel="noopener">Privacy Policy</a>. Free invite access is up to Studio and can change or end at any time.';
   h.innerHTML = esc(f ? f + " invited you." : "You're invited.") + "<span>Studio Pro, on us.</span>";
   s.textContent = "No card, no plan. Sign in, and Studio is ready for your Mac.";
-  ORDER = ["in", "code", "roles", "brands", "claude", "make"]; setStep(at, true);   /* v3: invites answer the questions too */
+  ORDER = ["in", "code", "roles", "brands", "claude", "make"]; setStep(at, true);    
 }
 
-/* ---------- You're in ---------- */
 var doneEl = $("[data-st-done]");
 function showDone(has) {
   var f = first(), pl = planOf(me.plan), h = me.hand || {};
@@ -2425,7 +2198,7 @@ function showDone(has) {
     : PAYWALL && paidStart() ? "You're on Studio " + pl.name + ". Your next charge is " + me.notrial.price + " on " + renewsLong() + "."
     : PAYWALL && me.promo ? "Your free month runs until " + startsLong() + ". Then " + then(pl.id, me.period) + ", unless you cancel before. Stripe will remind you before the first charge."
     : PAYWALL ? "Your 14 days run until " + renewLong + ". Then " + then(pl.id, me.period) + ", unless you cancel before. We'll remind you 3 days before."
-    : "Free to start. Make your first video, and keep it for 14 days for $1 when you're ready.";
+    : "Free to start. Your first 14 days are free, with no card: pick a plan when you're ready.";
   var open = $("[data-st-open]"), dl = $("[data-st-dl]");
   if (STUDIO && h.code) { h.download = h.open = STUDIO + "/_launch/download?code=" + encodeURIComponent(h.code); }
   open.href = h.open || "studio://"; dl.href = h.download || "#";
@@ -2435,17 +2208,17 @@ function showDone(has) {
     sheet.classList.add("done"); sheet.classList.remove("shown");
     sheet.scrollTop = 0; doneEl.scrollTop = 0;
     pass2.enter(2100);
-    setTimeout(function () { if (sheet.classList.contains("done")) SK.guideTap($("[data-st-pass2]"), { key: "studio-guide-pass", from: $("[data-st-kay]"), onPress: function () { pass2.spin(); } }); }, 3400);   /* the first time: Kayla's dot shows the pass can be pressed */
+    setTimeout(function () { if (sheet.classList.contains("done")) SK.guideTap($("[data-st-pass2]"), { key: "studio-guide-pass", from: $("[data-st-kay]"), onPress: function () { pass2.spin(); } }); }, 3400);    
     setTimeout(function () { sheet.classList.add("shown"); }, SK.reduced ? 0 : 900);
     SFX.play("ask", { gain: 1 }); setTimeout(function () { SFX.play("done", { gain: .55 }); }, 140);
     SFX.bed.swell(); KAY.say([PAYWALL ? "pw-done" : mode === "mac" ? "su-mac" : mode === "get" ? "su-dl" : "su-done"]);
     setTimeout(function () { doneEl.focus({ preventScroll: true }); }, 600);
     if (PAYWALL) { tell({ type: "studio-paywall:unlocked", plan: me.plan, period: me.period }); try { window.webkit.messageHandlers.studio.postMessage({ unlocked: true, plan: me.plan, period: me.period }); } catch (e) {} }
-    else if (mode === "mac") sendMacLink();   /* v3: no surprise download; on a phone the link goes to their email */
+    else if (mode === "mac") sendMacLink();    
   }
 }
 var STUDIO = (Q.get("studio") || "").replace(/\/+$/, "");
-if (!/^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(STUDIO)) STUDIO = "";   /* the Hub's launch journey: a test Studio on this Mac */
+if (!/^http:\/\/(127\.0\.0\.1|localhost):\d{2,5}$/.test(STUDIO)) STUDIO = "";    
 function download() {
   var u = me.hand && me.hand.download;
   if (STUDIO && u) { location.href = u; return; }
@@ -2454,29 +2227,26 @@ function download() {
 }
 $("[data-st-dl]").addEventListener("click", function (e) { e.preventDefault(); download(); });
 
-/* v3: a Mac on a desk gets the Download button; a phone or tablet gets the Mac link (?phone / ?mac force either on this Mac) */
 function onMac() { if (local && Q.has("phone")) return false; if (local && Q.has("mac")) return true; return /Macintosh|Mac OS X/.test(navigator.userAgent) && !(navigator.maxTouchPoints > 1) && !matchMedia("(pointer: coarse)").matches; }
-/* The Download button: the file comes down on the page with a live bar (fetch, streamed, into a blob, then saved as Studio.dmg). If the
-   browser can't stream it (no CORS on the file, an old browser), it falls back to a normal download. Then the 1-2-3 steps. */
 var getting = false;
 function getStudio() {
   if (getting) return; getting = true;
   var u = me.hand && me.hand.download, btn = $("[data-st-get]"), prog = $("[data-st-prog]"), bar = $("[data-st-bar]"), pt = $("[data-st-prog-t]"), pc = $("[data-st-pct]");
   var mb = function (n) { return (n / 1048576).toFixed(n >= 104857600 ? 0 : 1) + " MB"; };
   var show = function (got, total) { var f = total ? Math.min(1, got / total) : 0; bar.style.width = (total ? f * 100 : Math.min(92, got / 2621440)).toFixed(1) + "%"; pc.textContent = total ? Math.floor(f * 100) + "%" : mb(got); pt.textContent = total ? mb(got) + " of " + mb(total) : mb(got) + " so far"; };
-  var test = MOCK || !u || u === "#download" || !!STUDIO;   /* the stand-in or the Hub's Launch day: no real file */
+  var test = MOCK || !u || u === "#download" || !!STUDIO;    
   var done = function (fallback) {
     bar.style.width = "100%"; pc.textContent = fallback || test ? "" : "100%";
     pt.textContent = test ? "Test run: nothing is downloaded" : fallback ? "Your browser is saving Studio.dmg" : "Downloaded · Studio.dmg";
     $("[data-st-get-t]").textContent = "Download again"; btn.disabled = false; getting = false; clearTimeout(stall);
     where(test, fallback); doneEl.classList.add("got"); SFX.play("done", { gain: .6 });
-    if (!test) setTimeout(function () { point(6500); }, 500);   /* the real file: point at the browser's downloads for a few seconds */
+    if (!test) setTimeout(function () { point(6500); }, 500);    
   };
-  var stall = setTimeout(function () { $("[data-st-retry]").hidden = false; }, 12000);   /* nothing for a while: a way to try again */
+  var stall = setTimeout(function () { $("[data-st-retry]").hidden = false; }, 12000);    
   var plain = function () { var a = document.createElement("a"); a.href = u; a.rel = "noopener"; document.body.appendChild(a); a.click(); a.parentNode.removeChild(a); $("[data-st-retry]").hidden = false; done(true); };
   btn.disabled = true; $("[data-st-get-t]").textContent = "Downloading…"; prog.hidden = false; show(0, 1);
   if (STUDIO && u) { location.href = u; done(true); return; }
-  if (MOCK || !u || u === "#download") {   /* this Mac: a stand-in file of Studio's size, at a fast connection's pace */
+  if (MOCK || !u || u === "#download") {    
     var total = 238 * 1048576, t0 = performance.now();
     (function tick() { var f = Math.min(1, (performance.now() - t0) / 4200); show(total * f, total); if (f < 1) requestAnimationFrame(tick); else done(false); })();
     return;
@@ -2493,12 +2263,10 @@ function getStudio() {
   }).catch(plain);
 }
 $("[data-st-get]").addEventListener("click", getStudio);
-/* where it went. Browsers save to the Downloads folder unless someone has changed it; each shows its downloads in its own place:
-   Chrome, Edge, Safari and Firefox at the top right of the toolbar, Arc in its sidebar. The pointer sits at that corner. */
 var BROWSER = "";
-function browser() {   /* asked when it's needed: Arc paints its palette onto the page after it loads */
+function browser() {    
   var ua = navigator.userAgent;
-  try { if (getComputedStyle(document.documentElement).getPropertyValue("--arc-palette-title")) return "arc"; } catch (e) {}   /* Arc sets its palette on every page */
+  try { if (getComputedStyle(document.documentElement).getPropertyValue("--arc-palette-title")) return "arc"; } catch (e) {}    
   if (/Edg\//.test(ua)) return "edge"; if (/Firefox\//.test(ua)) return "firefox"; if (/Chrome\/|Chromium\//.test(ua)) return "chrome"; if (/Safari\//.test(ua)) return "safari"; return "";
 }
 var DLKEY = "", DLSAY = "";
@@ -2521,9 +2289,8 @@ function point(ms) {
 $("[data-st-show]").addEventListener("click", function () { point(6000); });
 $("[data-st-retry-a]").addEventListener("click", function (e) {
   if (this.getAttribute("href") === "#") { e.preventDefault(); toast("Test run: nothing is downloaded."); return; }
-  setTimeout(function () { point(6000); }, 800);   /* the direct link: the browser saves it, and the pointer shows where */
+  setTimeout(function () { point(6000); }, 800);    
 });
-/* a phone: the Mac link by email (the waitlist Worker checks the session and sends "Get Studio on your Mac"), and Copy link */
 var MACLINK = "https://askstudio.ai/start/?mac";
 function sendMacLink() {
   var t = $("[data-st-mac-t]");
@@ -2542,28 +2309,26 @@ $("[data-st-open]").addEventListener("click", function (e) {
   if (MOCK) { e.preventDefault(); toast("Opens Studio, signed in (studio://handoff)."); }
 });
 
-/* ---------- open / close ---------- */
 function open() {
-  if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }   /* a page of its own (build.py PAGES) */
+  if (!window.SK_PAGE) { location.href = "start/" + location.search + HASH; return; }    
   if (sheet.classList.contains("open")) return;
   lastFocus = document.activeElement;
   if (!sky.getAttribute("src")) { sky.src = WALL[ORDER[at]] || WALL["in"]; $$(".pass .frost").forEach(function (f) { f.src = frostOf(sky.getAttribute("src")); }); }
-  SFX.wake(); SFX.bed.start();   /* always: on a context that isn't running yet it waits silently and fades in on the first tap or key */
+  SFX.wake(); SFX.bed.start();    
   sheet.hidden = false; sheet.scrollTop = 0;
   html.classList.add("wl-open");
   if (SK.kayla && SK.kayla.pause) SK.kayla.pause();
   if (!DEEP.test(location.hash)) { try { history.pushState({ st: 1 }, "", location.pathname + location.search + HASH); pushed = true; } catch (e) {} }
-  SK.sheetIn(sheet, sky, function () { sizeStage(); slidePer(); }, function () { sizeStage(); });   /* kit.js: the wallpaper decoded first, then the entrance */
+  SK.sheetIn(sheet, sky, function () { sizeStage(); slidePer(); }, function () { sizeStage(); });    
   wallNow = sky.getAttribute("src"); SK.edgeTint(wallNow); SK.frost(wallNow);
   wall(ORDER[at]); want(ORDER[at + 1] || "done"); personal();
   intro().then(function () { reveal(stepEl(ORDER[at])); KAY.say([LINE[ORDER[at]]]); });
   drawHome(); story(ORDER[at] === "in" || ORDER[at] === "code");
   focusStep(SK.reduced ? 0 : 560);
 }
-/* Studio's logo animation opens it: the mark splits, slides, "Studio" blurs in; then the sky and the first question come through */
 var introEl = $("[data-st-intro]"), introDone = false, logoP = null;
 function intro() {
-  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();   /* no logo preloader (Evan): the page builds itself in instead (.wl.open, section.css) */
+  introDone = true; if (introEl) introEl.hidden = true; return Promise.resolve();    
   introDone = true; sheet.classList.add("intro");
   logoP = logoP || new Promise(function (res) { if (window.StudioLogo) return res(); var s = document.createElement("script"); s.src = "assets/studio-logo-anim.js"; s.onload = res; s.onerror = res; document.head.appendChild(s); });
   return logoP.then(function () {
@@ -2595,7 +2360,6 @@ window.addEventListener("hashchange", function () { if (DEEP.test(location.hash)
 document.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest("[data-start], a[href='" + HASH + "']"); if (!t || sheet.contains(t)) return; e.preventDefault(); open(); });
 $("[data-st-close]").addEventListener("click", function () { if (EMBED && PAYWALL) { tell({ type: "studio-paywall:close" }); return; } close(); });
 $("[data-st-look]").addEventListener("click", function () { tell({ type: "studio-paywall:look" }); try { window.webkit.messageHandlers.studio.postMessage({ look: true }); } catch (e) {} });
-/* phones: "Look around first" sits right under the plans, not in the bottom row (the bar needs the whole row; nothing floats over the list) */
 (function () {
   var lk = $("[data-st-look]"), dock = lk.parentNode, mq = matchMedia("(max-width: 960px)");
   var place = function () { var plan = stepEl("plan"); if (mq.matches) { if (lk.parentNode !== plan) { plan.appendChild(lk); lk.classList.add("inline"); } } else if (lk.parentNode !== dock) { dock.insertBefore(lk, dock.firstChild); lk.classList.remove("inline"); } };
@@ -2610,12 +2374,10 @@ sheet.addEventListener("keydown", function (e) {
   if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
 });
 
-/* Restart (this Mac only): back to the first step, nothing kept */
 var restartB = $("[data-st-restart]");
 restartB.hidden = !local;
 restartB.addEventListener("click", function () { location.href = location.pathname + location.search.replace(/[?&]paid=1/, "") + HASH; location.reload(); });
 
-/* ---------- Chapters (this Mac only): any step a press away, with sample answers (no real email, no code, no card) ---------- */
 if (local && !EMBED && window.SK_PAGE) {
   var CH = [["in", "Sign in"], ["code", "Email code"], ["roles", "What you do"], ["brands", "Your brands"], ["claude", "Claude"], ["make", "Make first"], ["done", "You're in"], ["plan", "Paywall · Plan"], ["pay", "Paywall · Pay"], ["unlocked", "Paywall · Unlocked"]];
   var chNow = function () { return sheet.classList.contains("done") ? (PAYWALL ? "unlocked" : "done") : ORDER[at]; };
@@ -2635,18 +2397,13 @@ if (local && !EMBED && window.SK_PAGE) {
   };
   var chUI = SK.chapters({ list: CH, now: chNow, go: chGo, walls: true, wallDefault: "Each step its own", wall: function (src) { setWalls(src); wallNow = ""; wall(sheet.classList.contains("done") ? "done" : ORDER[at]); } });
   var CHQ = Q.get("ch") || H.get("ch"); if (CHQ) setTimeout(function () { chGo(CHQ); chUI.paint(); }, 600);
-  new MutationObserver(function () { chUI.paint(); }).observe(sheet, { attributes: true, attributeFilter: ["data-step", "class"] });   /* the pill follows the step as you go */
+  new MutationObserver(function () { chUI.paint(); }).observe(sheet, { attributes: true, attributeFilter: ["data-step", "class"] });    
 }
 
-/* live: the payment key comes from the server, never from this file (App & releases: a Worker var) */
 if (LIVE && !CFG.stripe) fetch(CFG.worker + "/pricing.json").then(function (r) { return r.json(); }).then(function (j) { if (j && j.publishable_key) CFG.stripe = j.publishable_key; }).catch(function () {});
 
-/* Studio shows #paywall in an iframe and talks to it with postMessage (no token ever in a URL). Only Studio's own window, on
-   this Mac (127.0.0.1 / localhost), is listened to; everything goes back to that exact origin, never "*" (except "ready"). */
 var PARENT = "", PW = { mode: "onboarding", action: "" };
 function tell(msg) { if (EMBED && PARENT) try { window.parent.postMessage(msg, PARENT); } catch (e) {} }
-/* the app's sign-in can run out while the paywall is open (an hour): ask Studio for a fresh token (studio-paywall:token), and wait
-   up to 8 s for its answer ({ type: "studio-paywall:token", token }) */
 var tokenWait = null;
 function freshToken() {
   if (!EMBED || !PARENT) return Promise.reject(E("bad_token"));
@@ -2662,9 +2419,33 @@ window.addEventListener("message", function (e) {
   if (d.type === "studio-paywall:token" && d.token) { me.session = Object.assign({}, me.session, { access_token: d.token }); if (tokenWait) { var w = tokenWait; tokenWait = null; w.res(d.token); } }
 });
 var HEADS = { export: "Export it with Studio.", post: "Post it with Studio.", generate: "Make it with Studio." };
+var COPY = P.copy || {};
+var FEE = Number(P.trial_fee) || 0;
+function straight() { return PAYWALL && (FEE === 0 || trialEnded()); }
+function words(o) { var c = o && o.copy && typeof o.copy === "object" && o.copy.title ? o.copy : COPY[PW.action]; return c && c.title ? c : null; }
+function trialEnded() { return PAYWALL && !!PW && PW.action === "trial" && !!PW.words; }
+function endedPrice() {
+  if (!straight() || me.promo) return;
+  var pl = planOf(me.plan), num = parseFloat(String(me.period === "year" ? then(pl.id, "year") : price(pl.id, me.period)).replace(/[^0-9.]/g, "")) || 0;
+  me.notrial = { price: "$" + (num % 1 ? num.toFixed(2) : num), cents: Math.round(num * 100) };
+}
 function pwHead() {
   if (!PAYWALL) return;
   var pl = planOf(me.plan), pq = stepEl("plan"), head = PW.mode === "locked" ? (HEADS[PW.action] || "Keep making with Studio.") : "Keep your Studio.";
+  if (trialEnded()) {
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(PW.words.title) + "<span>" + esc(PW.words.line || "") + "</span>";
+    pq.querySelector(".wl-qs").textContent = PW.words.sub || "";
+    $("[data-st-look]").textContent = PW.words.dismiss || "Not now";
+    return;
+  }
+  if (straight() && !me.promo) {            
+    endedPrice();
+    pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>Studio " + esc(pl.name) + " is " + esc(then(pl.id, me.period)) + ".</span>";
+    pq.querySelector(".wl-qs").textContent = "Your plan starts today. Cancel anytime in Studio, in Settings → Billing.";
+    $("[data-st-look]").textContent = PW.mode === "locked" ? "Not now" : "Look around first";
+    return;
+  }
   pq.querySelector(".wl-qh").innerHTML = esc(head) + "<span>" + (me.promo ? "Your first month is free, then " : "14 days for $1, then ") + esc(then(pl.id, me.period)) + ".</span>";
   pq.querySelector(".wl-qs").textContent = me.promo ? "Cancel anytime before " + startsLong() + " and you won't be charged. Your plan starts " + startsLong() + "."
     : "Cancel anytime before day 14 and you won't be charged again. Your plan starts " + renewLong + ".";
@@ -2672,15 +2453,17 @@ function pwHead() {
 }
 function paywall(o) {
   o = o || {};
-  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] ? o.action : "";
+  PW.mode = o.mode === "locked" ? "locked" : "onboarding"; PW.action = HEADS[o.action] || COPY[o.action] || (o.action === "trial" && o.copy) ? o.action : "";
+  PW.words = words(o); if (PW.action === "trial" && !PW.words) PW.action = "";
+  me.notrial = null;
   if (o.plan && planOf(o.plan).id === o.plan) me.plan = o.plan;
   if (o.period === "year" || o.period === "month") me.period = o.period;
-  me.first = String(o.first || o.first_name || o.given_name || o.name || o.full_name || "").trim().split(/\s+/)[0]; me.email = o.email || "";   /* Studio sends first; the other names are taken too */ me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
+  me.first = String(o.first || o.first_name || o.given_name || o.name || o.full_name || "").trim().split(/\s+/)[0]; me.email = o.email || "";     me.session = { access_token: o.token || "mock" }; me.hand = { code: o.handoff || "" };
   $("[data-st-badge]").textContent = "Unlock";
   perEl.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-checked", x.getAttribute("data-per") === me.period ? "true" : "false"); });
   drawPlans(); slidePer(); pwHead();
-  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Evan"; me.email = "evan@studio.com"; }
-  steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });   /* straight to the plan */
+  if (MOCK && !me.first && !Q.has("noname")) { me.first = "Alex"; me.email = "alex@northwind.example"; }    
+  steps.forEach(function (q) { q.classList.remove("past"); q.classList.toggle("on", q.getAttribute("data-q") === "plan"); });    
   at = 0; setStep(0, true); drawPlanStage();
 }
 window.StudioPaywall = { open: function (o) { paywall(o); open(); } };
@@ -2688,11 +2471,9 @@ window.StudioPaywall = { open: function (o) { paywall(o); open(); } };
 if (EMBED && PAYWALL0) { try { window.parent.postMessage({ type: "studio-paywall:ready" }, "*"); } catch (e) {} }
 if (EMBED) sheet.classList.add("embed");
 
-/* first paint */
 drawPlans(); drawHome(); setStep(0, true);
-if (PAYWALL) paywall({});
+if (PAYWALL) paywall({ action: (/[#&?]action=(\w+)/.exec(location.hash + location.search) || [])[1] || "" });    
 if (INV) lookup(INV).then(setInvite, function () { setInvite({ state: "open", from: "" }); });
-/* back from Google/Apple (the session is in the address), or from a bank's 3-D Secure page (?paid=1) */
 if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { return c.auth.getSession(); }).then(function (r) {
   var s = r && r.data && r.data.session; if (!s) return;
   var u = s.user || {}, md = u.user_metadata || {};
@@ -2700,7 +2481,7 @@ if (LIVE && /access_token=/.test(location.hash)) supa().then(function (c) { retu
   try { history.replaceState(null, "", location.pathname + location.search + HASH); } catch (e) {}
   open(); signedIn().catch(function (x) { err(say(x)); });
 });
-if (Q.has("paid") && LIVE) {   /* back from the bank: pick up where Pay left off */
+if (Q.has("paid") && LIVE) {    
   var back = null; try { back = JSON.parse(sessionStorage.getItem("studio-checkout") || "null"); } catch (e) {}
   if (back) {
     me.first = back.first || ""; me.email = back.email || ""; me.plan = back.plan || "pro"; me.period = back.period || "month"; me.hand = { code: back.handoff };

@@ -1,7 +1,7 @@
 # Studio Terms of Service
 
 **Effective date:** November 20, 2026
-**Last updated:** November 20, 2026
+**Last updated:** November 26, 2026
 
 > **Please read Section 22.** It requires most disputes to be resolved by individual binding arbitration rather than in court, and waives your right to a jury trial and to take part in a class action. You can opt out within 30 days (Section 22.8).
 
@@ -27,7 +27,7 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 **3.2 Security.** You are responsible for everything that happens under your account and on the Macs where you use Studio, including activity by anyone you let use them. Keep your email account, devices and connected third-party accounts secure. Tell us right away at hello@askstudio.ai if you think your account has been compromised.
 
-**3.3 Seats and devices.** Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on up to **two (2) Macs** at a time. We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.
+**3.3 Seats and devices.** Each plan includes a set number of seats (named users). A seat belongs to one named person and may not be shared or rotated among people. Each seat may be active on a set number of Macs at a time: **Creator: one (1) Mac; Pro and Unlimited: up to two (2) Macs per person.** We may use licence keys, entitlement checks and device activation to enforce these limits, and we may deactivate devices or seats that exceed them. The account owner who buys the plan is responsible for the seats they assign and for those users' compliance with these Terms.
 
 ## 4. Licence to use Studio
 
@@ -46,26 +46,39 @@ You may not use the Service if you are barred from it under US law or the laws o
 
 **4.4 Reservation.** The App is licensed, not sold. We and our licensors keep all rights not expressly granted to you.
 
+**4.5 Studio's code, instructions, look and packs.** Studio's software and code; the instructions, prompts, skills and rules that guide its AI; the packs our servers deliver (including the AI pack, media library, sound effects and other content packs); its templates and presets; and its distinctive look, motion and visual style (together, "**Studio Materials**") are our confidential property and trade secrets. They are licensed to you only for use inside the App under Section 4.1. Unless we agree in writing, you may not, and may not help or let anyone else:
+
+- reverse engineer, decompile, extract, scrape, copy, record or reproduce any Studio Materials, except to the extent applicable law forbids this restriction;
+- sell, resell, share, publish, give away or redistribute Studio Materials, or packs or files taken from the App, on their own or bundled with anything else;
+- use Studio Materials, or anything derived from them, to build, train, improve or market a product or service that competes with Studio, or to recreate the App, its presets or its visual style in another product;
+- use Studio, its AI or any AI account connected to it to do any of the above, including by asking it to reveal, rewrite or export its instructions, prompts, skills or packs.
+
+This section protects Studio itself, not what you make with it: the videos and other content you create stay Your Content under Section 9.
+
+**Two strikes for attempts through Studio's AI.** If you use, or try to use, Studio or its AI to extract, copy or recreate Studio Materials, the first attempt gets a warning in the App (we may also email it to you). **A second attempt on your account automatically suspends your licence and account**, and no refund of any fees is due. Detection is automated and can be wrong: if you believe a warning or suspension was a mistake, email hello@askstudio.ai with "Appeal" in the subject within 30 days. We'll review it and reply, and if it was a mistake we'll lift the strike or restore your access. This warning step covers only attempts made through Studio or its AI; it doesn't limit what we may do about other breaches of Section 4.2 or this Section 4.5.
+
+**Breach.** Breaking this Section 4.5 or Section 4.2 is a material breach. Subject to the two-strike rule above for attempts through Studio's AI, we may end your licence and account immediately under Section 14.2, **with no refund of any fees, including prepaid fees**, and we may enforce our intellectual property and other rights by any lawful means, including going to court for an injunction under Section 22.4, damages, and recovery of our reasonable legal fees where the law allows.
+
 ## 5. Subscriptions, trial and billing
 
 **5.1 Plans.** Studio is sold as a monthly subscription. Current plans:
 
-| Plan | Price | Seats |
-| --- | --- | --- |
-| Creator | $99 per month | 1 |
-| Pro | $199 per month | 3 |
-| Unlimited | $299 per month | 10 |
+| Plan | Price | Seats | Macs per seat |
+| --- | --- | --- | --- |
+| Creator | $99 per month | 1 | 1 |
+| Pro | $199 per month | 3 | 2 |
+| Unlimited | $299 per month | 10 | 2 |
 
 Prices are in US dollars and exclude taxes. The Site and checkout show current plans and prices; if those differ from this table, the price shown at checkout when you subscribe applies.
 
-**5.2 The "14 days for $1" trial.** New subscribers may be offered a 14-day trial for a one-time fee of $1.00 (the "**Trial Fee**").
+**5.2 The free 14-day trial.** New users may be offered a free 14-day trial of the Service.
 
-- We charge the $1.00 Trial Fee when you start the trial.
-- Your trial lasts 14 days. **Unless you cancel before your trial ends, on day 15 (14 days after you start) your subscription automatically converts to the plan you chose, and we charge that plan's full monthly price to your payment method.** Checkout shows the exact renewal date.
-- One trial per person, household, payment method and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).
-- We email you a reminder before your trial converts. If the reminder doesn't arrive, that doesn't change your renewal date or your right to cancel.
+- The trial is free. We don't ask for a payment method to start it, and nothing is charged during it.
+- Your trial lasts 14 days from when you start it. The App shows how many days are left.
+- **When your trial ends, it does not turn into a paid subscription on its own.** To keep using the Service, you choose a plan and subscribe through checkout. Until you do, your access to the paid features stops at the end of the trial.
+- One trial per person, household and device. We may refuse or end a trial we believe is being misused (for example, repeat trials with new emails).
 
-**5.3 Automatic renewal.** **Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.** By starting a trial or subscription and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.
+**5.3 Automatic renewal.** **Your subscription renews automatically every month at the then-current price for your plan, plus applicable taxes, and we charge your payment method on file at the start of each billing period, until you cancel.** By subscribing and checking the auto-renewal box at checkout, you authorize these recurring charges. We charge through our payment processor, Stripe; we never see or store your full card number.
 
 **5.4 How to cancel.** You can cancel at any time, effective immediately for future renewals, by any of these methods:
 
@@ -75,7 +88,7 @@ Prices are in US dollars and exclude taxes. The Site and checkout show current p
 
 Cancelling stops all future charges. **You keep access until the end of the period you've already paid for (or the end of your trial), and then your subscription ends.** We send a confirmation when you cancel. Deleting the App does not cancel your subscription.
 
-**5.5 Refunds.** **The $1.00 Trial Fee and all subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.** We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.
+**5.5 Refunds.** **Subscription payments are non-refundable, and we don't give credits or refunds for partial months, unused seats or unused time, except where required by law or where these Terms expressly say otherwise.** We may still give a refund or credit in our sole discretion; doing so once does not oblige us to do it again.
 
 **5.6 Price changes.** We may change plan prices. We'll give you at least **30 days' notice** by email before a new price applies to your subscription, and it will take effect only at your next renewal after the notice period. If you don't want to pay the new price, cancel before it takes effect. If you keep your subscription after it takes effect, you agree to the new price.
 
@@ -164,7 +177,7 @@ We may remove content we can access, disable features, or suspend or terminate a
 
 ## 12. Our intellectual property; feedback
 
-**12.1 Ours.** The Service, including the App, Site, software, design, templates, workflows, prompts we provide, documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.
+**12.1 Ours.** The Service, including the App, Site, software, design, templates, workflows, prompts we provide, Studio Materials (Section 4.5), documentation and our names and logos, belongs to us and our licensors and is protected by intellectual property laws. These Terms don't give you any rights in our trademarks.
 
 **12.2 Feedback.** If you send us ideas, suggestions or feedback, you give us a perpetual, irrevocable, worldwide, royalty-free licence to use them for any purpose without paying or crediting you. You aren't required to send feedback.
 
@@ -189,7 +202,7 @@ If your material was removed and you believe that was a mistake, you may send a 
 
 **14.2 By us.** We may suspend or terminate your access, or any part of it, immediately and without notice, if we reasonably believe you violated these Terms, created risk or possible legal exposure for us or others, failed to pay, or engaged in fraud or abuse, or if we're required to by law. We may also stop offering the Service, or any plan, for any reason, with at least 30 days' notice to active subscribers. **If we terminate your paid subscription for convenience (not because of your breach), we'll refund the prepaid fees for the unused part of your current billing period.** No other refunds are due on termination.
 
-**14.3 Effect.** When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.
+**14.3 Effect.** When your access ends, your licence ends, the App may stop working, and we may delete account data on our servers in line with our Privacy Policy. Your local workspace stays on your Mac. Sections 4.2, 4.5, 5.5, 8, 9.3, 9.4, 10, 12, 14.3 and 16 to 24 survive termination, along with any other terms that by their nature should.
 
 ## 15. Changes to the Service
 

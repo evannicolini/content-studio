@@ -1,11 +1,11 @@
-// Studio's emails, as { subject, html, text }. Four, and only four (Evan, 2026-11-20), plus the Mac link (macEmail) and the
-// "a friend joined" note (friendJoinedEmail, Evan 2026-11-21: "where do I go to come back to see if my friends sign up"):
+// Studio's emails, as { subject, html, text }. Four, and only four (the owner, 2026-11-20), plus the Mac link (macEmail) and the
+// "a friend joined" note (friendJoinedEmail, the owner, 2026-11-21: "where do I go to come back to see if my friends sign up"):
 //
 //   (the designed three take { theme: "light" } as their last argument; dark is the default)
 //   confirmEmail   "Confirm your spot"       designed: the 6-digit code and the one-tap button (sent by the Worker on sign-up)
-//   youreInEmail   "You're in, {first}"      NOT designed: a plain note from Evan, Gmail-native, replies go to hello@
-//   inviteEmail    "{first}, your Studio invite is here"   designed: the access link and 14 days free, in Evan's voice (held for launch)
-//   inviteText     the invite-ready SMS (not an email): Evan's voice, their first name
+//   youreInEmail   "You're in, {first}"      NOT designed: a plain note from the owner, Gmail-native, replies go to hello@
+//   inviteEmail    "{first}, your Studio invite is here"   designed: the access link and 14 days free, in the owner's voice (held for launch)
+//   inviteText     the invite-ready SMS (not an email): the owner's voice, their first name
 //   welcomeEmail   "Welcome to Studio"       designed: the download, right after an app sign-up
 //   friendJoinedEmail "{friend} just joined Studio with your link"   designed, no hero: to the inviter, n of 3, the pass link
 //
@@ -16,7 +16,7 @@
 const SITE = "https://askstudio.ai";
 const FONT = "'Hanken Grotesk','Helvetica Neue',Helvetica,Arial,sans-serif";
 const MONO = "'Studio Mono','IBM Plex Mono','SF Mono',ui-monospace,Menlo,Consolas,monospace";
-// Two themes (Evan, v4): dark (black, like Studio in dark mode) and light (the sand page, near-black ink). Neutral greys only: no blue,
+// Two themes (the owner, v4): dark (black, like Studio in dark mode) and light (the sand page, near-black ink). Neutral greys only: no blue,
 // no teal, no borders, no glow. Each designed email takes { theme: "light" }; dark is the default. C is the palette of the email being
 // built (set at the start of each one, synchronously, and put back after).
 const DARK = { name: "dark", night: "#000000", ink: "#FFFFFF", body: "#d4d4d4", soft: "#9a9a9a", dim: "#6f6f6f", sand: "#f5f3ee", jet: "#000000", well: "#161616", lockup: "studio-lockup.png", lw: 110, lh: 31, apple: "apple-black.png" };
@@ -94,7 +94,7 @@ function confirmOne(first, code, link) {
   return { subject, html, text };
 }
 
-// 2. You're in: a plain note from Evan that looks like he wrote it in Gmail. No design, no images, no tracking, links written
+// 2. You're in: a plain note from the owner that looks like he wrote it in Gmail. No design, no images, no tracking, links written
 // the way a person types them. Gmail's own markup (dir="ltr" divs) in Gmail's font, so no client falls back to a serif.
 export function youreInEmail(first, place, refLink, passLink) {
   const name = one(first) || "there";
@@ -115,9 +115,9 @@ export function youreInEmail(first, place, refLink, passLink) {
   return { subject, html, text, sender: { name: "Evan from Studio", email: "hello@askstudio.ai" }, replyTo: { name: "Evan from Studio", email: "hello@askstudio.ai" } };
 }
 
-// 3. Your invite is here (held for launch): the access link, and 14 days free, in Evan's voice.
+// 3. Your invite is here (held for launch): the access link, and 14 days free, in the owner's voice.
 // It goes to the waitlist (a list), so its footer carries the unsubscribe link and the company's postal address (CAN-SPAM).
-// unsubscribe defaults to Brevo's own tag; address is the company's mailing address (Evan, 2026-11-20).
+// unsubscribe defaults to Brevo's own tag; address is the company's mailing address (the owner, 2026-11-20).
 export function inviteEmail(first, accessLink, opts = {}) { return themed(opts, () => inviteOne(first, accessLink, opts)); }
 function inviteOne(first, accessLink, { unsubscribe = "{{ unsubscribe }}", address = "4328 Del Mar Ave, San Diego, CA 92107" } = {}) {
   const name = one(first), subject = name ? name + ", your Studio invite is here" : "Your Studio invite is here";
@@ -139,7 +139,7 @@ function inviteOne(first, accessLink, { unsubscribe = "{{ unsubscribe }}", addre
   return { subject, html, text };
 }
 
-// The invite-ready text (Brevo SMS, toll-free; only to people who ticked "text me when my invite is ready"). Evan's voice, their
+// The invite-ready text (Brevo SMS, toll-free; only to people who ticked "text me when my invite is ready"). The owner's voice, their
 // first name, the brand first and the opt-out last, as the carrier needs.
 export function inviteText(first, link = "askstudio.ai/start") {
   const name = one(first, 40);

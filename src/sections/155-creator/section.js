@@ -904,7 +904,7 @@ function fitArt() { root.style.setProperty("--crk", WIDE.matches ? (root.clientW
 fitArt();
 window.addEventListener("resize", function () { requestAnimationFrame(fitArt); });
 
-/* Evan's voice note: tap plays or pauses; never on its own. It joins the site's clips so only one plays at a time (Kayla stops it, it stops Kayla). */
+/* The owner's voice note: tap plays or pauses; never on its own. It joins the site's clips so only one plays at a time (Kayla stops it, it stops Kayla). */
 var note = root.querySelector("[data-note]"), a = document.getElementById("evan-why");
 if (note && a) {
   (SK.audios || []).push(a);
@@ -915,7 +915,7 @@ if (note && a) {
   note.addEventListener("click", function () { if (a.paused) { var q = a.play(); q && q.catch(function () {}); } else a.pause(); });
 }
 
-/* "Ask me anything": a door, not a chat. Enter or the arrow opens Evan's Digital Persona on MIRRA in a new tab. */
+/* "Ask me anything": a door, not a chat. Enter or the arrow opens the founder's Digital Persona in a new tab. */
 var form = root.querySelector(".cr-field");
 if (form) form.addEventListener("submit", function (e) { e.preventDefault(); window.open("https://mirra.co/evan/dpchat", "_blank", "noopener"); });
 
@@ -923,7 +923,7 @@ if (form) form.addEventListener("submit", function (e) { e.preventDefault(); win
 var orb = root.querySelector("canvas[data-orb]");
 if (orb && window.StudioOrbs) SK.onView(root, function () { if (!orb._orb) window.StudioOrbs.mount(orb, { state: "working", size: 32 }); }, function () { if (typeof orb._orb === "function") orb._orb(); });
 
-/* the wallpaper switcher (Evan's, for now): his six picks, in his order */
+/* the wallpaper switcher (the owner's, for now): his six picks, in his order */
 var WPS = [["Sea cliffs in haze", "sea-cliffs-haze"], ["Dune grass and ocean", "dune-grass-ocean"], ["Red mesas in haze", "red-mesas-haze"], ["Green hills, double exposure", "hills-double-exposure"], ["Frost hills, gold grass", "frost-hills-gold-grass"]];
 var bg = root.querySelector(".cr-bg"), nameEl = root.querySelector("[data-wp-name]"), wi = 0;
 root.querySelectorAll("[data-wp]").forEach(function (b) {

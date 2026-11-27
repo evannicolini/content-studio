@@ -388,7 +388,7 @@ html.kp-off .kp [data-beam], html.kp-off .kp [data-beam]::before, html.kp-off .k
 
 /* ---------- sections off screen aren't drawn (every browser) ----------
    A section well off screen isn't styled, laid out or painted, and keeps no layers, until it's near (content-visibility: auto, as
-   customesignature.com does); before, the page kept 550 to 800 compositor layers for sections all the way down. Each keeps the height
+   another site does); before, the page kept 550 to 800 compositor layers for sections all the way down. Each keeps the height
    it had the last time it was drawn (auto), and starts from about its height at this size. Before a jump down the page everything is
    laid out for a moment (kit.js SK.fullRender), so jumps land where they did. */
 main > section:not(#hero) { content-visibility: auto; contain-intrinsic-size: auto var(--cis, 1000px); }
