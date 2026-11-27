@@ -1201,6 +1201,53 @@
 })();
 
 
+/* ---------- SK.away: no sound while the page isn't being looked at ----------
+   Another tab, the home screen, a locked phone, Chrome closed: the page goes hidden and every sound it makes stops (Evan: the
+   music and Kayla kept playing from his iPhone's home screen). Every AudioContext the page makes and every <audio>/<video>
+   that plays (detached new Audio() included) is tracked; on hidden (and pagehide) the contexts are suspended and the playing,
+   audible media paused; when the page is visible again, exactly those are resumed (what was playing picks up where it was). */
+(function () {
+  var SK = (window.SK = window.SK || {});
+  var ctxs = [], media = new Set(), held = null;
+  ["AudioContext", "webkitAudioContext"].forEach(function (n) {
+    var C = window[n]; if (!C || C.__skHush) return;
+    var W = function () { var c = new (Function.prototype.bind.apply(C, [null].concat([].slice.call(arguments))))(); ctxs.push(c); if (held) { try { c.suspend(); held.ctx.push(c); } catch (e) {} } return c; };
+    W.prototype = C.prototype; W.__skHush = true; try { Object.setPrototypeOf(W, C); } catch (e) {}
+    window[n] = W;
+  });
+  var MP = window.HTMLMediaElement && HTMLMediaElement.prototype, play0 = MP && MP.play;
+  if (play0 && !MP.__skHush) {
+    MP.__skHush = true;
+    MP.play = function () {
+      media.add(this);
+      if (held && document.hidden && !this.muted) {   /* nothing starts while hidden: it starts when the page is back */
+        if (held.media.indexOf(this) < 0) held.media.push(this);
+        return Promise.resolve();
+      }
+      return play0.apply(this, arguments);
+    };
+  }
+  function audible(m) { return m && !m.paused && !m.muted && m.volume > 0; }
+  function hush() {
+    if (held) return;
+    held = { ctx: [], media: [] };
+    ctxs.forEach(function (c) { if (c.state === "running") { try { c.suspend(); held.ctx.push(c); } catch (e) {} } });
+    var all = new Set(media); document.querySelectorAll("audio, video").forEach(function (m) { all.add(m); });
+    all.forEach(function (m) { if (audible(m)) { try { m.pause(); held.media.push(m); } catch (e) {} } });
+  }
+  function wake() {
+    if (!held) return;
+    var h = held; held = null;
+    h.ctx.forEach(function (c) { if (c.state === "suspended") { try { var p = c.resume(); if (p && p.catch) p.catch(function () {}); } catch (e) {} } });
+    h.media.forEach(function (m) { try { var p = play0.call(m); if (p && p.catch) p.catch(function () {}); } catch (e) {} });
+  }
+  document.addEventListener("visibilitychange", function () { if (document.hidden) hush(); else wake(); });
+  window.addEventListener("pagehide", hush);
+  window.addEventListener("pageshow", function () { if (!document.hidden) wake(); });
+  SK.away = { now: hush, wake: wake, held: function () { return !!held; } };
+})();
+
+
 /* ---------- SK.guideTap: Kayla's guide dot (the app tour's cursor: a white dot, a ring on each press, her name beside it) ----------
    Once per browser (key): it glides in from Kayla's pill, "presses" the target, calls onPress (the pass spins once, showing it can be
    pressed), and fades. Nothing with reduced motion. */
