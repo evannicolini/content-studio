@@ -1189,10 +1189,12 @@ window.SK_PRICES = {"default":"year","save":20,"live":false,"year":{"from":"$79"
     root.style.setProperty("--lvh", Math.round(full) + "px");
     var isField = function (a) { return a && sheet.contains(a) && a.matches && a.matches("input:not([type=checkbox]):not([type=radio]):not([type=button]), select, textarea"); };
     function scroller() { return o.scroller ? o.scroller() : sheet; }
-    function keep(est) {   /* the field to about a fifth of the way down what's visible */
+    function keep(est) {   /* the field (a code row: the whole row) centred in what's visible above the keyboard, a touch high */
       var a = document.activeElement; if (!isField(a)) return;
-      var vh = est ? full - est : h0(), top = vv ? vv.offsetTop : 0, r = a.getBoundingClientRect(), want = top + Math.min(vh * .22, 140);
-      if (r.top < top + 56 || r.bottom > top + vh - 20) { var sc = scroller(); if (sc) sc.scrollTop += r.top - want; }
+      var box = (a.closest && a.closest(".wl-otp, .st-otp")) || a;
+      var vh = est ? full - est : h0(), top = vv ? vv.offsetTop : 0, r = box.getBoundingClientRect();
+      var want = top + Math.max(64, (vh - r.height) / 2 - vh * .06);
+      if (Math.abs(r.top - want) > 24) { var sc = scroller(); if (sc) sc.scrollTop += r.top - want; }
     }
     function unpan() { if (sheet.hidden || !window.SK_PAGE) return; if (window.scrollY || root.scrollTop || document.body.scrollTop) { window.scrollTo(0, 0); document.body.scrollTop = 0; } }
     function check() {
