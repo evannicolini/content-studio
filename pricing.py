@@ -168,6 +168,16 @@ def logos(row):
     return "".join(out)
 
 
+def info(row, key):
+    """the row's small info icon and its one-line tip (hover or focus on desktop, tap on narrow screens: section.js)"""
+    t = str(row.get("info") or "").strip()
+    if not t:
+        return ""
+    return ('<span class="pd-iw"><button type="button" class="pd-i" aria-label="About %s" aria-describedby="%s" aria-expanded="false">'
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 7.3v3.6"/><circle class="dot" cx="8" cy="5" r=".55"/></svg></button>'
+            '<span class="pd-tip" role="tooltip" id="%s">%s</span></span>' % (H.escape(row["label"]), key, key, H.escape(t)))
+
+
 def cell(v):
     """(class, inner html) for one plan's value in a comparison row"""
     if v is True:
@@ -212,7 +222,7 @@ def plans_html(data, vw):
         g.append('<div class="pd-h" style="grid-column:%d; grid-row:1">%s</div>' % (i + 2, head(p, card(p, period), vw)))
     for r, row in enumerate(rows):
         z = " z" if r % 2 == 0 else ""
-        g.append('<div class="pd-c lab%s%s" style="grid-column:1; grid-row:%d"><span>%s</span>%s</div>' % (z, " first" if z else "", r + 2, H.escape(row["label"]), logos(row)))
+        g.append('<div class="pd-c lab%s%s" style="grid-column:1; grid-row:%d"><span class="lt">%s%s%s</span></div>' % (z, " first" if z else "", r + 2, H.escape(row["label"]), logos(row), info(row, "pdt-%d" % r)))
         for i, p in enumerate(plans):
             cls, inner = cell(row["values"][p["id"]])
             g.append('<div class="pd-c%s%s%s" style="grid-column:%d; grid-row:%d">%s</div>' % (cls, z, " last" if z and i == n - 1 else "", i + 2, r + 2, inner))
@@ -225,12 +235,13 @@ def plans_html(data, vw):
         if b:
             c.append('<span class="pd-pbeam" data-beam="cx" data-active aria-hidden="true"><span data-beam-bloom></span></span>')
         c.append('<div class="pd-ch">%s</div><ul class="pd-clist">' % head(p, card(p, period), vw))
-        for row in rows:
+        for r, row in enumerate(rows):
             cls, inner = cell(row["values"][p["id"]])
             if cls == " big":
-                c.append('<li class="pd-cr big">%s</li>' % inner)
+                k = str(row.get("card") or "").strip()  # a value that needs its row's name beside it on a card ("20 GB cloud storage for renders")
+                c.append('<li class="pd-cr big">%s%s%s</li>' % (inner, ('<small class="k">%s</small>' % H.escape(k)) if k else "", info(row, "pdt-%s-%d" % (H.escape(p["id"]), r))))
             else:
-                label = '<span>%s</span>%s' % (H.escape(row["label"]), logos(row))
+                label = '<span>%s</span>%s%s' % (H.escape(row["label"]), logos(row), info(row, "pdt-%s-%d" % (H.escape(p["id"]), r)))
                 c.append('<li class="pd-cr%s">%s%s</li>' % (cls, inner if cls != " s" else "", label + (inner if cls == " s" else "")))
         c.append("</ul></article>")
     c.append("</div>")

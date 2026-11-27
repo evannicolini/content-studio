@@ -170,3 +170,23 @@ function paintWave(c) {
 
 /* ---------- the floating Kayla player (.kp) slides away while Pricing is in view, unless it is playing (CSS: html.kp-away) ---------- */
 SK.onView(root, function () { document.documentElement.classList.add("kp-away"); }, function () { document.documentElement.classList.remove("kp-away"); });
+
+/* row info tips: hover and keyboard focus are CSS; a tap or a click pins one open (only one at a time). A tap outside, Escape,
+   or scrolling the plans off screen closes it. */
+(function () {
+  var plans = document.querySelector('#pricing .pd-plans');
+  if (!plans) return;
+  var open = null;
+  function close() { if (open) { open.setAttribute('aria-expanded', 'false'); open = null; } }
+  plans.addEventListener('click', function (e) {
+    var b = e.target.closest('.pd-i');
+    if (!b) return;
+    e.preventDefault();
+    var was = open === b;
+    close();
+    if (!was) { b.setAttribute('aria-expanded', 'true'); open = b; }
+  });
+  document.addEventListener('pointerdown', function (e) { if (open && !e.target.closest('.pd-i')) close(); }, true);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  window.addEventListener('scroll', function () { if (open && open.getBoundingClientRect().bottom < 0) close(); }, { passive: true });
+})();
