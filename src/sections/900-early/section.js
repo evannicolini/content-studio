@@ -56,7 +56,7 @@ document.querySelectorAll("[data-download]").forEach(function (b) {
   if (sp) sp.textContent = "Get early access";
   if (where === "steps") { b.className = ""; SK.gx(b, { hot: true, paper: !!b.closest(".on-paper") }); b.insertAdjacentHTML("beforeend", ARROW); }
   var help = b.parentNode && b.parentNode.querySelector("[data-send-help]");
-  if (help && where === "hero") help.remove();     /* the hero goes straight from Get early access to the prompt field (Evan) */
+  if (help && where === "hero") help.remove();     /* the hero goes straight from Get early access to the prompt field */
   else if (help && !help.closest(".pr-open")) { help.removeAttribute("data-send-help"); help.textContent = "14 days of everything, free. Studio is for Mac."; }
 });
 document.querySelectorAll(".pd-btn.soon").forEach(function (s) {

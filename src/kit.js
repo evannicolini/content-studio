@@ -1203,8 +1203,8 @@
 
 
 /* ---------- SK.away: no sound while the page isn't being looked at ----------
-   Another tab, the home screen, a locked phone, Chrome closed: the page goes hidden and every sound it makes stops (Evan: the
-   music and Kayla kept playing from his iPhone's home screen). Every AudioContext the page makes and every <audio>/<video>
+   Another tab, the home screen, a locked phone, Chrome closed: the page goes hidden and every sound it makes stops (the
+   music and Kayla had kept playing from an iPhone's home screen). Every AudioContext the page makes and every <audio>/<video>
    that plays (detached new Audio() included) is tracked; on hidden (and pagehide) the contexts are suspended and the playing,
    audible media paused; when the page is visible again, exactly those are resumed (what was playing picks up where it was). */
 (function () {
